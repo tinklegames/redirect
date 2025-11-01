@@ -7,7 +7,7 @@ async function checkCode() {
     const openPageBtn = document.getElementById('openPageBtn');
 
     try {
-        const response = await fetch('https://raw.githubusercontent.com/tinkleparty/redirect/main/codes.json');
+        const response = await fetch('https://raw.githubusercontent.com/tinklegames/redirect/main/codes.json');
         const data = await response.json();
 
         if (data[code]) {
