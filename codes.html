@@ -256,6 +256,56 @@ h2 {
 </style>
 </head>
 <body>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+
+<div id="intro-screen">
+  <div id="intro-text">Click to Enter</div>
+</div>
+
+<style>
+  /* Intro Screen */
+  #intro-screen {
+    position: fixed;
+    inset: 0;
+    background: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    transition: opacity 1s ease, visibility 1s ease;
+  }
+  #intro-text {
+    color: white;
+    font-family: "Orbitron", sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.25s ease, opacity 0.5s ease;
+  }
+  #intro-text:hover {
+    transform: scale(1.08);
+    opacity: 0.9;
+  }
+  #intro-screen.fade-out {
+    opacity: 0;
+    visibility: hidden;
+  }
+</style>
+
+<script>
+  // Intro Screen Logic
+  document.addEventListener("DOMContentLoaded", () => {
+    const intro = document.getElementById("intro-screen");
+    const text = document.getElementById("intro-text");
+
+    text.addEventListener("click", () => {
+      intro.classList.add("fade-out");
+      setTimeout(() => intro.remove(), 1000);
+    });
+  });
+</script>
 
 <div id="announcement-banner">
   📢 Enter Codes Here!
