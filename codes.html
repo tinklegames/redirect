@@ -886,6 +886,8 @@ function filterSearch(term) {
 
 /* --- Sidebar Events --- */
 sidebarItems.forEach(item => {
+  if (item.id === "movies-btn") return;
+
   item.addEventListener("click", () => {
     sidebarItems.forEach(i => i.classList.remove("active"));
     item.classList.add("active");
@@ -907,8 +909,9 @@ attachButtonEvents();
 showCategory("all");
 
 moviesBtn.addEventListener("click", () => {
-  const win = window.open("about:blank", "_blank");
+  const currentActive = document.querySelector(".sidebar-item.active");
 
+  const win = window.open("about:blank", "_blank");
   if (win) {
     win.document.write(`
       <html>
@@ -924,6 +927,8 @@ moviesBtn.addEventListener("click", () => {
   } else {
     alert("Please allow pop-ups for this site to open Movies.");
   }
+  sidebarItems.forEach(i => i.classList.remove("active"));
+  if (currentActive) currentActive.classList.add("active");
 });
 </script>
 
