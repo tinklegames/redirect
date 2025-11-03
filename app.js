@@ -1,7 +1,6 @@
 let generatedLink = "";
 let iframeAllowed = false;
 
-// Check code input
 async function checkCode() {
     const code = document.getElementById('codeInput').value.trim();
     const resultDiv = document.getElementById('result');
@@ -14,7 +13,6 @@ async function checkCode() {
         const data = await response.json();
 
         if (data[code]) {
-            // Split URL and iframe flag
             const parts = data[code].split('|');
             generatedLink = parts[0];
             iframeAllowed = parts[1] === 'true';
@@ -22,10 +20,11 @@ async function checkCode() {
             document.getElementById('codeInput').value = generatedLink;
             resultDiv.innerHTML = "✅ Link generated successfully!";
 
-            // Change submit button to Copy Link
-            submitBtn.innerHTML = "Copy Link";
-            submitBtn.onclick = () => copyLink(generatedLink);
-            submitBtn.style.backgroundColor = "#4CAF50";
+            const newBtn = submitBtn.cloneNode(true); // clone the button to remove old events
+            submitBtn.parentNode.replaceChild(newBtn, submitBtn);
+            newBtn.innerHTML = "Copy Link";
+            newBtn.addEventListener('click', () => copyLink(generatedLink));
+            newBtn.style.backgroundColor = "#4CAF50";
 
             if (iframeAllowed) {
                 openPageBtn.classList.remove("hidden");
@@ -60,7 +59,6 @@ function copyLink(link) {
     });
 }
 
-// Open site in iframe
 function openPage() {
     if (!generatedLink || !iframeAllowed) return;
 
@@ -111,7 +109,6 @@ function openPage() {
     newTab.document.close();
 }
 
-// Notification function
 function showNotification(message, type) {
     const notification = document.getElementById('notification');
     notification.innerHTML = message;
@@ -123,10 +120,8 @@ function showNotification(message, type) {
     }, 3000);
 }
 
-// Attach button events
 document.getElementById('submitBtn').addEventListener('click', checkCode);
 document.getElementById('openPageBtn').addEventListener('click', openPage);
 
-// Hide Open Page button and hint by default
 document.getElementById('openPageBtn').classList.add('hidden');
 document.getElementById('iframeHint').classList.add('hidden');
