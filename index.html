@@ -9,12 +9,18 @@
     <div id="container">
         <h2>Enter Code</h2>
         <input type="text" id="codeInput" placeholder="Enter your code..." />
-        <button id="submitBtn" onclick="checkCode()">Submit</button>
+
+        <button id="submitBtn">Submit</button>
+
         <div id="result"></div>
 
-        <!-- New button (hidden until link is valid) -->
-        <button id="openPageBtn" class="hidden" onclick="openPage()">Open Page</button>
+        <!-- Open Page button -->
+        <button id="openPageBtn" class="hidden">Open Page</button>
+
+        <!-- Hint for sites that cannot open in iframe -->
+        <div id="iframeHint" class="hidden" style="color: yellow; margin-top: 10px;"></div>
     </div>
+
     <div id="notification" class="hidden"></div>
 
     <script src="app.js"></script>
