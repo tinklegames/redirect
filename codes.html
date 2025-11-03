@@ -905,10 +905,20 @@ function showNotification(message, success = true) {
 /* --- Show Category --- */
 function showCategory(category) {
   gamesContainer.innerHTML = "";
+  
   let filtered = allCards.filter(c => category === "all" || c.dataset.category === category);
+  
+  filtered.sort((a, b) => {
+    const nameA = a.querySelector(".game-name").textContent.toLowerCase();
+    const nameB = b.querySelector(".game-name").textContent.toLowerCase();
+    return nameA.localeCompare(nameB);
+  });
+  
+  // Add sorted cards
   filtered.forEach(c => gamesContainer.appendChild(c));
   attachButtonEvents(gamesContainer);
 }
+
 
 /* --- Most Popular --- */
 function showPopular() {
