@@ -72,7 +72,6 @@ function openPage() {
         <!DOCTYPE html>
         <html>
         <head>
-            <title>Game Viewer</title>
             <style>
                 html, body {
                     margin: 0;
