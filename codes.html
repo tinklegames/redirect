@@ -257,10 +257,67 @@ h2 {
 </head>
 <body>
 
-<div id="announcement-banner" onclick="window.open('https://tinklegames.github.io/redirect/', '_blank')">
+<div id="announcement-banner">
   📢 Enter Codes Here!
 </div>
-  
+<script>
+  const announcementBanner = document.getElementById("announcement-banner");
+const codesLink = "https://tinklegames.github.io/redirect/";
+const mainSite = window.location.href; // automatically uses current page as return target
+
+announcementBanner.addEventListener("click", () => {
+  // Replace the current document in the same tab
+  const doc = window.open("about:blank", "_self");
+  if (doc) {
+    doc.document.write(`
+      <html>
+        <head>
+          <title>Tinkle Party Codes</title>
+          <style>
+            body {
+              margin: 0;
+              background-color: black;
+              overflow: hidden;
+              font-family: Arial, sans-serif;
+            }
+            iframe {
+              border: none;
+              width: 100vw;
+              height: 100vh;
+            }
+            button {
+              position: fixed;
+              top: 12px;
+              left: 12px;
+              background: rgba(255,255,255,0.08);
+              border: 1px solid rgba(255,255,255,0.3);
+              color: white;
+              font-size: 14px;
+              padding: 8px 16px;
+              border-radius: 8px;
+              cursor: pointer;
+              z-index: 1000;
+              backdrop-filter: blur(8px);
+              transition: all 0.2s ease;
+            }
+            button:hover {
+              background: rgba(255,255,255,0.25);
+              transform: scale(1.05);
+            }
+          </style>
+        </head>
+        <body>
+          <button onclick="window.location.href='${mainSite}'">🔙 Go Back</button>
+          <iframe src="${codesLink}" allowfullscreen></iframe>
+        </body>
+      </html>
+    `);
+    doc.document.close();
+  } else {
+    alert("Redirect failed — please allow this site to open pages.");
+  }
+});
+</script>
 <!-- SIDEBAR -->
 <div id="sidebar">
   <div class="sidebar-item active" data-category="all">All Games</div>
