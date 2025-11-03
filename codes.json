@@ -78,7 +78,7 @@
     "FNAFWORLD": "https://tinklegames.github.io/redirect/fnafworld.html|true",
     "UCN": "https://tinklegames.github.io/redirect/UCN.html|true",
     "FTF1": "https://tinklegames.github.io/redirect/FTF.html|true",
-    "GOI": "http://tinklegames.github.io/host/gettingoverit.html|true",
+    "GOI": "http://tinklegames.github.io/host/gettingoverit.html|false",
     "RIDER": "https://www.youtube.com/playables/Ugkxm5HxgUlE8E4geeF2lLFt7ylX-yUfuSlM|false",
     "HILLCLIMB": "https://8606525433070157749.playables.usercontent.goog/v/assets/index.html#flags=%7B%22enableServiceWorker%22%3Afalse%7D&origin=https%3A%2F%2Fwww.youtube.com|false",
     "HOLEIO": "http://tinklegames.github.io/host/holeio.html|true",
