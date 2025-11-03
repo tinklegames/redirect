@@ -865,24 +865,29 @@ const notification = document.getElementById("notification");
 const searchBar = document.getElementById("search-bar");
 const moviesBtn = document.getElementById("movies-btn");
 const moviesLink = "https://tinklegames.github.io/host/cinema";
-  
-let clickData = JSON.parse(localStorage.getItem("clickData")) || {};
 
 /* --- Copy Buttons --- */
 function attachButtonEvents(container = document) {
   container.querySelectorAll(".get-code").forEach(btn => {
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", async () => {
       const card = btn.closest(".game-card");
       const code = card.dataset.code;
       const name = card.querySelector(".game-name").textContent;
-      clickData[name] = (clickData[name] || 0) + 1;
-      localStorage.setItem("clickData", JSON.stringify(clickData));
 
+      try {
+        // update Firebase click count
+        await incrementGameClick(name);
+      } catch (err) {
+        console.error("⚠️ Firebase update failed:", err);
+      }
+
+      // copy to clipboard
       navigator.clipboard.writeText(code)
-        .then(() => showNotification("Copied! Code: " + code, true))
+        .then(() => showNotification(`Copied! Code: ${code}`, true))
         .catch(() => showNotification("Failed to copy code", false));
 
-      if (document.querySelector(".sidebar-item.active").dataset.category === "popular") {
+      // refresh popular list if currently viewing it
+      if (document.querySelector(".sidebar-item.active")?.dataset.category === "popular") {
         showPopular();
       }
     });
@@ -1052,7 +1057,6 @@ moviesBtn.addEventListener("click", () => {
   if (currentActive) currentActive.classList.add("active");
 });
 </script>
-
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
@@ -1100,10 +1104,10 @@ function sanitizeKey(name) {
 // --- Increment click count in Firebase ---
 async function incrementGameClick(name) {
   const safeKey = sanitizeKey(name);
-  const gameRef = ref(db, 'clickData/' + safeKey);
-  const snapshot = await get(gameRef);
+  const gameRef = ref(db, 'clickData/' + safeKey); // ✅ modular ref
+  const snapshot = await get(gameRef);             // ✅ modular get
   const current = snapshot.exists() ? snapshot.val() : 0;
-  await set(gameRef, current + 1);
+  await set(gameRef, current + 1);                // ✅ modular set
 }
 
 // --- Get all click data from Firebase ---
@@ -1561,6 +1565,15 @@ window.showPopular = async function() {
   const disconnectTask = onDisconnect(myRef);
   disconnectTask.remove();
   set(myRef, true);
+  
+  window.incrementGameClick = async function(name) {
+  const safeKey = sanitizeKey(name);
+  const gameRef = ref(db, 'clickData/' + safeKey);
+  const snapshot = await get(gameRef);
+  const current = snapshot.exists() ? snapshot.val() : 0;
+  await set(gameRef, current + 1);
+};
+
 </script>
 </body>
 </html>
