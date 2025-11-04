@@ -425,6 +425,32 @@ h2 {
   width: 20px;
   height: 20px;
 }
+.category-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background-color: #222;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.category-btn:hover {
+  background-color: #333;
+  transform: scale(1.05);
+}
+
+.category-btn.active {
+  background-color: #5865F2;
+  border-color: #5865F2;
+}
+#all-games-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
 </style>
 
 <script>
@@ -518,13 +544,6 @@ announcementBanner.addEventListener("click", () => {
 <!-- SIDEBAR -->
 <div id="sidebar">
   <div class="sidebar-item active" data-category="all">All Games</div>
-  <div class="sidebar-item" data-category="popular">⭐ Most Popular</div>
-  <div class="sidebar-item" data-category="new">🆕 New Games</div>
-  <div class="sidebar-item" data-category="action">⚔️ Action</div>
-  <div class="sidebar-item" data-category="horror">👻 Horror</div>
-  <div class="sidebar-item" data-category="arcade">🕹️ Arcade</div>
-  <div class="sidebar-item" data-category="puzzle">🧩 Puzzle</div>
-  <div class="sidebar-item" data-category="simulator">🏭 Simulator</div>
   <div class="sidebar-item" data-category="request">🎮 Request Games</div>
   <div class="sidebar-item" id="movies-btn">🎬 Movies</div>
   <div class="sidebar-item" data-category="partners">🤝 Partners</div>
@@ -533,7 +552,11 @@ announcementBanner.addEventListener("click", () => {
 <!-- MAIN -->
 <div id="container">
   <h2 id="category-title">All Games</h2>
+<div id="all-games-controls">
   <input id="search-bar" type="text" placeholder="🔍 Search games..." />
+  <div id="category-buttons" style="display:flex; justify-content:center; flex-wrap:wrap; gap:10px; margin-bottom:20px;">
+  </div>
+</div>
   <div id="games">
     <div class="game-card" data-code="FUN" data-category="horror">
       <p class="game-name">FeedVid Live</p>
@@ -988,12 +1011,47 @@ announcementBanner.addEventListener("click", () => {
 <script>
 const sidebarItems = document.querySelectorAll(".sidebar-item");
 const gamesContainer = document.getElementById("games");
+const allGamesControls = document.getElementById("all-games-controls");
 const allCards = [...document.querySelectorAll(".game-card")]; // Keep originals
 const title = document.getElementById("category-title");
 const notification = document.getElementById("notification");
 const searchBar = document.getElementById("search-bar");
 const moviesBtn = document.getElementById("movies-btn");
 const moviesLink = "https://tinklegames.github.io/host/cinema";
+
+const categories = [
+  { name: "🎮 All Games", value: "all" },
+  { name: "⭐ Popular", value: "popular" },
+  { name: "🆕 New", value: "new" },
+  { name: "⚔️ Action", value: "action" },
+  { name: "👻 Horror", value: "horror" },
+  { name: "🕹️ Arcade", value: "arcade" },
+  { name: "🧩 Puzzle", value: "puzzle" },
+  { name: "🏭 Simulator", value: "simulator" }
+];
+
+const categoryButtonsContainer = document.getElementById("category-buttons");
+
+categories.forEach(cat => {
+  const btn = document.createElement("button");
+  btn.textContent = cat.name;
+  btn.dataset.category = cat.value;
+  btn.className = "category-btn";
+  btn.addEventListener("click", () => {
+    sidebarItems.forEach(i => i.classList.remove("active")); // unselect sidebar
+    title.textContent = cat.name;
+
+    if (cat.value === "popular") showPopular();
+    else if (cat.value === "new") showNewGames();
+    else showCategory(cat.value);
+
+    // Highlight clicked button
+    document.querySelectorAll(".category-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+  });
+  categoryButtonsContainer.appendChild(btn);
+});
+
 
 /* --- Copy Buttons --- */
 function attachButtonEvents(container = document) {
@@ -1033,20 +1091,19 @@ function showNotification(message, success = true) {
 
 /* --- Show Category --- */
 function showCategory(category) {
-  gamesContainer.innerHTML = "";
-  
+  gamesContainer.innerHTML = ""; // only clear game cards
   let filtered = allCards.filter(c => category === "all" || c.dataset.category === category);
-  
+
   filtered.sort((a, b) => {
     const nameA = a.querySelector(".game-name").textContent.toLowerCase();
     const nameB = b.querySelector(".game-name").textContent.toLowerCase();
     return nameA.localeCompare(nameB);
   });
-  
-  // Add sorted cards
+
   filtered.forEach(c => gamesContainer.appendChild(c));
   attachButtonEvents(gamesContainer);
 }
+
 
 
 /* --- Most Popular --- */
@@ -1191,15 +1248,14 @@ function showPartners() {
   
 /* --- Search --- */
 function filterSearch(term) {
-  const active = document.querySelector(".sidebar-item.active").dataset.category;
-  const cards = gamesContainer.querySelectorAll(".game-card");
   term = term.toLowerCase();
+  const cards = gamesContainer.querySelectorAll(".game-card"); // only cards
   cards.forEach(card => {
     const name = card.querySelector(".game-name").textContent.toLowerCase();
-    const match = name.includes(term);
-    card.style.display = match ? "flex" : "none";
+    card.style.display = name.includes(term) ? "flex" : "none";
   });
 }
+
 
 /* --- Sidebar Events --- */
 sidebarItems.forEach(item => {
@@ -1211,6 +1267,9 @@ sidebarItems.forEach(item => {
     title.textContent = item.textContent.replace(/^[^a-zA-Z]+/, "");
     const cat = item.dataset.category;
 
+    // Show/hide search and category buttons
+    allGamesControls.style.display = (cat === "all") ? "flex" : "none";
+
     if (cat === "popular") showPopular();
     else if (cat === "new") showNewGames();
     else if (cat === "request") showRequestForm();
@@ -1220,6 +1279,7 @@ sidebarItems.forEach(item => {
     filterSearch(searchBar.value);
   });
 });
+
 
 searchBar.addEventListener("input", e => filterSearch(e.target.value));
 
