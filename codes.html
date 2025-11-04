@@ -292,6 +292,139 @@ h2 {
     opacity: 0;
     visibility: hidden;
   }
+  
+/* --- Partner Card --- */
+.card {
+  position: relative;
+  width: 300px;
+  height: 200px;
+  background-color: #f2f2f2;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  perspective: 1000px;
+  box-shadow: 0 0 0 5px #ffffff80;
+  transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(255, 255, 255, 0.2);
+}
+
+/* --- Front Image --- */
+.card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.card:hover img {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+/* --- Back Content --- */
+.card__content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: #f2f2f2;
+  transform: rotateX(-90deg);
+  transform-origin: bottom;
+  transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card:hover .card__content {
+  transform: rotateX(0deg);
+}
+
+/* --- Text --- */
+.card__title {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+  font-weight: 700;
+}
+
+.card__description {
+  margin: 10px 0;
+  font-size: 14px;
+  color: #777;
+  line-height: 1.4;
+}
+
+/* --- Buttons --- */
+.card__buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.card__button {
+  flex: 1;
+  text-align: center;
+  padding: 8px 0;
+  border-radius: 8px;
+  background: #5865F2; /* Discord color */
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.3s ease, transform 0.2s;
+}
+
+.card__button.open {
+  background: #333;
+}
+
+.card__button:hover {
+  transform: scale(1.05);
+  background: #404EED;
+}
+
+.card__button.open:hover {
+  background: #555;
+}
+
+.download-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background-color: #242a35;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  border: 1px solid #e8e8e82d;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.3s, transform 0.2s;
+  margin-bottom: 20px; /* adds space between button and partner cards */
+}
+
+.download-button:hover {
+  background-color: #2f3542;
+  transform: scale(1.03);
+}
+
+.download-button svg {
+  width: 20px;
+  height: 20px;
+}
 </style>
 
 <script>
@@ -394,6 +527,7 @@ announcementBanner.addEventListener("click", () => {
   <div class="sidebar-item" data-category="simulator">🏭 Simulator</div>
   <div class="sidebar-item" data-category="request">🎮 Request Games</div>
   <div class="sidebar-item" id="movies-btn">🎬 Movies</div>
+  <div class="sidebar-item" data-category="partners">🤝 Partners</div>
 </div>
 
 <!-- MAIN -->
@@ -1002,6 +1136,58 @@ function showRequestForm() {
   });
 }
 
+function showPartners() {
+  gamesContainer.innerHTML = `
+    <div style="display:flex; flex-direction:column; align-items:center; gap:20px;">
+      <!-- Partner Request Button -->
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSfGFYfEffO0jUycLLyO2RUNwhjUve70fhkaUiwUNqoOPpp1Qw/viewform" 
+         target="_blank" 
+         class="download-button">
+        <svg stroke-linejoin="round" stroke-linecap="round" fill="none" stroke-width="2" stroke="currentColor" viewBox="0 0 24 24">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <polyline points="14 2 14 8 20 8"></polyline>
+          <line y2="13" x2="8" y1="13" x1="16"></line>
+          <line y2="17" x2="8" y1="17" x1="16"></line>
+          <polyline points="10 9 9 9 8 9"></polyline>
+        </svg>
+        Partner Request
+      </a>
+
+      <!-- Partner Cards -->
+      <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:20px;">
+        <div class="card">
+          <img src="https://cdn.discordapp.com/attachments/1234567890/example-image.png" alt="Partner Logo">
+          <div class="card__content">
+            <div>
+              <p class="card__title">Partner Name</p>
+              <p class="card__description">
+                This is a short description of your partner — who they are or what they do.
+              </p>
+            </div>
+            <div class="card__buttons">
+              <a href="https://partnerwebsite.com" target="_blank" class="card__button open">Open Link</a>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <img src="https://cdn.discordapp.com/attachments/1234567890/example-image.png" alt="Partner Logo">
+          <div class="card__content">
+            <div>
+              <p class="card__title">Partner Name</p>
+              <p class="card__description">
+                This is a short description of your partner — who they are or what they do.
+              </p>
+            </div>
+            <div class="card__buttons">
+              <a href="https://partnerwebsite.com" target="_blank" class="card__button open">Open Link</a>
+              <a href="https://discord.gg/yourinvite" target="_blank" class="card__button">Discord</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
   
 /* --- Search --- */
 function filterSearch(term) {
@@ -1028,6 +1214,7 @@ sidebarItems.forEach(item => {
     if (cat === "popular") showPopular();
     else if (cat === "new") showNewGames();
     else if (cat === "request") showRequestForm();
+    else if (cat === "partners") showPartners();
     else showCategory(cat);
 
     filterSearch(searchBar.value);
