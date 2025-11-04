@@ -1194,8 +1194,8 @@ function showRequestForm() {
     const now = Date.now();
     const elapsed = now - lastSubmitTime;
 
-    if (elapsed < 10000) { // 10 seconds
-      const remaining = Math.ceil((10000 - elapsed) / 1000);
+    if (elapsed < 60000) { // 10 seconds
+      const remaining = Math.ceil((60000 - elapsed) / 1000);
       showNotification(`⏳ Please wait ${remaining}s before submitting another request.`, false);
       return;
     }
