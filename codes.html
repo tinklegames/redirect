@@ -1055,9 +1055,19 @@ categories.forEach(cat => {
 function attachButtonEvents(container = document) {
   container.querySelectorAll(".get-code").forEach(btn => {
     btn.addEventListener("click", async () => {
+      if (btn.disabled) return; // prevent rapid clicking
+
       const card = btn.closest(".game-card");
       const code = card.dataset.code;
       const name = card.querySelector(".game-name").textContent;
+
+      // disable all get-code buttons for 5 seconds
+      const allButtons = document.querySelectorAll(".get-code");
+      allButtons.forEach(b => {
+        b.disabled = true;
+        b.style.opacity = "0.5";
+        b.style.cursor = "not-allowed";
+      });
 
       try {
         // update Firebase click count
@@ -1075,6 +1085,15 @@ function attachButtonEvents(container = document) {
       if (document.querySelector(".sidebar-item.active")?.dataset.category === "popular") {
         showPopular();
       }
+
+      // re-enable all buttons after 5 seconds
+      setTimeout(() => {
+        allButtons.forEach(b => {
+          b.disabled = false;
+          b.style.opacity = "0.9";
+          b.style.cursor = "pointer";
+        });
+      }, 5000);
     });
   });
 }
