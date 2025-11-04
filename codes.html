@@ -1186,12 +1186,23 @@ function showRequestForm() {
   `;
 
   const form = document.getElementById("request-form");
+  const submitBtn = form.querySelector(".form-submit-btn");
+  let lastSubmitTime = 0; // track cooldown
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+    const now = Date.now();
+    const elapsed = now - lastSubmitTime;
+
+    if (elapsed < 10000) { // 10 seconds
+      const remaining = Math.ceil((10000 - elapsed) / 1000);
+      showNotification(`⏳ Please wait ${remaining}s before submitting another request.`, false);
+      return;
+    }
+
+    lastSubmitTime = now;
     const gameName = document.getElementById("game").value.trim();
     if (!gameName) return;
-
 
     try {
       await fetch("https://script.google.com/macros/s/AKfycbzeM04a5TJDonO4hj2QkeEinqdviobX2veBbX-IKcUYYV0WJ50ybbmuIeHcO7qiSeH3/exec", {
@@ -1200,7 +1211,7 @@ function showRequestForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ game: gameName })
       });
-      
+
       showNotification("✅ Game request submitted!", true);
       form.reset();
     } catch (error) {
