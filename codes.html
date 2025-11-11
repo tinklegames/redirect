@@ -526,7 +526,6 @@ announcementBanner.addEventListener("click", () => {
   <div class="sidebar-item active" data-category="all">All Games</div>
   <div class="sidebar-item" id="movies-btn">🎬 Movies</div>
   <div class="sidebar-item" data-category="request">🎮 Request Games</div>
-  <div class="sidebar-item" data-category="suggestions">💡 Suggestions</div>
 </div>
 
 <!-- MAIN -->
@@ -1093,8 +1092,6 @@ categories.forEach(cat => {
 
     if (cat.value === "popular") showPopular();
     else if (cat.value === "new") showNewGames();
-    else if (cat === "request") showRequestForm();
-    else if (cat === "suggestions") showSuggestionsForm();
     else showCategory(cat.value);
 
     // Highlight clicked button
@@ -1274,65 +1271,6 @@ function showRequestForm() {
     }
   });
 }
-
-/* --- Suggestions --- */
-function showSuggestionsForm() {
-  gamesContainer.innerHTML = `
-    <div class="form-container">
-      <h3 class="form-title">💡 Suggestions</h3>
-      <form id="suggestion-form" class="form">
-        <div class="form-group">
-          <input
-            type="text"
-            id="suggestion"
-            name="suggestion"
-            placeholder="Enter your suggestion..."
-            required
-          />
-        </div>
-
-        <button type="submit" class="form-submit-btn">
-          Submit Suggestion
-        </button>
-      </form>
-    </div>
-  `;
-
-  const form = document.getElementById("suggestion-form");
-  const submitBtn = form.querySelector(".form-submit-btn");
-  let lastSubmitTime = 0; // track cooldown
-
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const now = Date.now();
-    const elapsed = now - lastSubmitTime;
-
-    if (elapsed < 60000) { // 10 seconds
-      const remaining = Math.ceil((60000 - elapsed) / 1000);
-      showNotification(`⏳ Please wait ${remaining}s before submitting another request.`, false);
-      return;
-    }
-
-    lastSubmitTime = now;
-    const gameName = document.getElementById("suggestion").value.trim();
-    if (!gameName) return;
-
-    try {
-      await fetch("https://script.google.com/macros/s/AKfycbx5-AJYIr6YKofpmG_DRQTzNOlI-5sbC-41Ccy92r0u71ZiKFYdCTZweyODr7lsZPsf/exec", {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ game: gameName })
-      });
-
-      showNotification("✅ Suggestion submitted!", true);
-      form.reset();
-    } catch (error) {
-      console.error(error);
-      showNotification("❌ Failed to submit suggestion.", false);
-    }
-  });
-}
   
 /* --- Search --- */
 function filterSearch(term) {
@@ -1361,7 +1299,6 @@ sidebarItems.forEach(item => {
     if (cat === "popular") showPopular();
     else if (cat === "new") showNewGames();
     else if (cat === "request") showRequestForm();
-    else if (cat === "suggestions") showSuggestionsForm();
     else showCategory(cat);
 
     filterSearch(searchBar.value);
