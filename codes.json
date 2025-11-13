@@ -104,5 +104,10 @@
     "SNOW": "https://tinklegames.github.io/host/snowrider3d|true",
     "BBROS": "https://nealfun.app/game/baseball-bros/|true",
     "AGS": "https://tinklegames.github.io/youtube-playables/angry-birds-showdown/|false",
-    "AG": "https://tinklegames.github.io/AngryBirds/|false"
+    "AG": "https://tinklegames.github.io/AngryBirds/|false",
+    "SMASHK": "https://tinklegames.github.io/ports/play/smash-karts/|true",
+    "TAG": "https://tinklegames.github.io/ports/play/tag/|true",
+    "MOTO1": "https://tinklegames.github.io/ports/play/motox3m/|true",
+    "INCREDIBOX": "https://tinklegames.github.io/ports/play/incredibox/|true",
+    "BADPIGS": "https://tinklegames.github.io/ports/play/bad-piggies/|true"
 }
