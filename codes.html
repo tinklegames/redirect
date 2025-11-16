@@ -262,41 +262,80 @@ h2 {
 </style>
 </head>
 <body>
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
 
-<div id="intro-screen">
-  <div id="intro-text">Click to Enter</div>
+<div id="updateLog" class="update-log show">
+  <div class="log-content" onclick="event.stopPropagation()">
+    <span class="close-btn" onclick="hideUpdateLog()"><i class='bx bx-x'></i></span>
+    <h2>Update Log V1.0</h2>
+    <ul>
+      <li>Added Update Log</li>
+      <li>Added 6 New Games</li>
+      _______________________________
+      <h3>Coming Soon</h3>
+      <li>More Games</li>
+      <li>Themes</li>
+      <li>AI</li>
+    </ul>
+  </div>
 </div>
 
 <style>
-  /* Intro Screen */
-  #intro-screen {
+  .update-log {
     position: fixed;
     inset: 0;
-    background: black;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(5px);
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 10000;
-    transition: opacity 1s ease, visibility 1s ease;
+    z-index: 999;
+    opacity: 1;
+    transition: opacity 0.5s ease;
   }
-  #intro-text {
-    color: white;
-    font-family: "Orbitron", sans-serif;
-    font-size: 36px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    cursor: pointer;
-    user-select: none;
-    transition: transform 0.25s ease, opacity 0.5s ease;
-  }
-  #intro-text:hover {
-    transform: scale(1.08);
-    opacity: 0.9;
-  }
-  #intro-screen.fade-out {
+
+  .update-log.fade-out {
     opacity: 0;
-    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .log-content {
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    padding: 30px 40px;
+    border-radius: 20px;
+    color: white;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    text-align: left;
+    position: relative;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .update-log.fade-out .log-content {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  .log-content h2 {
+    margin-top: 0;
+  }
+
+  .log-content ul {
+    padding-left: 20px;
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    font-size: 1.4rem;
+    cursor: pointer;
   }
   
 /* --- Partner Card --- */
@@ -434,16 +473,17 @@ h2 {
 </style>
 
 <script>
-  // Intro Screen Logic
-  document.addEventListener("DOMContentLoaded", () => {
-    const intro = document.getElementById("intro-screen");
-    const text = document.getElementById("intro-text");
+  function hideUpdateLog() {
+    const log = document.getElementById('updateLog');
+    log.classList.add('fade-out');
+    setTimeout(() => {
+      log.style.display = 'none';
+      log.classList.remove('fade-out'); // reset for next time
+    }, 500); // matches transition duration
+  }
 
-    text.addEventListener("click", () => {
-      intro.classList.add("fade-out");
-      setTimeout(() => intro.remove(), 1000);
-    });
-  });
+  // Clicking outside log content also closes
+  document.getElementById('updateLog').addEventListener('click', hideUpdateLog);
 </script>
 
 <div id="announcement-banner">
