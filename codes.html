@@ -259,13 +259,17 @@ h2 {
   border-color: transparent;
   box-shadow: 0 0 15px rgba(64, 201, 255, 0.4);
 }
+.update-log.hidden-start {
+  opacity: 0;
+  pointer-events: none;
+}
 </style>
 </head>
 <body>
 <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
 
-<div id="updateLog" class="update-log show">
+<div id="updateLog" class="update-log hidden-start">
   <div class="log-content" onclick="event.stopPropagation()">
     <span class="close-btn" onclick="hideUpdateLog()"><i class='bx bx-x'></i></span>
     <h2>Update Log V1.0</h2>
@@ -485,6 +489,20 @@ h2 {
   // Clicking outside log content also closes
   document.getElementById('updateLog').addEventListener('click', hideUpdateLog);
 </script>
+<script>
+window.addEventListener("DOMContentLoaded", () => {
+  const log = document.getElementById("updateLog");
+
+  // force hidden state first
+  log.classList.add("hidden-start");
+
+  // allow a tiny delay so the transition triggers
+  setTimeout(() => {
+    log.classList.remove("hidden-start");
+  }, 50);
+});
+</script>
+
 
 <div id="announcement-banner">
   📢 Enter Codes Here!
@@ -2015,5 +2033,6 @@ window.showPopular = async function() {
 };
 
 </script>
+
 </body>
 </html>
