@@ -112,10 +112,10 @@
     "MOTO3": "https://tinklegames.github.io/motox3m/game/moto-x3m-3/|true",
     "MOTO4": "https://tinklegames.github.io/motox3m/game/moto-x3m-pool-party/|true",
     "MOTO5": "https://tinklegames.github.io/motox3m/game/moto-x3m-spooky-land/|true",
-    "MOTO6": "https://tinklegames.github.io/motox3m/game/moto-x3m-winter/|true",
-    "INCREDIBOX": "https://tinklegames.github.io/ports/play/incredibox/|true",
-    "BADPIGS": "https://tinklegames.github.io/ports/play/bad-piggies/|true",
-    "DIDDY": "https://tinklegames.github.io/host/diddygame/|true",
-    "NSMB": "https://tinklegames.github.io/host/nsmb/|true",
-    "UKILL": "https://tinklegames.github.io/host/ULTRAKILL/|true"
+    "MOTO6": "https://tinklegames.github.io/motox3m/game/moto-x3m-winter|true",
+    "INCREDIBOX": "https://tinklegames.github.io/ports/play/incredibox|true",
+    "BADPIGS": "https://tinklegames.github.io/ports/play/bad-piggies|true",
+    "DIDDY": "https://tinklegames.github.io/host/diddygame|true",
+    "NSMB": "https://tinklegames.github.io/host/nsmb|true",
+    "UKILL": "https://tinklegames.github.io/host/ULTRAKILL|true"
 }
