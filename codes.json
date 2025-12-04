@@ -128,5 +128,6 @@
     "CRANK": "http://tinklegames.github.io/crank|false",
     "NARROW": "https://tinklegames.github.io/host/narrow.one/|false",
     "TLD": "https://tinklegames.github.io/TLD/|true",
-    "HTALE": "https://tinklegames.github.io/horrortale/|true"
+    "HTALE": "https://tinklegames.github.io/horrortale/|true",
+    "STUMBLE": "https://tinklegames.github.io/stumbguys/|true"
 }
