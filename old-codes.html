@@ -1,526 +1,574 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<title>English Assignment</title>
-<style>
-body {
-  background-color: black;
-  margin: 0;
-  font-family: Arial, sans-serif;
-  overflow-x: hidden;
-  display: flex;
-}
+    <meta charset="UTF-8">
+    <title>English Assignment</title>
+    <style>
+        body {
+            background-color: black;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+            display: flex;
+        }
 
-/* --- Announcement --- */
-#announcement-banner {
-  width: 100%;
-  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  text-align: center;
-  padding: 12px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 999;
-  border: none;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-}
+        /* --- Announcement --- */
+        #announcement-banner {
+            width: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 999;
+            border: none;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
 
-#announcement-banner:hover {
-  background: linear-gradient(90deg, #764ba2 0%, #667eea 100%);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-  transform: translateY(1px);
-}
-  
-/* --- Sidebar --- */
-#sidebar {
-  position: fixed;
-  top: 60px;
-  left: 0;
-  width: 200px;
-  background-color: #111;
-  height: calc(100vh - 60px);
-  border-right: 1px solid #333;
-  padding-top: 20px;
-  overflow-y: auto;
-}
-.sidebar-item {
-  color: white;
-  padding: 12px 20px;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-.sidebar-item:hover,
-.sidebar-item.active { background-color: #333; }
+        #announcement-banner:hover {
+            background: linear-gradient(90deg, #764ba2 0%, #667eea 100%);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            transform: translateY(1px);
+        }
 
-/* --- Main Container --- */
-#container {
-  margin-left: 200px;
-  margin-top: 60px;
-  background-color: #1a1a1a;
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0 0 10px rgba(255,255,255,0.2);
-  max-width: calc(100% - 220px);
-  min-height: calc(100vh - 80px);
-  flex: 1;
-}
+        /* --- Sidebar --- */
+        #sidebar {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            width: 200px;
+            background-color: #111;
+            height: calc(100vh - 60px);
+            border-right: 1px solid #333;
+            padding-top: 20px;
+            overflow-y: auto;
+        }
 
-h2 {
-  color: white;
-  text-align: center;
-  margin-bottom: 10px;
-}
+        .sidebar-item {
+            color: white;
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
 
-#search-bar {
-  width: 80%;
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 8px;
-  border: none;
-  margin: 0 auto 25px;
-  outline: none;
-  display: block;
-  text-align: center;
-}
+        .sidebar-item:hover,
+        .sidebar-item.active {
+            background-color: #333;
+        }
 
-/* --- Game Gallery Layout --- */
-#games {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 25px;
-  padding-bottom: 50px;
-}
+        /* --- Main Container --- */
+        #container {
+            margin-left: 200px;
+            margin-top: 60px;
+            background-color: #1a1a1a;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+            max-width: calc(100% - 220px);
+            min-height: calc(100vh - 80px);
+            flex: 1;
+        }
 
-/* --- Game Card --- */
-.game-card {
-  position: relative;
-  background-color: #222;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 0 8px rgba(255,255,255,0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  width: 180px;
-  height: 240px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.game-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 15px rgba(255,255,255,0.3);
-}
-.game-card img {
-  width: 160px;
-  height: 160px;
-  object-fit: cover;
-  border-radius: 15px;
-  margin-top: 10px;
-}
-.game-name {
-  color: white;
-  font-size: 14px;
-  font-weight: bold;
-  margin: 8px 0 5px;
-}
-.get-code {
-  padding: 6px 14px;
-  border-radius: 10px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-size: 12px;
-  opacity: 0.9;
-}
-.get-code:hover { background-color: #45a049; }
+        h2 {
+            color: white;
+            text-align: center;
+            margin-bottom: 10px;
+        }
 
-/* --- Rank Badges --- */
-.rank-badge {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  font-weight: bold;
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 12px;
-  color: black;
-  animation: pulse 1.2s infinite alternate;
-}
-@keyframes pulse {
-  from { transform: scale(1); }
-  to { transform: scale(1.15); }
-}
-.rank-gold   { background: linear-gradient(45deg, gold, #ffda73); box-shadow: 0 0 12px gold; }
-.rank-silver { background: linear-gradient(45deg, #c0c0c0, #eeeeee); box-shadow: 0 0 12px #ccc; }
-.rank-bronze { background: linear-gradient(45deg, #cd7f32, #e6a96f); box-shadow: 0 0 12px #cd7f32; }
-.rank-blue   { background: linear-gradient(45deg, #00bfff, #80e0ff); box-shadow: 0 0 12px #00bfff; }
+        #search-bar {
+            width: 80%;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: none;
+            margin: 0 auto 25px;
+            outline: none;
+            display: block;
+            text-align: center;
+        }
 
-/* --- Notification --- */
-#notification {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  padding: 15px;
-  border-radius: 10px;
-  color: white;
-  font-size: 14px;
-  display: none;
-  z-index: 1000;
-}
-.success { background-color: #4CAF50; }
-.error { background-color: #f44336; }
+        /* --- Game Gallery Layout --- */
+        #games {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+            padding-bottom: 50px;
+        }
 
-.form-container {
-  width: 360px;
-  background: linear-gradient(#1a1a1a, #1a1a1a) padding-box,
-              linear-gradient(145deg, transparent 35%, #e81cff, #40c9ff) border-box;
-  border: 2px solid transparent;
-  padding: 32px 26px;
-  font-size: 14px;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-radius: 18px;
-  box-shadow: 0 0 25px rgba(232, 28, 255, 0.3);
-  margin: 60px auto;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.form-container:hover {
-  transform: scale(1.02);
-  box-shadow: 0 0 35px rgba(64, 201, 255, 0.4);
-}
+        /* --- Game Card --- */
+        .game-card {
+            position: relative;
+            background-color: #222;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: 180px;
+            height: 240px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-.form-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: #fff;
-  text-align: center;
-  margin-bottom: 22px;
-}
+        .game-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
 
-.form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  width: 100%;
-}
+        .game-card img {
+            width: 160px;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-top: 10px;
+        }
 
-.form-group {
-  width: 80%;
-  display: flex;
-  flex-direction: column;
-}
+        .game-name {
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            margin: 8px 0 5px;
+        }
 
-.form-group input {
-  width: 90%;
-  padding: 12px 14px;
-  border-radius: 10px;
-  color: #fff;
-  background-color: transparent;
-  border: 1px solid #444;
-  text-align: center;
-  font-size: 14px;
-  transition: border 0.2s, box-shadow 0.2s;
-}
-.form-group input::placeholder {
-  color: #888;
-}
-.form-group input:focus {
-  outline: none;
-  border-color: #e81cff;
-  box-shadow: 0 0 10px rgba(232, 28, 255, 0.3);
-}
+        .get-code {
+            padding: 6px 14px;
+            border-radius: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            opacity: 0.9;
+        }
 
-.form-submit-btn {
-  color: #ccc;
-  font-weight: 600;
-  background: #212121;
-  border: 1px solid #414141;
-  padding: 10px 20px;
-  border-radius: 10px;
-  cursor: pointer;
-  width: 50%;
-  transition: all 0.25s ease;
-}
-.form-submit-btn:hover {
-  background: linear-gradient(90deg, #e81cff, #40c9ff);
-  color: white;
-  border-color: transparent;
-  box-shadow: 0 0 15px rgba(64, 201, 255, 0.4);
-}
-.update-log.hidden-start {
-  opacity: 0;
-  pointer-events: none;
-}
-</style>
+        .get-code:hover {
+            background-color: #45a049;
+        }
+
+        /* --- Rank Badges --- */
+        .rank-badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: black;
+            animation: pulse 1.2s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.15);
+            }
+        }
+
+        .rank-gold {
+            background: linear-gradient(45deg, gold, #ffda73);
+            box-shadow: 0 0 12px gold;
+        }
+
+        .rank-silver {
+            background: linear-gradient(45deg, #c0c0c0, #eeeeee);
+            box-shadow: 0 0 12px #ccc;
+        }
+
+        .rank-bronze {
+            background: linear-gradient(45deg, #cd7f32, #e6a96f);
+            box-shadow: 0 0 12px #cd7f32;
+        }
+
+        .rank-blue {
+            background: linear-gradient(45deg, #00bfff, #80e0ff);
+            box-shadow: 0 0 12px #00bfff;
+        }
+
+        /* --- Notification --- */
+        #notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+            font-size: 14px;
+            display: none;
+            z-index: 1000;
+        }
+
+        .success {
+            background-color: #4CAF50;
+        }
+
+        .error {
+            background-color: #f44336;
+        }
+
+        .form-container {
+            width: 360px;
+            background: linear-gradient(#1a1a1a, #1a1a1a) padding-box,
+                linear-gradient(145deg, transparent 35%, #e81cff, #40c9ff) border-box;
+            border: 2px solid transparent;
+            padding: 32px 26px;
+            font-size: 14px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-radius: 18px;
+            box-shadow: 0 0 25px rgba(232, 28, 255, 0.3);
+            margin: 60px auto;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-container:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 35px rgba(64, 201, 255, 0.4);
+        }
+
+        .form-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #fff;
+            text-align: center;
+            margin-bottom: 22px;
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .form-group {
+            width: 80%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group input {
+            width: 90%;
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: #fff;
+            background-color: transparent;
+            border: 1px solid #444;
+            text-align: center;
+            font-size: 14px;
+            transition: border 0.2s, box-shadow 0.2s;
+        }
+
+        .form-group input::placeholder {
+            color: #888;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #e81cff;
+            box-shadow: 0 0 10px rgba(232, 28, 255, 0.3);
+        }
+
+        .form-submit-btn {
+            color: #ccc;
+            font-weight: 600;
+            background: #212121;
+            border: 1px solid #414141;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 50%;
+            transition: all 0.25s ease;
+        }
+
+        .form-submit-btn:hover {
+            background: linear-gradient(90deg, #e81cff, #40c9ff);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 0 15px rgba(64, 201, 255, 0.4);
+        }
+
+        .update-log.hidden-start {
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
 </head>
+
 <body>
-<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
 
-<div id="updateLog" class="update-log hidden-start">
-  <div class="log-content" onclick="event.stopPropagation()">
-    <span class="close-btn" onclick="hideUpdateLog()"><i class='bx bx-x'></i></span>
-    <h2>Update Log V1.4</h2>
-    <ul>
-      <li>Added Basket Bros</li>
-      <li>Added Basketball Stars</li>
-      <li>Added Cut The Rope</li>
-      <li>Added Cut The Rope: Time Travel</li>
-      <li>Added Rooftop Snipers</li>
-      <li>Added Rooftop Snipers 2</li>
-      _______________________________
-      <h3>Coming Soon</h3>
-      <li>More Games</li>
-      <li>Themes</li>
-      <li>AI</li>
-    </ul>
-  </div>
-</div>
+    <div id="updateLog" class="update-log hidden-start">
+        <div class="log-content" onclick="event.stopPropagation()">
+            <span class="close-btn" onclick="hideUpdateLog()"><i class='bx bx-x'></i></span>
+            <h2>Update Log V1.4</h2>
+            <ul>
+                <li>Added Basket Bros</li>
+                <li>Added Basketball Stars</li>
+                <li>Added Cut The Rope</li>
+                <li>Added Cut The Rope: Time Travel</li>
+                <li>Added Rooftop Snipers</li>
+                <li>Added Rooftop Snipers 2</li>
+                _______________________________
+                <h3>Coming Soon</h3>
+                <li>More Games</li>
+                <li>Themes</li>
+                <li>AI</li>
+            </ul>
+        </div>
+    </div>
 
-<style>
-  .update-log {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(5px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 999;
-    opacity: 1;
-    transition: opacity 0.5s ease;
-  }
+    <style>
+        .update-log {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
 
-  .update-log.fade-out {
-    opacity: 0;
-    pointer-events: none;
-  }
+        .update-log.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
 
-  .log-content {
-    background: rgba(0, 0, 0, 0.25);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    padding: 30px 40px;
-    border-radius: 20px;
-    color: white;
-    max-width: 400px;
-    width: 90%;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-    text-align: left;
-    position: relative;
-    transition: transform 0.5s ease, opacity 0.5s ease;
-    opacity: 1;
-    transform: scale(1);
-  }
+        .log-content {
+            background: rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 30px 40px;
+            border-radius: 20px;
+            color: white;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+            text-align: left;
+            position: relative;
+            transition: transform 0.5s ease, opacity 0.5s ease;
+            opacity: 1;
+            transform: scale(1);
+        }
 
-  .update-log.fade-out .log-content {
-    opacity: 0;
-    transform: scale(0.95);
-  }
+        .update-log.fade-out .log-content {
+            opacity: 0;
+            transform: scale(0.95);
+        }
 
-  .log-content h2 {
-    margin-top: 0;
-  }
+        .log-content h2 {
+            margin-top: 0;
+        }
 
-  .log-content ul {
-    padding-left: 20px;
-  }
+        .log-content ul {
+            padding-left: 20px;
+        }
 
-  .close-btn {
-    position: absolute;
-    top: 10px;
-    right: 14px;
-    font-size: 1.4rem;
-    cursor: pointer;
-  }
-  
-/* --- Partner Card --- */
-.card {
-  position: relative;
-  width: 300px;
-  height: 200px;
-  background-color: #f2f2f2;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  perspective: 1000px;
-  box-shadow: 0 0 0 5px #ffffff80;
-  transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 14px;
+            font-size: 1.4rem;
+            cursor: pointer;
+        }
 
-.card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 16px rgba(255, 255, 255, 0.2);
-}
+        /* --- Partner Card --- */
+        .card {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            background-color: #f2f2f2;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            perspective: 1000px;
+            box-shadow: 0 0 0 5px #ffffff80;
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
 
-/* --- Front Image --- */
-.card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(255, 255, 255, 0.2);
+        }
 
-.card:hover img {
-  opacity: 0;
-  transform: scale(0.9);
-}
+        /* --- Front Image --- */
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
 
-/* --- Back Content --- */
-.card__content {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  padding: 20px;
-  box-sizing: border-box;
-  background-color: #f2f2f2;
-  transform: rotateX(-90deg);
-  transform-origin: bottom;
-  transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
+        .card:hover img {
+            opacity: 0;
+            transform: scale(0.9);
+        }
 
-.card:hover .card__content {
-  transform: rotateX(0deg);
-}
+        /* --- Back Content --- */
+        .card__content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: #f2f2f2;
+            transform: rotateX(-90deg);
+            transform-origin: bottom;
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
 
-/* --- Text --- */
-.card__title {
-  margin: 0;
-  font-size: 24px;
-  color: #333;
-  font-weight: 700;
-}
+        .card:hover .card__content {
+            transform: rotateX(0deg);
+        }
 
-.card__description {
-  margin: 10px 0;
-  font-size: 14px;
-  color: #777;
-  line-height: 1.4;
-}
+        /* --- Text --- */
+        .card__title {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+            font-weight: 700;
+        }
 
-/* --- Buttons --- */
-.card__buttons {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  margin-top: 10px;
-}
+        .card__description {
+            margin: 10px 0;
+            font-size: 14px;
+            color: #777;
+            line-height: 1.4;
+        }
 
-.card__button {
-  flex: 1;
-  text-align: center;
-  padding: 8px 0;
-  border-radius: 8px;
-  background: #5865F2; /* Discord color */
-  color: white;
-  font-weight: bold;
-  font-size: 14px;
-  cursor: pointer;
-  text-decoration: none;
-  transition: background 0.3s ease, transform 0.2s;
-}
+        /* --- Buttons --- */
+        .card__buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 10px;
+        }
 
-.card__button.open {
-  background: #333;
-}
+        .card__button {
+            flex: 1;
+            text-align: center;
+            padding: 8px 0;
+            border-radius: 8px;
+            background: #5865F2;
+            /* Discord color */
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.3s ease, transform 0.2s;
+        }
 
-.card__button:hover {
-  transform: scale(1.05);
-  background: #404EED;
-}
+        .card__button.open {
+            background: #333;
+        }
 
-.card__button.open:hover {
-  background: #555;
-}
-  
-.category-btn {
-  padding: 8px 16px;
-  border-radius: 8px;
-  border: 1px solid #444;
-  background-color: #222;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
+        .card__button:hover {
+            transform: scale(1.05);
+            background: #404EED;
+        }
 
-.category-btn:hover {
-  background-color: #333;
-  transform: scale(1.05);
-}
+        .card__button.open:hover {
+            background: #555;
+        }
 
-.category-btn.active {
-  background-color: #5865F2;
-  border-color: #5865F2;
-}
-#all-games-controls {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 20px;
-}
-</style>
+        .category-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background-color: #222;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
 
-<script>
-  function hideUpdateLog() {
-    const log = document.getElementById('updateLog');
-    log.classList.add('fade-out');
-    setTimeout(() => {
-      log.style.display = 'none';
-      log.classList.remove('fade-out'); // reset for next time
-    }, 500); // matches transition duration
-  }
+        .category-btn:hover {
+            background-color: #333;
+            transform: scale(1.05);
+        }
 
-  // Clicking outside log content also closes
-  document.getElementById('updateLog').addEventListener('click', hideUpdateLog);
-</script>
-<script>
-window.addEventListener("DOMContentLoaded", () => {
-  const log = document.getElementById("updateLog");
+        .category-btn.active {
+            background-color: #5865F2;
+            border-color: #5865F2;
+        }
 
-  // force hidden state first
-  log.classList.add("hidden-start");
+        #all-games-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+    </style>
 
-  // allow a tiny delay so the transition triggers
-  setTimeout(() => {
-    log.classList.remove("hidden-start");
-  }, 50);
-});
-</script>
+    <script>
+        function hideUpdateLog() {
+            const log = document.getElementById('updateLog');
+            log.classList.add('fade-out');
+            setTimeout(() => {
+                log.style.display = 'none';
+                log.classList.remove('fade-out'); // reset for next time
+            }, 500); // matches transition duration
+        }
+
+        // Clicking outside log content also closes
+        document.getElementById('updateLog').addEventListener('click', hideUpdateLog);
+    </script>
+    <script>
+        window.addEventListener("DOMContentLoaded", () => {
+            const log = document.getElementById("updateLog");
+
+            // force hidden state first
+            log.classList.add("hidden-start");
+
+            // allow a tiny delay so the transition triggers
+            setTimeout(() => {
+                log.classList.remove("hidden-start");
+            }, 50);
+        });
+    </script>
 
 
-<div id="announcement-banner">
-  📢 Enter Codes Here!
-</div>
-<script>
-const announcementBanner = document.getElementById("announcement-banner");
-const codesLink = "https://tinklegames.github.io/redirect/";
-const mainSite = window.location.href; // original page to return to
+    <div id="announcement-banner">
+        📢 Enter Codes Here!
+    </div>
+    <script>
+        const announcementBanner = document.getElementById("announcement-banner");
+        const codesLink = "https://tinklegames.github.io/redirect/";
+        const mainSite = window.location.href; // original page to return to
 
-announcementBanner.addEventListener("click", () => {
-  // Open about:blank in same tab
-  const doc = window.open("about:blank", "_self");
-  if (doc) {
-    doc.document.write(`
+        announcementBanner.addEventListener("click", () => {
+            // Open about:blank in same tab
+            const doc = window.open("about:blank", "_self");
+            if (doc) {
+                doc.document.write(`
       <html>
         <head>
           <title>Tinkle Party Codes</title>
@@ -577,870 +625,899 @@ announcementBanner.addEventListener("click", () => {
         </body>
       </html>
     `);
-    doc.document.close();
-  } else {
-    alert("Redirect failed — please allow this site to open pages.");
-  }
-});
-</script>
-<!-- SIDEBAR -->
-<div id="sidebar">
-  <div class="sidebar-item active" data-category="all">All Games</div>
-  <div class="sidebar-item" id="movies-btn">🎬 Movies</div>
-  <div class="sidebar-item" data-category="request">🎮 Request Games</div>
-  <div class="sidebar-item" data-category="suggestions">💡 Suggestions</div>
-</div>
-
-<!-- MAIN -->
-<div id="container">
-  <h2 id="category-title">All Games</h2>
-<div id="all-games-controls">
-  <input id="search-bar" type="text" placeholder="🔍 Search games..." />
-  <div id="category-buttons" style="display:flex; justify-content:center; flex-wrap:wrap; gap:10px; margin-bottom:20px;">
-  </div>
-</div>
-  <div id="games">
-    <div class="game-card" data-code="FUN" data-category="horror">
-      <p class="game-name">FeedVid Live</p>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7ODvZa5aAF8Hj8nWOrVcIGgolUgeqIgbL4A&s" alt="FeedVid Live">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="RACCOON" data-category="arcade">
-      <p class="game-name">Tanuki Sunset</p>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6xVpwHBAogwVdiqlsfh8m_1dsP0okrOH6VA&s" alt="Tanuki Sunset">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="POLY" data-category="arcade">
-      <p class="game-name">PolyTrack</p>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTN-a70X18WcY1jVzgEhMPJwvlxXqpqXzd8qg&s" alt="PolyTrack">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="VAMP" data-category="action">
-      <p class="game-name">Vampire Survivors</p>
-      <img src="https://play-lh.googleusercontent.com/R1dShZj1HNBQzrHhsAD9_F8BRc2FU-nlDMU7OIAIwnMge04QWvNZR-clnXnEd_v30Qo" alt="Vampire Survivors">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="SCARY" data-category="horror">
-      <p class="game-name">Delivery Mystery</p>
-      <img src="https://i.ytimg.com/vi/EGPrR_zt0YM/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLA-xjmqx4XqaYi9o9DPni3H-CNs4w" alt="Burger & Frights">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="KING" data-category="puzzle">
-      <p class="game-name">Sort the Court!</p>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScw_aOzrTL5nvkw15Rax6nPjHYUzsg3pEugA&s" alt="Sort the Court!">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="FRUIT" data-category="arcade">
-      <p class="game-name">Fruit Ninja</p>
-      <img src="https://cdn.jim-nielsen.com/ios/512/fruit-ninja-2020-08-31.png?rf=1024" alt="Fruit Ninja">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="BOW" data-category="arcade">
-      <p class="game-name">Bowmasters</p>
-      <img src="https://play-lh.googleusercontent.com/rsQyCuie6S8Munc2Hv6IMpePP1g3c0okLkyKRXd1IimOryIBMZqymGKaOg7bZ6NMkhj3=w240-h480-rw" alt="Bowmasters">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="CROSSY" data-category="arcade">
-      <p class="game-name">Crossy Roads</p>
-      <img src="https://upload.wikimedia.org/wikipedia/en/7/71/Crossy_Road_icon.jpeg" alt="Crossy Roads">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="DRAW" data-category="arcade">
-      <p class="game-name">Draw Climbers</p>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIfT8Z8cWUjy_YmipolVtNkYFCup2u2ziVOnNuFK3fQpmoKFyN4fn43uynMSDe2pZypjQ&usqp=CAU" alt="Draw Climbers">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="TOMB" data-category="arcade">
-      <p class="game-name">Tomb Of The Mask</p>
-      <img src="https://play-lh.googleusercontent.com/ATGr-U4JBK2VjFzKGK9eMMkrDxJaazadOUoz_7Yl0U5NrWSFcFUzEtNurWXYzVWc8uOO=w240-h480-rw" alt="Tomb Of The Mask">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="COOKIE" data-category="simulator">
-      <p class="game-name">Cookie Clicker</p>
-      <img src="https://play-lh.googleusercontent.com/Z1MOuuiD05ZN5LkVmMEvKF0mqAc-FknaQ2j8s4dZiO-LSPQX4EEA3RVJdlQEtxe96ok" alt="Cookie Clicker">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="DR3D" data-category="arcade">
-      <p class="game-name">Death Run 3D</p>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmy73hHHgqrJSvDJyUYr3niFBHo5oo3JFHCg&s" alt="Death Run 3D">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="BALDI" data-category="horror">
-      <p class="game-name">Baldi’s Basics</p>
-      <img src="https://play-lh.googleusercontent.com/EPV1TB4So1lB0DGrdCVExDpNU8ML67nd8OqBeoOIM-s6sDicxmDdPvCXD6n7LKevFl0" alt="Baldi’s Basics">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="SLOPE" data-category="arcade">
-      <p class="game-name">Slope</p>
-      <img src="https://play-lh.googleusercontent.com/uJn2i9h7KxYQarC_c3K4qH6o7gLtflFnhD_dN14MNkzHJ1NeNFzCL69jpB5mT0vCoQs" alt="Slope">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="DRIVE" data-category="arcade">
-      <p class="game-name">Drive Mad</p>
-      <img src="https://play-lh.googleusercontent.com/7l3WAPbei9MXrxnCzImpXi2VxjEBtgDl0htwvTnA-YqpJAuQJPpSiby1oB8LZMgD0IAy" alt="Drive Mad">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="FNAF1" data-category="horror">
-      <p class="game-name">FNAF 1</p>
-      <img src="https://github.com/tinklegames/fnaf/blob/main/1/logo.jpg?raw=true" alt="FNAF 1">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="FNAF2" data-category="horror">
-      <p class="game-name">FNAF 2</p>
-      <img src="https://github.com/tinklegames/fnaf/blob/main/2/logo.jpg?raw=true" alt="FNAF 2">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="FNAF3" data-category="horror">
-      <p class="game-name">FNAF 3</p>
-      <img src="https://github.com/tinklegames/fnaf/blob/main/3/logo.webp?raw=true" alt="FNAF 3">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="FNAF4" data-category="horror">
-      <p class="game-name">FNAF 4</p>
-      <img src="https://github.com/tinklegames/fnaf/blob/main/4/logo.webp?raw=true" alt="FNAF 4">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="FNAF4H" data-category="horror">
-      <p class="game-name">FNAF 4: Halloween Edition</p>
-      <img src="https://github.com/tinklegames/fnaf/blob/main/4-halloween/logo.png?raw=true" alt="FNAF 4H">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="FNAFPS" data-category="horror">
-      <p class="game-name">FNAF: Pizzeria Simulator</p>
-      <img src="https://github.com/tinklegames/fnaf/blob/main/ps/logo.png?raw=true" alt="FNAF PS">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="FNAFSL" data-category="horror">
-      <p class="game-name">FNAF: Sister Location</p>
-      <img src="https://github.com/tinklegames/fnaf/blob/main/sl/logo.png?raw=true" alt="FNAF SL">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="JET" data-category="arcade">
-      <p class="game-name">Jetpack Joyride</p>
-      <img src="https://play-lh.googleusercontent.com/3e_iyy1dolGSHqKFmwsao8SiMmqOtCuwD4CyKToLHoK34cchcH5PlG2VhOoE2_j-7FMH" alt="Jetpack Joyride">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="MART" data-category="arcade">
-      <p class="game-name">Monkey Mart</p>
-      <img src="https://play-lh.googleusercontent.com/rWReIdyvDaYJPeOxn7hbC0b-96ixGpQKM_EndiQa3SUME8TtI_rNUcI4qsw5teK9mqk" alt="Monkey Mart">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="SUBWAY" data-category="arcade">
-      <p class="game-name">Subway Surfers</p>
-      <img src="https://w7.pngwing.com/pngs/416/401/png-transparent-subway-surfers-smash-champs-android-kiloo-subway-surfer-hand-computer-wallpaper-cartoon-thumbnail.png" alt="Subway Surfers">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="SUPERHOT" data-category="arcade">
-      <p class="game-name">SUPERHOT</p>
-      <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/i/a6e74472-2425-4077-817c-55d42cee8697/dd2eu62-f3c6ca09-35fb-42c8-b360-1ddd7ef02fde.png/v1/fill/w_512,h_512,q_80,strp/superhot_icon__by_iconinja__by_iconinja_dd2eu62-fullview.jpg" alt="SUPERHOT">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="VEX4" data-category="arcade">
-      <p class="game-name">Vex 4</p>
-      <img src="https://images.dwncdn.net/images/t_app-icon-l/p/62c971a1-12be-478d-8207-57dbb4e28ff4/1993335666/2095_4-78353669-imgingest-7238314859016812313.png" alt="Vex 4">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="VEX5" data-category="arcade">
-      <p class="game-name">Vex 5</p>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHjyEdV0TwjMEn7tppjneB1C7aJrfzTt6lSQ&s" alt="Vex 5">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="VEX6" data-category="arcade">
-      <p class="game-name">Vex 6</p>
-      <img src="https://www.mathnook.com/img/addthis-fun-games/vex-6-200x200.png" alt="Vex 6">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="VEX7" data-category="arcade">
-      <p class="game-name">Vex 7</p>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-Qisw8oFkf2bTtLnplda1Bs8M5V-Gfcgwfw&s" alt="Vex 7">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="VEX8" data-category="arcade">
-      <p class="game-name">Vex 8</p>
-      <img src="https://play-lh.googleusercontent.com/4tQSYur7SAvXeEvT5GBugYeqbh8KEQSLd1S16t8CJYyDN3g2p27wiPlXnqqAxeCqvg" alt="Vex 8">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="DRIFT" data-category="arcade">
-      <p class="game-name">Drift Boss</p>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTS3Uh0wryQixfAEMiPLynShMYSlv9WO3SC45eEJ9MQxgwRbUo9UePjxNzR_292WwaY02I&usqp=CAU" alt="Drift Boss">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="TEMPLE" data-category="arcade">
-      <p class="game-name">Temple Run 2</p>
-      <img src="https://play-lh.googleusercontent.com/go4XqS4mYs-G2tZymiVLF4wJYXIi5QrvwixNRzssk4G_vRBHrAdg4E1ddNwy9c2cZA" alt="Temple Run 2">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="RETROBOWL" data-category="arcade">
-      <p class="game-name">Retro Bowl</p>
-      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimages.sftcdn.net%2Fimages%2Ft_app-icon-m%2Fp%2Faa2f8eee-d36a-4c20-904f-440b74a535fc%2F394413964%2Fretro-bowl-logo&f=1&nofb=1&ipt=b4b2b9df0af1df1bf111facfdcaf2a33c73e7402906f9692858aaaf7306f15dd" alt="Retro Bowl">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="MARIO" data-category="arcade">
-      <p class="game-name">Super Mario Bros</p>
-      <img src="https://m.media-amazon.com/images/I/91MTy%20J%201AL.jpg" alt="Super Mario Bros">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="PACMAN" data-category="arcade">
-      <p class="game-name">Pac-Man</p>
-      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2F3.bp.blogspot.com%2F_R3JDDb0C9EA%2FS_eb75zOdrI%2FAAAAAAAAABc%2FYvUgDBMDL14%2Fs320%2FPac%2BMan%2BGame.gif&f=1&nofb=1&ipt=b49ecb06a403d758b325c9b31074c773358a036db05d33402f456454c6c22102" alt="Pac-Man">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="RUN3" data-category="arcade">
-      <p class="game-name">Run 3</p>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqt84hsOmA1pbIydI7PvRVHS3eytJRQB5hdQqMO2BXOPBexAxUEFxKdoIGt2JkdImMGEU&usqp=CAU" alt="Run 3">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="STICKHOOK" data-category="arcade">
-      <p class="game-name">Stickman Hook</p>
-      <img src="https://play-lh.googleusercontent.com/yXqBI1Vb1b-xjwmXLE2T7FQbgHIxfvjze1b6jO2aLHfy8Y8ta7NFSEVqZoPHtM2Ajyrl" alt="Stickman Hook">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="MINECRAFT" data-category="action">
-      <p class="game-name">Minecraft</p>
-      <img src="https://i.pinimg.com/736x/6c/96/33/6c9633545ac521e641fb481c19d80a8d.jpg" alt="Minecraft">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="SL2" data-category="action">
-      <p class="game-name">Short Life 2</p>
-      <img src="https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=314,height=314,fit=cover,f=auto/ba38f1297873d106903997a184dbe536/short-life-2.png" alt="Short Life 2">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="BITLIFE" data-category="simulator">
-      <p class="game-name">BitLife</p>
-      <img src="https://play-lh.googleusercontent.com/fUM-UyywXxjC8soxAZdIlxJrlRRXmql8wkE426SHzft4lJycSKVd2jCYQQX1BEG9Xw" alt="BitLife">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="MURDER" data-category="puzzle">
-      <p class="game-name">Murder</p>
-      <img src="https://play-lh.googleusercontent.com/BT7zrf4JNZj4pRV5YIRT4D0DydkuLEzVvnOwKmmOxuc1sbIUJyZbeaFOhjuLK4CXWFg" alt="Murder">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="FNF" data-category="arcade">
-      <p class="game-name">Friday Night Funkin'</p>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsl2Wte_Hp5jrGNRJ3XNIIVa9zB0vO8y54Ig&s" alt="Friday Night Funkin'">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="TING" data-category="puzzle">
-      <p class="game-name">There Is No Game</p>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHriUJw61GtIpLXWLU3i6tgPuUEHFOJvwAHg&s" alt="There Is No Game">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="RS1" data-category="puzzle">
-      <p class="game-name">Riddle School 1</p>
-      <img src="https://flashmuseum.org/wp-content/uploads/2023/06/Riddle-School_logo.png" alt="Riddle School 1">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="RS2" data-category="puzzle">
-      <p class="game-name">Riddle School 2</p>
-      <img src="https://flashmuseum.org/wp-content/uploads/2023/05/Riddle-School-2_logo.png" alt="Riddle School 2">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="RS3" data-category="puzzle">
-      <p class="game-name">Riddle School 3</p>
-      <img src="https://github.com/tinklegames/rs/blob/main/3/riddleschool3.png?raw=true" alt="Riddle School 3">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="RS4" data-category="puzzle">
-      <p class="game-name">Riddle School 4</p>
-      <img src="https://github.com/tinklegames/rs/blob/main/4/riddleschool4.png?raw=true" alt="Riddle School 4">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="RS5" data-category="puzzle">
-      <p class="game-name">Riddle School 5</p>
-      <img src="https://github.com/tinklegames/rs/blob/main/5/riddleschool5.png?raw=true" alt="Riddle School 5">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="RS6" data-category="puzzle">
-      <p class="game-name">Riddle Transfer</p>
-      <img src="https://github.com/tinklegames/rs/blob/main/transfer/riddletransfer.png?raw=true" alt="Riddle Transfer">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="RS7" data-category="puzzle">
-      <p class="game-name">Riddle Transfer 2</p>
-      <img src="https://github.com/tinklegames/rs/blob/main/transfer2/riddletransfer2.png?raw=true" alt="Riddle Transfer 2">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="3DASH" data-category="arcade">
-      <p class="game-name">3D Geometry Dash</p>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFI2wUNUP3Nkl5pT2uxXQtlLTFes0hzx1MExk4FVVQS2TMnue85KpoMx5CuPWynSA_7kM&usqp=CAU" alt="3D Geometry Dash">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="1V1LOL" data-category="action">
-      <p class="game-name">1v1.lol</p>
-      <img src="https://www.metacritic.com/a/img/catalog/provider/6/12/6-1-758332-52.jpg" alt="1v1.lol">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="GRANNY" data-category="horror">
-      <p class="game-name">Granny</p>
-      <img src="https://play-lh.googleusercontent.com/yT_LBq_tyKeIDohKDsqN_Qt18jGIPUYIxY2C-1-E2YA9Qd60uZW08pua17qBmIiDPA" alt="Granny">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="GRANNY2" data-category="horror">
-      <p class="game-name">Granny 2</p>
-      <img src="https://play-lh.googleusercontent.com/iZ7NP-56YenT2dpgKEAw3n7IKFyu-S_9Iu3ayo28XYTgZpFtxsK_HXltV36pysSJqq8=w240-h480-rw" alt="Granny 2">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="BOBLOX" data-category="arcade">
-      <p class="game-name">Roblox Obby?</p>
-      <img src="https://cdna.artstation.com/p/assets/images/images/080/886/112/large/outmou-parkor-1.jpg?1728814579" alt="Roblox Obby?">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="GUNSPIN" data-category="arcade">
-      <p class="game-name">Gun Spin</p>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTei07pjTSWlXal0yIdqvTJLZpaoRVwblLSZA&s" alt="Gun Spin">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="HELIX" data-category="arcade">
-      <p class="game-name">Helix Jump</p>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7zftHcojlrv0v8q63HaVh0JE9ckf1f2hJOg&s" alt="Helix Jump">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="HOH" data-category="puzzle">
-      <p class="game-name">House of Hazards</p>
-      <img src="https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=314,height=314,fit=cover,f=auto/0609b0ba2889859b21cf47ca205818fe/house-of-hazards.png" alt="House of Hazards">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="PAPERIO2" data-category="arcade">
-      <p class="game-name">Paper.io 2</p>
-      <img src="https://play-lh.googleusercontent.com/SWTpYqsX9RN2YirCDnAjQ8qsbgn4UrHkRRGsjwuASnHMVqssIvWKzq82mP82y_ffBSE" alt="Paper.io 2">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="STUNT" data-category="action">
-      <p class="game-name">Stunt Car 3</p>
-      <img src="https://play-lh.googleusercontent.com/c3vpzjSr0_uxvmBvDJDMtDTSmla8wQeaSWDEn_pb92fHkD1AXSKLcrXDTxnULlAarlA=w240-h480-rw" alt="Stunt Car 3">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="WATERMELON" data-category="arcade">
-      <p class="game-name">Watermelon Go!</p>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzLBURxABwy5kMo_GQIT0uTJtgJ1slvo1Egw&s" alt="Watermelon Go!">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="TINYFISH" data-category="arcade">
-      <p class="game-name">Tiny Fishing</p>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFxZAeqObxw3k1vtmdAeWJ9WDgcqjFhLbmiQ&s" alt="Tiny Fishing">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="BOOTY" data-category="arcade">
-      <p class="game-name">Grow a big butt</p>
-      <img src="https://play-lh.googleusercontent.com/WzQkzhon86ognNoTWKPm8P0-eKboEW-xjQWInhEYr8SFOIit45kdRDPbGzOdJkZiSA" alt="Grow a big butt">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="GLADI" data-category="arcade">
-      <p class="game-name">Gladihoppers</p>
-      <img src="https://play-lh.googleusercontent.com/HUuFbIPERNbpW2Q72WIqiJ8bKDzIgT_C4PnYvMBuH0wC3B_KvpKmumm1FXhZj3jmRHw" alt="Gladihoppers">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="RB4" data-category="arcade">
-      <p class="game-name">Red Ball 4</p>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTi3Qa6MBbp6f1tobkXqjWwRA4Jbrr-ovjWww&s" alt="Red Ball 4">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="RB4V2" data-category="arcade">
-      <p class="game-name">Red Ball 4 Vol. 2</p>
-      <img src="https://github.com/tinklegames/rb/blob/main/4v2/rb4v2.png?raw=true" alt="Red Ball 4 V2">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="RB4V3" data-category="arcade">
-      <p class="game-name">Red Ball 4 Vol. 3</p>
-      <img src="https://github.com/tinklegames/rb/blob/main/rb4v3/rb4v3.png?raw=true" alt="Red Ball 4 V3">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="BLOCK" data-category="arcade">
-      <p class="game-name">Block Blast</p>
-      <img src="https://play-lh.googleusercontent.com/R0qgNDYYHbRhw6JFsdEbDMqONplEvJx0m0W9wzYVvY3eNF1c2rfBWYjQxW0sLEzFe1E=w600-h300-pc0xffffff-pd" alt="Block Blast">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="FPS" data-category="action">
-      <p class="game-name">Station Saturn</p>
-      <img src="https://img.itch.zone/aW1nLzExNDMzMzU2LnBuZw==/original/IvErVH.png" alt="Station Saturn">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="PLINKO" data-category="arcade">
-      <p class="game-name">Plinko RNG</p>
-      <img src="https://discord.do/wp-content/uploads/2025/04/Plinko-RNG-Discord-server.jpg" alt="Plinko RNG">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="HS1" data-category="puzzle">
-      <p class="game-name">Henry Stickmin: Breaking the Bank</p>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0Ubpi6WS3zxmQmDuAKjCNa4lvRROR0-zRPwCizWiXsD5Vz5Oac2mpbI3oIoY9dTGPYkY&usqp=CAU" alt="Henry Stickmin: ">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="HS2" data-category="puzzle">
-      <p class="game-name">Henry Stickmin: Escaping the Prison</p>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1aUHlWz3XXEO-kDdmVL8XhqQIIW6X8jbgitAN12x9nD_nV02SnW_5NDZPPJrzNoSDGX4&usqp=CAU" alt="Henry Stickmin: ">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="HS3" data-category="puzzle">
-      <p class="game-name">Henry Stickmin: Stealing the Diamond</p>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoZ9WucAFbmhxRz0ZgNMZ81FRKJzN_vljTLQ&s" alt="Henry Stickmin: ">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="HS4" data-category="puzzle">
-      <p class="game-name">Henry Stickmin: Infiltrating the Airship</p>
-      <img src="https://m.media-amazon.com/images/I/61Xvr2hpCiL.png" alt="Henry Stickmin: ">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="HS5" data-category="puzzle">
-      <p class="game-name">Henry Stickmin: Fleeing the Complex</p>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_F0vrDsQnVgc3KSuofz9N1MvNH_7-SB38TslA_schtzNDV_fQQ7Oq23rZVYdJ7ZRqfKk&usqp=CAU" alt="Henry Stickmin: ">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="RW1" data-category="action">
-      <p class="game-name">Raft Wars 1</p>
-      <img src="https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=314,height=314,fit=cover,f=auto/d2a3bbd1bb8aea542835f4f8a353d388/raft-wars.png" alt="Raft Wars 1">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="RW2" data-category="action">
-      <p class="game-name">Raft Wars 2</p>
-      <img src="https://play-lh.googleusercontent.com/lDc6_9GqbCXhsp6MHTPOtK8y1LxZz8pj0azRHLgRImBWHXTkhw_0hlT1XGyeP7lwn8k" alt="Raft Wars 2">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="MOTO1" data-category="arcade">
-      <p class="game-name">Moto X3M</p>
-      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fplay-lh.googleusercontent.com%2FAbQMuT4ncBfWDqNF-4ubmfaRag59nrW3fJARDsHK51_PENScmWCnMFeQX81wfPlfGBo&f=1&nofb=1&ipt=301ca4ad1e5460ec1ef976b88e85aa77a92247e73fb3f98c27db5fef43920e97">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="MOTO2" data-category="arcade">
-      <p class="game-name">Moto X3M 2</p>
-      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi0.wp.com%2Fmybestgames.dk%2Fwp-content%2Fuploads%2F2022%2F09%2FMoto-X3M-2.jpg%3Ffit%3D512%252C512%26ssl%3D1&f=1&nofb=1&ipt=a331b478a3e57271c0e473b527ab45d404034d8a01e096c961af58b7925e1fb2">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="MOTO3" data-category="arcade">
-      <p class="game-name">Moto X3M 3</p>
-      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fhyhygames.com%2Fthumbs%2Fmoto-x3m-3-thumb_2.webp&f=1&nofb=1&ipt=d3e2fea1cb36cb3b802274d7b0c790eb49bd5e0316c85f8af7f95adc4ec18920">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="MOTO4" data-category="arcade">
-      <p class="game-name">Moto X3M Pool Party</p>
-      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimg.poki-cdn.com%2Fcdn-cgi%2Fimage%2Fquality%3D78%2Cwidth%3D1200%2Cheight%3D1200%2Cfit%3Dcover%2Cf%3Dpng%2F0235b530eec4f17ad60137f6b245a988.jpeg&f=1&nofb=1&ipt=b61457385f6e70406405c6c7cd0efc09690c5ad80b0406ab3cef202c477422da">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="MOTO5" data-category="arcade">
-      <p class="game-name">Moto X3M Spooky Land</p>
-      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fkevin.games%2Fassets%2Fimages%2Fgames%2Fmoto-x3m-spooky-land.jpg&f=1&nofb=1&ipt=e22c82f189dfebbb21c9c8074b865553c77f888c93e984d62190b0a4312efa3b">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="MOTO6" data-category="arcade">
-      <p class="game-name">Moto X3M Winter</p>
-      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimg.enjoy4fun.com%2Fimage%2F500*500%2Fc96ggo6rsfeqo7486550.png&f=1&nofb=1&ipt=5a2ecd6f9708e54e0bcaf97f1084bac68490ca4675c1131118bbfbb422d977bb">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="BUCKSHOT" data-category="horror">
-      <p class="game-name">Buckshot Roulette</p>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFP-TxRuSQphlOWAHiCJUBxcJvCY6OQCZP5UCJg5u3aYZRD5WaI8relaMeqhyh5iVVyHo&usqp=CAU" alt="Buckshot Roulette">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="BENDY" data-category="horror">
-      <p class="game-name">Bendy and the Ink Machine</p>
-      <img src="https://play-lh.googleusercontent.com/96eBM7bUrouYRKa_1k3d2inqHMNJp25BX4IeGbpHdhvOYjLjqFn4upD2wEwGPsOBh2oz" alt="Bendy and the Ink Machine">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="KD1" data-category="puzzle">
-      <p class="game-name">Kindergarten</p>
-      <img src="https://m.media-amazon.com/images/M/MV5BY2Q1ZTQxYzctZTA1Ny00Mjc0LTk3YjgtMmJlZmIyOWQ2MzdmXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Kindergarten">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="KD2" data-category="puzzle">
-      <p class="game-name">Kindergarten 2</p>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT04MA00rFwaXlt7-k3TyPy2DPrdDXfJJ698w&s" alt="Kindergarten 2">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="KD3" data-category="puzzle">
-      <p class="game-name">Kindergarten 3</p>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzg5WOrTQbjBPdoAzapsgf3POEreUEK1YXaA&s" alt="Kindergarten 3">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="REPO" data-category="horror">
-      <p class="game-name">R.E.P.O.</p>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7erpTVvLl3jcjJOcvizpDTMAPPKyLGaaLIA&s" alt="R.E.P.O.">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="TILES" data-category="arcade">
-      <p class="game-name">Magic Tiles 3</p>
-      <img src="https://play-lh.googleusercontent.com/u94NKpNjH1sBOiKHevX3_ATM-ozNHg6b186oU9GfnPnHwbdJ7RaeipkCRcVPdf1KRA" alt="Magic Tiles 3">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="GD" data-category="arcade">
-      <p class="game-name">Geometry Dash Lite</p>
-      <img src="https://play-lh.googleusercontent.com/p7kWbWBFxQIrzolEqiV5uSvctLeyssZvBV7UBOX29wzZI52IdcSs4qCB_zsQJL1mt9A" alt="Geometry Dash Lite">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="FNAFWORLD" data-category="horror">
-      <p class="game-name">FNAF World</p>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQ4aXQb7ab14NFxtfCOjHT2SutBR5R1Hd8lA&s" alt="FNAF World">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="UCN" data-category="horror">
-      <p class="game-name">Ultimate Custom Night</p>
-      <img src="https://play-lh.googleusercontent.com/pB7dsLLcRgADtFpEPeKc5mSyAn1E1JzrdQ1V7-Y5hizgub3G8e9UJIc5opC9mYXKSBw" alt="Ultimate Custom Night">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="FTF1" data-category="horror">
-      <p class="game-name">Fears to Fathom: Home Alone</p>
-      <img src="https://sc.filehippo.net/images/t_app-icon-l/p/1056243c-a2c2-4903-9fda-1624d6d9ccfa/3410788382/fears-to-fathom-fears-to-fathom-icn.png" alt="Fears to Fathom: Home Alone">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="GOI" data-category="puzzle">
-      <p class="game-name">Getting Over It</p>
-      <img src="https://img.tapimg.net/market/images/b802b957f2287907f8988860dc00bd94.png/appicon?t=1" alt="Getting Over It">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="RIDER" data-category="arcade">
-      <p class="game-name">Rider</p>
-      <img src="https://play-lh.googleusercontent.com/R9qV0OFI0K-jccD79p5Km8bAfSFRa3yPJyuy88a5D6MTeOJEbX_93n-sjHnPs2aN_1A">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="HILLCLIMB" data-category="arcade">
-      <p class="game-name">Hill Climb Racing</p>
-      <img src="https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=314,height=314,fit=cover,f=auto/b87616bb88c0e3cb4c150c59fdc767fa/hill-climb-racing-lite.png">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="HOLEIO" data-category="arcade">
-      <p class="game-name">Hole.io</p>
-      <img src="https://upload.wikimedia.org/wikipedia/en/c/ca/Hole.io_logo.jpg">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="GROW" data-category="simulator">
-      <p class="game-name">Growden.io</p>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQzh9-rTodL-Q8m9QBBD2eDkRYPrbQO9jaqg&s">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="SCHOOLBOY" data-category="puzzle">
-      <p class="game-name">Schoolboy Runaway</p>
-      <img src="https://play-lh.googleusercontent.com/aeQ9le0YHrdLlPODSyYW9BnSZVR8gaQZH8hlRz9ksMX_hnzzMdw95Fo1zta4Lc726vQ=w240-h480-rw">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="RAFT" data-category="simulator">
-      <p class="game-name">Raft</p>
-      <img src="https://a.allegroimg.com/original/11bd03/000b4c3f4c239e3e5bb5b8e1d65c/RAFT-NOWA-PELNA-WERSJA-STEAM-PC-PL">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="SLIMERANCHER" data-category="simulator">
-      <p class="game-name">Slime Rancher</p>
-      <img src="https://upload.wikimedia.org/wikipedia/en/d/d2/Slime_Rancher_cover_art.png">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="CC3D" data-category="simulator">
-      <p class="game-name">Crazy Cattle 3D</p>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtgLxY50zDAkOZllI13iHGrgBQm4B8EDANOQ&s">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="DEADSEAT" data-category="horror">
-      <p class="game-name">The Deadseat</p>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0Uv4XtzrLyHstAEgQWDQ5TD6Uku5QkZKXug&s">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="CRAFT" data-category="simulator">
-      <p class="game-name">Infinite Craft</p>
-      <img src="https://play-lh.googleusercontent.com/YJFHGSmrMGuUqyWZ0oZDgDtDErIU2jQY3yT_PG9IRL6s5dBLmKXrXQShM3n8HFoPhkM=w240-h480-rw">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="SNOW" data-category="arcade">
-      <p class="game-name">Snow Rider 3D</p>
-      <img src="https://play-lh.googleusercontent.com/rvs-Y7c8PCBSkXoDGeEXtzSfPmxZ6IY2czOhpMQmH8jOs3qGOiMTtzIbA9qJTaT9qhk">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="BBROS" data-category="arcade">
-      <p class="game-name">Baseball Bros!</p>
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIqCVTgFC3nuV496hVhQ61zK_LRzdefqxaBMTKLQJPuMu221ek0N4F4L-vO0WIP12PtQo&usqp=CAU">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="AG" data-category="arcade">
-      <p class="game-name">Angry Birds</p>
-      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimages-wixmp-ed30a86b8c4ca887773594c2.wixmp.com%2Ff%2F5b58f188-2f8c-4f36-9071-2269d4d62786%2Fdeuysfq-ffc727e6-665a-452c-afbb-ffbaac543bee.png%3Ftoken%3DeyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzViNThmMTg4LTJmOGMtNGYzNi05MDcxLTIyNjlkNGQ2Mjc4NlwvZGV1eXNmcS1mZmM3MjdlNi02NjVhLTQ1MmMtYWZiYi1mZmJhYWM1NDNiZWUucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.ATdF4rP1nRkm36lXaQCU2a_-taJegaQ-o2V7eQWnotw&f=1&nofb=1&ipt=823b4fa0850186d09588efd1014ee835de18f3c10f878a19f9e89d0460433254">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="AGS" data-category="arcade">
-      <p class="game-name">Angry Birds Showdown</p>
-      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Falliblaze.github.io%2Fcatorf%2Fgn-math_files%2F147.png&f=1&nofb=1&ipt=d300f287737df8c662e1ed58d626ebbc2257c5df162fdc0ef3e83594dd38e950">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="BADPIGS" data-category="arcade">
-      <p class="game-name">Bad Piggies</p>
-      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fassets-prd.ignimgs.com%2F2023%2F04%2F02%2Fbadpiggies-1680458172670.jpg&f=1&nofb=1&ipt=c1122e0d44ae9ea04e8d6575d9a9db5fa92e5271ced2d55233d24638e8614e32">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="SMASHK" data-category="arcade">
-      <p class="game-name">Smash Karts</p>
-      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimg.poki.com%2Fcdn-cgi%2Fimage%2Fquality%3D78%2Cwidth%3D600%2Cheight%3D600%2Cfit%3Dcover%2Cg%3D0.5x0.5%2Cf%3Dauto%2F9c9e529b14731be871b07b89660bbc2a.png&f=1&nofb=1&ipt=a4e2641e2a925ee91c33a38b0cda3df5e2d6a49cc92640d9175394b826665d1d">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="TAG" data-category="arcade">
-      <p class="game-name">TAG</p>
-      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fr2.fizzerz.com%2Fgame-source%2Ftag%2Ficon.webp&f=1&nofb=1&ipt=99bccf606136507a5be04cf9967ac36a1ca9b3aacfddd2c6618b4710e0598c3a">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="INCREDIBOX" data-category="arcade">
-      <p class="game-name">Incredibox</p>
-      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fis1-ssl.mzstatic.com%2Fimage%2Fthumb%2FPurple122%2Fv4%2F45%2F37%2F99%2F45379958-11ab-d606-d91d-e73df7871536%2FAppIcon-0-0-1x_U007epad-0-85-220.png%2F1200x630wa.png&f=1&nofb=1&ipt=e710b116e649c468cf9bfa4113e8c2d42d70d6a80b0e6698cee4c0cde50453b9">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="DIDDY" data-category="simulator">
-      <p class="game-name">Diddy Game</p>
-      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fgamesfinder-assets.s3.eu-north-1.amazonaws.com%2Fimages%2Fco98ta.jpg&f=1&nofb=1&ipt=0b59caa2303ab8200697c4efa40f7f2100d04eda4746797aa87dc66cf0ac8b7d">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="NSMB" data-category="arcade">
-      <p class="game-name">New Super Mario Bros</p>
-      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fassets-prd.ignimgs.com%2F2022%2F04%2F13%2Fnew-super-mario-bros-ds-2022-1649888927223.jpg&f=1&nofb=1&ipt=ca274569c6a6b7d7bf84f956efbc750b35c2234a3b05401959debb673beb58a2">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="UKILL" data-category="action">
-      <p class="game-name">ULTRAKILL</p>
-      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn2.steamgriddb.com%2Ficon%2F91ca305decc7727a939aa6f77529fbbc%2F32%2F256x256.png&f=1&nofb=1&ipt=1e56653e70f301c415020acda1da2375755a9a025ec521fa122c6eb4d656bc34">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="RCD" data-category="simulator">
-      <p class="game-name">Russian Car Driver HD</p>
-      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimages.sftcdn.net%2Fimages%2Ft_app-icon-m%2Fp%2Fe1a1aa2f-31c1-4c52-8d1a-22376c81ba87%2F212763692%2Frussian-car-driver-hd-icon.png&f=1&nofb=1&ipt=5a91fac424c593b781f98fe1a7057a24708b886d99c2929fad2a88aee77faaca">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="ROCIM" data-category="simulator">
-      <p class="game-name">Race On Cars in Moscow</p>
-      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fplaygama.com%2Fcdn-cgi%2Fimagedelivery%2FLN2S-4p3-GgZvEx3IPaKUA%2F8957d616-ac9a-4bed-e49e-cf44eb2efd00%2Fthumb&f=1&nofb=1&ipt=ca1bbc828ec880bbe9badb727976ba237ab81260f1faab983e7f1d54aab1d109">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="RHYTHMH" data-category="arcade">
-      <p class="game-name">Rhythm Hell</p>
-      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.mobygames.com%2Fcovers%2F17679640-rhythm-hell-windows-front-cover.png&f=1&nofb=1&ipt=147bd5fe0a3a322b1c20afdd8b6f8a517b403a023ac9b0d66f42fc18d94a13b9">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="EVO" data-category="arcade">
-      <p class="game-name">EvoWars.io</p>
-      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn-1.webcatalog.io%2Fcatalog%2Fpoki-evowars-io%2Fpoki-evowars-io-icon.png%3Fv%3D1714780107988&f=1&nofb=1&ipt=3ffa4bb9813c1c8fe562c8a89a4ace4483af6ba847cb2f2de1971722333f6904">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="BIKEOBBY" data-category="puzzle">
-      <p class="game-name">Bike Obby</p>
-      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimgs2.dab3games.com%2Fbike-obby-game-copy50.png&f=1&nofb=1&ipt=05b806113da1c2014476aa7e09865c1f7ec408b8918d3d88dfd532e19c14daee">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="FORT" data-category="action">
-      <p class="game-name">Fortzone</p>
-      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fnargames.com%2Fstorage%2Fuploads%2Fthumbs%2Ffortzone-battle-royale.webp&f=1&nofb=1&ipt=5aa2972ec0aa768ca8169ed8ef4eb846da4ba419effac08860c4a236bc9cc66c">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="CRANK" data-category="horror">
-      <p class="game-name">Crank</p>
-      <img src="https://img.itch.zone/aW1nLzIzNjUwODA4LnBuZw==/original/NHMbF%2B.png">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="NARROW" data-category="action">
-      <p class="game-name">Narrow One</p>
-      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fplay-lh.googleusercontent.com%2FhxeNM0b_zVBvHNJJoApRCyATVRwDC--WoDe6fiuflKUb4HWTABMdIWRZUb7-yoA-43U&f=1&nofb=1&ipt=caced4435ca045850892e530fdd5578cb8b0511afc5a6333a82f5adba73f1849">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="ADGAC" data-category="puzzle">
-      <p class="game-name">A Difficult Game About Climbing</p>
-      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fgeometrydash-game.io%2Fdata%2Fimage%2Fgame%2Fa-difficult-game-about-climbing%2520(2).jpg&f=1&nofb=1&ipt=e3270b5c1724ebba1dde8f99d9a8428ab3ceab8f9e58a24afd6e72ffb2741cc8">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="TLD" data-category="simulator">
-      <p class="game-name">The Long Drive</p>
-      <img src="https://avatars.mds.yandex.net/get-games/1881957/2a00000198f54eff79dc1865c3807f757222/pjpg128x128">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="HTALE" data-category="horror">
-      <p class="game-name">Horror Tale</p>
-      <img src="https://github.com/tinklegames/horrortale/blob/main/TemplateData/unity-logo-dark.png?raw=true">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="BASKET" data-category="arcade">
-      <p class="game-name">Basket Bros</p>
-      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ffreegames.io%2Ffiles%2Fimages%2Fthumb_basketbros_512_512.png&f=1&nofb=1&ipt=ee126b2660dfe0d5d559dad3c5fcd0d25a51175d40050512539964d3bcf7dd26">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="BSTARS" data-category="arcade">
-      <p class="game-name">Basketball Stars</p>
-      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fpreview.redd.it%2Fbasketball-stars-multiplayer-v0-z96yi6bl3bja1.jpg%3Fwidth%3D1080%26format%3Dpjpg%26auto%3Dwebp%26s%3D621bd39faab8a38aa4b1f295be56df31ebe1db1b&f=1&nofb=1&ipt=d466d6821186b1bc38832770fabc8eecae503cd39f9061908ff8db97f4f7e422">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="CTR1" data-category="arcade">
-      <p class="game-name">Cut The Rope</p>
-      <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Ffc06.deviantart.net%2Ffs71%2Ff%2F2010%2F355%2F4%2F4%2Fcut_the_rope_icon_by_wolvonic-d35d0ej.png&f=1&nofb=1&ipt=b68e8d886fd04051d7e0016045b19c9ddb6bb235d9425e50d65599c047897f1a">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="CTRTT" data-category="arcade">
-      <p class="game-name">Cut The Rope: Time Travel</p>
-      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.jim-nielsen.com%2Fios%2F512%2Fcut-the-rope-time-travel-2021-04-16.png&f=1&nofb=1&ipt=2f29189c2ecde21b02c1be734cf5135b411ad9a5a2e5ab30538c7ef035733d0d">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="RTS" data-category="arcade">
-      <p class="game-name">Rooftop Snipers</p>
-      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Flnabros.github.io%2Fimg%2Frooftop-snipers.png&f=1&nofb=1&ipt=d5beb44a5c574d15ecd96c17f1965c81755d11f13b580f04d81e62d011870fa3">
-      <button class="get-code">Get Code</button>
-    </div>
-    <div class="game-card" data-code="RTS2" data-category="arcade">
-      <p class="game-name">Rooftop Snipers 2</p>
-      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fpokigamez.github.io%2Fimages%2Frooftop-snipers-2.png&f=1&nofb=1&ipt=024cf301d9540341dee9c49ca341d0cf670a5707f298fb4064c8748e4901f468">
-      <button class="get-code">Get Code</button>
-    </div>
-  </div>
-</div>
-
-<div id="notification"></div>
-
-<script>
-const sidebarItems = document.querySelectorAll(".sidebar-item");
-const gamesContainer = document.getElementById("games");
-const allGamesControls = document.getElementById("all-games-controls");
-const allCards = [...document.querySelectorAll(".game-card")]; // Keep originals
-const title = document.getElementById("category-title");
-const notification = document.getElementById("notification");
-const searchBar = document.getElementById("search-bar");
-const moviesBtn = document.getElementById("movies-btn");
-const moviesLink = "https://tinklegames.github.io/host/cinema";
-
-const categories = [
-  { name: "🎮 All Games", value: "all" },
-  { name: "⭐ Popular", value: "popular" },
-  { name: "🆕 New", value: "new" },
-  { name: "⚔️ Action", value: "action" },
-  { name: "👻 Horror", value: "horror" },
-  { name: "🕹️ Arcade", value: "arcade" },
-  { name: "🧩 Puzzle", value: "puzzle" },
-  { name: "🏭 Simulator", value: "simulator" }
-];
-
-const categoryButtonsContainer = document.getElementById("category-buttons");
-
-categories.forEach(cat => {
-  const btn = document.createElement("button");
-  btn.textContent = cat.name;
-  btn.dataset.category = cat.value;
-  btn.className = "category-btn";
-  btn.addEventListener("click", () => {
-    sidebarItems.forEach(i => i.classList.remove("active")); // unselect sidebar
-    title.textContent = cat.name;
-
-    if (cat.value === "popular") showPopular();
-    else if (cat.value === "new") showNewGames();
-    else if (cat === "request") showRequestForm();
-    else if (cat === "suggestions") showSuggestionsForm();
-    else showCategory(cat.value);
-
-    // Highlight clicked button
-    document.querySelectorAll(".category-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-  });
-  categoryButtonsContainer.appendChild(btn);
-});
-
-
-/* --- Copy Buttons --- */
-function attachButtonEvents(container = document) {
-  container.querySelectorAll(".get-code").forEach(btn => {
-    btn.addEventListener("click", async () => {
-      if (btn.disabled) return; // prevent rapid clicking
-
-      const card = btn.closest(".game-card");
-      const code = card.dataset.code;
-      const name = card.querySelector(".game-name").textContent;
-
-      // disable all get-code buttons for 5 seconds
-      const allButtons = document.querySelectorAll(".get-code");
-      allButtons.forEach(b => {
-        b.disabled = true;
-        b.style.opacity = "0.5";
-        b.style.cursor = "not-allowed";
-      });
-
-      try {
-        // update Firebase click count
-        await incrementGameClick(name);
-      } catch (err) {
-        console.error("⚠️ Firebase update failed:", err);
-      }
-
-      // copy to clipboard
-      navigator.clipboard.writeText(code)
-        .then(() => showNotification(`Copied! Code: ${code}`, true))
-        .catch(() => showNotification("Failed to copy code", false));
-
-      // refresh popular list if currently viewing it
-      if (document.querySelector(".sidebar-item.active")?.dataset.category === "popular") {
-        showPopular();
-      }
-
-      // re-enable all buttons after 5 seconds
-      setTimeout(() => {
-        allButtons.forEach(b => {
-          b.disabled = false;
-          b.style.opacity = "0.9";
-          b.style.cursor = "pointer";
+                doc.document.close();
+            } else {
+                alert("Redirect failed — please allow this site to open pages.");
+            }
         });
-      }, 5000);
-    });
-  });
-}
+    </script>
+    <!-- SIDEBAR -->
+    <div id="sidebar">
+        <div class="sidebar-item active" data-category="all">All Games</div>
+        <div class="sidebar-item" id="movies-btn">🎬 Movies</div>
+        <div class="sidebar-item" data-category="request">🎮 Request Games</div>
+        <div class="sidebar-item" data-category="suggestions">💡 Suggestions</div>
+        <div class="sidebar-item" id="newSite-btn">️✨ NEW SITE</div>
+    </div>
 
-/* --- Notification --- */
-function showNotification(message, success = true) {
-  notification.textContent = message;
-  notification.className = success ? "success" : "error";
-  notification.style.display = "block";
-  setTimeout(() => notification.style.display = "none", 3000);
-}
+    <!-- MAIN -->
+    <div id="container">
+        <h2 id="category-title">All Games</h2>
+        <div id="all-games-controls">
+            <input id="search-bar" type="text" placeholder="🔍 Search games..." />
+            <div id="category-buttons" style="display:flex; justify-content:center; flex-wrap:wrap; gap:10px; margin-bottom:20px;">
+            </div>
+        </div>
+        <div id="games">
+            <div class="game-card" data-code="FUN" data-category="horror">
+                <p class="game-name">FeedVid Live</p>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7ODvZa5aAF8Hj8nWOrVcIGgolUgeqIgbL4A&s" alt="FeedVid Live">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="RACCOON" data-category="arcade">
+                <p class="game-name">Tanuki Sunset</p>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6xVpwHBAogwVdiqlsfh8m_1dsP0okrOH6VA&s" alt="Tanuki Sunset">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="POLY" data-category="arcade">
+                <p class="game-name">PolyTrack</p>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTN-a70X18WcY1jVzgEhMPJwvlxXqpqXzd8qg&s" alt="PolyTrack">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="VAMP" data-category="action">
+                <p class="game-name">Vampire Survivors</p>
+                <img src="https://play-lh.googleusercontent.com/R1dShZj1HNBQzrHhsAD9_F8BRc2FU-nlDMU7OIAIwnMge04QWvNZR-clnXnEd_v30Qo" alt="Vampire Survivors">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="SCARY" data-category="horror">
+                <p class="game-name">Delivery Mystery</p>
+                <img src="https://i.ytimg.com/vi/EGPrR_zt0YM/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLA-xjmqx4XqaYi9o9DPni3H-CNs4w" alt="Burger & Frights">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="KING" data-category="puzzle">
+                <p class="game-name">Sort the Court!</p>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScw_aOzrTL5nvkw15Rax6nPjHYUzsg3pEugA&s" alt="Sort the Court!">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="FRUIT" data-category="arcade">
+                <p class="game-name">Fruit Ninja</p>
+                <img src="https://cdn.jim-nielsen.com/ios/512/fruit-ninja-2020-08-31.png?rf=1024" alt="Fruit Ninja">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="BOW" data-category="arcade">
+                <p class="game-name">Bowmasters</p>
+                <img src="https://play-lh.googleusercontent.com/rsQyCuie6S8Munc2Hv6IMpePP1g3c0okLkyKRXd1IimOryIBMZqymGKaOg7bZ6NMkhj3=w240-h480-rw" alt="Bowmasters">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="CROSSY" data-category="arcade">
+                <p class="game-name">Crossy Roads</p>
+                <img src="https://upload.wikimedia.org/wikipedia/en/7/71/Crossy_Road_icon.jpeg" alt="Crossy Roads">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="DRAW" data-category="arcade">
+                <p class="game-name">Draw Climbers</p>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIfT8Z8cWUjy_YmipolVtNkYFCup2u2ziVOnNuFK3fQpmoKFyN4fn43uynMSDe2pZypjQ&usqp=CAU" alt="Draw Climbers">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="TOMB" data-category="arcade">
+                <p class="game-name">Tomb Of The Mask</p>
+                <img src="https://play-lh.googleusercontent.com/ATGr-U4JBK2VjFzKGK9eMMkrDxJaazadOUoz_7Yl0U5NrWSFcFUzEtNurWXYzVWc8uOO=w240-h480-rw" alt="Tomb Of The Mask">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="COOKIE" data-category="simulator">
+                <p class="game-name">Cookie Clicker</p>
+                <img src="https://play-lh.googleusercontent.com/Z1MOuuiD05ZN5LkVmMEvKF0mqAc-FknaQ2j8s4dZiO-LSPQX4EEA3RVJdlQEtxe96ok" alt="Cookie Clicker">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="DR3D" data-category="arcade">
+                <p class="game-name">Death Run 3D</p>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmy73hHHgqrJSvDJyUYr3niFBHo5oo3JFHCg&s" alt="Death Run 3D">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="BALDI" data-category="horror">
+                <p class="game-name">Baldi’s Basics</p>
+                <img src="https://play-lh.googleusercontent.com/EPV1TB4So1lB0DGrdCVExDpNU8ML67nd8OqBeoOIM-s6sDicxmDdPvCXD6n7LKevFl0" alt="Baldi’s Basics">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="SLOPE" data-category="arcade">
+                <p class="game-name">Slope</p>
+                <img src="https://play-lh.googleusercontent.com/uJn2i9h7KxYQarC_c3K4qH6o7gLtflFnhD_dN14MNkzHJ1NeNFzCL69jpB5mT0vCoQs" alt="Slope">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="DRIVE" data-category="arcade">
+                <p class="game-name">Drive Mad</p>
+                <img src="https://play-lh.googleusercontent.com/7l3WAPbei9MXrxnCzImpXi2VxjEBtgDl0htwvTnA-YqpJAuQJPpSiby1oB8LZMgD0IAy" alt="Drive Mad">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="FNAF1" data-category="horror">
+                <p class="game-name">FNAF 1</p>
+                <img src="https://github.com/tinklegames/fnaf/blob/main/1/logo.jpg?raw=true" alt="FNAF 1">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="FNAF2" data-category="horror">
+                <p class="game-name">FNAF 2</p>
+                <img src="https://github.com/tinklegames/fnaf/blob/main/2/logo.jpg?raw=true" alt="FNAF 2">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="FNAF3" data-category="horror">
+                <p class="game-name">FNAF 3</p>
+                <img src="https://github.com/tinklegames/fnaf/blob/main/3/logo.webp?raw=true" alt="FNAF 3">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="FNAF4" data-category="horror">
+                <p class="game-name">FNAF 4</p>
+                <img src="https://github.com/tinklegames/fnaf/blob/main/4/logo.webp?raw=true" alt="FNAF 4">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="FNAF4H" data-category="horror">
+                <p class="game-name">FNAF 4: Halloween Edition</p>
+                <img src="https://github.com/tinklegames/fnaf/blob/main/4-halloween/logo.png?raw=true" alt="FNAF 4H">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="FNAFPS" data-category="horror">
+                <p class="game-name">FNAF: Pizzeria Simulator</p>
+                <img src="https://github.com/tinklegames/fnaf/blob/main/ps/logo.png?raw=true" alt="FNAF PS">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="FNAFSL" data-category="horror">
+                <p class="game-name">FNAF: Sister Location</p>
+                <img src="https://github.com/tinklegames/fnaf/blob/main/sl/logo.png?raw=true" alt="FNAF SL">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="JET" data-category="arcade">
+                <p class="game-name">Jetpack Joyride</p>
+                <img src="https://play-lh.googleusercontent.com/3e_iyy1dolGSHqKFmwsao8SiMmqOtCuwD4CyKToLHoK34cchcH5PlG2VhOoE2_j-7FMH" alt="Jetpack Joyride">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="MART" data-category="arcade">
+                <p class="game-name">Monkey Mart</p>
+                <img src="https://play-lh.googleusercontent.com/rWReIdyvDaYJPeOxn7hbC0b-96ixGpQKM_EndiQa3SUME8TtI_rNUcI4qsw5teK9mqk" alt="Monkey Mart">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="SUBWAY" data-category="arcade">
+                <p class="game-name">Subway Surfers</p>
+                <img src="https://w7.pngwing.com/pngs/416/401/png-transparent-subway-surfers-smash-champs-android-kiloo-subway-surfer-hand-computer-wallpaper-cartoon-thumbnail.png" alt="Subway Surfers">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="SUPERHOT" data-category="arcade">
+                <p class="game-name">SUPERHOT</p>
+                <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/i/a6e74472-2425-4077-817c-55d42cee8697/dd2eu62-f3c6ca09-35fb-42c8-b360-1ddd7ef02fde.png/v1/fill/w_512,h_512,q_80,strp/superhot_icon__by_iconinja__by_iconinja_dd2eu62-fullview.jpg" alt="SUPERHOT">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="VEX4" data-category="arcade">
+                <p class="game-name">Vex 4</p>
+                <img src="https://images.dwncdn.net/images/t_app-icon-l/p/62c971a1-12be-478d-8207-57dbb4e28ff4/1993335666/2095_4-78353669-imgingest-7238314859016812313.png" alt="Vex 4">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="VEX5" data-category="arcade">
+                <p class="game-name">Vex 5</p>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHjyEdV0TwjMEn7tppjneB1C7aJrfzTt6lSQ&s" alt="Vex 5">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="VEX6" data-category="arcade">
+                <p class="game-name">Vex 6</p>
+                <img src="https://www.mathnook.com/img/addthis-fun-games/vex-6-200x200.png" alt="Vex 6">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="VEX7" data-category="arcade">
+                <p class="game-name">Vex 7</p>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-Qisw8oFkf2bTtLnplda1Bs8M5V-Gfcgwfw&s" alt="Vex 7">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="VEX8" data-category="arcade">
+                <p class="game-name">Vex 8</p>
+                <img src="https://play-lh.googleusercontent.com/4tQSYur7SAvXeEvT5GBugYeqbh8KEQSLd1S16t8CJYyDN3g2p27wiPlXnqqAxeCqvg" alt="Vex 8">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="DRIFT" data-category="arcade">
+                <p class="game-name">Drift Boss</p>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTS3Uh0wryQixfAEMiPLynShMYSlv9WO3SC45eEJ9MQxgwRbUo9UePjxNzR_292WwaY02I&usqp=CAU" alt="Drift Boss">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="TEMPLE" data-category="arcade">
+                <p class="game-name">Temple Run 2</p>
+                <img src="https://play-lh.googleusercontent.com/go4XqS4mYs-G2tZymiVLF4wJYXIi5QrvwixNRzssk4G_vRBHrAdg4E1ddNwy9c2cZA" alt="Temple Run 2">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="RETROBOWL" data-category="arcade">
+                <p class="game-name">Retro Bowl</p>
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimages.sftcdn.net%2Fimages%2Ft_app-icon-m%2Fp%2Faa2f8eee-d36a-4c20-904f-440b74a535fc%2F394413964%2Fretro-bowl-logo&f=1&nofb=1&ipt=b4b2b9df0af1df1bf111facfdcaf2a33c73e7402906f9692858aaaf7306f15dd" alt="Retro Bowl">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="MARIO" data-category="arcade">
+                <p class="game-name">Super Mario Bros</p>
+                <img src="https://m.media-amazon.com/images/I/91MTy%20J%201AL.jpg" alt="Super Mario Bros">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="PACMAN" data-category="arcade">
+                <p class="game-name">Pac-Man</p>
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2F3.bp.blogspot.com%2F_R3JDDb0C9EA%2FS_eb75zOdrI%2FAAAAAAAAABc%2FYvUgDBMDL14%2Fs320%2FPac%2BMan%2BGame.gif&f=1&nofb=1&ipt=b49ecb06a403d758b325c9b31074c773358a036db05d33402f456454c6c22102" alt="Pac-Man">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="RUN3" data-category="arcade">
+                <p class="game-name">Run 3</p>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTqt84hsOmA1pbIydI7PvRVHS3eytJRQB5hdQqMO2BXOPBexAxUEFxKdoIGt2JkdImMGEU&usqp=CAU" alt="Run 3">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="STICKHOOK" data-category="arcade">
+                <p class="game-name">Stickman Hook</p>
+                <img src="https://play-lh.googleusercontent.com/yXqBI1Vb1b-xjwmXLE2T7FQbgHIxfvjze1b6jO2aLHfy8Y8ta7NFSEVqZoPHtM2Ajyrl" alt="Stickman Hook">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="MINECRAFT" data-category="action">
+                <p class="game-name">Minecraft</p>
+                <img src="https://i.pinimg.com/736x/6c/96/33/6c9633545ac521e641fb481c19d80a8d.jpg" alt="Minecraft">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="SL2" data-category="action">
+                <p class="game-name">Short Life 2</p>
+                <img src="https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=314,height=314,fit=cover,f=auto/ba38f1297873d106903997a184dbe536/short-life-2.png" alt="Short Life 2">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="BITLIFE" data-category="simulator">
+                <p class="game-name">BitLife</p>
+                <img src="https://play-lh.googleusercontent.com/fUM-UyywXxjC8soxAZdIlxJrlRRXmql8wkE426SHzft4lJycSKVd2jCYQQX1BEG9Xw" alt="BitLife">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="MURDER" data-category="puzzle">
+                <p class="game-name">Murder</p>
+                <img src="https://play-lh.googleusercontent.com/BT7zrf4JNZj4pRV5YIRT4D0DydkuLEzVvnOwKmmOxuc1sbIUJyZbeaFOhjuLK4CXWFg" alt="Murder">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="FNF" data-category="arcade">
+                <p class="game-name">Friday Night Funkin'</p>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsl2Wte_Hp5jrGNRJ3XNIIVa9zB0vO8y54Ig&s" alt="Friday Night Funkin'">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="TING" data-category="puzzle">
+                <p class="game-name">There Is No Game</p>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHriUJw61GtIpLXWLU3i6tgPuUEHFOJvwAHg&s" alt="There Is No Game">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="RS1" data-category="puzzle">
+                <p class="game-name">Riddle School 1</p>
+                <img src="https://flashmuseum.org/wp-content/uploads/2023/06/Riddle-School_logo.png" alt="Riddle School 1">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="RS2" data-category="puzzle">
+                <p class="game-name">Riddle School 2</p>
+                <img src="https://flashmuseum.org/wp-content/uploads/2023/05/Riddle-School-2_logo.png" alt="Riddle School 2">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="RS3" data-category="puzzle">
+                <p class="game-name">Riddle School 3</p>
+                <img src="https://github.com/tinklegames/rs/blob/main/3/riddleschool3.png?raw=true" alt="Riddle School 3">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="RS4" data-category="puzzle">
+                <p class="game-name">Riddle School 4</p>
+                <img src="https://github.com/tinklegames/rs/blob/main/4/riddleschool4.png?raw=true" alt="Riddle School 4">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="RS5" data-category="puzzle">
+                <p class="game-name">Riddle School 5</p>
+                <img src="https://github.com/tinklegames/rs/blob/main/5/riddleschool5.png?raw=true" alt="Riddle School 5">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="RS6" data-category="puzzle">
+                <p class="game-name">Riddle Transfer</p>
+                <img src="https://github.com/tinklegames/rs/blob/main/transfer/riddletransfer.png?raw=true" alt="Riddle Transfer">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="RS7" data-category="puzzle">
+                <p class="game-name">Riddle Transfer 2</p>
+                <img src="https://github.com/tinklegames/rs/blob/main/transfer2/riddletransfer2.png?raw=true" alt="Riddle Transfer 2">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="3DASH" data-category="arcade">
+                <p class="game-name">3D Geometry Dash</p>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFI2wUNUP3Nkl5pT2uxXQtlLTFes0hzx1MExk4FVVQS2TMnue85KpoMx5CuPWynSA_7kM&usqp=CAU" alt="3D Geometry Dash">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="1V1LOL" data-category="action">
+                <p class="game-name">1v1.lol</p>
+                <img src="https://www.metacritic.com/a/img/catalog/provider/6/12/6-1-758332-52.jpg" alt="1v1.lol">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="GRANNY" data-category="horror">
+                <p class="game-name">Granny</p>
+                <img src="https://play-lh.googleusercontent.com/yT_LBq_tyKeIDohKDsqN_Qt18jGIPUYIxY2C-1-E2YA9Qd60uZW08pua17qBmIiDPA" alt="Granny">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="GRANNY2" data-category="horror">
+                <p class="game-name">Granny 2</p>
+                <img src="https://play-lh.googleusercontent.com/iZ7NP-56YenT2dpgKEAw3n7IKFyu-S_9Iu3ayo28XYTgZpFtxsK_HXltV36pysSJqq8=w240-h480-rw" alt="Granny 2">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="BOBLOX" data-category="arcade">
+                <p class="game-name">Roblox Obby?</p>
+                <img src="https://cdna.artstation.com/p/assets/images/images/080/886/112/large/outmou-parkor-1.jpg?1728814579" alt="Roblox Obby?">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="GUNSPIN" data-category="arcade">
+                <p class="game-name">Gun Spin</p>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTei07pjTSWlXal0yIdqvTJLZpaoRVwblLSZA&s" alt="Gun Spin">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="HELIX" data-category="arcade">
+                <p class="game-name">Helix Jump</p>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ7zftHcojlrv0v8q63HaVh0JE9ckf1f2hJOg&s" alt="Helix Jump">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="HOH" data-category="puzzle">
+                <p class="game-name">House of Hazards</p>
+                <img src="https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=314,height=314,fit=cover,f=auto/0609b0ba2889859b21cf47ca205818fe/house-of-hazards.png" alt="House of Hazards">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="PAPERIO2" data-category="arcade">
+                <p class="game-name">Paper.io 2</p>
+                <img src="https://play-lh.googleusercontent.com/SWTpYqsX9RN2YirCDnAjQ8qsbgn4UrHkRRGsjwuASnHMVqssIvWKzq82mP82y_ffBSE" alt="Paper.io 2">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="STUNT" data-category="action">
+                <p class="game-name">Stunt Car 3</p>
+                <img src="https://play-lh.googleusercontent.com/c3vpzjSr0_uxvmBvDJDMtDTSmla8wQeaSWDEn_pb92fHkD1AXSKLcrXDTxnULlAarlA=w240-h480-rw" alt="Stunt Car 3">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="WATERMELON" data-category="arcade">
+                <p class="game-name">Watermelon Go!</p>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzLBURxABwy5kMo_GQIT0uTJtgJ1slvo1Egw&s" alt="Watermelon Go!">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="TINYFISH" data-category="arcade">
+                <p class="game-name">Tiny Fishing</p>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFxZAeqObxw3k1vtmdAeWJ9WDgcqjFhLbmiQ&s" alt="Tiny Fishing">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="BOOTY" data-category="arcade">
+                <p class="game-name">Grow a big butt</p>
+                <img src="https://play-lh.googleusercontent.com/WzQkzhon86ognNoTWKPm8P0-eKboEW-xjQWInhEYr8SFOIit45kdRDPbGzOdJkZiSA" alt="Grow a big butt">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="GLADI" data-category="arcade">
+                <p class="game-name">Gladihoppers</p>
+                <img src="https://play-lh.googleusercontent.com/HUuFbIPERNbpW2Q72WIqiJ8bKDzIgT_C4PnYvMBuH0wC3B_KvpKmumm1FXhZj3jmRHw" alt="Gladihoppers">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="RB4" data-category="arcade">
+                <p class="game-name">Red Ball 4</p>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTi3Qa6MBbp6f1tobkXqjWwRA4Jbrr-ovjWww&s" alt="Red Ball 4">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="RB4V2" data-category="arcade">
+                <p class="game-name">Red Ball 4 Vol. 2</p>
+                <img src="https://github.com/tinklegames/rb/blob/main/4v2/rb4v2.png?raw=true" alt="Red Ball 4 V2">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="RB4V3" data-category="arcade">
+                <p class="game-name">Red Ball 4 Vol. 3</p>
+                <img src="https://github.com/tinklegames/rb/blob/main/rb4v3/rb4v3.png?raw=true" alt="Red Ball 4 V3">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="BLOCK" data-category="arcade">
+                <p class="game-name">Block Blast</p>
+                <img src="https://play-lh.googleusercontent.com/R0qgNDYYHbRhw6JFsdEbDMqONplEvJx0m0W9wzYVvY3eNF1c2rfBWYjQxW0sLEzFe1E=w600-h300-pc0xffffff-pd" alt="Block Blast">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="FPS" data-category="action">
+                <p class="game-name">Station Saturn</p>
+                <img src="https://img.itch.zone/aW1nLzExNDMzMzU2LnBuZw==/original/IvErVH.png" alt="Station Saturn">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="PLINKO" data-category="arcade">
+                <p class="game-name">Plinko RNG</p>
+                <img src="https://discord.do/wp-content/uploads/2025/04/Plinko-RNG-Discord-server.jpg" alt="Plinko RNG">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="HS1" data-category="puzzle">
+                <p class="game-name">Henry Stickmin: Breaking the Bank</p>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0Ubpi6WS3zxmQmDuAKjCNa4lvRROR0-zRPwCizWiXsD5Vz5Oac2mpbI3oIoY9dTGPYkY&usqp=CAU" alt="Henry Stickmin: ">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="HS2" data-category="puzzle">
+                <p class="game-name">Henry Stickmin: Escaping the Prison</p>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1aUHlWz3XXEO-kDdmVL8XhqQIIW6X8jbgitAN12x9nD_nV02SnW_5NDZPPJrzNoSDGX4&usqp=CAU" alt="Henry Stickmin: ">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="HS3" data-category="puzzle">
+                <p class="game-name">Henry Stickmin: Stealing the Diamond</p>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoZ9WucAFbmhxRz0ZgNMZ81FRKJzN_vljTLQ&s" alt="Henry Stickmin: ">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="HS4" data-category="puzzle">
+                <p class="game-name">Henry Stickmin: Infiltrating the Airship</p>
+                <img src="https://m.media-amazon.com/images/I/61Xvr2hpCiL.png" alt="Henry Stickmin: ">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="HS5" data-category="puzzle">
+                <p class="game-name">Henry Stickmin: Fleeing the Complex</p>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_F0vrDsQnVgc3KSuofz9N1MvNH_7-SB38TslA_schtzNDV_fQQ7Oq23rZVYdJ7ZRqfKk&usqp=CAU" alt="Henry Stickmin: ">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="RW1" data-category="action">
+                <p class="game-name">Raft Wars 1</p>
+                <img src="https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=314,height=314,fit=cover,f=auto/d2a3bbd1bb8aea542835f4f8a353d388/raft-wars.png" alt="Raft Wars 1">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="RW2" data-category="action">
+                <p class="game-name">Raft Wars 2</p>
+                <img src="https://play-lh.googleusercontent.com/lDc6_9GqbCXhsp6MHTPOtK8y1LxZz8pj0azRHLgRImBWHXTkhw_0hlT1XGyeP7lwn8k" alt="Raft Wars 2">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="MOTO1" data-category="arcade">
+                <p class="game-name">Moto X3M</p>
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fplay-lh.googleusercontent.com%2FAbQMuT4ncBfWDqNF-4ubmfaRag59nrW3fJARDsHK51_PENScmWCnMFeQX81wfPlfGBo&f=1&nofb=1&ipt=301ca4ad1e5460ec1ef976b88e85aa77a92247e73fb3f98c27db5fef43920e97">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="MOTO2" data-category="arcade">
+                <p class="game-name">Moto X3M 2</p>
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi0.wp.com%2Fmybestgames.dk%2Fwp-content%2Fuploads%2F2022%2F09%2FMoto-X3M-2.jpg%3Ffit%3D512%252C512%26ssl%3D1&f=1&nofb=1&ipt=a331b478a3e57271c0e473b527ab45d404034d8a01e096c961af58b7925e1fb2">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="MOTO3" data-category="arcade">
+                <p class="game-name">Moto X3M 3</p>
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fhyhygames.com%2Fthumbs%2Fmoto-x3m-3-thumb_2.webp&f=1&nofb=1&ipt=d3e2fea1cb36cb3b802274d7b0c790eb49bd5e0316c85f8af7f95adc4ec18920">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="MOTO4" data-category="arcade">
+                <p class="game-name">Moto X3M Pool Party</p>
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimg.poki-cdn.com%2Fcdn-cgi%2Fimage%2Fquality%3D78%2Cwidth%3D1200%2Cheight%3D1200%2Cfit%3Dcover%2Cf%3Dpng%2F0235b530eec4f17ad60137f6b245a988.jpeg&f=1&nofb=1&ipt=b61457385f6e70406405c6c7cd0efc09690c5ad80b0406ab3cef202c477422da">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="MOTO5" data-category="arcade">
+                <p class="game-name">Moto X3M Spooky Land</p>
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fkevin.games%2Fassets%2Fimages%2Fgames%2Fmoto-x3m-spooky-land.jpg&f=1&nofb=1&ipt=e22c82f189dfebbb21c9c8074b865553c77f888c93e984d62190b0a4312efa3b">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="MOTO6" data-category="arcade">
+                <p class="game-name">Moto X3M Winter</p>
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimg.enjoy4fun.com%2Fimage%2F500*500%2Fc96ggo6rsfeqo7486550.png&f=1&nofb=1&ipt=5a2ecd6f9708e54e0bcaf97f1084bac68490ca4675c1131118bbfbb422d977bb">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="BUCKSHOT" data-category="horror">
+                <p class="game-name">Buckshot Roulette</p>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFP-TxRuSQphlOWAHiCJUBxcJvCY6OQCZP5UCJg5u3aYZRD5WaI8relaMeqhyh5iVVyHo&usqp=CAU" alt="Buckshot Roulette">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="BENDY" data-category="horror">
+                <p class="game-name">Bendy and the Ink Machine</p>
+                <img src="https://play-lh.googleusercontent.com/96eBM7bUrouYRKa_1k3d2inqHMNJp25BX4IeGbpHdhvOYjLjqFn4upD2wEwGPsOBh2oz" alt="Bendy and the Ink Machine">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="KD1" data-category="puzzle">
+                <p class="game-name">Kindergarten</p>
+                <img src="https://m.media-amazon.com/images/M/MV5BY2Q1ZTQxYzctZTA1Ny00Mjc0LTk3YjgtMmJlZmIyOWQ2MzdmXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg" alt="Kindergarten">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="KD2" data-category="puzzle">
+                <p class="game-name">Kindergarten 2</p>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT04MA00rFwaXlt7-k3TyPy2DPrdDXfJJ698w&s" alt="Kindergarten 2">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="KD3" data-category="puzzle">
+                <p class="game-name">Kindergarten 3</p>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzg5WOrTQbjBPdoAzapsgf3POEreUEK1YXaA&s" alt="Kindergarten 3">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="REPO" data-category="horror">
+                <p class="game-name">R.E.P.O.</p>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7erpTVvLl3jcjJOcvizpDTMAPPKyLGaaLIA&s" alt="R.E.P.O.">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="TILES" data-category="arcade">
+                <p class="game-name">Magic Tiles 3</p>
+                <img src="https://play-lh.googleusercontent.com/u94NKpNjH1sBOiKHevX3_ATM-ozNHg6b186oU9GfnPnHwbdJ7RaeipkCRcVPdf1KRA" alt="Magic Tiles 3">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="GD" data-category="arcade">
+                <p class="game-name">Geometry Dash Lite</p>
+                <img src="https://play-lh.googleusercontent.com/p7kWbWBFxQIrzolEqiV5uSvctLeyssZvBV7UBOX29wzZI52IdcSs4qCB_zsQJL1mt9A" alt="Geometry Dash Lite">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="FNAFWORLD" data-category="horror">
+                <p class="game-name">FNAF World</p>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQ4aXQb7ab14NFxtfCOjHT2SutBR5R1Hd8lA&s" alt="FNAF World">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="UCN" data-category="horror">
+                <p class="game-name">Ultimate Custom Night</p>
+                <img src="https://play-lh.googleusercontent.com/pB7dsLLcRgADtFpEPeKc5mSyAn1E1JzrdQ1V7-Y5hizgub3G8e9UJIc5opC9mYXKSBw" alt="Ultimate Custom Night">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="FTF1" data-category="horror">
+                <p class="game-name">Fears to Fathom: Home Alone</p>
+                <img src="https://sc.filehippo.net/images/t_app-icon-l/p/1056243c-a2c2-4903-9fda-1624d6d9ccfa/3410788382/fears-to-fathom-fears-to-fathom-icn.png" alt="Fears to Fathom: Home Alone">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="GOI" data-category="puzzle">
+                <p class="game-name">Getting Over It</p>
+                <img src="https://img.tapimg.net/market/images/b802b957f2287907f8988860dc00bd94.png/appicon?t=1" alt="Getting Over It">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="RIDER" data-category="arcade">
+                <p class="game-name">Rider</p>
+                <img src="https://play-lh.googleusercontent.com/R9qV0OFI0K-jccD79p5Km8bAfSFRa3yPJyuy88a5D6MTeOJEbX_93n-sjHnPs2aN_1A">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="HILLCLIMB" data-category="arcade">
+                <p class="game-name">Hill Climb Racing</p>
+                <img src="https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=314,height=314,fit=cover,f=auto/b87616bb88c0e3cb4c150c59fdc767fa/hill-climb-racing-lite.png">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="HOLEIO" data-category="arcade">
+                <p class="game-name">Hole.io</p>
+                <img src="https://upload.wikimedia.org/wikipedia/en/c/ca/Hole.io_logo.jpg">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="GROW" data-category="simulator">
+                <p class="game-name">Growden.io</p>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQzh9-rTodL-Q8m9QBBD2eDkRYPrbQO9jaqg&s">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="SCHOOLBOY" data-category="puzzle">
+                <p class="game-name">Schoolboy Runaway</p>
+                <img src="https://play-lh.googleusercontent.com/aeQ9le0YHrdLlPODSyYW9BnSZVR8gaQZH8hlRz9ksMX_hnzzMdw95Fo1zta4Lc726vQ=w240-h480-rw">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="RAFT" data-category="simulator">
+                <p class="game-name">Raft</p>
+                <img src="https://a.allegroimg.com/original/11bd03/000b4c3f4c239e3e5bb5b8e1d65c/RAFT-NOWA-PELNA-WERSJA-STEAM-PC-PL">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="SLIMERANCHER" data-category="simulator">
+                <p class="game-name">Slime Rancher</p>
+                <img src="https://upload.wikimedia.org/wikipedia/en/d/d2/Slime_Rancher_cover_art.png">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="CC3D" data-category="simulator">
+                <p class="game-name">Crazy Cattle 3D</p>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQtgLxY50zDAkOZllI13iHGrgBQm4B8EDANOQ&s">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="DEADSEAT" data-category="horror">
+                <p class="game-name">The Deadseat</p>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0Uv4XtzrLyHstAEgQWDQ5TD6Uku5QkZKXug&s">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="CRAFT" data-category="simulator">
+                <p class="game-name">Infinite Craft</p>
+                <img src="https://play-lh.googleusercontent.com/YJFHGSmrMGuUqyWZ0oZDgDtDErIU2jQY3yT_PG9IRL6s5dBLmKXrXQShM3n8HFoPhkM=w240-h480-rw">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="SNOW" data-category="arcade">
+                <p class="game-name">Snow Rider 3D</p>
+                <img src="https://play-lh.googleusercontent.com/rvs-Y7c8PCBSkXoDGeEXtzSfPmxZ6IY2czOhpMQmH8jOs3qGOiMTtzIbA9qJTaT9qhk">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="BBROS" data-category="arcade">
+                <p class="game-name">Baseball Bros!</p>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIqCVTgFC3nuV496hVhQ61zK_LRzdefqxaBMTKLQJPuMu221ek0N4F4L-vO0WIP12PtQo&usqp=CAU">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="AG" data-category="arcade">
+                <p class="game-name">Angry Birds</p>
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimages-wixmp-ed30a86b8c4ca887773594c2.wixmp.com%2Ff%2F5b58f188-2f8c-4f36-9071-2269d4d62786%2Fdeuysfq-ffc727e6-665a-452c-afbb-ffbaac543bee.png%3Ftoken%3DeyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzViNThmMTg4LTJmOGMtNGYzNi05MDcxLTIyNjlkNGQ2Mjc4NlwvZGV1eXNmcS1mZmM3MjdlNi02NjVhLTQ1MmMtYWZiYi1mZmJhYWM1NDNiZWUucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.ATdF4rP1nRkm36lXaQCU2a_-taJegaQ-o2V7eQWnotw&f=1&nofb=1&ipt=823b4fa0850186d09588efd1014ee835de18f3c10f878a19f9e89d0460433254">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="AGS" data-category="arcade">
+                <p class="game-name">Angry Birds Showdown</p>
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Falliblaze.github.io%2Fcatorf%2Fgn-math_files%2F147.png&f=1&nofb=1&ipt=d300f287737df8c662e1ed58d626ebbc2257c5df162fdc0ef3e83594dd38e950">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="BADPIGS" data-category="arcade">
+                <p class="game-name">Bad Piggies</p>
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fassets-prd.ignimgs.com%2F2023%2F04%2F02%2Fbadpiggies-1680458172670.jpg&f=1&nofb=1&ipt=c1122e0d44ae9ea04e8d6575d9a9db5fa92e5271ced2d55233d24638e8614e32">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="SMASHK" data-category="arcade">
+                <p class="game-name">Smash Karts</p>
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimg.poki.com%2Fcdn-cgi%2Fimage%2Fquality%3D78%2Cwidth%3D600%2Cheight%3D600%2Cfit%3Dcover%2Cg%3D0.5x0.5%2Cf%3Dauto%2F9c9e529b14731be871b07b89660bbc2a.png&f=1&nofb=1&ipt=a4e2641e2a925ee91c33a38b0cda3df5e2d6a49cc92640d9175394b826665d1d">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="TAG" data-category="arcade">
+                <p class="game-name">TAG</p>
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fr2.fizzerz.com%2Fgame-source%2Ftag%2Ficon.webp&f=1&nofb=1&ipt=99bccf606136507a5be04cf9967ac36a1ca9b3aacfddd2c6618b4710e0598c3a">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="INCREDIBOX" data-category="arcade">
+                <p class="game-name">Incredibox</p>
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fis1-ssl.mzstatic.com%2Fimage%2Fthumb%2FPurple122%2Fv4%2F45%2F37%2F99%2F45379958-11ab-d606-d91d-e73df7871536%2FAppIcon-0-0-1x_U007epad-0-85-220.png%2F1200x630wa.png&f=1&nofb=1&ipt=e710b116e649c468cf9bfa4113e8c2d42d70d6a80b0e6698cee4c0cde50453b9">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="DIDDY" data-category="simulator">
+                <p class="game-name">Diddy Game</p>
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fgamesfinder-assets.s3.eu-north-1.amazonaws.com%2Fimages%2Fco98ta.jpg&f=1&nofb=1&ipt=0b59caa2303ab8200697c4efa40f7f2100d04eda4746797aa87dc66cf0ac8b7d">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="NSMB" data-category="arcade">
+                <p class="game-name">New Super Mario Bros</p>
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fassets-prd.ignimgs.com%2F2022%2F04%2F13%2Fnew-super-mario-bros-ds-2022-1649888927223.jpg&f=1&nofb=1&ipt=ca274569c6a6b7d7bf84f956efbc750b35c2234a3b05401959debb673beb58a2">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="UKILL" data-category="action">
+                <p class="game-name">ULTRAKILL</p>
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn2.steamgriddb.com%2Ficon%2F91ca305decc7727a939aa6f77529fbbc%2F32%2F256x256.png&f=1&nofb=1&ipt=1e56653e70f301c415020acda1da2375755a9a025ec521fa122c6eb4d656bc34">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="RCD" data-category="simulator">
+                <p class="game-name">Russian Car Driver HD</p>
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimages.sftcdn.net%2Fimages%2Ft_app-icon-m%2Fp%2Fe1a1aa2f-31c1-4c52-8d1a-22376c81ba87%2F212763692%2Frussian-car-driver-hd-icon.png&f=1&nofb=1&ipt=5a91fac424c593b781f98fe1a7057a24708b886d99c2929fad2a88aee77faaca">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="ROCIM" data-category="simulator">
+                <p class="game-name">Race On Cars in Moscow</p>
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fplaygama.com%2Fcdn-cgi%2Fimagedelivery%2FLN2S-4p3-GgZvEx3IPaKUA%2F8957d616-ac9a-4bed-e49e-cf44eb2efd00%2Fthumb&f=1&nofb=1&ipt=ca1bbc828ec880bbe9badb727976ba237ab81260f1faab983e7f1d54aab1d109">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="RHYTHMH" data-category="arcade">
+                <p class="game-name">Rhythm Hell</p>
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.mobygames.com%2Fcovers%2F17679640-rhythm-hell-windows-front-cover.png&f=1&nofb=1&ipt=147bd5fe0a3a322b1c20afdd8b6f8a517b403a023ac9b0d66f42fc18d94a13b9">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="EVO" data-category="arcade">
+                <p class="game-name">EvoWars.io</p>
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn-1.webcatalog.io%2Fcatalog%2Fpoki-evowars-io%2Fpoki-evowars-io-icon.png%3Fv%3D1714780107988&f=1&nofb=1&ipt=3ffa4bb9813c1c8fe562c8a89a4ace4483af6ba847cb2f2de1971722333f6904">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="BIKEOBBY" data-category="puzzle">
+                <p class="game-name">Bike Obby</p>
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimgs2.dab3games.com%2Fbike-obby-game-copy50.png&f=1&nofb=1&ipt=05b806113da1c2014476aa7e09865c1f7ec408b8918d3d88dfd532e19c14daee">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="FORT" data-category="action">
+                <p class="game-name">Fortzone</p>
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fnargames.com%2Fstorage%2Fuploads%2Fthumbs%2Ffortzone-battle-royale.webp&f=1&nofb=1&ipt=5aa2972ec0aa768ca8169ed8ef4eb846da4ba419effac08860c4a236bc9cc66c">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="CRANK" data-category="horror">
+                <p class="game-name">Crank</p>
+                <img src="https://img.itch.zone/aW1nLzIzNjUwODA4LnBuZw==/original/NHMbF%2B.png">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="NARROW" data-category="action">
+                <p class="game-name">Narrow One</p>
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fplay-lh.googleusercontent.com%2FhxeNM0b_zVBvHNJJoApRCyATVRwDC--WoDe6fiuflKUb4HWTABMdIWRZUb7-yoA-43U&f=1&nofb=1&ipt=caced4435ca045850892e530fdd5578cb8b0511afc5a6333a82f5adba73f1849">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="ADGAC" data-category="puzzle">
+                <p class="game-name">A Difficult Game About Climbing</p>
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fgeometrydash-game.io%2Fdata%2Fimage%2Fgame%2Fa-difficult-game-about-climbing%2520(2).jpg&f=1&nofb=1&ipt=e3270b5c1724ebba1dde8f99d9a8428ab3ceab8f9e58a24afd6e72ffb2741cc8">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="TLD" data-category="simulator">
+                <p class="game-name">The Long Drive</p>
+                <img src="https://avatars.mds.yandex.net/get-games/1881957/2a00000198f54eff79dc1865c3807f757222/pjpg128x128">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="HTALE" data-category="horror">
+                <p class="game-name">Horror Tale</p>
+                <img src="https://github.com/tinklegames/horrortale/blob/main/TemplateData/unity-logo-dark.png?raw=true">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="BASKET" data-category="arcade">
+                <p class="game-name">Basket Bros</p>
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ffreegames.io%2Ffiles%2Fimages%2Fthumb_basketbros_512_512.png&f=1&nofb=1&ipt=ee126b2660dfe0d5d559dad3c5fcd0d25a51175d40050512539964d3bcf7dd26">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="BSTARS" data-category="arcade">
+                <p class="game-name">Basketball Stars</p>
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fpreview.redd.it%2Fbasketball-stars-multiplayer-v0-z96yi6bl3bja1.jpg%3Fwidth%3D1080%26format%3Dpjpg%26auto%3Dwebp%26s%3D621bd39faab8a38aa4b1f295be56df31ebe1db1b&f=1&nofb=1&ipt=d466d6821186b1bc38832770fabc8eecae503cd39f9061908ff8db97f4f7e422">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="CTR1" data-category="arcade">
+                <p class="game-name">Cut The Rope</p>
+                <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Ffc06.deviantart.net%2Ffs71%2Ff%2F2010%2F355%2F4%2F4%2Fcut_the_rope_icon_by_wolvonic-d35d0ej.png&f=1&nofb=1&ipt=b68e8d886fd04051d7e0016045b19c9ddb6bb235d9425e50d65599c047897f1a">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="CTRTT" data-category="arcade">
+                <p class="game-name">Cut The Rope: Time Travel</p>
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.jim-nielsen.com%2Fios%2F512%2Fcut-the-rope-time-travel-2021-04-16.png&f=1&nofb=1&ipt=2f29189c2ecde21b02c1be734cf5135b411ad9a5a2e5ab30538c7ef035733d0d">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="RTS" data-category="arcade">
+                <p class="game-name">Rooftop Snipers</p>
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Flnabros.github.io%2Fimg%2Frooftop-snipers.png&f=1&nofb=1&ipt=d5beb44a5c574d15ecd96c17f1965c81755d11f13b580f04d81e62d011870fa3">
+                <button class="get-code">Get Code</button>
+            </div>
+            <div class="game-card" data-code="RTS2" data-category="arcade">
+                <p class="game-name">Rooftop Snipers 2</p>
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fpokigamez.github.io%2Fimages%2Frooftop-snipers-2.png&f=1&nofb=1&ipt=024cf301d9540341dee9c49ca341d0cf670a5707f298fb4064c8748e4901f468">
+                <button class="get-code">Get Code</button>
+            </div>
+        </div>
+    </div>
 
-/* --- Show Category --- */
-function showCategory(category) {
-  gamesContainer.innerHTML = ""; // only clear game cards
-  let filtered = allCards.filter(c => category === "all" || c.dataset.category === category);
+    <div id="notification"></div>
 
-  filtered.sort((a, b) => {
-    const nameA = a.querySelector(".game-name").textContent.toLowerCase();
-    const nameB = b.querySelector(".game-name").textContent.toLowerCase();
-    return nameA.localeCompare(nameB);
-  });
+    <script>
+        const sidebarItems = document.querySelectorAll(".sidebar-item");
+        const gamesContainer = document.getElementById("games");
+        const allGamesControls = document.getElementById("all-games-controls");
+        const allCards = [...document.querySelectorAll(".game-card")]; // Keep originals
+        const title = document.getElementById("category-title");
+        const notification = document.getElementById("notification");
+        const searchBar = document.getElementById("search-bar");
+        const moviesBtn = document.getElementById("movies-btn");
+        const moviesLink = "https://tinklegames.github.io/host/cinema";
+        const newSiteBtn = document.getElementById("newSite-btn");
+        const newSiteLink = "https://tinklegames.github.io/redirect/codes";
 
-  filtered.forEach(c => gamesContainer.appendChild(c));
-  attachButtonEvents(gamesContainer);
-}
+        const categories = [{
+                name: "🎮 All Games",
+                value: "all"
+            },
+            {
+                name: "⭐ Popular",
+                value: "popular"
+            },
+            {
+                name: "🆕 New",
+                value: "new"
+            },
+            {
+                name: "⚔️ Action",
+                value: "action"
+            },
+            {
+                name: "👻 Horror",
+                value: "horror"
+            },
+            {
+                name: "🕹️ Arcade",
+                value: "arcade"
+            },
+            {
+                name: "🧩 Puzzle",
+                value: "puzzle"
+            },
+            {
+                name: "🏭 Simulator",
+                value: "simulator"
+            }
+        ];
+
+        const categoryButtonsContainer = document.getElementById("category-buttons");
+
+        categories.forEach(cat => {
+            const btn = document.createElement("button");
+            btn.textContent = cat.name;
+            btn.dataset.category = cat.value;
+            btn.className = "category-btn";
+            btn.addEventListener("click", () => {
+                sidebarItems.forEach(i => i.classList.remove("active")); // unselect sidebar
+                title.textContent = cat.name;
+
+                if (cat.value === "popular") showPopular();
+                else if (cat.value === "new") showNewGames();
+                else if (cat === "request") showRequestForm();
+                else if (cat === "suggestions") showSuggestionsForm();
+                else showCategory(cat.value);
+
+                // Highlight clicked button
+                document.querySelectorAll(".category-btn").forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+            });
+            categoryButtonsContainer.appendChild(btn);
+        });
+
+
+        /* --- Copy Buttons --- */
+        function attachButtonEvents(container = document) {
+            container.querySelectorAll(".get-code").forEach(btn => {
+                btn.addEventListener("click", async () => {
+                    if (btn.disabled) return; // prevent rapid clicking
+
+                    const card = btn.closest(".game-card");
+                    const code = card.dataset.code;
+                    const name = card.querySelector(".game-name").textContent;
+
+                    // disable all get-code buttons for 5 seconds
+                    const allButtons = document.querySelectorAll(".get-code");
+                    allButtons.forEach(b => {
+                        b.disabled = true;
+                        b.style.opacity = "0.5";
+                        b.style.cursor = "not-allowed";
+                    });
+
+                    try {
+                        // update Firebase click count
+                        await incrementGameClick(name);
+                    } catch (err) {
+                        console.error("⚠️ Firebase update failed:", err);
+                    }
+
+                    // copy to clipboard
+                    navigator.clipboard.writeText(code)
+                        .then(() => showNotification(`Copied! Code: ${code}`, true))
+                        .catch(() => showNotification("Failed to copy code", false));
+
+                    // refresh popular list if currently viewing it
+                    if (document.querySelector(".sidebar-item.active")?.dataset.category === "popular") {
+                        showPopular();
+                    }
+
+                    // re-enable all buttons after 5 seconds
+                    setTimeout(() => {
+                        allButtons.forEach(b => {
+                            b.disabled = false;
+                            b.style.opacity = "0.9";
+                            b.style.cursor = "pointer";
+                        });
+                    }, 5000);
+                });
+            });
+        }
+
+        /* --- Notification --- */
+        function showNotification(message, success = true) {
+            notification.textContent = message;
+            notification.className = success ? "success" : "error";
+            notification.style.display = "block";
+            setTimeout(() => notification.style.display = "none", 3000);
+        }
+
+        /* --- Show Category --- */
+        function showCategory(category) {
+            gamesContainer.innerHTML = ""; // only clear game cards
+            let filtered = allCards.filter(c => category === "all" || c.dataset.category === category);
+
+            filtered.sort((a, b) => {
+                const nameA = a.querySelector(".game-name").textContent.toLowerCase();
+                const nameB = b.querySelector(".game-name").textContent.toLowerCase();
+                return nameA.localeCompare(nameB);
+            });
+
+            filtered.forEach(c => gamesContainer.appendChild(c));
+            attachButtonEvents(gamesContainer);
+        }
 
 
 
-/* --- Most Popular --- */
-function showPopular() {
-  const ranked = allCards
-    .map(card => {
-      const name = card.querySelector(".game-name").textContent;
-      return { card, count: clickData[name] || 0 };
-    })
-    .filter(e => e.count > 0)
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 5);
+        /* --- Most Popular --- */
+        function showPopular() {
+            const ranked = allCards
+                .map(card => {
+                    const name = card.querySelector(".game-name").textContent;
+                    return {
+                        card,
+                        count: clickData[name] || 0
+                    };
+                })
+                .filter(e => e.count > 0)
+                .sort((a, b) => b.count - a.count)
+                .slice(0, 5);
 
-  gamesContainer.innerHTML = "";
-  ranked.forEach((entry, i) => {
-    const clone = entry.card.cloneNode(true);
-    const badge = document.createElement("div");
-    badge.className = "rank-badge";
-    if (i === 0) badge.classList.add("rank-gold");
-    else if (i === 1) badge.classList.add("rank-silver");
-    else if (i === 2) badge.classList.add("rank-bronze");
-    else badge.classList.add("rank-blue");
-    badge.textContent = `#${i + 1}`;
-    clone.appendChild(badge);
-    gamesContainer.appendChild(clone);
-  });
-  attachButtonEvents(gamesContainer);
-}
+            gamesContainer.innerHTML = "";
+            ranked.forEach((entry, i) => {
+                const clone = entry.card.cloneNode(true);
+                const badge = document.createElement("div");
+                badge.className = "rank-badge";
+                if (i === 0) badge.classList.add("rank-gold");
+                else if (i === 1) badge.classList.add("rank-silver");
+                else if (i === 2) badge.classList.add("rank-bronze");
+                else badge.classList.add("rank-blue");
+                badge.textContent = `#${i + 1}`;
+                clone.appendChild(badge);
+                gamesContainer.appendChild(clone);
+            });
+            attachButtonEvents(gamesContainer);
+        }
 
-/* --- New Games --- */
-function showNewGames() {
-  // Take the last 10 game cards from allCards
-  const recent = allCards.slice(-10);
-  gamesContainer.innerHTML = "";
-  recent.forEach(c => {
-    const clone = c.cloneNode(true);
-    gamesContainer.appendChild(clone);
-  });
-  attachButtonEvents(gamesContainer);
-}
+        /* --- New Games --- */
+        function showNewGames() {
+            // Take the last 10 game cards from allCards
+            const recent = allCards.slice(-10);
+            gamesContainer.innerHTML = "";
+            recent.forEach(c => {
+                const clone = c.cloneNode(true);
+                gamesContainer.appendChild(clone);
+            });
+            attachButtonEvents(gamesContainer);
+        }
 
-/* --- Request Games --- */
-function showRequestForm() {
-  gamesContainer.innerHTML = `
+        /* --- Request Games --- */
+        function showRequestForm() {
+            gamesContainer.innerHTML = `
     <div class="form-container">
       <h3 class="form-title">🎮 Request a Game</h3>
       <form id="request-form" class="form">
@@ -1461,45 +1538,49 @@ function showRequestForm() {
     </div>
   `;
 
-  const form = document.getElementById("request-form");
-  const submitBtn = form.querySelector(".form-submit-btn");
-  let lastSubmitTime = 0; // track cooldown
+            const form = document.getElementById("request-form");
+            const submitBtn = form.querySelector(".form-submit-btn");
+            let lastSubmitTime = 0; // track cooldown
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const now = Date.now();
-    const elapsed = now - lastSubmitTime;
+            form.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                const now = Date.now();
+                const elapsed = now - lastSubmitTime;
 
-    if (elapsed < 60000) { // 10 seconds
-      const remaining = Math.ceil((60000 - elapsed) / 1000);
-      showNotification(`⏳ Please wait ${remaining}s before submitting another request.`, false);
-      return;
-    }
+                if (elapsed < 60000) { // 10 seconds
+                    const remaining = Math.ceil((60000 - elapsed) / 1000);
+                    showNotification(`⏳ Please wait ${remaining}s before submitting another request.`, false);
+                    return;
+                }
 
-    lastSubmitTime = now;
-    const gameName = document.getElementById("game").value.trim();
-    if (!gameName) return;
+                lastSubmitTime = now;
+                const gameName = document.getElementById("game").value.trim();
+                if (!gameName) return;
 
-    try {
-      await fetch("https://script.google.com/macros/s/AKfycbzeM04a5TJDonO4hj2QkeEinqdviobX2veBbX-IKcUYYV0WJ50ybbmuIeHcO7qiSeH3/exec", {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ game: gameName })
-      });
+                try {
+                    await fetch("https://script.google.com/macros/s/AKfycbzeM04a5TJDonO4hj2QkeEinqdviobX2veBbX-IKcUYYV0WJ50ybbmuIeHcO7qiSeH3/exec", {
+                        method: "POST",
+                        mode: "no-cors",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            game: gameName
+                        })
+                    });
 
-      showNotification("✅ Game request submitted!", true);
-      form.reset();
-    } catch (error) {
-      console.error(error);
-      showNotification("❌ Failed to submit request.", false);
-    }
-  });
-}
+                    showNotification("✅ Game request submitted!", true);
+                    form.reset();
+                } catch (error) {
+                    console.error(error);
+                    showNotification("❌ Failed to submit request.", false);
+                }
+            });
+        }
 
-/* --- Suggestions --- */
-function showSuggestionsForm() {
-  gamesContainer.innerHTML = `
+        /* --- Suggestions --- */
+        function showSuggestionsForm() {
+            gamesContainer.innerHTML = `
     <div class="form-container">
       <h3 class="form-title">💡 Suggestions</h3>
       <form id="suggestion-form" class="form">
@@ -1520,88 +1601,93 @@ function showSuggestionsForm() {
     </div>
   `;
 
-  const form = document.getElementById("suggestion-form");
-  const submitBtn = form.querySelector(".form-submit-btn");
-  let lastSubmitTime = 0; // track cooldown
+            const form = document.getElementById("suggestion-form");
+            const submitBtn = form.querySelector(".form-submit-btn");
+            let lastSubmitTime = 0; // track cooldown
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const now = Date.now();
-    const elapsed = now - lastSubmitTime;
+            form.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                const now = Date.now();
+                const elapsed = now - lastSubmitTime;
 
-    if (elapsed < 60000) { // 10 seconds
-      const remaining = Math.ceil((60000 - elapsed) / 1000);
-      showNotification(`⏳ Please wait ${remaining}s before submitting another request.`, false);
-      return;
-    }
+                if (elapsed < 60000) { // 10 seconds
+                    const remaining = Math.ceil((60000 - elapsed) / 1000);
+                    showNotification(`⏳ Please wait ${remaining}s before submitting another request.`, false);
+                    return;
+                }
 
-    lastSubmitTime = now;
-    const gameName = document.getElementById("suggestion").value.trim();
-    if (!gameName) return;
+                lastSubmitTime = now;
+                const gameName = document.getElementById("suggestion").value.trim();
+                if (!gameName) return;
 
-    try {
-      await fetch("https://script.google.com/macros/s/AKfycbx5-AJYIr6YKofpmG_DRQTzNOlI-5sbC-41Ccy92r0u71ZiKFYdCTZweyODr7lsZPsf/exec", {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ game: gameName })
-      });
+                try {
+                    await fetch("https://script.google.com/macros/s/AKfycbx5-AJYIr6YKofpmG_DRQTzNOlI-5sbC-41Ccy92r0u71ZiKFYdCTZweyODr7lsZPsf/exec", {
+                        method: "POST",
+                        mode: "no-cors",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            game: gameName
+                        })
+                    });
 
-      showNotification("✅ Suggestion submitted!", true);
-      form.reset();
-    } catch (error) {
-      console.error(error);
-      showNotification("❌ Failed to submit suggestion.", false);
-    }
-  });
-}
-  
-/* --- Search --- */
-function filterSearch(term) {
-  term = term.toLowerCase();
-  const cards = gamesContainer.querySelectorAll(".game-card"); // only cards
-  cards.forEach(card => {
-    const name = card.querySelector(".game-name").textContent.toLowerCase();
-    card.style.display = name.includes(term) ? "flex" : "none";
-  });
-}
+                    showNotification("✅ Suggestion submitted!", true);
+                    form.reset();
+                } catch (error) {
+                    console.error(error);
+                    showNotification("❌ Failed to submit suggestion.", false);
+                }
+            });
+        }
 
-
-/* --- Sidebar Events --- */
-sidebarItems.forEach(item => {
-  if (item.id === "movies-btn") return;
-
-  item.addEventListener("click", () => {
-    sidebarItems.forEach(i => i.classList.remove("active"));
-    item.classList.add("active");
-    title.textContent = item.textContent.replace(/^[^a-zA-Z]+/, "");
-    const cat = item.dataset.category;
-
-    // Show/hide search and category buttons
-    allGamesControls.style.display = (cat === "all") ? "flex" : "none";
-
-    if (cat === "popular") showPopular();
-    else if (cat === "new") showNewGames();
-    else if (cat === "request") showRequestForm();
-    else if (cat === "suggestions") showSuggestionsForm();
-    else showCategory(cat);
-
-    filterSearch(searchBar.value);
-  });
-});
+        /* --- Search --- */
+        function filterSearch(term) {
+            term = term.toLowerCase();
+            const cards = gamesContainer.querySelectorAll(".game-card"); // only cards
+            cards.forEach(card => {
+                const name = card.querySelector(".game-name").textContent.toLowerCase();
+                card.style.display = name.includes(term) ? "flex" : "none";
+            });
+        }
 
 
-searchBar.addEventListener("input", e => filterSearch(e.target.value));
+        /* --- Sidebar Events --- */
+        sidebarItems.forEach(item => {
+            if (item.id === "movies-btn") return;
+            if (item.id === "newSite-btn") return;
 
-attachButtonEvents();
-showCategory("all");
+            item.addEventListener("click", () => {
+                sidebarItems.forEach(i => i.classList.remove("active"));
+                item.classList.add("active");
+                title.textContent = item.textContent.replace(/^[^a-zA-Z]+/, "");
+                const cat = item.dataset.category;
 
-moviesBtn.addEventListener("click", () => {
-  const currentActive = document.querySelector(".sidebar-item.active");
+                // Show/hide search and category buttons
+                allGamesControls.style.display = (cat === "all") ? "flex" : "none";
 
-  const win = window.open("about:blank", "_blank");
-  if (win) {
-    win.document.write(`
+                if (cat === "popular") showPopular();
+                else if (cat === "new") showNewGames();
+                else if (cat === "request") showRequestForm();
+                else if (cat === "suggestions") showSuggestionsForm();
+                else showCategory(cat);
+
+                filterSearch(searchBar.value);
+            });
+        });
+
+
+        searchBar.addEventListener("input", e => filterSearch(e.target.value));
+
+        attachButtonEvents();
+        showCategory("all");
+
+        moviesBtn.addEventListener("click", () => {
+            const currentActive = document.querySelector(".sidebar-item.active");
+
+            const win = window.open("about:blank", "_blank");
+            if (win) {
+                win.document.write(`
       <html>
         <head><title>Tinkle Party Cinema</title></head>
         <body style="margin:0;background-color:black;">
@@ -1611,354 +1697,394 @@ moviesBtn.addEventListener("click", () => {
         </body>
       </html>
     `);
-    win.document.close();
-  } else {
-    alert("Please allow pop-ups for this site to open Movies.");
-  }
-  sidebarItems.forEach(i => i.classList.remove("active"));
-  if (currentActive) currentActive.classList.add("active");
-});
-</script>
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
-  import {
-    getDatabase, ref, get, set, onValue, push, onDisconnect
-  } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
-  import { getAuth, signInAnonymously, onAuthStateChanged } 
-    from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
-  
-  const firebaseConfig = {
-    apiKey: "AIzaSyC-IDS2wfF3ZgVzjwf0cHUazNGolLFhXVQ",
-    authDomain: "mostpopular-39c60.firebaseapp.com",
-    databaseURL: "https://mostpopular-39c60-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "mostpopular-39c60",
-    storageBucket: "mostpopular-39c60.firebasedatabase.app",
-    messagingSenderId: "939775132675",
-    appId: "1:939775132675:web:7d40bd8fff497c53553a36",
-    measurementId: "G-XTTQ03YFN9"
-  };
+                win.document.close();
+            } else {
+                alert("Please allow pop-ups for this site to open Movies.");
+            }
+            sidebarItems.forEach(i => i.classList.remove("active"));
+            if (currentActive) currentActive.classList.add("active");
+        });
+        
+        newSiteBtn.addEventListener("click", () => {
+            const currentActive = document.querySelector(".sidebar-item.active");
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
+            const win = window.open("about:blank", "_blank");
+            if (win) {
+                win.document.write(`
+      <html>
+        <head><title>Tinkle Codes</title></head>
+        <body style="margin:0;background-color:black;">
+          <iframe src="${newSiteLink}" 
+            style="border:none;width:100vw;height:100vh;" 
+            allowfullscreen></iframe>
+        </body>
+      </html>
+    `);
+                win.document.close();
+            } else {
+                alert("Please allow pop-ups for this site to open the new site.");
+            }
+            sidebarItems.forEach(i => i.classList.remove("active"));
+            if (currentActive) currentActive.classList.add("active");
+        });
+    </script>
+    <script type="module">
+        import {
+            initializeApp
+        } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+        import {
+            getAnalytics
+        } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
+        import {
+            getDatabase,
+            ref,
+            get,
+            set,
+            onValue,
+            push,
+            onDisconnect
+        } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
+        import {
+            getAuth,
+            signInAnonymously,
+            onAuthStateChanged
+        }
+        from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 
-  // --- 🔐 Anonymous Auth (must come before database use) ---
-  const auth = getAuth(app);
-  signInAnonymously(auth)
-    .then(() => console.log("✅ Signed in anonymously"))
-    .catch((error) => console.error("❌ Auth error:", error));
+        const firebaseConfig = {
+            apiKey: "AIzaSyC-IDS2wfF3ZgVzjwf0cHUazNGolLFhXVQ",
+            authDomain: "mostpopular-39c60.firebaseapp.com",
+            databaseURL: "https://mostpopular-39c60-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "mostpopular-39c60",
+            storageBucket: "mostpopular-39c60.firebasedatabase.app",
+            messagingSenderId: "939775132675",
+            appId: "1:939775132675:web:7d40bd8fff497c53553a36",
+            measurementId: "G-XTTQ03YFN9"
+        };
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      console.log("👤 Anonymous UID:", user.uid);
-    }
-  });
-  
-  const db = getDatabase(app);
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+
+        // --- 🔐 Anonymous Auth (must come before database use) ---
+        const auth = getAuth(app);
+        signInAnonymously(auth)
+            .then(() => console.log("✅ Signed in anonymously"))
+            .catch((error) => console.error("❌ Auth error:", error));
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                console.log("👤 Anonymous UID:", user.uid);
+            }
+        });
+
+        const db = getDatabase(app);
 
 
-// --- Sanitize Firebase keys ---
-function sanitizeKey(name) {
-  return name.replace(/[.#$/\[\]]/g, "_");
-}
+        // --- Sanitize Firebase keys ---
+        function sanitizeKey(name) {
+            return name.replace(/[.#$/\[\]]/g, "_");
+        }
 
-// --- Increment click count in Firebase ---
-async function incrementGameClick(name) {
-  const safeKey = sanitizeKey(name);
-  const gameRef = ref(db, 'clickData/' + safeKey); // ✅ modular ref
-  const snapshot = await get(gameRef);             // ✅ modular get
-  const current = snapshot.exists() ? snapshot.val() : 0;
-  await set(gameRef, current + 1);                // ✅ modular set
-}
+        // --- Increment click count in Firebase ---
+        async function incrementGameClick(name) {
+            const safeKey = sanitizeKey(name);
+            const gameRef = ref(db, 'clickData/' + safeKey); // ✅ modular ref
+            const snapshot = await get(gameRef); // ✅ modular get
+            const current = snapshot.exists() ? snapshot.val() : 0;
+            await set(gameRef, current + 1); // ✅ modular set
+        }
 
-// --- Get all click data from Firebase ---
-async function getAllClickData() {
-  const snapshot = await get(ref(db, 'clickData'));
-  return snapshot.exists() ? snapshot.val() : {};
-}
+        // --- Get all click data from Firebase ---
+        async function getAllClickData() {
+            const snapshot = await get(ref(db, 'clickData'));
+            return snapshot.exists() ? snapshot.val() : {};
+        }
 
-// --- Attach copy & click events to buttons ---
-window.attachButtonEvents = function(container = document) {
-  container.querySelectorAll(".get-code").forEach(btn => {
-    btn.addEventListener("click", async () => {
-      const card = btn.closest(".game-card");
-      const code = card.dataset.code;
-      const name = card.querySelector(".game-name").textContent;
+        // --- Attach copy & click events to buttons ---
+        window.attachButtonEvents = function(container = document) {
+            container.querySelectorAll(".get-code").forEach(btn => {
+                btn.addEventListener("click", async () => {
+                    const card = btn.closest(".game-card");
+                    const code = card.dataset.code;
+                    const name = card.querySelector(".game-name").textContent;
 
-      // Firebase increment
-      try {
-        await incrementGameClick(name);
-      } catch (e) {
-        console.error("incrementGameClick failed:", e);
-      }
+                    // Firebase increment
+                    try {
+                        await incrementGameClick(name);
+                    } catch (e) {
+                        console.error("incrementGameClick failed:", e);
+                    }
 
-      // Copy code to clipboard
-      navigator.clipboard.writeText(code)
-        .then(() => showNotification("Copied! Code: " + code, true))
-        .catch(() => showNotification("Failed to copy code", false));
+                    // Copy code to clipboard
+                    navigator.clipboard.writeText(code)
+                        .then(() => showNotification("Copied! Code: " + code, true))
+                        .catch(() => showNotification("Failed to copy code", false));
 
-      // Refresh popular list if active
-      if (document.querySelector(".sidebar-item.active").dataset.category === "popular") {
-        showPopular();
-      }
-    });
-  });
-};
+                    // Refresh popular list if active
+                    if (document.querySelector(".sidebar-item.active").dataset.category === "popular") {
+                        showPopular();
+                    }
+                });
+            });
+        };
 
-// --- Show top 5 popular games ---
-window.showPopular = async function() {
-  const clickData = await getAllClickData();
-  const ranked = allCards
-    .map(card => {
-      const name = card.querySelector(".game-name").textContent;
-      const safeKey = sanitizeKey(name); // sanitize here too
-      return { card, count: clickData[safeKey] || 0 };
-    })
-    .filter(e => e.count > 0)
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 5);
+        // --- Show top 5 popular games ---
+        window.showPopular = async function() {
+            const clickData = await getAllClickData();
+            const ranked = allCards
+                .map(card => {
+                    const name = card.querySelector(".game-name").textContent;
+                    const safeKey = sanitizeKey(name); // sanitize here too
+                    return {
+                        card,
+                        count: clickData[safeKey] || 0
+                    };
+                })
+                .filter(e => e.count > 0)
+                .sort((a, b) => b.count - a.count)
+                .slice(0, 5);
 
-  gamesContainer.innerHTML = "";
-  ranked.forEach((entry, i) => {
-    const clone = entry.card.cloneNode(true);
-    const badge = document.createElement("div");
-    badge.className = "rank-badge " +
-      (i === 0 ? "rank-gold" : i === 1 ? "rank-silver" : i === 2 ? "rank-bronze" : "rank-blue");
-    badge.textContent = `#${i + 1}`;
-    clone.appendChild(badge);
-    gamesContainer.appendChild(clone);
-  });
+            gamesContainer.innerHTML = "";
+            ranked.forEach((entry, i) => {
+                const clone = entry.card.cloneNode(true);
+                const badge = document.createElement("div");
+                badge.className = "rank-badge " +
+                    (i === 0 ? "rank-gold" : i === 1 ? "rank-silver" : i === 2 ? "rank-bronze" : "rank-blue");
+                badge.textContent = `#${i + 1}`;
+                clone.appendChild(badge);
+                gamesContainer.appendChild(clone);
+            });
 
-  attachButtonEvents(gamesContainer);
-};
-  
-  const settingsRef = ref(db, "siteSettings");
-  const triggerAnnRef = ref(db, "announcementTriggerNow");
-  const triggerRef = ref(db, "jumpscareTriggerNow");
-  const trollBaseRef = ref(db, "trollTriggers");
+            attachButtonEvents(gamesContainer);
+        };
 
-  // === Timestamp Guards ===
-  let lastAnnounceTriggerTime = 0;
-  let lastJumpscareTimestamp = 0;
-  let lastCursorChaos = 0;
-  let lastCreepySound = 0;
-  let lastFlashbang = 0;
-  let lastReverseControls = 0;
+        const settingsRef = ref(db, "siteSettings");
+        const triggerAnnRef = ref(db, "announcementTriggerNow");
+        const triggerRef = ref(db, "jumpscareTriggerNow");
+        const trollBaseRef = ref(db, "trollTriggers");
 
-  let initialAnnounceLoaded = false;
-  let initialJumpLoaded = false;
-  let initialCursorLoaded = false;
-  let initialSoundLoaded = false;
-  let initialFlashbangLoaded = false;
-  let initialReverseLoaded = false;
+        // === Timestamp Guards ===
+        let lastAnnounceTriggerTime = 0;
+        let lastJumpscareTimestamp = 0;
+        let lastCursorChaos = 0;
+        let lastCreepySound = 0;
+        let lastFlashbang = 0;
+        let lastReverseControls = 0;
 
-  // === Listen for site settings ===
-  onValue(settingsRef, (snapshot) => {
-    const s = snapshot.val();
-    if (!s) return;
+        let initialAnnounceLoaded = false;
+        let initialJumpLoaded = false;
+        let initialCursorLoaded = false;
+        let initialSoundLoaded = false;
+        let initialFlashbangLoaded = false;
+        let initialReverseLoaded = false;
 
-    document.body.style.backgroundColor = s.backgroundColor || "#0a0a0a";
+        // === Listen for site settings ===
+        onValue(settingsRef, (snapshot) => {
+            const s = snapshot.val();
+            if (!s) return;
 
-    setupBanner();
-    const content = document.getElementById("announcement-content");
-    if (content) content.innerHTML = s.announcement || "";
-  });
+            document.body.style.backgroundColor = s.backgroundColor || "#0a0a0a";
 
-  // === Setup Announcement Banner if Missing ===
-  function setupBanner() {
-    if (document.getElementById("announcement")) return;
+            setupBanner();
+            const content = document.getElementById("announcement-content");
+            if (content) content.innerHTML = s.announcement || "";
+        });
 
-    const banner = document.createElement("div");
-    banner.id = "announcement";
-    banner.style.position = "fixed";
-    banner.style.top = "50%";
-    banner.style.left = "50%";
-    banner.style.transform = "translate(-50%, -50%)";
-    banner.style.maxWidth = "80%";
-    banner.style.padding = "40px";
-    banner.style.borderRadius = "10px";
-    banner.style.textAlign = "center";
-    banner.style.color = "white";
-    banner.style.zIndex = "9999";
-    banner.style.background = "rgba(0, 0, 0, 0.85)";
-    banner.style.fontSize = "1.5em";
-    banner.style.opacity = "0";
-    banner.style.transition = "opacity 1s ease";
-    banner.style.display = "none";
+        // === Setup Announcement Banner if Missing ===
+        function setupBanner() {
+            if (document.getElementById("announcement")) return;
 
-    const title = document.createElement("h2");
-    title.textContent = "📢 Announcement";
-    title.style.marginBottom = "15px";
-    title.style.color = "#FFD700";
-    title.style.textShadow = "0 0 10px rgba(255,255,255,0.5)";
-    banner.appendChild(title);
+            const banner = document.createElement("div");
+            banner.id = "announcement";
+            banner.style.position = "fixed";
+            banner.style.top = "50%";
+            banner.style.left = "50%";
+            banner.style.transform = "translate(-50%, -50%)";
+            banner.style.maxWidth = "80%";
+            banner.style.padding = "40px";
+            banner.style.borderRadius = "10px";
+            banner.style.textAlign = "center";
+            banner.style.color = "white";
+            banner.style.zIndex = "9999";
+            banner.style.background = "rgba(0, 0, 0, 0.85)";
+            banner.style.fontSize = "1.5em";
+            banner.style.opacity = "0";
+            banner.style.transition = "opacity 1s ease";
+            banner.style.display = "none";
 
-    const content = document.createElement("div");
-    content.id = "announcement-content";
-    banner.appendChild(content);
+            const title = document.createElement("h2");
+            title.textContent = "📢 Announcement";
+            title.style.marginBottom = "15px";
+            title.style.color = "#FFD700";
+            title.style.textShadow = "0 0 10px rgba(255,255,255,0.5)";
+            banner.appendChild(title);
 
-    document.body.appendChild(banner);
-  }
+            const content = document.createElement("div");
+            content.id = "announcement-content";
+            banner.appendChild(content);
 
-  // === Manual Announcement Trigger ===
-  onValue(triggerAnnRef, (snapshot) => {
-    const t = snapshot.val();
-    if (!t || typeof t.timestamp !== "number") return;
+            document.body.appendChild(banner);
+        }
 
-    if (!initialAnnounceLoaded) {
-      lastAnnounceTriggerTime = t.timestamp;
-      initialAnnounceLoaded = true;
-      return;
-    }
+        // === Manual Announcement Trigger ===
+        onValue(triggerAnnRef, (snapshot) => {
+            const t = snapshot.val();
+            if (!t || typeof t.timestamp !== "number") return;
 
-    if (t.timestamp === lastAnnounceTriggerTime) return;
-    lastAnnounceTriggerTime = t.timestamp;
+            if (!initialAnnounceLoaded) {
+                lastAnnounceTriggerTime = t.timestamp;
+                initialAnnounceLoaded = true;
+                return;
+            }
 
-    setupBanner();
-    const banner = document.getElementById("announcement");
-    const content = document.getElementById("announcement-content");
-    if (content) content.innerHTML = t.text || "(no message)";
+            if (t.timestamp === lastAnnounceTriggerTime) return;
+            lastAnnounceTriggerTime = t.timestamp;
 
-    banner.style.display = "block";
-    setTimeout(() => banner.style.opacity = "1", 50);
+            setupBanner();
+            const banner = document.getElementById("announcement");
+            const content = document.getElementById("announcement-content");
+            if (content) content.innerHTML = t.text || "(no message)";
 
-    setTimeout(() => {
-      banner.style.opacity = "0";
-      setTimeout(() => banner.style.display = "none", 1000);
-    }, 5000);
+            banner.style.display = "block";
+            setTimeout(() => banner.style.opacity = "1", 50);
 
-    // Optional: clear after use
-    set(triggerAnnRef, null);
-  });
+            setTimeout(() => {
+                banner.style.opacity = "0";
+                setTimeout(() => banner.style.display = "none", 1000);
+            }, 5000);
 
-  // === Manual Jumpscare Trigger ===
-  onValue(triggerRef, (snapshot) => {
-    const t = snapshot.val();
-    if (!t || typeof t.timestamp !== "number") return;
+            // Optional: clear after use
+            set(triggerAnnRef, null);
+        });
 
-    if (!initialJumpLoaded) {
-      lastJumpscareTimestamp = t.timestamp;
-      initialJumpLoaded = true;
-      return;
-    }
+        // === Manual Jumpscare Trigger ===
+        onValue(triggerRef, (snapshot) => {
+            const t = snapshot.val();
+            if (!t || typeof t.timestamp !== "number") return;
 
-    if (t.timestamp === lastJumpscareTimestamp) return;
-    lastJumpscareTimestamp = t.timestamp;
+            if (!initialJumpLoaded) {
+                lastJumpscareTimestamp = t.timestamp;
+                initialJumpLoaded = true;
+                return;
+            }
 
-    const img = document.createElement("img");
-    img.src = t.image;
-    img.style.position = "fixed";
-    img.style.top = "0";
-    img.style.left = "0";
-    img.style.width = "100%";
-    img.style.height = "100%";
-    img.style.objectFit = "cover";
-    img.style.zIndex = "10000";
-    document.body.appendChild(img);
+            if (t.timestamp === lastJumpscareTimestamp) return;
+            lastJumpscareTimestamp = t.timestamp;
 
-    setTimeout(() => img.remove(), 1500);
+            const img = document.createElement("img");
+            img.src = t.image;
+            img.style.position = "fixed";
+            img.style.top = "0";
+            img.style.left = "0";
+            img.style.width = "100%";
+            img.style.height = "100%";
+            img.style.objectFit = "cover";
+            img.style.zIndex = "10000";
+            document.body.appendChild(img);
 
-    // Optional: clear after use
-    set(triggerRef, null);
-  });
+            setTimeout(() => img.remove(), 1500);
 
-  // === Cursor Chaos
-  onValue(ref(db, "trollTriggers/cursorChaos"), (snap) => {
-    const data = snap.val();
-    if (!data || typeof data.timestamp !== "number") return;
+            // Optional: clear after use
+            set(triggerRef, null);
+        });
 
-    if (!initialCursorLoaded) {
-      lastCursorChaos = data.timestamp;
-      initialCursorLoaded = true;
-      return;
-    }
+        // === Cursor Chaos
+        onValue(ref(db, "trollTriggers/cursorChaos"), (snap) => {
+            const data = snap.val();
+            if (!data || typeof data.timestamp !== "number") return;
 
-    if (data.timestamp === lastCursorChaos) return;
-    lastCursorChaos = data.timestamp;
+            if (!initialCursorLoaded) {
+                lastCursorChaos = data.timestamp;
+                initialCursorLoaded = true;
+                return;
+            }
 
-    document.body.style.cursor = "none";
-    setTimeout(() => {
-      document.body.style.cursor = "default";
-    }, 3000);
-  });
+            if (data.timestamp === lastCursorChaos) return;
+            lastCursorChaos = data.timestamp;
 
-  // === creepySound (taco rain / crab rave) and audio playing
-  onValue(ref(db, "trollTriggers/creepySound"), (snap) => {
-    const data = snap.val();
-    if (!data || !data.url || Date.now() - data.timestamp > 10000) return;
+            document.body.style.cursor = "none";
+            setTimeout(() => {
+                document.body.style.cursor = "default";
+            }, 3000);
+        });
 
-    const audio = new Audio(data.url);
-    audio.play().catch(console.error);
+        // === creepySound (taco rain / crab rave) and audio playing
+        onValue(ref(db, "trollTriggers/creepySound"), (snap) => {
+            const data = snap.val();
+            if (!data || !data.url || Date.now() - data.timestamp > 10000) return;
 
-    // 🌮 Taco rain
-    if (data.url.includes("rainingtacos.mp3")) {
-      startTacoRain();
-    }
+            const audio = new Audio(data.url);
+            audio.play().catch(console.error);
 
-    // 🦀 Crab rave
-    if (data.url.includes("crabrave.mp3")) {
-      startCrabRave();
-    }
-  });
+            // 🌮 Taco rain
+            if (data.url.includes("rainingtacos.mp3")) {
+                startTacoRain();
+            }
 
-  // === Taco Rain Animation ===
-  function startTacoRain() {
-    const tacoURL = "https://cdn-icons-png.flaticon.com/512/10342/10342492.png"; // <== your taco image URL
-    const rainContainer = document.createElement("div");
-    rainContainer.id = "taco-rain";
-    rainContainer.style.position = "fixed";
-    rainContainer.style.top = "0";
-    rainContainer.style.left = "0";
-    rainContainer.style.width = "100%";
-    rainContainer.style.height = "100%";
-    rainContainer.style.pointerEvents = "none";
-    rainContainer.style.overflow = "hidden";
-    rainContainer.style.zIndex = "99999";
-    document.body.appendChild(rainContainer);
+            // 🦀 Crab rave
+            if (data.url.includes("crabrave.mp3")) {
+                startCrabRave();
+            }
+        });
 
-    // Generate tacos + spice particles
-    const tacoCount = 20;
-    const spiceCount = 40;
-    for (let i = 0; i < tacoCount; i++) createTaco(rainContainer, tacoURL);
-    for (let i = 0; i < spiceCount; i++) createSpice(rainContainer);
+        // === Taco Rain Animation ===
+        function startTacoRain() {
+            const tacoURL = "https://cdn-icons-png.flaticon.com/512/10342/10342492.png"; // <== your taco image URL
+            const rainContainer = document.createElement("div");
+            rainContainer.id = "taco-rain";
+            rainContainer.style.position = "fixed";
+            rainContainer.style.top = "0";
+            rainContainer.style.left = "0";
+            rainContainer.style.width = "100%";
+            rainContainer.style.height = "100%";
+            rainContainer.style.pointerEvents = "none";
+            rainContainer.style.overflow = "hidden";
+            rainContainer.style.zIndex = "99999";
+            document.body.appendChild(rainContainer);
 
-    // Remove after song ends (~30s)
-    setTimeout(() => rainContainer.remove(), 33000);
-  }
+            // Generate tacos + spice particles
+            const tacoCount = 20;
+            const spiceCount = 40;
+            for (let i = 0; i < tacoCount; i++) createTaco(rainContainer, tacoURL);
+            for (let i = 0; i < spiceCount; i++) createSpice(rainContainer);
 
-  function createTaco(container, tacoURL) {
-    const taco = document.createElement("img");
-    taco.src = tacoURL;
-    taco.style.position = "absolute";
-    taco.style.top = "-100px";
-    taco.style.left = Math.random() * 100 + "vw";
-    taco.style.width = 50 + Math.random() * 50 + "px";
-    taco.style.opacity = 0.9;
-    taco.style.transform = `rotate(${Math.random() * 360}deg)`;
-    taco.style.animation = `tacoFall ${4 + Math.random() * 5}s linear infinite`;
-    taco.style.animationDelay = Math.random() * 5 + "s";
-    container.appendChild(taco);
-  }
+            // Remove after song ends (~30s)
+            setTimeout(() => rainContainer.remove(), 33000);
+        }
 
-  function createSpice(container) {
-    const spice = document.createElement("div");
-    spice.style.position = "absolute";
-    spice.style.top = "-10px";
-    spice.style.left = Math.random() * 100 + "vw";
-    spice.style.width = "8px";
-    spice.style.height = "8px";
-    spice.style.borderRadius = "50%";
-    spice.style.background = Math.random() > 0.5 ? "#d17f3f" : "#f5c26b"; // taco spice colors
-    spice.style.opacity = 0.8;
-    spice.style.animation = `spiceFall ${3 + Math.random() * 3}s linear infinite`;
-    spice.style.animationDelay = Math.random() * 5 + "s";
-    container.appendChild(spice);
-  }
+        function createTaco(container, tacoURL) {
+            const taco = document.createElement("img");
+            taco.src = tacoURL;
+            taco.style.position = "absolute";
+            taco.style.top = "-100px";
+            taco.style.left = Math.random() * 100 + "vw";
+            taco.style.width = 50 + Math.random() * 50 + "px";
+            taco.style.opacity = 0.9;
+            taco.style.transform = `rotate(${Math.random() * 360}deg)`;
+            taco.style.animation = `tacoFall ${4 + Math.random() * 5}s linear infinite`;
+            taco.style.animationDelay = Math.random() * 5 + "s";
+            container.appendChild(taco);
+        }
 
-  // === CSS Animations ===
-  const style = document.createElement("style");
-  style.textContent = `
+        function createSpice(container) {
+            const spice = document.createElement("div");
+            spice.style.position = "absolute";
+            spice.style.top = "-10px";
+            spice.style.left = Math.random() * 100 + "vw";
+            spice.style.width = "8px";
+            spice.style.height = "8px";
+            spice.style.borderRadius = "50%";
+            spice.style.background = Math.random() > 0.5 ? "#d17f3f" : "#f5c26b"; // taco spice colors
+            spice.style.opacity = 0.8;
+            spice.style.animation = `spiceFall ${3 + Math.random() * 3}s linear infinite`;
+            spice.style.animationDelay = Math.random() * 5 + "s";
+            container.appendChild(spice);
+        }
+
+        // === CSS Animations ===
+        const style = document.createElement("style");
+        style.textContent = `
   @keyframes tacoFall {
     0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
     100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
@@ -1969,174 +2095,174 @@ window.showPopular = async function() {
     100% { transform: translateY(110vh); opacity: 0; }
   }
   `;
-  document.head.appendChild(style);
+        document.head.appendChild(style);
 
-  function startCrabRave() {
-    const crabURL = "https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUyYXJjYTZ2YWxsdTU4bjZleW0yczdxYmhjcmVjMnJob2cwOHlpNTlieiZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/NitS36ljNxQcfT0QIT/200.gif";
-    const pageHeight = Math.max(document.body.scrollHeight, window.innerHeight);
-    const raveContainer = document.createElement("div");
-    raveContainer.id = "crab-rave";
-    Object.assign(raveContainer.style, {
-      position: "absolute",
-      top: "0",
-      left: "0",
-      width: "100%",
-      height: pageHeight + "px",
-      pointerEvents: "none",
-      zIndex: "99998",
-    });
-    document.body.appendChild(raveContainer);
+        function startCrabRave() {
+            const crabURL = "https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUyYXJjYTZ2YWxsdTU4bjZleW0yczdxYmhjcmVjMnJob2cwOHlpNTlieiZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/NitS36ljNxQcfT0QIT/200.gif";
+            const pageHeight = Math.max(document.body.scrollHeight, window.innerHeight);
+            const raveContainer = document.createElement("div");
+            raveContainer.id = "crab-rave";
+            Object.assign(raveContainer.style, {
+                position: "absolute",
+                top: "0",
+                left: "0",
+                width: "100%",
+                height: pageHeight + "px",
+                pointerEvents: "none",
+                zIndex: "99998",
+            });
+            document.body.appendChild(raveContainer);
 
-    // === Create full-page spotlights ===
-    const spotlight = document.createElement("div");
-    Object.assign(spotlight.style, {
-      position: "absolute", // scrolls with page
-      top: "0",
-      left: "0",
-      width: "100%",
-      height: pageHeight + "px",
-      pointerEvents: "none",
-      zIndex: "99999",
-      background: "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.2) 0%, transparent 70%)",
-      mixBlendMode: "screen",
-      transition: "background 0.3s ease",
-    });
-    document.body.appendChild(spotlight);
+            // === Create full-page spotlights ===
+            const spotlight = document.createElement("div");
+            Object.assign(spotlight.style, {
+                position: "absolute", // scrolls with page
+                top: "0",
+                left: "0",
+                width: "100%",
+                height: pageHeight + "px",
+                pointerEvents: "none",
+                zIndex: "99999",
+                background: "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.2) 0%, transparent 70%)",
+                mixBlendMode: "screen",
+                transition: "background 0.3s ease",
+            });
+            document.body.appendChild(spotlight);
 
-    // === Create crab crowd ===
-    const crabCount = 50;
-    for (let i = 0; i < crabCount; i++) {
-      const crab = document.createElement("img");
-      crab.src = crabURL;
-      crab.style.position = "absolute";
-      crab.style.transition = "transform 0.2s ease";
-      crab.style.willChange = "transform";
+            // === Create crab crowd ===
+            const crabCount = 50;
+            for (let i = 0; i < crabCount; i++) {
+                const crab = document.createElement("img");
+                crab.src = crabURL;
+                crab.style.position = "absolute";
+                crab.style.transition = "transform 0.2s ease";
+                crab.style.willChange = "transform";
 
-      const x = Math.random() * 95 + 2.5;
-      const y = Math.random() * pageHeight;
+                const x = Math.random() * 95 + 2.5;
+                const y = Math.random() * pageHeight;
 
-      const scale = 0.3 + Math.random() * 0.4;
+                const scale = 0.3 + Math.random() * 0.4;
 
-      Object.assign(crab.style, {
-        left: `${x}%`,
-        top: `${y}px`,
-        transform: `translate(-50%, 0) scale(${scale})`,
-        zIndex: Math.floor(scale * 100),
-      });
+                Object.assign(crab.style, {
+                    left: `${x}%`,
+                    top: `${y}px`,
+                    transform: `translate(-50%, 0) scale(${scale})`,
+                    zIndex: Math.floor(scale * 100),
+                });
 
-      raveContainer.appendChild(crab);
-    }
+                raveContainer.appendChild(crab);
+            }
 
-    // === Beat sync: page scale + crab bounce + spotlight color ===
-    const colors = ["#ff00ff", "#00ffff", "#ffcc00", "#ff69b4", "#00ff00"];
-    let beatUp = false;
-    let colorIndex = 0;
+            // === Beat sync: page scale + crab bounce + spotlight color ===
+            const colors = ["#ff00ff", "#00ffff", "#ffcc00", "#ff69b4", "#00ff00"];
+            let beatUp = false;
+            let colorIndex = 0;
 
-    const beatInterval = setInterval(() => {
-      beatUp = !beatUp;
+            const beatInterval = setInterval(() => {
+                beatUp = !beatUp;
 
-      // Page scaling bounce
-      const scale = beatUp ? 1.03 : 1; // grow slightly on beat
-      document.body.style.transform = `scale(${scale})`;
-      document.body.style.transformOrigin = "center top";
-      document.body.style.transition = "transform 0.2s ease";
+                // Page scaling bounce
+                const scale = beatUp ? 1.03 : 1; // grow slightly on beat
+                document.body.style.transform = `scale(${scale})`;
+                document.body.style.transformOrigin = "center top";
+                document.body.style.transition = "transform 0.2s ease";
 
-      // Spotlight moves randomly
-      const spotlightX = Math.random() * 100;
-      const spotlightY = Math.random() * 100;
-      const color = colors[colorIndex % colors.length];
-      colorIndex++;
-      spotlight.style.background = `radial-gradient(circle at ${spotlightX}% ${spotlightY}%, ${color}40 0%, transparent 70%)`;
+                // Spotlight moves randomly
+                const spotlightX = Math.random() * 100;
+                const spotlightY = Math.random() * 100;
+                const color = colors[colorIndex % colors.length];
+                colorIndex++;
+                spotlight.style.background = `radial-gradient(circle at ${spotlightX}% ${spotlightY}%, ${color}40 0%, transparent 70%)`;
 
-      // Crab bounce per beat
-      document.querySelectorAll("#crab-rave img").forEach((crab) => {
-        const bounce = `translateY(${beatUp ? -6 : 0}px)`;
-        crab.style.transform = crab.style.transform.replace(/translateY\(.*?\)/, "") + ` ${bounce}`;
-      });
-    }, 480); // ~125 BPM
+                // Crab bounce per beat
+                document.querySelectorAll("#crab-rave img").forEach((crab) => {
+                    const bounce = `translateY(${beatUp ? -6 : 0}px)`;
+                    crab.style.transform = crab.style.transform.replace(/translateY\(.*?\)/, "") + ` ${bounce}`;
+                });
+            }, 480); // ~125 BPM
 
-    // === End effect after ~17s ===
-    setTimeout(() => {
-      clearInterval(beatInterval);
-      document.body.style.transform = "scale(1)";
-      raveContainer.remove();
-      spotlight.remove();
-    }, 17000);
-  }
+            // === End effect after ~17s ===
+            setTimeout(() => {
+                clearInterval(beatInterval);
+                document.body.style.transform = "scale(1)";
+                raveContainer.remove();
+                spotlight.remove();
+            }, 17000);
+        }
 
-  // === Flashbang
-  onValue(ref(db, "trollTriggers/flashbang"), (snap) => {
-    const data = snap.val();
-    if (!data || typeof data.timestamp !== "number") return;
+        // === Flashbang
+        onValue(ref(db, "trollTriggers/flashbang"), (snap) => {
+            const data = snap.val();
+            if (!data || typeof data.timestamp !== "number") return;
 
-    if (!initialFlashbangLoaded) {
-      lastFlashbang = data.timestamp;
-      initialFlashbangLoaded = true;
-      return;
-    }
+            if (!initialFlashbangLoaded) {
+                lastFlashbang = data.timestamp;
+                initialFlashbangLoaded = true;
+                return;
+            }
 
-    if (data.timestamp === lastFlashbang) return;
-    lastFlashbang = data.timestamp;
+            if (data.timestamp === lastFlashbang) return;
+            lastFlashbang = data.timestamp;
 
-    const flash = document.createElement("div");
-    flash.style.position = "fixed";
-    flash.style.top = "0";
-    flash.style.left = "0";
-    flash.style.width = "100%";
-    flash.style.height = "100%";
-    flash.style.background = "white";
-    flash.style.zIndex = "99999";
-    flash.style.transition = "opacity 0.5s ease";
-    flash.style.opacity = "1";
-    document.body.appendChild(flash);
+            const flash = document.createElement("div");
+            flash.style.position = "fixed";
+            flash.style.top = "0";
+            flash.style.left = "0";
+            flash.style.width = "100%";
+            flash.style.height = "100%";
+            flash.style.background = "white";
+            flash.style.zIndex = "99999";
+            flash.style.transition = "opacity 0.5s ease";
+            flash.style.opacity = "1";
+            document.body.appendChild(flash);
 
-    setTimeout(() => flash.style.opacity = "0", 200);
-    setTimeout(() => flash.remove(), 800);
-  });
+            setTimeout(() => flash.style.opacity = "0", 200);
+            setTimeout(() => flash.remove(), 800);
+        });
 
-  // === Reverse Controls
-  onValue(ref(db, "trollTriggers/reverseControls"), (snap) => {
-    const data = snap.val();
-    if (!data || typeof data.timestamp !== "number") return;
+        // === Reverse Controls
+        onValue(ref(db, "trollTriggers/reverseControls"), (snap) => {
+            const data = snap.val();
+            if (!data || typeof data.timestamp !== "number") return;
 
-    if (!initialReverseLoaded) {
-      lastReverseControls = data.timestamp;
-      initialReverseLoaded = true;
-      return;
-    }
+            if (!initialReverseLoaded) {
+                lastReverseControls = data.timestamp;
+                initialReverseLoaded = true;
+                return;
+            }
 
-    if (data.timestamp === lastReverseControls) return;
-    lastReverseControls = data.timestamp;
+            if (data.timestamp === lastReverseControls) return;
+            lastReverseControls = data.timestamp;
 
-    const moveHandler = (e) => {
-      window.scrollBy(
-        (Math.random() - 0.5) * -50,
-        (Math.random() - 0.5) * -50
-      );
-    };
-    document.addEventListener("mousemove", moveHandler);
-    setTimeout(() => {
-      document.removeEventListener("mousemove", moveHandler);
-    }, 3000);
-  });
+            const moveHandler = (e) => {
+                window.scrollBy(
+                    (Math.random() - 0.5) * -50,
+                    (Math.random() - 0.5) * -50
+                );
+            };
+            document.addEventListener("mousemove", moveHandler);
+            setTimeout(() => {
+                document.removeEventListener("mousemove", moveHandler);
+            }, 3000);
+        });
 
-  // === 👥 Live User Presence Tracking ===
-  const usersRef = ref(db, "connectedUsers");
-  const myRef = push(usersRef);
-  // onDisconnect equivalent:
-  const disconnectTask = onDisconnect(myRef);
-  disconnectTask.remove();
-  set(myRef, true);
-  
-  window.incrementGameClick = async function(name) {
-  const safeKey = sanitizeKey(name);
-  const gameRef = ref(db, 'clickData/' + safeKey);
-  const snapshot = await get(gameRef);
-  const current = snapshot.exists() ? snapshot.val() : 0;
-  await set(gameRef, current + 1);
-};
+        // === 👥 Live User Presence Tracking ===
+        const usersRef = ref(db, "connectedUsers");
+        const myRef = push(usersRef);
+        // onDisconnect equivalent:
+        const disconnectTask = onDisconnect(myRef);
+        disconnectTask.remove();
+        set(myRef, true);
 
-</script>
+        window.incrementGameClick = async function(name) {
+            const safeKey = sanitizeKey(name);
+            const gameRef = ref(db, 'clickData/' + safeKey);
+            const snapshot = await get(gameRef);
+            const current = snapshot.exists() ? snapshot.val() : 0;
+            await set(gameRef, current + 1);
+        };
+    </script>
 
 </body>
+
 </html>
