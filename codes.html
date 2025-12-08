@@ -3219,17 +3219,22 @@
          const gateUnlockBtn = document.getElementById("gateUnlockBtn");
 
          function tryUnlock() {
-             const val = (gatePassword.value || "").trim();
-             if (!val) {
+             const rawVal = (gatePassword.value || "").trim();
+             const val = rawVal.toLowerCase(); // user input, lowercased
+             const correct = ACCESS_PASSWORD.toLowerCase(); // stored password, lowercased
+
+             if (!rawVal) {
                  gateError.textContent = "Enter the password.";
                  return;
              }
-             if (val !== ACCESS_PASSWORD) {
+
+             if (val !== correct) {
                  gateError.textContent = "Incorrect password.";
                  gatePassword.select();
                  showToast("ACCESS", "Wrong password");
                  return;
              }
+
              gateError.textContent = "";
              gate.classList.add("hidden");
              app.classList.add("visible");
@@ -3240,14 +3245,15 @@
              const search = document.getElementById("searchInput");
              if (search) search.focus();
 
-             // 🔔 Show update log once the deck is unlocked
+             // your existing stuff after unlock:
+             showToast("ACCESS", "Deck unlocked");
              if (updateLogBtn) {
-                 updateLogBtn.style.display = "flex"; // reveal bottom-right button
+                 updateLogBtn.style.display = "flex";
              }
              showUpdateLog(true);
-             startSnow();
-
+             startSnow(); // if you’re using this
          }
+
 
          gateUnlockBtn.addEventListener("click", tryUnlock);
          gatePassword.addEventListener("keydown", (e) => {
