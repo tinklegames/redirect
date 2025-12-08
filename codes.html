@@ -3577,6 +3577,7 @@
              // Only skip if the special flag is set
              if (localStorage.getItem("skipGate") === "true") {
                  // Hide password gate, show app
+                 startSnow();
                  if (gate) gate.classList.add("hidden");
                  if (app) app.classList.add("visible");
 
