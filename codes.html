@@ -3230,8 +3230,8 @@
 
          function tryUnlock() {
              const rawVal = (gatePassword.value || "").trim();
-             const val = rawVal.toLowerCase(); // user input, lowercased
-             const correct = ACCESS_PASSWORD.toLowerCase(); // stored password, lowercased
+             const val = rawVal.toLowerCase();
+             const correct = ACCESS_PASSWORD.toLowerCase();
 
              if (!rawVal) {
                  gateError.textContent = "Enter the password.";
@@ -3245,7 +3245,16 @@
                  return;
              }
 
+             // ✅ password correct
              gateError.textContent = "";
+
+             // ✅ remember that this device is unlocked
+             try {
+                 localStorage.setItem("skipGate", "true");
+             } catch (e) {
+                 console.warn("Could not save skipGate flag", e);
+             }
+
              gate.classList.add("hidden");
              app.classList.add("visible");
              setTimeout(() => {
@@ -3255,14 +3264,14 @@
              const search = document.getElementById("searchInput");
              if (search) search.focus();
 
-             // your existing stuff after unlock:
              showToast("ACCESS", "Deck unlocked");
              if (updateLogBtn) {
                  updateLogBtn.style.display = "flex";
              }
              showUpdateLog(true);
-             startSnow(); // if you’re using this
+             startSnow();
          }
+
 
 
          gateUnlockBtn.addEventListener("click", tryUnlock);
@@ -3584,17 +3593,22 @@
              const gate = document.getElementById("gate");
              const app = document.getElementById("app");
 
-             // Only skip if the special flag is set
              if (localStorage.getItem("skipGate") === "true") {
-                 // Hide password gate, show app
-                 startSnow();
+                 // Auto-unlock on this device
                  if (gate) gate.classList.add("hidden");
                  if (app) app.classList.add("visible");
+                 startSnow();
 
-                 // 🔁 IMPORTANT: clear it immediately so a normal refresh shows the lock again
-                 localStorage.removeItem("skipGate");
+                 // optional: also show update log button + log
+                 if (typeof updateLogBtn !== "undefined" && updateLogBtn) {
+                     updateLogBtn.style.display = "flex";
+                 }
+                 if (typeof showUpdateLog === "function") {
+                     showUpdateLog(true);
+                 }
              }
          });
+
 
          // Build games from original cards
          const sourceContainer = document.getElementById("source-games");
