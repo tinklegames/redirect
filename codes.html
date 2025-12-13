@@ -1909,6 +1909,21 @@
              color: var(--text-soft);
              padding-top: 8px;
          }
+
+         /* Hide music UI until player is ready */
+         #music-player-root {
+             opacity: 0;
+             pointer-events: none;
+             transform: translateY(8px);
+             transition: opacity 0.25s ease, transform 0.25s ease;
+         }
+
+         /* When ready, show it */
+         #music-player-root.music-ready {
+             opacity: 1;
+             pointer-events: auto;
+             transform: translateY(0);
+         }
      </style>
  </head>
 
@@ -2942,7 +2957,7 @@
      </div>
 
      <!-- Floating music player root -->
-     <div id="music-player-root">
+     <div id="music-player-root" class="music-hidden">
          <!-- FAB -->
          <button class="music-fab" id="musicFab" aria-label="Open music player">
              <svg viewBox="0 0 24 24" class="music-fab-icon">
@@ -3230,6 +3245,12 @@
                      console.log('[APP] setPlayerInstance called, player =', player);
                      this.player = player;
                      this.playerReady = true;
+
+                     // 🔥 reveal the UI only once the player is ready
+                     var root = document.getElementById('music-player-root');
+                     if (root && !root.classList.contains('music-ready')) {
+                         root.classList.add('music-ready');
+                     }
 
                      if (this.currentVideo) {
                          this.loadVideo(this.pendingPlay);
