@@ -153,5 +153,11 @@
     "ADCAP": "https://tinklehost.github.io/adcap|true",
     "PORTABOY": "https://tinklehost.github.io/portaboy|true",
     "ROLLSKY": "https://tinklehost.github.io/rollsky|true",
-    "CANDYCRUSH": "https://eloquent-dolphin-6a528f.netlify.app/|true"
+    "CANDYCRUSH": "https://eloquent-dolphin-6a528f.netlify.app/|true",
+    "FBAWG1": "https://tinklehost.github.io/fbawg/|true",
+    "FBAWG2": "https://tinklehost.github.io/fbawg/2|true",
+    "FBAWG3": "https://tinklehost.github.io/fbawg/3|true",
+    "FBAWG4": "https://tinklehost.github.io/fbawg/4|true",
+    "FBAWG5": "https://tinklehost.github.io/fbawg/5|true",
+    "FBAWG6": "https://tinklehost.github.io/fbawg/6|true"
     }
