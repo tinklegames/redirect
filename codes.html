@@ -3553,6 +3553,45 @@
          const gateError = document.getElementById("gateError");
          const gateUnlockBtn = document.getElementById("gateUnlockBtn");
 
+        // Read URL parameters and auto-fill password
+function autoFillFromURL() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const passwordParam = urlParams.get('autofill');
+  
+  if (passwordParam) {
+    const passwordInput = document.getElementById('gatePassword');
+    const unlockButton = document.getElementById('gateUnlockBtn');
+    
+    if (passwordInput) {
+      // Decode and fill the password
+      passwordInput.value = decodeURIComponent(passwordParam);
+      
+      // Optional: Show a message
+      const errorDiv = document.getElementById('gateError');
+      if (errorDiv) {
+        errorDiv.textContent = "Password auto-filled from gateway!";
+        errorDiv.style.color = "#00ff00";
+      }
+      
+      // Optional: Auto-submit after delay
+      if (unlockButton) {
+        setTimeout(() => {
+          unlockButton.click();
+        }, 1000);
+      }
+      
+      // Clean URL without reloading (optional)
+      if (window.history.replaceState) {
+        const cleanURL = window.location.pathname + window.location.hash;
+        window.history.replaceState({}, document.title, cleanURL);
+      }
+    }
+  }
+}
+
+// Run on page load
+document.addEventListener('DOMContentLoaded', autoFillFromURL);
+       
          // Code site navigation
          function openCodeSite() {
              if (!FULL_CODE_SITE_URL) return;
