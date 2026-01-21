@@ -3554,43 +3554,68 @@
          const gateUnlockBtn = document.getElementById("gateUnlockBtn");
 
         // Read URL parameters and auto-fill password
-function autoFillFromURL() {
+// Auto-fill password and auto-click the button
+function autoFillAndClick() {
   const urlParams = new URLSearchParams(window.location.search);
   const passwordParam = urlParams.get('autofill');
+  const autoClick = urlParams.get('autoclick');
   
   if (passwordParam) {
     const passwordInput = document.getElementById('gatePassword');
     const unlockButton = document.getElementById('gateUnlockBtn');
+    const errorDiv = document.getElementById('gateError');
     
     if (passwordInput) {
-      // Decode and fill the password
+      // Fill the password field
       passwordInput.value = decodeURIComponent(passwordParam);
       
-      // Optional: Show a message
-      const errorDiv = document.getElementById('gateError');
+      // Show success message
       if (errorDiv) {
-        errorDiv.textContent = "Password auto-filled from gateway!";
+        errorDiv.textContent = "✓ Password auto-filled from gateway!";
         errorDiv.style.color = "#00ff00";
+        errorDiv.style.fontWeight = "bold";
       }
       
-      // Optional: Auto-submit after delay
-      if (unlockButton) {
+      // If autoclick parameter is present, click the button
+      if (autoClick === 'true' && unlockButton) {
+        // Wait a moment so user can see the password was filled
         setTimeout(() => {
-          unlockButton.click();
-        }, 1000);
-      }
-      
-      // Clean URL without reloading (optional)
-      if (window.history.replaceState) {
-        const cleanURL = window.location.pathname + window.location.hash;
-        window.history.replaceState({}, document.title, cleanURL);
+          // Create and dispatch a proper click event
+          const clickEvent = new MouseEvent('click', {
+            view: window,
+            bubbles: true,
+            cancelable: true
+          });
+          
+          // Try to trigger the button's click handler
+          if (typeof unlockButton.onclick === 'function') {
+            unlockButton.onclick(clickEvent);
+          }
+          
+          // Also dispatch the event
+          unlockButton.dispatchEvent(clickEvent);
+          
+          // Update message
+          if (errorDiv) {
+            errorDiv.textContent = "✓ Auto-clicking unlock button...";
+          }
+          
+          // Clean URL without reloading
+          if (window.history.replaceState) {
+            const cleanURL = window.location.pathname;
+            window.history.replaceState({}, document.title, cleanURL);
+          }
+        }, 1500); // 1.5 second delay so user can see what's happening
       }
     }
   }
 }
 
-// Run on page load
-document.addEventListener('DOMContentLoaded', autoFillFromURL);
+// Run when page loads
+document.addEventListener('DOMContentLoaded', autoFillAndClick);
+
+// Also run after a delay in case of slow loading
+setTimeout(autoFillAndClick, 500);
        
          // Code site navigation
          function openCodeSite() {
