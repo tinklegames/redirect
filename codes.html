@@ -192,8 +192,8 @@
              transform: translateY(1px);
          }
 
-         /* ---------- PASSWORD GATE ---------- */
-         .gate {
+         /* ---------- Loader Screen ---------- */
+         .loader-screen {
              position: fixed;
              inset: 0;
              display: flex;
@@ -214,7 +214,7 @@
              pointer-events: none;
          }
 
-         .gate-panel {
+         .loader-panel {
              width: min(460px, 92vw);
              background: radial-gradient(circle at top, var(--panel-soft), var(--panel));
              border-radius: 26px;
@@ -1505,7 +1505,7 @@
              text-transform: uppercase;
              background: radial-gradient(circle at top left, rgba(59, 130, 246, 0.9), rgba(129, 140, 248, 0.95));
              color: #eef2ff;
-             display: none;
+             display: flex;
              /* only shown after unlock */
              align-items: center;
              gap: 6px;
@@ -1604,7 +1604,6 @@
              background: radial-gradient(circle at top left, var(--accent), var(--accent-3));
              color: white;
              display: none;
-             /* Hidden by default */
              align-items: center;
              justify-content: center;
              cursor: pointer;
@@ -1806,9 +1805,9 @@
  </head>
 
  <body>
-     <!-- PASSWORD GATE -->
-     <div class="gate" id="gate">
-         <div class="gate-panel">
+     <!-- LOADER SCREEN -->
+     <div class="loader-screen" id="loaderScreen">
+         <div class="loader-panel">
              <div class="loader-wrapper">
                  <span class="loader-letter">T</span>
                  <span class="loader-letter">I</span>
@@ -1823,28 +1822,11 @@
                  <span class="loader-letter">S</span>
                  <div class="loader"></div>
              </div>
-             <div class="gate-title">Access required</div>
-             <div class="gate-main">Tinkle Codes Gate</div>
-             <div class="gate-sub">Enter the access password to step into the games.</div>
-
-             <div class="group" style="margin-top:14px;">
-                 <svg stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="icon">
-                     <path d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" stroke-linejoin="round" stroke-linecap="round"></path>
-                 </svg>
-                 <input class="input" id="gatePassword" type="password" placeholder="access password">
-             </div>
-             <div class="gate-error" id="gateError"></div>
-             <div class="gate-actions">
-                 <button class="btn-glow" id="gateUnlockBtn">
-                     <span>Unlock codes</span>
-                     <svg viewBox="0 0 24 24" fill="none">
-                         <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-                     </svg>
-                 </button>
-             </div>
+             <div class="gate-title">Welcome to</div>
+             <div class="gate-main">Tinkle Games</div>
+             <div class="gate-sub"></div>
          </div>
      </div>
-
      <!-- MAIN APP -->
      <div class="app" id="app">
          <div class="top-shell">
@@ -1911,10 +1893,9 @@
                      <div class="hero-card">
                          <div class="hero-card-header">How it works</div>
                          <div class="hero-card-body">
-                             <p><strong>1.</strong> Unlock with the password.</p>
-                             <p><strong>2.</strong> Scroll through the grid of cards.</p>
-                             <p><strong>3.</strong> Click <strong>Copy code</strong> (or the card) to grab a code.</p>
-                             <p><strong>4.</strong> Hit <strong>Code site</strong> (top right) to open the codes page and paste.</p>
+                             <p><strong>1.</strong> Scroll through the grid of cards.</p>
+                             <p><strong>2.</strong> Click <strong>Copy code</strong> (or the card) to grab a code.</p>
+                             <p><strong>3.</strong> Hit <strong>Code site</strong> (top right) to open the codes page and paste.</p>
                          </div>
                      </div>
                  </div>
@@ -3580,8 +3561,6 @@
              });
          }
 
-         const ACCESS_PASSWORD = "tinkle"; // change if needed
-
          // Toast logic (always show, regardless of copy success)
          const toast = document.getElementById("toast");
          const toastText = document.getElementById("toastText");
@@ -3597,12 +3576,8 @@
              toastTimeout = setTimeout(() => toast.classList.remove("show"), 2200);
          }
 
-         // Password gate
          const gate = document.getElementById("gate");
          const app = document.getElementById("app");
-         const gatePassword = document.getElementById("gatePassword");
-         const gateError = document.getElementById("gateError");
-         const gateUnlockBtn = document.getElementById("gateUnlockBtn");
 
          // Code site navigation
          function openCodeSite() {
@@ -3912,29 +3887,34 @@
              });
          }
 
-         window.addEventListener("DOMContentLoaded", () => {
-             const gate = document.getElementById("gate");
-             const app = document.getElementById("app");
+         // Replace the existing loader script with this:
+         window.addEventListener('DOMContentLoaded', () => {
+             const loaderScreen = document.getElementById('loaderScreen');
+             const app = document.getElementById('app');
+             const aiButton = document.getElementById('aiChatButton');
+             const updateLogBtn = document.getElementById('updateLogBtn');
 
-             if (localStorage.getItem("skipGate") === "true") {
-                 // Auto-unlock on this device
-                 if (gate) gate.classList.add("hidden");
-                 if (app) app.classList.add("visible");
+             // Show loader for 2 seconds, then fade to main app
+             setTimeout(() => {
+                 if (loaderScreen) loaderScreen.style.opacity = '0';
+                 if (loaderScreen) loaderScreen.style.visibility = 'hidden';
+                 if (app) app.classList.add('visible');
+
+                 // Initialize features
                  startSnow();
+                 initAIChatbot();
 
-                 // Show AI chatbot button on auto-unlock too
-                 setTimeout(() => {
-                     initAIChatbot();
-                 }, 500);
+                 // Show AI button and update log button
+                 if (aiButton) aiButton.style.display = 'flex';
+                 if (updateLogBtn) updateLogBtn.style.display = 'flex';
 
-                 // optional: also show update log button + log
-                 if (typeof updateLogBtn !== "undefined" && updateLogBtn) {
-                     updateLogBtn.style.display = "flex";
+                 // Show update log automatically
+                 if (typeof showUpdateLog === 'function') {
+                     setTimeout(() => {
+                         showUpdateLog(true);
+                     }, 500); // Small delay for smooth transition
                  }
-                 if (typeof showUpdateLog === "function") {
-                     showUpdateLog(true);
-                 }
-             }
+             }, 1500); // 1.5 second delay
          });
 
 
@@ -4635,55 +4615,6 @@
                      aiMessages.scrollTop = aiMessages.scrollHeight;
                  }
              }, 3000);
-         }
-
-         // Modify the password unlock function to show the AI button
-         function tryUnlock() {
-             const rawVal = (gatePassword.value || "").trim();
-             const val = rawVal.toLowerCase();
-             const correct = ACCESS_PASSWORD.toLowerCase();
-
-             if (!rawVal) {
-                 gateError.textContent = "Enter the password.";
-                 return;
-             }
-
-             if (val !== correct) {
-                 gateError.textContent = "Incorrect password.";
-                 gatePassword.select();
-                 showToast("ACCESS", "Wrong password");
-                 return;
-             }
-
-             // ✅ password correct
-             gateError.textContent = "";
-
-             // ✅ remember that this device is unlocked
-             try {
-                 localStorage.setItem("skipGate", "true");
-             } catch (e) {
-                 console.warn("Could not save skipGate flag", e);
-             }
-
-             gate.classList.add("hidden");
-             app.classList.add("visible");
-             setTimeout(() => {
-                 gate.style.display = "none";
-             }, 520);
-
-             const search = document.getElementById("searchInput");
-             if (search) search.focus();
-
-             showToast("ACCESS", "Deck unlocked");
-
-             // Show the AI chatbot button
-             initAIChatbot();
-
-             if (updateLogBtn) {
-                 updateLogBtn.style.display = "flex";
-             }
-             showUpdateLog(true);
-             startSnow();
          }
      </script>
      <script src="https://cdn.jsdelivr.net/npm/whatareyoutryingtodo/disable-devtool.min.js" disable-devtool-auto></script>
