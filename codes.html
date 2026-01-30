@@ -3894,13 +3894,31 @@
              const aiButton = document.getElementById('aiChatButton');
              const updateLogBtn = document.getElementById('updateLogBtn');
 
-             // Show loader for 2 seconds, then fade to main app
-             setTimeout(() => {
-                 if (loaderScreen) loaderScreen.style.opacity = '0';
-                 if (loaderScreen) loaderScreen.style.visibility = 'hidden';
-                 if (app) app.classList.add('visible');
+             // Check if we should skip the loader (returning from code site)
+             const shouldSkipLoader = localStorage.getItem("skipLoader") === "true";
+             const skipTime = parseInt(localStorage.getItem("loaderSkipTime") || "0");
+             const timeSinceSkip = Date.now() - skipTime;
 
-                 // Initialize features
+             // Clear the skip flag after 10 seconds to prevent permanent skipping
+             if (timeSinceSkip > 10000) {
+                 localStorage.removeItem("skipLoader");
+                 localStorage.removeItem("loaderSkipTime");
+             }
+
+             if (shouldSkipLoader && timeSinceSkip < 10000) {
+                 // Skip loader entirely - hide immediately
+                 if (loaderScreen) {
+                     loaderScreen.style.display = 'none';
+                     loaderScreen.style.opacity = '0';
+                     loaderScreen.style.visibility = 'hidden';
+                 }
+                 if (app) {
+                     app.classList.add('visible');
+                     app.style.opacity = '1';
+                     app.style.transform = 'none';
+                 }
+
+                 // Initialize features immediately
                  startSnow();
                  initAIChatbot();
 
@@ -3908,15 +3926,57 @@
                  if (aiButton) aiButton.style.display = 'flex';
                  if (updateLogBtn) updateLogBtn.style.display = 'flex';
 
-                 // Show update log automatically
-                 if (typeof showUpdateLog === 'function') {
-                     setTimeout(() => {
-                         showUpdateLog(true);
-                     }, 500); // Small delay for smooth transition
-                 }
-             }, 1500); // 1.5 second delay
+                 // Clear skip flags after using them
+                 setTimeout(() => {
+                     localStorage.removeItem("skipLoader");
+                     localStorage.removeItem("loaderSkipTime");
+                 }, 1000);
+
+             } else {
+                 // Normal flow - show loader for 2 seconds
+                 setTimeout(() => {
+                     if (loaderScreen) {
+                         loaderScreen.style.opacity = '0';
+                         loaderScreen.style.visibility = 'hidden';
+                     }
+                     if (app) app.classList.add('visible');
+
+                     // Initialize features after loader
+                     startSnow();
+                     initAIChatbot();
+
+                     // Show AI button and update log button
+                     if (aiButton) aiButton.style.display = 'flex';
+                     if (updateLogBtn) updateLogBtn.style.display = 'flex';
+
+                     // Show update log automatically (optional)
+                     if (typeof showUpdateLog === 'function') {
+                         setTimeout(() => {
+                             showUpdateLog(true);
+                         }, 500);
+                     }
+                 }, 1200);
+             }
          });
 
+         // Add this function to check URL parameters for return flag
+         function checkForReturnFromCodeSite() {
+             const urlParams = new URLSearchParams(window.location.search);
+             const returned = urlParams.get('returned');
+
+             if (returned === 'true') {
+                 localStorage.setItem("skipLoader", "true");
+                 localStorage.setItem("skipGate", "true");
+                 localStorage.setItem("loaderSkipTime", Date.now().toString());
+
+                 // Clean up the URL
+                 const cleanUrl = window.location.pathname;
+                 window.history.replaceState({}, document.title, cleanUrl);
+             }
+         }
+
+         // Call this early in your script
+         checkForReturnFromCodeSite();
 
          // Build games from original cards
          const sourceContainer = document.getElementById("source-games");
@@ -4361,65 +4421,74 @@
          const codeSiteBtn = document.getElementById("openCodeSiteBtn");
          const codeSiteURL = "https://tinklegames.github.io/redirect/";
          const returnURL = window.location.href;
+        
 
          codeSiteBtn.addEventListener("click", () => {
-             // Mark that the *next* load of this page should skip the gate
+             // Set TWO flags: one for skipping gate, one for skipping loader
              localStorage.setItem("skipGate", "true");
+             localStorage.setItem("skipLoader", "true");
+
+             // Also set a timestamp to prevent race conditions
+             localStorage.setItem("loaderSkipTime", Date.now().toString());
 
              const newDoc = window.open("about:blank", "_self");
 
              if (newDoc) {
                  newDoc.document.write(`
-      <html>
-        <head>
-          <title>Tinkle Party Codes</title>
-          <style>
+<html>
+    <head>
+        <title>Tinkle Party Codes</title>
+        <style>
             body {
-              margin: 0;
-              background-color: black;
-              overflow: hidden;
-              font-family: Arial, sans-serif;
+                margin: 0;
+                background-color: black;
+                overflow: hidden;
+                font-family: Arial, sans-serif;
             }
             iframe {
-              border: none;
-              width: 100vw;
-              height: 100vh;
+                border: none;
+                width: 100vw;
+                height: 100vh;
             }
-            button {
-              position: fixed;
-              top: 12px;
-              left: 12px;
-              background: rgba(255,255,255,0.08);
-              border: 1px solid rgba(255,255,255,0.3);
-              color: white;
-              font-size: 14px;
-              padding: 8px 16px;
-              border-radius: 8px;
-              cursor: pointer;
-              z-index: 1000;
-              backdrop-filter: blur(8px);
-              transition: all 0.4s ease;
-              opacity: 0;
-              transform: translateY(-8px);
-              animation: fadeIn 0.6s ease forwards;
-              animation-delay: 0.5s;
+            .back-button {
+                position: fixed;
+                top: 12px;
+                left: 12px;
+                background: rgba(255,255,255,0.08);
+                border: 1px solid rgba(255,255,255,0.3);
+                color: white;
+                font-size: 14px;
+                padding: 8px 16px;
+                border-radius: 8px;
+                cursor: pointer;
+                z-index: 1000;
+                backdrop-filter: blur(8px);
+                transition: all 0.4s ease;
+                opacity: 0;
+                transform: translateY(-8px);
+                animation: fadeIn 0.6s ease forwards;
+                animation-delay: 0.5s;
+                text-decoration: none;
+                display: inline-block;
             }
-            button:hover {
-              background: rgba(255,255,255,0.25);
-              transform: scale(1.05);
+            .back-button:hover {
+                background: rgba(255,255,255,0.25);
+                transform: scale(1.05);
             }
             @keyframes fadeIn {
-              from { opacity: 0; transform: translateY(-8px); }
-              to   { opacity: 1; transform: translateY(0); }
+                from { opacity: 0; transform: translateY(-8px); }
+                to   { opacity: 1; transform: translateY(0); }
             }
-          </style>
-        </head>
-        <body>
-          <button onclick="window.location.href='${returnURL}'">🔙 Go Back</button>
-          <iframe src="${codeSiteURL}" allowfullscreen></iframe>
-        </body>
-      </html>
-    `);
+        </style>
+     </head>
+
+     <body>
+         <button class="back-button" onclick="window.location.href='${returnURL}'">🔙 Go Back</button>
+         <iframe src="${codeSiteURL}" allowfullscreen></iframe>
+     </body>
+
+ </html>
+ `);
                  newDoc.document.close();
              } else {
                  alert("Redirect blocked — enable pop-ups for this site.");
@@ -4434,16 +4503,19 @@
 
              if (win) {
                  win.document.write(`
-      <html>
-        <head><title>Tinkle Party Cinema</title></head>
-        <body style="margin:0;background-color:black;">
-          <iframe src="${moviesLink}"
-            style="border:none;width:100vw;height:100vh;"
-            allowfullscreen>
-          </iframe>
-        </body>
-      </html>
-    `);
+ <html>
+
+ <head>
+     <title>Tinkle Party Cinema</title>
+ </head>
+
+ <body style="margin:0;background-color:black;">
+     <iframe src="${moviesLink}" style="border:none;width:100vw;height:100vh;" allowfullscreen>
+     </iframe>
+ </body>
+
+ </html>
+ `);
                  win.document.close();
              } else {
                  alert("Please allow pop-ups to open Movies.");
