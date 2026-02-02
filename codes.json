@@ -174,6 +174,6 @@
     "FNAC2": "https://tinklehost.github.io/fnac2|true",
     "ROF": "https://tinklehost.github.io/rof|true",
     "SONEXE": "https://tinklehost.github.io/sonicexe|true",
-    "BASKRAN": "https://tinklehost.github.io/basket-random|true",
-    "SOCRAN": "https://tinklehost.github.io/soccer-random|true"
+    "BASKRANDOM": "https://tinklehost.github.io/basket-random|true",
+    "SOCRANDOM": "https://tinklehost.github.io/soccer-random|true"
     }
