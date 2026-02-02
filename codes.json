@@ -130,7 +130,7 @@
     "HTALE": "https://tinklegames.github.io/horrortale/|true",
     "STUMBLE": "https://tinklegames.github.io/stumbguys/|true",
     "BASKET": "https://basketbros-unblocked.github.io/a7/basket-bros/|true",
-    "BSTARS": "https://tinklegames.github.io/host/bstars/|true",
+    "BSTARS": "https://tinklehost.github.io/basketball-stars|true",
     "CTR1": "https://tinklegames.github.io/ctr/games/cut-the-rope/play/famobi/index.html|true",
     "CTRTT": "https://tinklegames.github.io/ctr/games/cut-the-rope-time-travel/play/|true",
     "RTS": "https://tinklehost.github.io/rts/rooftopsnipers|true",
@@ -173,5 +173,7 @@
     "FNAC1": "https://tinklehost.github.io/fnac1|true",
     "FNAC2": "https://tinklehost.github.io/fnac2|true",
     "ROF": "https://tinklehost.github.io/rof|true",
-    "SONEXE": "https://tinklehost.github.io/sonicexe|true"
+    "SONEXE": "https://tinklehost.github.io/sonicexe|true",
+    "BASKRAN": "https://tinklehost.github.io/basket-random|true",
+    "SOCRAN": "https://tinklehost.github.io/soccer-random|true"
     }
