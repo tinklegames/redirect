@@ -1848,29 +1848,18 @@
                      <div class="top-nav" id="topNav">
                          <button class="top-nav-tab active" data-page="codes">Codes</button>
                          <button class="top-nav-tab" data-page="favorites">Favorites</button>
+                         <button class="top-nav-tab" data-page="music">Music</button>
                          <button class="top-nav-tab" data-page="suggestions">Suggestions</button>
                          <button class="top-nav-tab" data-page="requests">Requests</button>
                          <button class="top-nav-tab" data-page="settings">Settings</button>
                          <button class="top-nav-tab" data-page="movies">Movies</button>
                      </div>
                      <button class="btn-glow" id="openCodeSiteBtn">
-                         <span>Code site</span>
+                         <span>Enter Code</span>
                          <svg viewBox="0 0 24 24" fill="none">
                              <path d="M7 17L17 7M9 7H17V15" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
                          </svg>
                      </button>
-                     <button class="btn-glow" onclick="goToOldCodes()">
-                         <span>Old Site</span>
-                         <svg viewBox="0 0 24 24" fill="none">
-                             <path d="M7 17L17 7M9 7H17V15" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
-                         </svg>
-                     </button>
-                     <script>
-                         function goToOldCodes() {
-                             window.location.href = "https://tinklegames.github.io/redirect/old-codes.html";
-                         }
-                     </script>
-
                  </div>
              </header>
          </div>
@@ -3600,6 +3589,12 @@
              window.open(MOVIES_URL, "_blank");
              showToast("NAVIGATION", "Opened movies site");
          }
+         
+         function openMusicSite() {
+             if (!MUSIC_URL) return;
+             window.open(MUSIC_URL, "_blank");
+             showToast("NAVIGATION", "Opened music site");
+         }
 
          // Top nav page switching
          const navTabs = document.querySelectorAll(".top-nav-tab");
@@ -3623,6 +3618,10 @@
                  const page = tab.dataset.page;
                  if (page === "movies") {
                      openMoviesSite();
+                     return;
+                 }
+                 if (page === "music") {
+                     openMusicSite();
                      return;
                  }
                  if (page === "popular") {
@@ -4525,6 +4524,33 @@
                  win.document.close();
              } else {
                  alert("Please allow pop-ups to open Movies.");
+             }
+         });
+         
+         const musicButton = document.querySelector('.top-nav-tab[data-page="music"]');
+         const musicLink = "https://dingyi222666.github.io/aura-music/";
+
+         musicButton.addEventListener("click", () => {
+             const win = window.open("about:blank", "_blank");
+
+             if (win) {
+                 win.document.write(`
+ <html>
+
+ <head>
+     <title>Tinkle Party Music</title>
+ </head>
+
+ <body style="margin:0;background-color:black;">
+     <iframe src="${musicLink}" style="border:none;width:100vw;height:100vh;" allowfullscreen>
+     </iframe>
+ </body>
+
+ </html>
+ `);
+                 win.document.close();
+             } else {
+                 alert("Please allow pop-ups to open Music.");
              }
          });
      </script>
