@@ -177,5 +177,19 @@
     "BASKRANDOM": "https://tinklehost.github.io/basket-random|true",
     "SOCRANDOM": "https://tinklehost.github.io/soccer-random|true",
     "TS1": "https://tinklehost.github.io/timeshooter1/|true",
-    "TS2": "https://tinklehost.github.io/timeshooter2/|true"
+    "TS2": "https://tinklehost.github.io/timeshooter2/|true",
+    "PAPA1": "https://tinklehost.github.io/papas/bakeria|true",
+    "PAPA2": "https://tinklehost.github.io/papas/burgeria|true",
+    "PAPA3": "https://tinklehost.github.io/papas/cheeseria|true",
+    "PAPA4": "https://tinklehost.github.io/papas/cupcakeria|true",
+    "PAPA5": "https://tinklehost.github.io/papas/donuteria|true",
+    "PAPA6": "https://tinklehost.github.io/papas/freezeria|true",
+    "PAPA7": "https://tinklehost.github.io/papas/hotdoggeria|true",
+    "PAPA8": "https://tinklehost.github.io/papas/pancakeria|true",
+    "PAPA9": "https://tinklehost.github.io/papas/pastaria|true",
+    "PAPA10": "https://tinklehost.github.io/papas/pizzeria|true",
+    "PAPA11": "https://tinklehost.github.io/papas/scooperia|true",
+    "PAPA12": "https://tinklehost.github.io/papas/sushiria|true",
+    "PAPA13": "https://tinklehost.github.io/papas/tacomia|true",
+    "PAPA14": "https://tinklehost.github.io/papas/wingeria|true"
     }
