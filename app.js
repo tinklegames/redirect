@@ -49,6 +49,32 @@ async function checkCode() {
     }
 }
 
+// Reset the UI to allow entering a new code
+function resetForNewCode() {
+    const submitBtn = document.getElementById('submitBtn');
+    const openPageBtn = document.getElementById('openPageBtn');
+    const iframeHint = document.getElementById('iframeHint');
+    const resultDiv = document.getElementById('result');
+    
+    // Reset button to original "Submit" state
+    const newBtn = submitBtn.cloneNode(true);
+    submitBtn.parentNode.replaceChild(newBtn, submitBtn);
+    newBtn.innerHTML = "Submit";
+    newBtn.style.backgroundColor = ""; // Reset to default
+    newBtn.addEventListener('click', checkCode);
+    
+    // Hide open page button and iframe hint
+    openPageBtn.classList.add("hidden");
+    iframeHint.classList.add("hidden");
+    
+    // Clear result message
+    resultDiv.innerHTML = "";
+    
+    // Reset variables
+    generatedLink = "";
+    iframeAllowed = false;
+}
+
 // Copy link to clipboard
 function copyLink(link) {
     navigator.clipboard.writeText(link).then(() => {
@@ -119,6 +145,11 @@ function showNotification(message, type) {
         notification.style.display = 'none';
     }, 3000);
 }
+
+// Add input event listener to detect typing in the code input
+document.getElementById('codeInput').addEventListener('input', function() {
+    resetForNewCode();
+});
 
 document.getElementById('submitBtn').addEventListener('click', checkCode);
 document.getElementById('openPageBtn').addEventListener('click', openPage);
