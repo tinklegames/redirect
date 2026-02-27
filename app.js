@@ -7,6 +7,7 @@ async function checkCode() {
     const submitBtn = document.getElementById('submitBtn');
     const actionBtn = document.getElementById('actionBtn');
     const iframeHint = document.getElementById('iframeHint');
+    const codeInput = document.getElementById('codeInput');
 
     try {
         const response = await fetch('https://raw.githubusercontent.com/tinklegames/redirect/main/codes.json');
@@ -17,63 +18,38 @@ async function checkCode() {
             generatedLink = parts[0];
             iframeAllowed = parts[1] === 'true';
 
-            document.getElementById('codeInput').value = generatedLink;
-            resultDiv.innerHTML = "✅ Link generated successfully!";
+            // Clear the input box
+            codeInput.value = "";
 
-            // Hide the submit button
-            submitBtn.classList.add("hidden");
-
-            // Configure the action button based on iframe allowed
             if (iframeAllowed) {
-                actionBtn.innerHTML = "Open Page";
-                actionBtn.style.backgroundColor = "#4CAF50";
-                actionBtn.onclick = openPage;
-                actionBtn.classList.remove("hidden");
+                // Directly open the page
+                openPage();
+                resultDiv.innerHTML = "✅ Opening page...";
+                actionBtn.classList.add("hidden");
                 iframeHint.classList.add("hidden");
+                showNotification("✅ Opening page...", "success");
             } else {
+                // Show copy button for non-iframe sites
+                resultDiv.innerHTML = "✅ Link generated!";
                 actionBtn.innerHTML = "Copy Link";
                 actionBtn.style.backgroundColor = "#4CAF50";
                 actionBtn.onclick = () => copyLink(generatedLink);
                 actionBtn.classList.remove("hidden");
                 iframeHint.classList.remove("hidden");
-                iframeHint.textContent = "⚠️ This site cannot open in an iframe. Copy the link instead.";
+                iframeHint.textContent = "⚠️ This site cannot open automatically. Copy the link instead.";
+                showNotification("✅ Link generated! Click Copy Link", "success");
             }
-
-            showNotification("✅ Valid code! Link generated.", "success");
         } else {
             resultDiv.innerHTML = "❌ Invalid code. Try again.";
             showNotification("❌ Invalid code. Please try again.", "error");
             actionBtn.classList.add("hidden");
             iframeHint.classList.add("hidden");
-            submitBtn.classList.remove("hidden"); // Make sure submit is visible
         }
     } catch (error) {
         console.error(error);
         resultDiv.innerHTML = "⚠️ Error fetching codes. Please try again later.";
         showNotification("⚠️ Error fetching codes. Try again later.", "error");
     }
-}
-
-// Reset the UI to allow entering a new code
-function resetForNewCode() {
-    const submitBtn = document.getElementById('submitBtn');
-    const actionBtn = document.getElementById('actionBtn');
-    const iframeHint = document.getElementById('iframeHint');
-    const resultDiv = document.getElementById('result');
-    
-    // Show submit button again
-    submitBtn.classList.remove("hidden");
-    
-    // Hide action button and iframe hint
-    actionBtn.classList.add("hidden");
-    iframeHint.classList.add("hidden");
-    
-    // Clear result message
-    resultDiv.innerHTML = "";
-    
-    // Reset variables
-    generatedLink = "";
-    iframeAllowed = false;
 }
 
 // Copy link to clipboard
@@ -87,7 +63,7 @@ function copyLink(link) {
 }
 
 function openPage() {
-    if (!generatedLink || !iframeAllowed) return;
+    if (!generatedLink) return;
 
     const newTab = window.open("about:blank", "_blank");
     if (!newTab) {
@@ -134,6 +110,9 @@ function openPage() {
         </html>
     `);
     newTab.document.close();
+    
+    // Clear the generated link after opening
+    generatedLink = "";
 }
 
 function showNotification(message, type) {
@@ -147,9 +126,17 @@ function showNotification(message, type) {
     }, 3000);
 }
 
-// Add input event listener to detect typing in the code input
+// Reset UI when user starts typing
 document.getElementById('codeInput').addEventListener('input', function() {
-    resetForNewCode();
+    const resultDiv = document.getElementById('result');
+    const actionBtn = document.getElementById('actionBtn');
+    const iframeHint = document.getElementById('iframeHint');
+    
+    resultDiv.innerHTML = "";
+    actionBtn.classList.add("hidden");
+    iframeHint.classList.add("hidden");
+    generatedLink = "";
+    iframeAllowed = false;
 });
 
 // Initialize
