@@ -1801,6 +1801,90 @@
                  bottom: 20px;
              }
          }
+
+         /* Make the play counter more prominent and match your theme */
+         .card__play-counter {
+             display: flex;
+             align-items: center;
+             gap: 6px;
+             font-size: 0.8rem;
+             color: #fff;
+             background: rgba(61, 106, 255, 0.15);
+             /* Matching the button blue */
+             padding: 6px 14px;
+             border-radius: 999px;
+             border: 1px solid rgba(61, 106, 255, 0.5);
+             transition: all 0.2s ease;
+             backdrop-filter: blur(4px);
+             box-shadow: 0 0 10px rgba(61, 106, 255, 0.2);
+         }
+
+         .card:hover .card__play-counter {
+             background: rgba(61, 106, 255, 0.25);
+             border-color: rgb(61, 106, 255);
+             transform: scale(1.05);
+             box-shadow: 0 0 20px rgba(61, 106, 255, 0.4);
+         }
+
+         .counter-icon {
+             font-size: 0.85rem;
+             color: #fff;
+             opacity: 0.9;
+             filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
+         }
+
+         .counter-number {
+             font-weight: 700;
+             color: #fff;
+             text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+             transition: transform 0.2s ease;
+             min-width: 30px;
+             text-align: center;
+             font-size: 0.9rem;
+             background: linear-gradient(135deg, #fff, #e0e7ff);
+             -webkit-background-clip: text;
+             -webkit-text-fill-color: transparent;
+             background-clip: text;
+         }
+
+         .counter-label {
+             font-size: 0.65rem;
+             opacity: 0.8;
+             text-transform: uppercase;
+             letter-spacing: 0.5px;
+             color: rgba(255, 255, 255, 0.8);
+             font-weight: 500;
+         }
+
+         /* Add a subtle glow animation on hover */
+         .card:hover .counter-number {
+             animation: counterGlow 1.5s ease-in-out infinite;
+         }
+
+         @keyframes counterGlow {
+
+             0%,
+             100% {
+                 text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+             }
+
+             50% {
+                 text-shadow: 0 0 20px rgba(61, 106, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.5);
+             }
+         }
+
+         /* Style for when the counter updates (matches button flash) */
+         .card__play-counter.updating {
+             background: rgb(61, 106, 255);
+             box-shadow: 0 0 30px 5px rgba(61, 106, 255, 0.8);
+             transition: all 0.2s ease-out;
+         }
+
+         .card__play-counter.updating .counter-number {
+             -webkit-text-fill-color: white;
+             color: white;
+             text-shadow: 0 0 20px white;
+         }
      </style>
  </head>
 
@@ -3274,6 +3358,7 @@
              <h3>Features</h3>
              <ul>
                  <li>🔧 Codes open games automatically now</li>
+                 <li>🔧 Added a play counter for each game</li>
              </ul>
              <h3></h3>
              <h3>Coming Soon</h3>
@@ -3282,7 +3367,7 @@
                  <li>💬 Should we add a chatroom?</li>
              </ul>
              <div class="log-footer">
-                 <span>Version 1.2.4 • Last updated Feb 26, 2026</span>
+                 <span>Version 1.2.4 • Last updated Feb 27, 2026</span>
              </div>
 
          </div>
@@ -3354,34 +3439,42 @@
              return name.replace(/[.#$/\[\]]/g, "_");
          }
 
-         // --- Increment click count in Firebase ---
-         async function incrementGameClickInternal(name) {
-             const safeKey = sanitizeKey(name);
-             const gameRef = ref(db, "clickData/" + safeKey);
-             const snapshot = await get(gameRef);
-             const current = snapshot.exists() ? snapshot.val() : 0;
-             await set(gameRef, current + 1);
-         }
-
-         // expose to non-module scripts
          window.incrementGameClick = async function(name) {
              try {
-                 await incrementGameClickInternal(name);
+                 const result = await window.incrementGameClicks(name);
+                 return result;
              } catch (e) {
                  console.error("incrementGameClick failed:", e);
              }
          };
 
-         // Expose a helper to read all click counts
-         window.getAllClickData = async function() {
+         // Add this test function to check Firebase data
+         window.testFirebaseData = async function() {
              try {
-                 const snapshot = await get(ref(db, 'clickData'));
-                 return snapshot.exists() ? snapshot.val() : {};
+                 console.log("Testing Firebase connection...");
+                 const snapshot = await get(ref(db, 'allTimeClickData'));
+                 if (snapshot.exists()) {
+                     console.log("All-time click data:", snapshot.val());
+                 } else {
+                     console.log("No all-time click data found yet");
+
+                     // Try to write some test data
+                     const testKey = sanitizeKey("Test Game");
+                     await set(ref(db, 'allTimeClickData/' + testKey), 42);
+                     console.log("Wrote test data. Try reading it back...");
+
+                     const testSnapshot = await get(ref(db, 'allTimeClickData/' + testKey));
+                     console.log("Test data read:", testSnapshot.val());
+                 }
              } catch (e) {
-                 console.error("getAllClickData failed:", e);
-                 return {};
+                 console.error("Firebase test failed:", e);
              }
          };
+
+         // Call this after Firebase initializes
+         setTimeout(() => {
+             window.testFirebaseData();
+         }, 3000);
 
          // --- Attach copy & click events to buttons ---
          window.attachButtonEvents = function(container = document) {
@@ -3403,6 +3496,156 @@
                          .then(() => showNotification("Copied! Code: " + code, true))
                          .catch(() => showNotification("Failed to copy code", false));
                  });
+             });
+         };
+
+         // Add this to your existing Firebase module script
+         // Add this new function for getting weekly click data
+         window.getWeeklyClickData = async function() {
+             try {
+                 const snapshot = await get(ref(db, 'weeklyClickData'));
+                 return snapshot.exists() ? snapshot.val() : {};
+             } catch (e) {
+                 console.error("getWeeklyClickData failed:", e);
+                 return {};
+             }
+         };
+
+         // Update this function with debugging
+         window.getAllTimeClickCount = async function(gameName) {
+             try {
+                 console.log("Getting count for game:", gameName);
+                 const safeKey = sanitizeKey(gameName);
+                 console.log("Sanitized key:", safeKey);
+
+                 const snapshot = await get(ref(db, 'allTimeClickData/' + safeKey));
+                 const count = snapshot.exists() ? snapshot.val() : 0;
+                 console.log(`Count for ${gameName}:`, count);
+                 return count;
+             } catch (e) {
+                 console.error("getAllTimeClickCount failed:", e);
+                 return 0;
+             }
+         };
+
+         // Generate a unique session ID when the page loads
+         const sessionId = Date.now().toString() + Math.random().toString(36).substr(2, 9);
+         console.log("Session ID:", sessionId);
+
+         // Track if we've already checked sessions for this game to avoid multiple Firebase calls
+         const sessionChecked = new Set();
+
+         window.incrementGameClicks = async function(name) {
+             try {
+                 console.log("Incrementing clicks for:", name);
+                 const safeKey = sanitizeKey(name);
+
+                 const auth = getAuth();
+                 const userId = auth.currentUser?.uid;
+
+                 if (!userId) {
+                     console.error("No user ID available");
+                     return null;
+                 }
+
+                 // Check if we've already processed this game in this session
+                 // This prevents multiple clicks in the same session from counting
+                 if (sessionChecked.has(name)) {
+                     console.log("Already counted this game in current session");
+
+                     // Still get current counts to display
+                     const allTimeRef = ref(db, 'allTimeClickData/' + safeKey);
+                     const allTimeSnapshot = await get(allTimeRef);
+                     const allTimeCurrent = allTimeSnapshot.exists() ? allTimeSnapshot.val() : 0;
+
+                     const weeklyRef = ref(db, 'weeklyClickData/' + safeKey);
+                     const weeklySnapshot = await get(weeklyRef);
+                     const weeklyCurrent = weeklySnapshot.exists() ? weeklySnapshot.val() : 0;
+
+                     return {
+                         weekly: weeklyCurrent,
+                         allTime: allTimeCurrent,
+                         alreadyClicked: true,
+                         newSession: false
+                     };
+                 }
+
+                 // Check if this session has already been recorded for this game
+                 const sessionRef = ref(db, `gameSessions/${safeKey}/${userId}/${sessionId}`);
+                 const sessionSnapshot = await get(sessionRef);
+
+                 // Determine if this is a new session for this game
+                 const isNewSession = !sessionSnapshot.exists();
+
+                 // Get current counts
+                 const allTimeRef = ref(db, 'allTimeClickData/' + safeKey);
+                 const allTimeSnapshot = await get(allTimeRef);
+                 const allTimeCurrent = allTimeSnapshot.exists() ? allTimeSnapshot.val() : 0;
+
+                 const weeklyRef = ref(db, 'weeklyClickData/' + safeKey);
+                 const weeklySnapshot = await get(weeklyRef);
+                 const weeklyCurrent = weeklySnapshot.exists() ? weeklySnapshot.val() : 0;
+
+                 // Only increment if this is a new session
+                 if (isNewSession) {
+                     // Increment all-time count (once per session)
+                     await set(allTimeRef, allTimeCurrent + 1);
+
+                     // Increment weekly count (once per session)
+                     await set(weeklyRef, weeklyCurrent + 1);
+
+                     // Record this session
+                     await set(sessionRef, {
+                         timestamp: Date.now(),
+                         sessionId: sessionId
+                     });
+
+                     console.log(`New session! Incremented counts to all-time: ${allTimeCurrent + 1}, weekly: ${weeklyCurrent + 1}`);
+                 } else {
+                     console.log("Already played this game in this session");
+                 }
+
+                 // Mark as checked for this session
+                 sessionChecked.add(name);
+
+                 return {
+                     weekly: isNewSession ? weeklyCurrent + 1 : weeklyCurrent,
+                     allTime: isNewSession ? allTimeCurrent + 1 : allTimeCurrent,
+                     newSession: isNewSession,
+                     alreadyClicked: !isNewSession
+                 };
+             } catch (e) {
+                 console.error("incrementGameClicks failed:", e);
+                 return null;
+             }
+         };
+
+         // Clean up old sessions (optional)
+         window.cleanupOldSessions = async function() {
+             try {
+                 const auth = getAuth();
+                 const userId = auth.currentUser?.uid;
+                 if (!userId) return;
+
+                 // This would need to be done server-side or with a Cloud Function
+                 // For now, we'll just let sessions accumulate
+                 console.log("Sessions are stored permanently to track unique visits");
+             } catch (e) {
+                 console.error("Failed to clean up old sessions:", e);
+             }
+         };
+
+         // Listen for real-time updates to all-time counts
+         const allTimeCountsRef = ref(db, 'allTimeClickData');
+         let allTimeCountsListener = null;
+
+         window.listenToAllTimeCounts = function(callback) {
+             if (allTimeCountsListener) {
+                 off(allTimeCountsListener);
+             }
+             allTimeCountsListener = onValue(allTimeCountsRef, (snapshot) => {
+                 const counts = snapshot.exists() ? snapshot.val() : {};
+                 callback(counts);
              });
          };
 
@@ -3830,14 +4073,6 @@
          const disconnectTask = onDisconnect(myRef);
          disconnectTask.remove();
          set(myRef, true);
-
-         window.incrementGameClick = async function(name) {
-             const safeKey = sanitizeKey(name);
-             const gameRef = ref(db, 'clickData/' + safeKey);
-             const snapshot = await get(gameRef);
-             const current = snapshot.exists() ? snapshot.val() : 0;
-             await set(gameRef, current + 1);
-         };
      </script>
 
 
@@ -4549,7 +4784,7 @@
              }
 
              favBtn.addEventListener("click", (e) => {
-                 e.stopPropagation(); // don't trigger copy
+                 e.stopPropagation();
                  toggleFavorite(game);
                  syncFavButton();
              });
@@ -4566,15 +4801,22 @@
 
              const footer = document.createElement("div");
              footer.className = "card__footer";
-             const hint = document.createElement("div");
-             hint.className = "card__hint";
-             hint.textContent = "Click copy or tap card";
+
+             // Play counter (now the main hover element)
+             const playCounter = document.createElement("div");
+             playCounter.className = "card__play-counter";
+             playCounter.innerHTML = `
+        <span class="counter-icon">🎮</span> 
+        <span class="counter-number" data-game="${sanitizeKey(game.name)}">0</span>
+        <span class="counter-label">plays</span>
+    `;
+
              const btn = document.createElement("button");
              btn.type = "button";
              btn.className = "btn-glow card__copy-btn";
              btn.innerHTML = "<span>Copy code</span>";
 
-             footer.appendChild(hint);
+             footer.appendChild(playCounter);
              footer.appendChild(btn);
 
              content.appendChild(topRow);
@@ -4584,24 +4826,83 @@
              card.appendChild(front);
              card.appendChild(content);
 
+             // Function to update the play counter
+             async function updatePlayCounter(retryCount = 0) {
+                 try {
+                     console.log("Updating counter for:", game.name);
+
+                     // Check if the function exists
+                     if (typeof window.getAllTimeClickCount !== 'function') {
+                         console.warn("getAllTimeClickCount not ready yet, retrying...", retryCount);
+                         if (retryCount < 5) { // Retry up to 5 times
+                             setTimeout(() => updatePlayCounter(retryCount + 1), 500 * (retryCount + 1));
+                             return;
+                         } else {
+                             console.error("getAllTimeClickCount still not available after 5 retries");
+                             // Set a fallback value
+                             const counterSpan = playCounter.querySelector('.counter-number');
+                             if (counterSpan) {
+                                 counterSpan.textContent = "0";
+                             }
+                             return;
+                         }
+                     }
+
+                     const count = await window.getAllTimeClickCount(game.name);
+                     console.log("Received count:", count);
+
+                     const counterSpan = playCounter.querySelector('.counter-number');
+                     if (counterSpan) {
+                         counterSpan.textContent = count;
+                         console.log("Counter updated to:", count);
+                     } else {
+                         console.error("Counter span not found");
+                     }
+                 } catch (e) {
+                     console.error("Error updating play counter:", e);
+                     if (retryCount < 3) {
+                         setTimeout(() => updatePlayCounter(retryCount + 1), 1000);
+                     }
+                 }
+             }
+
+             // Initial counter load
+             updatePlayCounter();
+
              async function handleCopy() {
                  if (!game.code) {
                      showToast("CLIPBOARD", "No code on this card");
                      return;
                  }
 
-                 // 🔥 bump click count in Firebase if the module loaded
+                 // Increment counts (only once per session)
                  if (window.incrementGameClick) {
                      try {
-                         await window.incrementGameClick(game.name);
+                         const result = await window.incrementGameClick(game.name);
+
+                         // Update counter with all-time count
+                         updatePlayCounter();
+
+                         playCounter.classList.add('updating');
+                         setTimeout(() => {
+                             playCounter.classList.remove('updating');
+                         }, 300);
+
+                         // Show different messages based on click status
+                         if (result) {
+                             if (result.alreadyClicked) {
+                                 showCopyToast(`📋 Code copied!`);
+                             } else if (result.newSession) {
+                                 showCopyToast(`📋 Code copied!`);
+                             }
+                         }
                      } catch (e) {
                          console.error("incrementGameClick error:", e);
                      }
                  }
 
-                 // clipboard + UI
+                 // Copy code to clipboard
                  tryCopyToClipboard(game.code);
-                 showCopyToast("Copied: " + game.code);
              }
 
              card.addEventListener("click", handleCopy);
@@ -4635,14 +4936,15 @@
                  // higher id = added later
                  toRender.sort((a, b) => b.id - a.id);
                  toRender = toRender.slice(0, 8);
-             } else if (sortMode === "popular") {
-                 // Top 10 by Firebase click counts, with fallback if no data
-                 let clickData = {};
-                 if (window.getAllClickData) {
+             } // Update the popular sorting in renderCards function
+             else if (sortMode === "popular") {
+                 // Use weekly click data for popular section
+                 let weeklyData = {};
+                 if (window.getWeeklyClickData) {
                      try {
-                         clickData = await window.getAllClickData();
+                         weeklyData = await window.getWeeklyClickData();
                      } catch (e) {
-                         console.error("getAllClickData error:", e);
+                         console.error("getWeeklyClickData error:", e);
                      }
                  }
 
@@ -4651,17 +4953,16 @@
                          const key = sanitizeKey(g.name);
                          return {
                              game: g,
-                             count: (clickData && clickData[key]) || 0
+                             count: (weeklyData && weeklyData[key]) || 0
                          };
                      })
                      .filter(entry => entry.count > 0)
                      .sort((a, b) => b.count - a.count)
-                     .slice(0, 8); // 🔟 top 10 only
+                     .slice(0, 8);
 
                  if (ranked.length) {
                      toRender = ranked.map(e => e.game);
                  } else {
-                     // no popular data yet → just fall back to A–Z
                      toRender.sort((a, b) => a.name.localeCompare(b.name));
                  }
              }
@@ -4726,6 +5027,30 @@
 
          // initial render
          renderCards();
+
+         // Set up real-time counter updates
+         if (window.listenToAllTimeCounts) {
+             console.log("Setting up real-time listener");
+             window.listenToAllTimeCounts((counts) => {
+                 console.log("Real-time update received:", counts);
+
+                 document.querySelectorAll('.counter-number').forEach(counter => {
+                     const gameKey = counter.dataset.game;
+                     const count = counts[gameKey] || 0;
+                     console.log(`Updating ${gameKey} to ${count}`);
+
+                     counter.textContent = count;
+
+                     // Add animation
+                     counter.style.transform = 'scale(1.2)';
+                     setTimeout(() => {
+                         counter.style.transform = 'scale(1)';
+                     }, 200);
+                 });
+             });
+         } else {
+             console.error("listenToAllTimeCounts not available");
+         }
 
          function renderRecent() {
              // Clear old grid
@@ -5063,6 +5388,24 @@
                  }
              }, 3000);
          }
+     </script>
+     <script>
+         // Check if Firebase functions are available
+         setTimeout(() => {
+             console.log("Checking Firebase functions:");
+             console.log("- getAllTimeClickCount:", typeof window.getAllTimeClickCount);
+             console.log("- listenToAllTimeCounts:", typeof window.listenToAllTimeCounts);
+             console.log("- incrementGameClicks:", typeof window.incrementGameClicks);
+
+             // If getAllTimeClickCount is still not available, define a fallback
+             if (typeof window.getAllTimeClickCount !== 'function') {
+                 console.warn("getAllTimeClickCount not found, creating fallback");
+                 window.getAllTimeClickCount = async function(gameName) {
+                     console.log("Fallback: returning 0 for", gameName);
+                     return 0;
+                 };
+             }
+         }, 2000);
      </script>
      <script src="https://cdn.jsdelivr.net/npm/whatareyoutryingtodo/disable-devtool.min.js" disable-devtool-auto></script>
      <!-- AI Chatbot -->
