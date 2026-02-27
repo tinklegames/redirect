@@ -24,10 +24,10 @@ async function checkCode() {
             if (iframeAllowed) {
                 // Directly open the page
                 openPage();
-                resultDiv.innerHTML = "✅ Opening page...";
+                resultDiv.innerHTML = "✅ Opened page";
                 actionBtn.classList.add("hidden");
                 iframeHint.classList.add("hidden");
-                showNotification("✅ Opening page...", "success");
+                showNotification("✅ Opened page", "success");
             } else {
                 // Show copy button for non-iframe sites
                 resultDiv.innerHTML = "✅ Link generated!";
