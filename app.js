@@ -20,12 +20,8 @@ async function checkCode() {
             document.getElementById('codeInput').value = generatedLink;
             resultDiv.innerHTML = "✅ Link generated successfully!";
 
-            // Reset submit button to original state
-            const newSubmitBtn = submitBtn.cloneNode(true);
-            submitBtn.parentNode.replaceChild(newSubmitBtn, submitBtn);
-            newSubmitBtn.innerHTML = "Submit";
-            newSubmitBtn.style.backgroundColor = "";
-            newSubmitBtn.addEventListener('click', checkCode);
+            // Hide the submit button
+            submitBtn.classList.add("hidden");
 
             // Configure the action button based on iframe allowed
             if (iframeAllowed) {
@@ -49,6 +45,7 @@ async function checkCode() {
             showNotification("❌ Invalid code. Please try again.", "error");
             actionBtn.classList.add("hidden");
             iframeHint.classList.add("hidden");
+            submitBtn.classList.remove("hidden"); // Make sure submit is visible
         }
     } catch (error) {
         console.error(error);
@@ -64,12 +61,8 @@ function resetForNewCode() {
     const iframeHint = document.getElementById('iframeHint');
     const resultDiv = document.getElementById('result');
     
-    // Reset button to original "Submit" state
-    const newBtn = submitBtn.cloneNode(true);
-    submitBtn.parentNode.replaceChild(newBtn, submitBtn);
-    newBtn.innerHTML = "Submit";
-    newBtn.style.backgroundColor = ""; // Reset to default
-    newBtn.addEventListener('click', checkCode);
+    // Show submit button again
+    submitBtn.classList.remove("hidden");
     
     // Hide action button and iframe hint
     actionBtn.classList.add("hidden");
