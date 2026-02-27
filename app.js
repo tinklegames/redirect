@@ -36,7 +36,7 @@ async function checkCode() {
                 actionBtn.onclick = () => copyLink(generatedLink);
                 actionBtn.classList.remove("hidden");
                 iframeHint.classList.remove("hidden");
-                iframeHint.textContent = "⚠️ This site cannot open automatically. Copy the link instead.";
+                iframeHint.textContent = "⚠️ This game cannot open automatically. Copy the link instead.";
                 showNotification("✅ Link generated! Click Copy Link", "success");
             }
         } else {
