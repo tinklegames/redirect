@@ -5,7 +5,7 @@ async function checkCode() {
     const code = document.getElementById('codeInput').value.trim();
     const resultDiv = document.getElementById('result');
     const submitBtn = document.getElementById('submitBtn');
-    const openPageBtn = document.getElementById('openPageBtn');
+    const actionBtn = document.getElementById('actionBtn');
     const iframeHint = document.getElementById('iframeHint');
 
     try {
@@ -20,26 +20,34 @@ async function checkCode() {
             document.getElementById('codeInput').value = generatedLink;
             resultDiv.innerHTML = "✅ Link generated successfully!";
 
-            const newBtn = submitBtn.cloneNode(true); // clone the button to remove old events
-            submitBtn.parentNode.replaceChild(newBtn, submitBtn);
-            newBtn.innerHTML = "Copy Link";
-            newBtn.addEventListener('click', () => copyLink(generatedLink));
-            newBtn.style.backgroundColor = "#4CAF50";
+            // Reset submit button to original state
+            const newSubmitBtn = submitBtn.cloneNode(true);
+            submitBtn.parentNode.replaceChild(newSubmitBtn, submitBtn);
+            newSubmitBtn.innerHTML = "Submit";
+            newSubmitBtn.style.backgroundColor = "";
+            newSubmitBtn.addEventListener('click', checkCode);
 
+            // Configure the action button based on iframe allowed
             if (iframeAllowed) {
-                openPageBtn.classList.remove("hidden");
+                actionBtn.innerHTML = "Open Page";
+                actionBtn.style.backgroundColor = "#4CAF50";
+                actionBtn.onclick = openPage;
+                actionBtn.classList.remove("hidden");
                 iframeHint.classList.add("hidden");
             } else {
-                openPageBtn.classList.add("hidden");
+                actionBtn.innerHTML = "Copy Link";
+                actionBtn.style.backgroundColor = "#4CAF50";
+                actionBtn.onclick = () => copyLink(generatedLink);
+                actionBtn.classList.remove("hidden");
                 iframeHint.classList.remove("hidden");
-                iframeHint.textContent = "⚠️ This site cannot open in an iframe. Copy and paste the link in your browser instead.";
+                iframeHint.textContent = "⚠️ This site cannot open in an iframe. Copy the link instead.";
             }
 
             showNotification("✅ Valid code! Link generated.", "success");
         } else {
             resultDiv.innerHTML = "❌ Invalid code. Try again.";
             showNotification("❌ Invalid code. Please try again.", "error");
-            openPageBtn.classList.add("hidden");
+            actionBtn.classList.add("hidden");
             iframeHint.classList.add("hidden");
         }
     } catch (error) {
@@ -52,7 +60,7 @@ async function checkCode() {
 // Reset the UI to allow entering a new code
 function resetForNewCode() {
     const submitBtn = document.getElementById('submitBtn');
-    const openPageBtn = document.getElementById('openPageBtn');
+    const actionBtn = document.getElementById('actionBtn');
     const iframeHint = document.getElementById('iframeHint');
     const resultDiv = document.getElementById('result');
     
@@ -63,8 +71,8 @@ function resetForNewCode() {
     newBtn.style.backgroundColor = ""; // Reset to default
     newBtn.addEventListener('click', checkCode);
     
-    // Hide open page button and iframe hint
-    openPageBtn.classList.add("hidden");
+    // Hide action button and iframe hint
+    actionBtn.classList.add("hidden");
     iframeHint.classList.add("hidden");
     
     // Clear result message
@@ -151,8 +159,7 @@ document.getElementById('codeInput').addEventListener('input', function() {
     resetForNewCode();
 });
 
+// Initialize
 document.getElementById('submitBtn').addEventListener('click', checkCode);
-document.getElementById('openPageBtn').addEventListener('click', openPage);
-
-document.getElementById('openPageBtn').classList.add('hidden');
+document.getElementById('actionBtn').classList.add('hidden');
 document.getElementById('iframeHint').classList.add('hidden');
