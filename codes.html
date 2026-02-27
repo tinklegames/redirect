@@ -3922,7 +3922,7 @@
              window.open(MOVIES_URL, "_blank");
              showToast("NAVIGATION", "Opened movies site");
          }
-         
+
          function openMusicSite() {
              if (!MUSIC_URL) return;
              window.open(MUSIC_URL, "_blank");
@@ -4113,6 +4113,7 @@
              }, 700);
          }
 
+         // Replace the suggestions form submission handler with this:
          const suggestionsForm = document.getElementById("suggestionsForm");
          let lastSuggestionSubmit = 0; // cooldown tracker
 
@@ -4138,8 +4139,22 @@
                      return;
                  }
 
+                 // Show immediate success message
+                 showToast("SUGGESTION", "Suggestion submitted! ✨");
+
+                 // ✨ Sparkle burst on the submit button
+                 const btn = suggestionsForm.querySelector("button[type='submit']");
+                 if (typeof playSparkleBurst === "function") {
+                     playSparkleBurst(btn || suggestionsForm);
+                 }
+
+                 // Reset form and set cooldown immediately
+                 suggestionsForm.reset();
+                 lastSuggestionSubmit = now;
+
+                 // Send to spreadsheet in the background (don't await)
                  try {
-                     await fetch(
+                     fetch(
                          "https://script.google.com/macros/s/AKfycbx5-AJYIr6YKofpmG_DRQTzNOlI-5sbC-41Ccy92r0u71ZiKFYdCTZweyODr7lsZPsf/exec", {
                              method: "POST",
                              mode: "no-cors",
@@ -4150,24 +4165,15 @@
                                  game: gameName
                              }),
                          }
-                     );
-
-                     lastSuggestionSubmit = now;
-                     suggestionsForm.reset();
-                     showToast("SUGGESTION", "Suggestion sent ✨");
-
-                     // ✨ Sparkle burst on the submit button
-                     const btn = suggestionsForm.querySelector("button[type='submit']");
-                     if (typeof playSparkleBurst === "function") {
-                         playSparkleBurst(btn || suggestionsForm);
-                     }
+                     ).catch(err => console.error("Background suggestion send failed:", err));
                  } catch (err) {
                      console.error("Suggestion submit failed:", err);
-                     showToast("ERROR", "Could not send suggestion. Try again later.");
+                     // Don't show error toast since we already showed success
                  }
              });
          }
 
+         // Replace the requests form submission handler with this:
          const requestsForm = document.getElementById("requestsForm");
          let lastRequestSubmit = 0; // cooldown tracker
 
@@ -4193,12 +4199,26 @@
                      return;
                  }
 
+                 // Show immediate success message
+                 showToast("REQUEST", "Game request submitted! 🎉");
+
+                 // ✨ Sparkle burst on the submit button
+                 const btn = requestsForm.querySelector("button[type='submit']");
+                 if (typeof playSparkleBurst === "function") {
+                     playSparkleBurst(btn || requestsForm);
+                 }
+
+                 // Reset form and set cooldown immediately
+                 requestsForm.reset();
+                 lastRequestSubmit = now;
+
+                 // Send to spreadsheet in the background (don't await)
                  const payload = {
                      game: gameName
                  };
 
                  try {
-                     await fetch(
+                     fetch(
                          "https://script.google.com/macros/s/AKfycbzeM04a5TJDonO4hj2QkeEinqdviobX2veBbX-IKcUYYV0WJ50ybbmuIeHcO7qiSeH3/exec", {
                              method: "POST",
                              mode: "no-cors",
@@ -4207,20 +4227,10 @@
                              },
                              body: JSON.stringify(payload),
                          }
-                     );
-
-                     lastRequestSubmit = now;
-                     requestsForm.reset();
-                     showToast("REQUEST", "Your request was sent! 🎉");
-
-                     // ✨ Sparkle burst on the submit button
-                     const btn = requestsForm.querySelector("button[type='submit']");
-                     if (typeof playSparkleBurst === "function") {
-                         playSparkleBurst(btn || requestsForm);
-                     }
+                     ).catch(err => console.error("Background request send failed:", err));
                  } catch (err) {
                      console.error("Request submit failed:", err);
-                     showToast("ERROR", "Could not send request. Try again later.");
+                     // Don't show error toast since we already showed success
                  }
              });
          }
@@ -4759,7 +4769,7 @@
          const codeSiteBtn = document.getElementById("openCodeSiteBtn");
          const codeSiteURL = "https://tinklegames.github.io/redirect/";
          const returnURL = window.location.href;
-        
+
 
          codeSiteBtn.addEventListener("click", () => {
              // Set TWO flags: one for skipping gate, one for skipping loader
@@ -4859,7 +4869,7 @@
                  alert("Please allow pop-ups to open Movies.");
              }
          });
-         
+
          const musicButton = document.querySelector('.top-nav-tab[data-page="music"]');
          const musicLink = "https://tinklehost.github.io/music/";
 
