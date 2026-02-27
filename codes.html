@@ -3535,6 +3535,10 @@
          // Track if we've already checked sessions for this game to avoid multiple Firebase calls
          const sessionChecked = new Set();
 
+         // Track last click time for each game per user (in memory)
+         const lastClickTime = new Map();
+         const COOLDOWN_TIME = 5 * 60 * 1000; // 5 minutes in milliseconds (adjust as needed)
+
          window.incrementGameClicks = async function(name) {
              try {
                  console.log("Incrementing clicks for:", name);
@@ -3548,12 +3552,15 @@
                      return null;
                  }
 
-                 // Check if we've already processed this game in this session
-                 // This prevents multiple clicks in the same session from counting
-                 if (sessionChecked.has(name)) {
-                     console.log("Already counted this game in current session");
+                 // Check cooldown in memory first (faster)
+                 const lastTime = lastClickTime.get(name);
+                 const now = Date.now();
 
-                     // Still get current counts to display
+                 if (lastTime && (now - lastTime < COOLDOWN_TIME)) {
+                     const secondsLeft = Math.ceil((COOLDOWN_TIME - (now - lastTime)) / 1000);
+                     console.log(`Cooldown active for ${name}. ${secondsLeft}s remaining`);
+
+                     // Get current counts to display
                      const allTimeRef = ref(db, 'allTimeClickData/' + safeKey);
                      const allTimeSnapshot = await get(allTimeRef);
                      const allTimeCurrent = allTimeSnapshot.exists() ? allTimeSnapshot.val() : 0;
@@ -3565,54 +3572,65 @@
                      return {
                          weekly: weeklyCurrent,
                          allTime: allTimeCurrent,
-                         alreadyClicked: true,
-                         newSession: false
+                         onCooldown: true,
+                         secondsLeft: secondsLeft
                      };
                  }
 
-                 // Check if this session has already been recorded for this game
-                 const sessionRef = ref(db, `gameSessions/${safeKey}/${userId}/${sessionId}`);
-                 const sessionSnapshot = await get(sessionRef);
+                 // Check Firebase for the last click time (in case user switched devices or cleared cache)
+                 const lastClickRef = ref(db, `userClickTimestamps/${userId}/${safeKey}`);
+                 const lastClickSnapshot = await get(lastClickRef);
 
-                 // Determine if this is a new session for this game
-                 const isNewSession = !sessionSnapshot.exists();
+                 let lastFirebaseTime = lastClickSnapshot.exists() ? lastClickSnapshot.val() : 0;
 
-                 // Get current counts
+                 // If last click was within cooldown period, don't increment
+                 if (lastFirebaseTime && (now - lastFirebaseTime < COOLDOWN_TIME)) {
+                     const secondsLeft = Math.ceil((COOLDOWN_TIME - (now - lastFirebaseTime)) / 1000);
+                     console.log(`Firebase cooldown active for ${name}. ${secondsLeft}s remaining`);
+
+                     // Still update memory cache
+                     lastClickTime.set(name, lastFirebaseTime);
+
+                     // Get current counts
+                     const allTimeRef = ref(db, 'allTimeClickData/' + safeKey);
+                     const allTimeSnapshot = await get(allTimeRef);
+                     const allTimeCurrent = allTimeSnapshot.exists() ? allTimeSnapshot.val() : 0;
+
+                     const weeklyRef = ref(db, 'weeklyClickData/' + safeKey);
+                     const weeklySnapshot = await get(weeklyRef);
+                     const weeklyCurrent = weeklySnapshot.exists() ? weeklySnapshot.val() : 0;
+
+                     return {
+                         weekly: weeklyCurrent,
+                         allTime: allTimeCurrent,
+                         onCooldown: true,
+                         secondsLeft: secondsLeft
+                     };
+                 }
+
+                 // Cooldown passed - increment counts
                  const allTimeRef = ref(db, 'allTimeClickData/' + safeKey);
                  const allTimeSnapshot = await get(allTimeRef);
                  const allTimeCurrent = allTimeSnapshot.exists() ? allTimeSnapshot.val() : 0;
+                 await set(allTimeRef, allTimeCurrent + 1);
 
                  const weeklyRef = ref(db, 'weeklyClickData/' + safeKey);
                  const weeklySnapshot = await get(weeklyRef);
                  const weeklyCurrent = weeklySnapshot.exists() ? weeklySnapshot.val() : 0;
+                 await set(weeklyRef, weeklyCurrent + 1);
 
-                 // Only increment if this is a new session
-                 if (isNewSession) {
-                     // Increment all-time count (once per session)
-                     await set(allTimeRef, allTimeCurrent + 1);
+                 // Update timestamp in Firebase
+                 await set(lastClickRef, now);
 
-                     // Increment weekly count (once per session)
-                     await set(weeklyRef, weeklyCurrent + 1);
+                 // Update memory cache
+                 lastClickTime.set(name, now);
 
-                     // Record this session
-                     await set(sessionRef, {
-                         timestamp: Date.now(),
-                         sessionId: sessionId
-                     });
-
-                     console.log(`New session! Incremented counts to all-time: ${allTimeCurrent + 1}, weekly: ${weeklyCurrent + 1}`);
-                 } else {
-                     console.log("Already played this game in this session");
-                 }
-
-                 // Mark as checked for this session
-                 sessionChecked.add(name);
+                 console.log(`Cooldown passed! Incremented counts to all-time: ${allTimeCurrent + 1}, weekly: ${weeklyCurrent + 1}`);
 
                  return {
-                     weekly: isNewSession ? weeklyCurrent + 1 : weeklyCurrent,
-                     allTime: isNewSession ? allTimeCurrent + 1 : allTimeCurrent,
-                     newSession: isNewSession,
-                     alreadyClicked: !isNewSession
+                     weekly: weeklyCurrent + 1,
+                     allTime: allTimeCurrent + 1,
+                     onCooldown: false
                  };
              } catch (e) {
                  console.error("incrementGameClicks failed:", e);
@@ -4875,7 +4893,7 @@
                      return;
                  }
 
-                 // Increment counts (only once per session)
+                 // Increment counts (with cooldown)
                  if (window.incrementGameClick) {
                      try {
                          const result = await window.incrementGameClick(game.name);
@@ -4883,6 +4901,7 @@
                          // Update counter with all-time count
                          updatePlayCounter();
 
+                         // Add visual feedback on the counter
                          playCounter.classList.add('updating');
                          setTimeout(() => {
                              playCounter.classList.remove('updating');
@@ -4890,9 +4909,9 @@
 
                          // Show different messages based on click status
                          if (result) {
-                             if (result.alreadyClicked) {
+                             if (result.onCooldown) {
                                  showCopyToast(`📋 Code copied!`);
-                             } else if (result.newSession) {
+                             } else {
                                  showCopyToast(`📋 Code copied!`);
                              }
                          }
@@ -4901,7 +4920,7 @@
                      }
                  }
 
-                 // Copy code to clipboard
+                 // Copy code to clipboard (ALWAYS copies, even on cooldown)
                  tryCopyToClipboard(game.code);
              }
 
