@@ -4718,8 +4718,8 @@ window.addEventListener('beforeunload', () => {
 });
 
          // === CSS Animations ===
-         const style = document.createElement("style");
-         style.textContent = `
+         const tacoStyle = document.createElement("style");
+         tacoStyle.textContent = `
   @keyframes tacoFall {
     0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
     100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
@@ -4730,7 +4730,7 @@ window.addEventListener('beforeunload', () => {
     100% { transform: translateY(110vh); opacity: 0; }
   }
   `;
-         document.head.appendChild(style);
+         document.head.appendChild(tacoStyle);
 
          function startCrabRave() {
              const crabURL = "https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUyYXJjYTZ2YWxsdTU4bjZleW0yczdxYmhjcmVjMnJob2cwOHlpNTlieiZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/NitS36ljNxQcfT0QIT/200.gif";
