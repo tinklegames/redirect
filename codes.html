@@ -3381,62 +3381,62 @@
      <div id="snow-container"></div>
 
      <script type="module">
-      import {
-    initializeApp
-} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
-import {
-    getAnalytics
-} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
-import {
-    getDatabase,
-    ref,
-    get,
-    set,
-    onValue,
-    push,
-    onDisconnect
-} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
-import {
-    getAuth,
-    signInAnonymously,
-    onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+         import {
+             initializeApp
+         } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+         import {
+             getAnalytics
+         } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
+         import {
+             getDatabase,
+             ref,
+             get,
+             set,
+             onValue,
+             push,
+             onDisconnect
+         } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
+         import {
+             getAuth,
+             signInAnonymously,
+             onAuthStateChanged
+         } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 
-const firebaseConfig = {
-    apiKey: "AIzaSyC-IDS2wfF3ZgVzjwf0cHUazNGolLFhXVQ",
-    authDomain: "mostpopular-39c60.firebaseapp.com",
-    databaseURL: "https://mostpopular-39c60-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "mostpopular-39c60",
-    storageBucket: "mostpopular-39c60.firebasedatabase.app",
-    messagingSenderId: "939775132675",
-    appId: "1:939775132675:web:7d40bd8fff497c53553a36",
-    measurementId: "G-XTTQ03YFN9"
-};
+         const firebaseConfig = {
+             apiKey: "AIzaSyC-IDS2wfF3ZgVzjwf0cHUazNGolLFhXVQ",
+             authDomain: "mostpopular-39c60.firebaseapp.com",
+             databaseURL: "https://mostpopular-39c60-default-rtdb.europe-west1.firebasedatabase.app",
+             projectId: "mostpopular-39c60",
+             storageBucket: "mostpopular-39c60.firebasedatabase.app",
+             messagingSenderId: "939775132675",
+             appId: "1:939775132675:web:7d40bd8fff497c53553a36",
+             measurementId: "G-XTTQ03YFN9"
+         };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-const db = getDatabase(app);
-const auth = getAuth(app);
+         // Initialize Firebase
+         const app = initializeApp(firebaseConfig);
+         const analytics = getAnalytics(app);
+         const db = getDatabase(app);
+         const auth = getAuth(app);
 
-// Sign in anonymously
-signInAnonymously(auth)
-    .then(() => console.log("✅ Signed in anonymously"))
-    .catch((error) => console.error("❌ Auth error:", error));
+         // Sign in anonymously
+         signInAnonymously(auth)
+             .then(() => console.log("✅ Signed in anonymously"))
+             .catch((error) => console.error("❌ Auth error:", error));
 
-// ============== IMMEDIATE LOCAL BAN CHECK ==============
-(function immediateBanCheck() {
-    const banned = localStorage.getItem('tinkle_banned') === 'true' || 
-                   sessionStorage.getItem('tinkle_banned') === 'true' ||
-                   document.cookie.includes('tinkle_banned=true');
-    
-    if (banned) {
-        const reason = localStorage.getItem('tinkle_ban_reason') || "Violated terms of service";
-        const date = localStorage.getItem('tinkle_ban_time') || Date.now();
-        const by = localStorage.getItem('tinkle_ban_by') || "Administrator";
-        const deviceId = localStorage.getItem('tinkle_device_id') || 'unknown';
-        
-        document.documentElement.innerHTML = `
+         // ============== IMMEDIATE LOCAL BAN CHECK ==============
+         (function immediateBanCheck() {
+             const banned = localStorage.getItem('tinkle_banned') === 'true' ||
+                 sessionStorage.getItem('tinkle_banned') === 'true' ||
+                 document.cookie.includes('tinkle_banned=true');
+
+             if (banned) {
+                 const reason = localStorage.getItem('tinkle_ban_reason') || "Violated terms of service";
+                 const date = localStorage.getItem('tinkle_ban_time') || Date.now();
+                 const by = localStorage.getItem('tinkle_ban_by') || "Administrator";
+                 const deviceId = localStorage.getItem('tinkle_device_id') || 'unknown';
+
+                 document.documentElement.innerHTML = `
             <!DOCTYPE html>
             <html>
             <head>
@@ -3491,138 +3491,138 @@ signInAnonymously(auth)
             </body>
             </html>
         `;
-        throw new Error("PERMANENTLY BANNED");
-    }
-})();
+                 throw new Error("PERMANENTLY BANNED");
+             }
+         })();
 
-// ============== PERSISTENT DEVICE FINGERPRINT ==============
-function generateDeviceFingerprint() {
-    try {
-        // Check all storage locations for existing fingerprint
-        const storedFingerprint = localStorage.getItem('tinkle_device_id') || 
-                                 sessionStorage.getItem('tinkle_device_id') ||
-                                 document.cookie.split(';').find(c => c.trim().startsWith('tinkle_device_id='))?.split('=')[1];
-        
-        if (storedFingerprint) {
-            return {
-                deviceId: storedFingerprint,
-                sessionId: Date.now().toString(16) + Math.random().toString(36).substr(2, 5)
-            };
-        }
-        
-        // Generate new fingerprint from stable components
-        const components = [
-            navigator.userAgent,
-            navigator.language,
-            screen.colorDepth,
-            screen.width + 'x' + screen.height,
-            new Date().getTimezoneOffset(),
-            navigator.hardwareConcurrency || 'unknown',
-            !!navigator.maxTouchPoints,
-            (() => {
-                try {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = 200;
-                    canvas.height = 50;
-                    const ctx = canvas.getContext('2d');
-                    ctx.textBaseline = "top";
-                    ctx.font = "14px 'Arial'";
-                    ctx.fillStyle = "#f60";
-                    ctx.fillRect(125, 1, 62, 20);
-                    ctx.fillStyle = "#069";
-                    ctx.fillText("TinkleCodes", 2, 15);
-                    ctx.fillStyle = "rgba(102, 204, 0, 0.7)";
-                    ctx.fillText("Fingerprint", 2, 30);
-                    return canvas.toDataURL();
-                } catch (e) {
-                    return 'canvas-error';
-                }
-            })(),
-            (() => {
-                try {
-                    const canvas = document.createElement('canvas');
-                    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-                    if (gl) {
-                        const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-                        if (debugInfo) {
-                            return gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
-                        }
-                    }
-                    return 'webgl-not-available';
-                } catch (e) {
-                    return 'webgl-error';
-                }
-            })(),
-            (() => {
-                try {
-                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                    return audioContext.sampleRate || 'unknown';
-                } catch (e) {
-                    return 'audio-error';
-                }
-            })(),
-            navigator.platform,
-            screen.availWidth + 'x' + screen.availHeight,
-            screen.pixelDepth,
-            Intl.DateTimeFormat().resolvedOptions().timeZone || 'unknown'
-        ];
-        
-        const fingerprintString = components.join('|||');
-        let hash = 0;
-        for (let i = 0; i < fingerprintString.length; i++) {
-            const char = fingerprintString.charCodeAt(i);
-            hash = ((hash << 5) - hash) + char;
-            hash = hash & hash;
-        }
-        
-        const deviceId = Math.abs(hash).toString(16);
-        
-        // Store in multiple locations for persistence
-        localStorage.setItem('tinkle_device_id', deviceId);
-        sessionStorage.setItem('tinkle_device_id', deviceId);
-        document.cookie = `tinkle_device_id=${deviceId}; max-age=31536000; path=/; SameSite=Strict`;
-        
-        return {
-            deviceId: deviceId,
-            sessionId: Date.now().toString(16) + Math.random().toString(36).substr(2, 5)
-        };
-    } catch (e) {
-        console.error("Fingerprint error:", e);
-        const fallbackId = 'fallback-' + Math.random().toString(36).substr(2, 9);
-        localStorage.setItem('tinkle_device_id', fallbackId);
-        return {
-            deviceId: fallbackId,
-            sessionId: Date.now().toString(16)
-        };
-    }
-}
+         // ============== PERSISTENT DEVICE FINGERPRINT ==============
+         function generateDeviceFingerprint() {
+             try {
+                 // Check all storage locations for existing fingerprint
+                 const storedFingerprint = localStorage.getItem('tinkle_device_id') ||
+                     sessionStorage.getItem('tinkle_device_id') ||
+                     document.cookie.split(';').find(c => c.trim().startsWith('tinkle_device_id='))?.split('=')[1];
 
-const deviceInfo = generateDeviceFingerprint();
-console.log("Device ID:", deviceInfo.deviceId);
+                 if (storedFingerprint) {
+                     return {
+                         deviceId: storedFingerprint,
+                         sessionId: Date.now().toString(16) + Math.random().toString(36).substr(2, 5)
+                     };
+                 }
 
-// ============== BAN SCREEN FUNCTION ==============
-function showBanScreen(banData) {
-    const banReason = banData.reason || "Violated terms of service";
-    const banDate = banData.bannedAt ? new Date(banData.bannedAt).toLocaleString() : "Unknown";
-    const bannedBy = banData.bannedBy || "Administrator";
-    const deviceId = deviceInfo.deviceId;
-    
-    // Store ban info everywhere to prevent bypass
-    localStorage.setItem('tinkle_banned', 'true');
-    localStorage.setItem('tinkle_ban_reason', banReason);
-    localStorage.setItem('tinkle_ban_time', banData.bannedAt || Date.now());
-    localStorage.setItem('tinkle_ban_by', bannedBy);
-    localStorage.setItem('tinkle_banned_device', deviceId);
-    
-    sessionStorage.setItem('tinkle_banned', 'true');
-    sessionStorage.setItem('tinkle_ban_reason', banReason);
-    
-    document.cookie = `tinkle_banned=true; max-age=31536000; path=/; SameSite=Strict`;
-    document.cookie = `tinkle_ban_reason=${encodeURIComponent(banReason)}; max-age=31536000; path=/; SameSite=Strict`;
-    document.cookie = `tinkle_banned_device=${deviceId}; max-age=31536000; path=/; SameSite=Strict`;
-    
-    // Completely replace page
-    document.documentElement.innerHTML = `
+                 // Generate new fingerprint from stable components
+                 const components = [
+                     navigator.userAgent,
+                     navigator.language,
+                     screen.colorDepth,
+                     screen.width + 'x' + screen.height,
+                     new Date().getTimezoneOffset(),
+                     navigator.hardwareConcurrency || 'unknown',
+                     !!navigator.maxTouchPoints,
+                     (() => {
+                         try {
+                             const canvas = document.createElement('canvas');
+                             canvas.width = 200;
+                             canvas.height = 50;
+                             const ctx = canvas.getContext('2d');
+                             ctx.textBaseline = "top";
+                             ctx.font = "14px 'Arial'";
+                             ctx.fillStyle = "#f60";
+                             ctx.fillRect(125, 1, 62, 20);
+                             ctx.fillStyle = "#069";
+                             ctx.fillText("TinkleCodes", 2, 15);
+                             ctx.fillStyle = "rgba(102, 204, 0, 0.7)";
+                             ctx.fillText("Fingerprint", 2, 30);
+                             return canvas.toDataURL();
+                         } catch (e) {
+                             return 'canvas-error';
+                         }
+                     })(),
+                     (() => {
+                         try {
+                             const canvas = document.createElement('canvas');
+                             const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                             if (gl) {
+                                 const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+                                 if (debugInfo) {
+                                     return gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+                                 }
+                             }
+                             return 'webgl-not-available';
+                         } catch (e) {
+                             return 'webgl-error';
+                         }
+                     })(),
+                     (() => {
+                         try {
+                             const audioContext = new(window.AudioContext || window.webkitAudioContext)();
+                             return audioContext.sampleRate || 'unknown';
+                         } catch (e) {
+                             return 'audio-error';
+                         }
+                     })(),
+                     navigator.platform,
+                     screen.availWidth + 'x' + screen.availHeight,
+                     screen.pixelDepth,
+                     Intl.DateTimeFormat().resolvedOptions().timeZone || 'unknown'
+                 ];
+
+                 const fingerprintString = components.join('|||');
+                 let hash = 0;
+                 for (let i = 0; i < fingerprintString.length; i++) {
+                     const char = fingerprintString.charCodeAt(i);
+                     hash = ((hash << 5) - hash) + char;
+                     hash = hash & hash;
+                 }
+
+                 const deviceId = Math.abs(hash).toString(16);
+
+                 // Store in multiple locations for persistence
+                 localStorage.setItem('tinkle_device_id', deviceId);
+                 sessionStorage.setItem('tinkle_device_id', deviceId);
+                 document.cookie = `tinkle_device_id=${deviceId}; max-age=31536000; path=/; SameSite=Strict`;
+
+                 return {
+                     deviceId: deviceId,
+                     sessionId: Date.now().toString(16) + Math.random().toString(36).substr(2, 5)
+                 };
+             } catch (e) {
+                 console.error("Fingerprint error:", e);
+                 const fallbackId = 'fallback-' + Math.random().toString(36).substr(2, 9);
+                 localStorage.setItem('tinkle_device_id', fallbackId);
+                 return {
+                     deviceId: fallbackId,
+                     sessionId: Date.now().toString(16)
+                 };
+             }
+         }
+
+         const deviceInfo = generateDeviceFingerprint();
+         console.log("Device ID:", deviceInfo.deviceId);
+
+         // ============== BAN SCREEN FUNCTION ==============
+         function showBanScreen(banData) {
+             const banReason = banData.reason || "Violated terms of service";
+             const banDate = banData.bannedAt ? new Date(banData.bannedAt).toLocaleString() : "Unknown";
+             const bannedBy = banData.bannedBy || "Administrator";
+             const deviceId = deviceInfo.deviceId;
+
+             // Store ban info everywhere to prevent bypass
+             localStorage.setItem('tinkle_banned', 'true');
+             localStorage.setItem('tinkle_ban_reason', banReason);
+             localStorage.setItem('tinkle_ban_time', banData.bannedAt || Date.now());
+             localStorage.setItem('tinkle_ban_by', bannedBy);
+             localStorage.setItem('tinkle_banned_device', deviceId);
+
+             sessionStorage.setItem('tinkle_banned', 'true');
+             sessionStorage.setItem('tinkle_ban_reason', banReason);
+
+             document.cookie = `tinkle_banned=true; max-age=31536000; path=/; SameSite=Strict`;
+             document.cookie = `tinkle_ban_reason=${encodeURIComponent(banReason)}; max-age=31536000; path=/; SameSite=Strict`;
+             document.cookie = `tinkle_banned_device=${deviceId}; max-age=31536000; path=/; SameSite=Strict`;
+
+             // Completely replace page
+             document.documentElement.innerHTML = `
         <!DOCTYPE html>
         <html>
         <head>
@@ -3677,359 +3677,490 @@ function showBanScreen(banData) {
         </body>
         </html>
     `;
-    
-    throw new Error("PERMANENTLY BANNED");
-}
 
-// ============== CHECK FIREBASE BAN ==============
-(async () => {
-    try {
-        const bannedRef = ref(db, 'bannedDevices');
-        const bannedSnapshot = await get(bannedRef);
-        const bannedDevices = bannedSnapshot.val() || {};
-        
-        if (bannedDevices[deviceInfo.deviceId]) {
-            showBanScreen(bannedDevices[deviceInfo.deviceId]);
-            return;
-        }
-        
-        console.log("Access granted for device:", deviceInfo.deviceId);
-        
-        // Register device in connected users
-        const usersRef = ref(db, 'connectedUsers');
-        const myConnRef = push(usersRef);
-        
-        await set(myConnRef, {
-            deviceId: deviceInfo.deviceId,
-            sessionId: deviceInfo.sessionId,
-            userAgent: navigator.userAgent,
-            screenSize: `${screen.width}x${screen.height}`,
-            language: navigator.language,
-            joinedAt: Date.now(),
-            platform: navigator.platform
-        });
-        
-        // Listen for real-time bans
-        onValue(ref(db, 'bannedDevices'), (snap) => {
-            const bans = snap.val() || {};
-            if (bans[deviceInfo.deviceId]) {
-                showBanScreen(bans[deviceInfo.deviceId]);
-            }
-        });
-        
-        // Remove on disconnect
-        onDisconnect(myConnRef).remove();
-        
-    } catch (e) {
-        if (e.message !== "PERMANENTLY BANNED") {
-            console.error("Init error:", e);
-        }
-    }
-})();
+             throw new Error("PERMANENTLY BANNED");
+         }
 
-// ============== SANITIZE KEY FUNCTION ==============
-function sanitizeKey(name) {
-    return name.replace(/[.#$/\[\]]/g, "_");
-}
+         // ============== CHECK FIREBASE BAN ==============
+         (async () => {
+             try {
+                 const bannedRef = ref(db, 'bannedDevices');
+                 const bannedSnapshot = await get(bannedRef);
+                 const bannedDevices = bannedSnapshot.val() || {};
 
-// ============== GAME CLICK FUNCTIONS ==============
-window.incrementGameClick = async function(name) {
-    try {
-        const result = await window.incrementGameClicks(name);
-        return result;
-    } catch (e) {
-        console.error("incrementGameClick failed:", e);
-    }
-};
+                 if (bannedDevices[deviceInfo.deviceId]) {
+                     showBanScreen(bannedDevices[deviceInfo.deviceId]);
+                     return;
+                 }
 
-window.getWeeklyClickData = async function() {
-    try {
-        const snapshot = await get(ref(db, 'weeklyClickData'));
-        return snapshot.exists() ? snapshot.val() : {};
-    } catch (e) {
-        console.error("getWeeklyClickData failed:", e);
-        return {};
-    }
-};
+                 console.log("Access granted for device:", deviceInfo.deviceId);
 
-window.getAllTimeClickCount = async function(gameName) {
-    try {
-        const safeKey = sanitizeKey(gameName);
-        const snapshot = await get(ref(db, 'allTimeClickData/' + safeKey));
-        return snapshot.exists() ? snapshot.val() : 0;
-    } catch (e) {
-        console.error("getAllTimeClickCount failed:", e);
-        return 0;
-    }
-};
+                 // Register device in connected users
+                 const usersRef = ref(db, 'connectedUsers');
+                 const myConnRef = push(usersRef);
 
-// Track last click time for cooldown
-const lastClickTime = new Map();
-const COOLDOWN_TIME = 5 * 60 * 1000; // 5 minutes
+                 await set(myConnRef, {
+                     deviceId: deviceInfo.deviceId,
+                     sessionId: deviceInfo.sessionId,
+                     userAgent: navigator.userAgent,
+                     screenSize: `${screen.width}x${screen.height}`,
+                     language: navigator.language,
+                     joinedAt: Date.now(),
+                     platform: navigator.platform
+                 });
 
-window.incrementGameClicks = async function(name) {
-    try {
-        const safeKey = sanitizeKey(name);
-        const userId = auth.currentUser?.uid;
+                 // Listen for real-time bans
+                 onValue(ref(db, 'bannedDevices'), (snap) => {
+                     const bans = snap.val() || {};
+                     if (bans[deviceInfo.deviceId]) {
+                         showBanScreen(bans[deviceInfo.deviceId]);
+                     }
+                 });
 
-        if (!userId) {
-            console.error("No user ID available");
-            return null;
-        }
+                 // Remove on disconnect
+                 onDisconnect(myConnRef).remove();
 
-        const now = Date.now();
-        const lastTime = lastClickTime.get(name);
+             } catch (e) {
+                 if (e.message !== "PERMANENTLY BANNED") {
+                     console.error("Init error:", e);
+                 }
+             }
+         })();
 
-        // Check cooldown
-        if (lastTime && (now - lastTime < COOLDOWN_TIME)) {
-            const secondsLeft = Math.ceil((COOLDOWN_TIME - (now - lastTime)) / 1000);
-            
-            const allTimeRef = ref(db, 'allTimeClickData/' + safeKey);
-            const allTimeSnapshot = await get(allTimeRef);
-            const allTimeCurrent = allTimeSnapshot.exists() ? allTimeSnapshot.val() : 0;
+         // Listen for unban signal
+         onValue(ref(db, `connectedUsers/${myConnRef.key}`), (snap) => {
+             const data = snap.val();
+             if (data && data.unbanned) {
+                 // Clear all local ban data
+                 localStorage.removeItem('tinkle_banned');
+                 localStorage.removeItem('tinkle_ban_reason');
+                 localStorage.removeItem('tinkle_ban_time');
+                 localStorage.removeItem('tinkle_ban_by');
+                 localStorage.removeItem('tinkle_banned_device');
 
-            return {
-                allTime: allTimeCurrent,
-                onCooldown: true,
-                secondsLeft: secondsLeft
-            };
-        }
+                 sessionStorage.removeItem('tinkle_banned');
+                 sessionStorage.removeItem('tinkle_ban_reason');
 
-        // Increment counts
-        const allTimeRef = ref(db, 'allTimeClickData/' + safeKey);
-        const allTimeSnapshot = await get(allTimeRef);
-        const allTimeCurrent = allTimeSnapshot.exists() ? allTimeSnapshot.val() : 0;
-        await set(allTimeRef, allTimeCurrent + 1);
+                 // Clear ban cookies
+                 document.cookie = 'tinkle_banned=; max-age=0; path=/';
+                 document.cookie = 'tinkle_ban_reason=; max-age=0; path=/';
+                 document.cookie = 'tinkle_banned_device=; max-age=0; path=/';
 
-        const weeklyRef = ref(db, 'weeklyClickData/' + safeKey);
-        const weeklySnapshot = await get(weeklyRef);
-        const weeklyCurrent = weeklySnapshot.exists() ? weeklySnapshot.val() : 0;
-        await set(weeklyRef, weeklyCurrent + 1);
+                 alert("✅ You have been unbanned! The page will now reload.");
+                 window.location.reload();
+             }
+         });
 
-        lastClickTime.set(name, now);
+         // Listen for real-time bans AND unbans
+         onValue(ref(db, 'bannedDevices'), (snap) => {
+             const bans = snap.val() || {};
 
-        return {
-            allTime: allTimeCurrent + 1,
-            weekly: weeklyCurrent + 1,
-            onCooldown: false
-        };
-    } catch (e) {
-        console.error("incrementGameClicks failed:", e);
-        return null;
-    }
-};
+             // Check if this device is banned
+             if (bans[deviceInfo.deviceId]) {
+                 showBanScreen(bans[deviceInfo.deviceId]);
+             }
+             // Check if this device was previously banned but now unbanned
+             else if (localStorage.getItem('tinkle_banned') === 'true') {
+                 // Device was banned before but now not in ban list = unbanned
+                 console.log("Device has been unbanned!");
 
-// Listen for real-time updates
-const allTimeCountsRef = ref(db, 'allTimeClickData');
-window.listenToAllTimeCounts = function(callback) {
-    onValue(allTimeCountsRef, (snapshot) => {
-        const counts = snapshot.exists() ? snapshot.val() : {};
-        callback(counts);
-    });
-};
+                 // Clear all local ban data
+                 localStorage.removeItem('tinkle_banned');
+                 localStorage.removeItem('tinkle_ban_reason');
+                 localStorage.removeItem('tinkle_ban_time');
+                 localStorage.removeItem('tinkle_ban_by');
+                 localStorage.removeItem('tinkle_banned_device');
 
-// ============== TIMESTAMP GUARDS FOR PRANKS ==============
-let lastMaintenanceTime = 0, lastRickrollTime = 0, lastScreenShakeTime = 0;
-let lastInvertColorsTime = 0, lastSlowModeTime = 0, lastFakeVirusTime = 0;
-let lastRotateScreenTime = 0, lastCursorChaosTime = 0, lastFlashbangTime = 0;
-let lastReverseControlsTime = 0, lastCreepySoundTime = 0, lastForceUpdateTime = 0;
-let lastAnnounceTriggerTime = 0, lastJumpscareTimestamp = 0;
+                 sessionStorage.removeItem('tinkle_banned');
+                 sessionStorage.removeItem('tinkle_ban_reason');
 
-let initialMaintenanceLoaded = false, initialRickrollLoaded = false;
-let initialScreenShakeLoaded = false, initialInvertColorsLoaded = false;
-let initialSlowModeLoaded = false, initialFakeVirusLoaded = false;
-let initialRotateScreenLoaded = false, initialCursorLoaded = false;
-let initialFlashbangLoaded = false, initialReverseLoaded = false;
-let initialSoundLoaded = false, initialForceUpdateLoaded = false;
-let initialAnnounceLoaded = false, initialJumpLoaded = false;
+                 document.cookie = 'tinkle_banned=; max-age=0; path=/';
+                 document.cookie = 'tinkle_ban_reason=; max-age=0; path=/';
+                 document.cookie = 'tinkle_banned_device=; max-age=0; path=/';
 
-// ============== SITE SETTINGS ==============
-const settingsRef = ref(db, "siteSettings");
-const triggerAnnRef = ref(db, "announcementTriggerNow");
-const triggerRef = ref(db, "jumpscareTriggerNow");
+                 // Show notification and reload
+                 alert("✅ You have been unbanned! The page will now reload.");
+                 window.location.reload();
+             }
+         });
 
-onValue(settingsRef, (snapshot) => {
-    const s = snapshot.val();
-    if (!s) return;
-    document.body.style.backgroundColor = s.backgroundColor || "#0a0a0a";
-    const content = document.getElementById("announcement-content");
-    if (content) content.innerHTML = s.announcement || "";
-});
+         // Register device in connected users
+         const usersRef = ref(db, 'connectedUsers');
+         const myConnRef = push(usersRef);
 
-// ============== ANNOUNCEMENT ==============
-onValue(triggerAnnRef, (snapshot) => {
-    const t = snapshot.val();
-    if (!t || typeof t.timestamp !== "number") return;
+         // Check if this device was previously banned but now unbanned
+         const wasBanned = localStorage.getItem('tinkle_banned') === 'true';
+         if (wasBanned) {
+             console.log("Device was previously banned but now accessing - clearing local ban data");
+             localStorage.removeItem('tinkle_banned');
+             localStorage.removeItem('tinkle_ban_reason');
+             localStorage.removeItem('tinkle_ban_time');
+             localStorage.removeItem('tinkle_ban_by');
+             localStorage.removeItem('tinkle_banned_device');
 
-    if (!initialAnnounceLoaded) {
-        lastAnnounceTriggerTime = t.timestamp;
-        initialAnnounceLoaded = true;
-        return;
-    }
+             sessionStorage.removeItem('tinkle_banned');
+             sessionStorage.removeItem('tinkle_ban_reason');
 
-    if (t.timestamp === lastAnnounceTriggerTime) return;
-    lastAnnounceTriggerTime = t.timestamp;
+             document.cookie = 'tinkle_banned=; max-age=0; path=/';
+             document.cookie = 'tinkle_ban_reason=; max-age=0; path=/';
+             document.cookie = 'tinkle_banned_device=; max-age=0; path=/';
+         }
 
-    alert("📢 ANNOUNCEMENT:\n" + (t.text || "No message"));
-});
+         await set(myConnRef, {
+             deviceId: deviceInfo.deviceId,
+             sessionId: deviceInfo.sessionId,
+             userAgent: navigator.userAgent,
+             screenSize: `${screen.width}x${screen.height}`,
+             language: navigator.language,
+             joinedAt: Date.now(),
+             platform: navigator.platform,
+             previouslyBanned: wasBanned // Track if they were banned before
+         });
 
-// ============== JUMPSCARE ==============
-onValue(triggerRef, (snapshot) => {
-    const t = snapshot.val();
-    if (!t || typeof t.timestamp !== "number") return;
+         // Listen for unban signal
+         onValue(ref(db, `connectedUsers/${myConnRef.key}`), (snap) => {
+             const data = snap.val();
+             if (data && data.unbanned) {
+                 console.log("Received unban signal!");
 
-    if (!initialJumpLoaded) {
-        lastJumpscareTimestamp = t.timestamp;
-        initialJumpLoaded = true;
-        return;
-    }
+                 // Clear all local ban data
+                 localStorage.removeItem('tinkle_banned');
+                 localStorage.removeItem('tinkle_ban_reason');
+                 localStorage.removeItem('tinkle_ban_time');
+                 localStorage.removeItem('tinkle_ban_by');
+                 localStorage.removeItem('tinkle_banned_device');
 
-    if (t.timestamp === lastJumpscareTimestamp) return;
-    lastJumpscareTimestamp = t.timestamp;
+                 sessionStorage.removeItem('tinkle_banned');
+                 sessionStorage.removeItem('tinkle_ban_reason');
 
-    if (!t.image) return;
+                 document.cookie = 'tinkle_banned=; max-age=0; path=/';
+                 document.cookie = 'tinkle_ban_reason=; max-age=0; path=/';
+                 document.cookie = 'tinkle_banned_device=; max-age=0; path=/';
 
-    const img = document.createElement("img");
-    img.src = t.image;
-    img.style.position = "fixed";
-    img.style.top = "0";
-    img.style.left = "0";
-    img.style.width = "100%";
-    img.style.height = "100%";
-    img.style.objectFit = "cover";
-    img.style.zIndex = "100000";
-    document.body.appendChild(img);
-    setTimeout(() => img.remove(), 1500);
-});
+                 alert("✅ You have been unbanned! The page will now reload.");
+                 window.location.reload();
+             }
+         });
 
-// ============== CURSOR CHAOS ==============
-onValue(ref(db, "trollTriggers/cursorChaos"), (snap) => {
-    const data = snap.val();
-    if (!data || typeof data.timestamp !== "number") return;
+         // ============== SANITIZE KEY FUNCTION ==============
+         function sanitizeKey(name) {
+             return name.replace(/[.#$/\[\]]/g, "_");
+         }
 
-    if (!initialCursorLoaded) {
-        lastCursorChaosTime = data.timestamp;
-        initialCursorLoaded = true;
-        return;
-    }
+         // ============== GAME CLICK FUNCTIONS ==============
+         window.incrementGameClick = async function(name) {
+             try {
+                 const result = await window.incrementGameClicks(name);
+                 return result;
+             } catch (e) {
+                 console.error("incrementGameClick failed:", e);
+             }
+         };
 
-    if (data.timestamp === lastCursorChaosTime) return;
-    lastCursorChaosTime = data.timestamp;
-    
-    if (!data.active) return;
+         window.getWeeklyClickData = async function() {
+             try {
+                 const snapshot = await get(ref(db, 'weeklyClickData'));
+                 return snapshot.exists() ? snapshot.val() : {};
+             } catch (e) {
+                 console.error("getWeeklyClickData failed:", e);
+                 return {};
+             }
+         };
 
-    document.body.style.cursor = "none";
-    setTimeout(() => document.body.style.cursor = "default", 3000);
-});
+         window.getAllTimeClickCount = async function(gameName) {
+             try {
+                 const safeKey = sanitizeKey(gameName);
+                 const snapshot = await get(ref(db, 'allTimeClickData/' + safeKey));
+                 return snapshot.exists() ? snapshot.val() : 0;
+             } catch (e) {
+                 console.error("getAllTimeClickCount failed:", e);
+                 return 0;
+             }
+         };
 
-// ============== CREEPY SOUND ==============
-onValue(ref(db, "trollTriggers/creepySound"), (snap) => {
-    const data = snap.val();
-    if (!data || typeof data.timestamp !== "number") return;
-    
-    if (!initialSoundLoaded) {
-        lastCreepySoundTime = data.timestamp;
-        initialSoundLoaded = true;
-        return;
-    }
+         // Track last click time for cooldown
+         const lastClickTime = new Map();
+         const COOLDOWN_TIME = 5 * 60 * 1000; // 5 minutes
 
-    if (data.timestamp === lastCreepySoundTime) return;
-    lastCreepySoundTime = data.timestamp;
-    
-    if (!data.url) return;
+         window.incrementGameClicks = async function(name) {
+             try {
+                 const safeKey = sanitizeKey(name);
+                 const userId = auth.currentUser?.uid;
 
-    const audio = new Audio(data.url);
-    audio.play().catch(console.error);
+                 if (!userId) {
+                     console.error("No user ID available");
+                     return null;
+                 }
 
-    if (data.url.includes("rainingtacos.mp3")) {
-        startTacoRain();
-    }
-    if (data.url.includes("crabrave.mp3")) {
-        startCrabRave();
-    }
-});
+                 const now = Date.now();
+                 const lastTime = lastClickTime.get(name);
 
-// ============== FLASHBANG ==============
-onValue(ref(db, "trollTriggers/flashbang"), (snap) => {
-    const data = snap.val();
-    if (!data || typeof data.timestamp !== "number") return;
+                 // Check cooldown
+                 if (lastTime && (now - lastTime < COOLDOWN_TIME)) {
+                     const secondsLeft = Math.ceil((COOLDOWN_TIME - (now - lastTime)) / 1000);
 
-    if (!initialFlashbangLoaded) {
-        lastFlashbangTime = data.timestamp;
-        initialFlashbangLoaded = true;
-        return;
-    }
+                     const allTimeRef = ref(db, 'allTimeClickData/' + safeKey);
+                     const allTimeSnapshot = await get(allTimeRef);
+                     const allTimeCurrent = allTimeSnapshot.exists() ? allTimeSnapshot.val() : 0;
 
-    if (data.timestamp === lastFlashbangTime) return;
-    lastFlashbangTime = data.timestamp;
-    
-    if (!data.active) return;
+                     return {
+                         allTime: allTimeCurrent,
+                         onCooldown: true,
+                         secondsLeft: secondsLeft
+                     };
+                 }
 
-    const flash = document.createElement("div");
-    flash.style.position = "fixed";
-    flash.style.top = "0";
-    flash.style.left = "0";
-    flash.style.width = "100%";
-    flash.style.height = "100%";
-    flash.style.background = "white";
-    flash.style.zIndex = "999999";
-    flash.style.opacity = "1";
-    flash.style.transition = "opacity 0.5s ease";
-    document.body.appendChild(flash);
+                 // Increment counts
+                 const allTimeRef = ref(db, 'allTimeClickData/' + safeKey);
+                 const allTimeSnapshot = await get(allTimeRef);
+                 const allTimeCurrent = allTimeSnapshot.exists() ? allTimeSnapshot.val() : 0;
+                 await set(allTimeRef, allTimeCurrent + 1);
 
-    setTimeout(() => flash.style.opacity = "0", 200);
-    setTimeout(() => flash.remove(), 800);
-});
+                 const weeklyRef = ref(db, 'weeklyClickData/' + safeKey);
+                 const weeklySnapshot = await get(weeklyRef);
+                 const weeklyCurrent = weeklySnapshot.exists() ? weeklySnapshot.val() : 0;
+                 await set(weeklyRef, weeklyCurrent + 1);
 
-// ============== REVERSE CONTROLS ==============
-onValue(ref(db, "trollTriggers/reverseControls"), (snap) => {
-    const data = snap.val();
-    if (!data || typeof data.timestamp !== "number") return;
+                 lastClickTime.set(name, now);
 
-    if (!initialReverseLoaded) {
-        lastReverseControlsTime = data.timestamp;
-        initialReverseLoaded = true;
-        return;
-    }
+                 return {
+                     allTime: allTimeCurrent + 1,
+                     weekly: weeklyCurrent + 1,
+                     onCooldown: false
+                 };
+             } catch (e) {
+                 console.error("incrementGameClicks failed:", e);
+                 return null;
+             }
+         };
 
-    if (data.timestamp === lastReverseControlsTime) return;
-    lastReverseControlsTime = data.timestamp;
-    
-    if (!data.active) return;
+         // Listen for real-time updates
+         const allTimeCountsRef = ref(db, 'allTimeClickData');
+         window.listenToAllTimeCounts = function(callback) {
+             onValue(allTimeCountsRef, (snapshot) => {
+                 const counts = snapshot.exists() ? snapshot.val() : {};
+                 callback(counts);
+             });
+         };
 
-    const handler = (e) => {
-        window.scrollBy(
-            (Math.random() - 0.5) * -50,
-            (Math.random() - 0.5) * -50
-        );
-    };
-    document.addEventListener("mousemove", handler);
-    setTimeout(() => document.removeEventListener("mousemove", handler), 3000);
-});
+         // ============== TIMESTAMP GUARDS FOR PRANKS ==============
+         let lastMaintenanceTime = 0,
+             lastRickrollTime = 0,
+             lastScreenShakeTime = 0;
+         let lastInvertColorsTime = 0,
+             lastSlowModeTime = 0,
+             lastFakeVirusTime = 0;
+         let lastRotateScreenTime = 0,
+             lastCursorChaosTime = 0,
+             lastFlashbangTime = 0;
+         let lastReverseControlsTime = 0,
+             lastCreepySoundTime = 0,
+             lastForceUpdateTime = 0;
+         let lastAnnounceTriggerTime = 0,
+             lastJumpscareTimestamp = 0;
 
-// ============== MAINTENANCE MODE ==============
-onValue(ref(db, "trollTriggers/maintenance"), (snap) => {
-    const data = snap.val();
-    if (!data || typeof data.timestamp !== "number") return;
-    
-    if (!initialMaintenanceLoaded) {
-        lastMaintenanceTime = data.timestamp;
-        initialMaintenanceLoaded = true;
-        return;
-    }
-    
-    if (data.timestamp === lastMaintenanceTime) return;
-    lastMaintenanceTime = data.timestamp;
-    
-    const existing = document.getElementById('maintenanceOverlay');
-    if (existing) existing.remove();
-    document.body.style.pointerEvents = '';
-    document.body.style.overflow = '';
-    
-    if (data.active) {
-        const overlay = document.createElement('div');
-        overlay.id = 'maintenanceOverlay';
-        overlay.innerHTML = `
+         let initialMaintenanceLoaded = false,
+             initialRickrollLoaded = false;
+         let initialScreenShakeLoaded = false,
+             initialInvertColorsLoaded = false;
+         let initialSlowModeLoaded = false,
+             initialFakeVirusLoaded = false;
+         let initialRotateScreenLoaded = false,
+             initialCursorLoaded = false;
+         let initialFlashbangLoaded = false,
+             initialReverseLoaded = false;
+         let initialSoundLoaded = false,
+             initialForceUpdateLoaded = false;
+         let initialAnnounceLoaded = false,
+             initialJumpLoaded = false;
+
+         // ============== SITE SETTINGS ==============
+         const settingsRef = ref(db, "siteSettings");
+         const triggerAnnRef = ref(db, "announcementTriggerNow");
+         const triggerRef = ref(db, "jumpscareTriggerNow");
+
+         onValue(settingsRef, (snapshot) => {
+             const s = snapshot.val();
+             if (!s) return;
+             document.body.style.backgroundColor = s.backgroundColor || "#0a0a0a";
+             const content = document.getElementById("announcement-content");
+             if (content) content.innerHTML = s.announcement || "";
+         });
+
+         // ============== ANNOUNCEMENT ==============
+         onValue(triggerAnnRef, (snapshot) => {
+             const t = snapshot.val();
+             if (!t || typeof t.timestamp !== "number") return;
+
+             if (!initialAnnounceLoaded) {
+                 lastAnnounceTriggerTime = t.timestamp;
+                 initialAnnounceLoaded = true;
+                 return;
+             }
+
+             if (t.timestamp === lastAnnounceTriggerTime) return;
+             lastAnnounceTriggerTime = t.timestamp;
+
+             alert("📢 ANNOUNCEMENT:\n" + (t.text || "No message"));
+         });
+
+         // ============== JUMPSCARE ==============
+         onValue(triggerRef, (snapshot) => {
+             const t = snapshot.val();
+             if (!t || typeof t.timestamp !== "number") return;
+
+             if (!initialJumpLoaded) {
+                 lastJumpscareTimestamp = t.timestamp;
+                 initialJumpLoaded = true;
+                 return;
+             }
+
+             if (t.timestamp === lastJumpscareTimestamp) return;
+             lastJumpscareTimestamp = t.timestamp;
+
+             if (!t.image) return;
+
+             const img = document.createElement("img");
+             img.src = t.image;
+             img.style.position = "fixed";
+             img.style.top = "0";
+             img.style.left = "0";
+             img.style.width = "100%";
+             img.style.height = "100%";
+             img.style.objectFit = "cover";
+             img.style.zIndex = "100000";
+             document.body.appendChild(img);
+             setTimeout(() => img.remove(), 1500);
+         });
+
+         // ============== CURSOR CHAOS ==============
+         onValue(ref(db, "trollTriggers/cursorChaos"), (snap) => {
+             const data = snap.val();
+             if (!data || typeof data.timestamp !== "number") return;
+
+             if (!initialCursorLoaded) {
+                 lastCursorChaosTime = data.timestamp;
+                 initialCursorLoaded = true;
+                 return;
+             }
+
+             if (data.timestamp === lastCursorChaosTime) return;
+             lastCursorChaosTime = data.timestamp;
+
+             if (!data.active) return;
+
+             document.body.style.cursor = "none";
+             setTimeout(() => document.body.style.cursor = "default", 3000);
+         });
+
+         // ============== CREEPY SOUND ==============
+         onValue(ref(db, "trollTriggers/creepySound"), (snap) => {
+             const data = snap.val();
+             if (!data || typeof data.timestamp !== "number") return;
+
+             if (!initialSoundLoaded) {
+                 lastCreepySoundTime = data.timestamp;
+                 initialSoundLoaded = true;
+                 return;
+             }
+
+             if (data.timestamp === lastCreepySoundTime) return;
+             lastCreepySoundTime = data.timestamp;
+
+             if (!data.url) return;
+
+             const audio = new Audio(data.url);
+             audio.play().catch(console.error);
+
+             if (data.url.includes("rainingtacos.mp3")) {
+                 startTacoRain();
+             }
+             if (data.url.includes("crabrave.mp3")) {
+                 startCrabRave();
+             }
+         });
+
+         // ============== FLASHBANG ==============
+         onValue(ref(db, "trollTriggers/flashbang"), (snap) => {
+             const data = snap.val();
+             if (!data || typeof data.timestamp !== "number") return;
+
+             if (!initialFlashbangLoaded) {
+                 lastFlashbangTime = data.timestamp;
+                 initialFlashbangLoaded = true;
+                 return;
+             }
+
+             if (data.timestamp === lastFlashbangTime) return;
+             lastFlashbangTime = data.timestamp;
+
+             if (!data.active) return;
+
+             const flash = document.createElement("div");
+             flash.style.position = "fixed";
+             flash.style.top = "0";
+             flash.style.left = "0";
+             flash.style.width = "100%";
+             flash.style.height = "100%";
+             flash.style.background = "white";
+             flash.style.zIndex = "999999";
+             flash.style.opacity = "1";
+             flash.style.transition = "opacity 0.5s ease";
+             document.body.appendChild(flash);
+
+             setTimeout(() => flash.style.opacity = "0", 200);
+             setTimeout(() => flash.remove(), 800);
+         });
+
+         // ============== REVERSE CONTROLS ==============
+         onValue(ref(db, "trollTriggers/reverseControls"), (snap) => {
+             const data = snap.val();
+             if (!data || typeof data.timestamp !== "number") return;
+
+             if (!initialReverseLoaded) {
+                 lastReverseControlsTime = data.timestamp;
+                 initialReverseLoaded = true;
+                 return;
+             }
+
+             if (data.timestamp === lastReverseControlsTime) return;
+             lastReverseControlsTime = data.timestamp;
+
+             if (!data.active) return;
+
+             const handler = (e) => {
+                 window.scrollBy(
+                     (Math.random() - 0.5) * -50,
+                     (Math.random() - 0.5) * -50
+                 );
+             };
+             document.addEventListener("mousemove", handler);
+             setTimeout(() => document.removeEventListener("mousemove", handler), 3000);
+         });
+
+         // ============== MAINTENANCE MODE ==============
+         onValue(ref(db, "trollTriggers/maintenance"), (snap) => {
+             const data = snap.val();
+             if (!data || typeof data.timestamp !== "number") return;
+
+             if (!initialMaintenanceLoaded) {
+                 lastMaintenanceTime = data.timestamp;
+                 initialMaintenanceLoaded = true;
+                 return;
+             }
+
+             if (data.timestamp === lastMaintenanceTime) return;
+             lastMaintenanceTime = data.timestamp;
+
+             const existing = document.getElementById('maintenanceOverlay');
+             if (existing) existing.remove();
+             document.body.style.pointerEvents = '';
+             document.body.style.overflow = '';
+
+             if (data.active) {
+                 const overlay = document.createElement('div');
+                 overlay.id = 'maintenanceOverlay';
+                 overlay.innerHTML = `
             <div style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.98); z-index:999999; display:flex; align-items:center; justify-content:center; flex-direction:column; color:white; backdrop-filter:blur(15px);">
                 <div style="font-size:120px; margin-bottom:30px; animation: maintenanceSpin 3s infinite;">🔧</div>
                 <h1 style="color:#4CAF50; font-size:48px; margin-bottom:20px;">Maintenance Mode</h1>
@@ -4039,182 +4170,182 @@ onValue(ref(db, "trollTriggers/maintenance"), (snap) => {
                 </div>
             </div>
         `;
-        document.body.appendChild(overlay);
-        document.body.style.pointerEvents = 'none';
-        document.body.style.overflow = 'hidden';
-    }
-});
+                 document.body.appendChild(overlay);
+                 document.body.style.pointerEvents = 'none';
+                 document.body.style.overflow = 'hidden';
+             }
+         });
 
-// ============== RICKROLL ==============
-let rickrollPlayer = null;
-onValue(ref(db, "trollTriggers/rickroll"), (snap) => {
-    const data = snap.val();
-    if (!data || typeof data.timestamp !== "number") return;
-    
-    if (!initialRickrollLoaded) {
-        lastRickrollTime = data.timestamp;
-        initialRickrollLoaded = true;
-        return;
-    }
-    
-    if (data.timestamp === lastRickrollTime) return;
-    lastRickrollTime = data.timestamp;
-    
-    if (rickrollPlayer) {
-        rickrollPlayer.remove();
-        rickrollPlayer = null;
-        document.getElementById('rickroll-text')?.remove();
-    }
-    
-    if (data.active) {
-        rickrollPlayer = document.createElement('iframe');
-        rickrollPlayer.style.position = 'fixed';
-        rickrollPlayer.style.bottom = '20px';
-        rickrollPlayer.style.right = '20px';
-        rickrollPlayer.style.width = '400px';
-        rickrollPlayer.style.height = '225px';
-        rickrollPlayer.style.zIndex = '999999';
-        rickrollPlayer.style.border = '4px solid #ff4444';
-        rickrollPlayer.style.borderRadius = '12px';
-        rickrollPlayer.style.boxShadow = '0 0 50px rgba(255,68,68,0.5)';
-        rickrollPlayer.src = 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1';
-        rickrollPlayer.allow = 'autoplay';
-        document.body.appendChild(rickrollPlayer);
-        
-        const text = document.createElement('div');
-        text.id = 'rickroll-text';
-        text.style.position = 'fixed';
-        text.style.bottom = '260px';
-        text.style.right = '30px';
-        text.style.color = '#ff4444';
-        text.style.fontSize = '18px';
-        text.style.fontWeight = 'bold';
-        text.style.zIndex = '999999';
-        text.style.animation = 'rickrollText 2s infinite';
-        text.innerHTML = '🎵 Never Gonna Give You Up 🎵';
-        document.body.appendChild(text);
-    }
-});
+         // ============== RICKROLL ==============
+         let rickrollPlayer = null;
+         onValue(ref(db, "trollTriggers/rickroll"), (snap) => {
+             const data = snap.val();
+             if (!data || typeof data.timestamp !== "number") return;
 
-// ============== SCREEN SHAKE ==============
-onValue(ref(db, "trollTriggers/screenShake"), (snap) => {
-    const data = snap.val();
-    if (!data || typeof data.timestamp !== "number") return;
-    
-    if (!initialScreenShakeLoaded) {
-        lastScreenShakeTime = data.timestamp;
-        initialScreenShakeLoaded = true;
-        return;
-    }
-    
-    if (data.timestamp === lastScreenShakeTime) return;
-    lastScreenShakeTime = data.timestamp;
-    
-    if (!data.active) return;
-    
-    const intensity = data.intensity || 10;
-    const duration = data.duration || 3000;
-    const start = Date.now();
-    
-    (function shake() {
-        const elapsed = Date.now() - start;
-        if (elapsed > duration) {
-            document.body.style.transform = '';
-            return;
-        }
-        const x = (Math.random() - 0.5) * intensity * 2;
-        const y = (Math.random() - 0.5) * intensity * 2;
-        document.body.style.transform = `translate(${x}px, ${y}px)`;
-        requestAnimationFrame(shake);
-    })();
-});
+             if (!initialRickrollLoaded) {
+                 lastRickrollTime = data.timestamp;
+                 initialRickrollLoaded = true;
+                 return;
+             }
 
-// ============== INVERT COLORS ==============
-onValue(ref(db, "trollTriggers/invertColors"), (snap) => {
-    const data = snap.val();
-    if (!data || typeof data.timestamp !== "number") return;
-    
-    if (!initialInvertColorsLoaded) {
-        lastInvertColorsTime = data.timestamp;
-        initialInvertColorsLoaded = true;
-        return;
-    }
-    
-    if (data.timestamp === lastInvertColorsTime) return;
-    lastInvertColorsTime = data.timestamp;
-    
-    document.documentElement.style.filter = data.active ? 'invert(100%) hue-rotate(180deg)' : '';
-});
+             if (data.timestamp === lastRickrollTime) return;
+             lastRickrollTime = data.timestamp;
 
-// ============== SLOW MODE ==============
-onValue(ref(db, "trollTriggers/slowMode"), (snap) => {
-    const data = snap.val();
-    if (!data || typeof data.timestamp !== "number") return;
-    
-    if (!initialSlowModeLoaded) {
-        lastSlowModeTime = data.timestamp;
-        initialSlowModeLoaded = true;
-        return;
-    }
-    
-    if (data.timestamp === lastSlowModeTime) return;
-    lastSlowModeTime = data.timestamp;
-    
-    document.getElementById('slow-mode-style')?.remove();
-    document.getElementById('slow-mode-warning')?.remove();
-    document.body.classList.remove('slow-mode');
-    
-    if (data.active) {
-        const style = document.createElement('style');
-        style.id = 'slow-mode-style';
-        style.textContent = `
+             if (rickrollPlayer) {
+                 rickrollPlayer.remove();
+                 rickrollPlayer = null;
+                 document.getElementById('rickroll-text')?.remove();
+             }
+
+             if (data.active) {
+                 rickrollPlayer = document.createElement('iframe');
+                 rickrollPlayer.style.position = 'fixed';
+                 rickrollPlayer.style.bottom = '20px';
+                 rickrollPlayer.style.right = '20px';
+                 rickrollPlayer.style.width = '400px';
+                 rickrollPlayer.style.height = '225px';
+                 rickrollPlayer.style.zIndex = '999999';
+                 rickrollPlayer.style.border = '4px solid #ff4444';
+                 rickrollPlayer.style.borderRadius = '12px';
+                 rickrollPlayer.style.boxShadow = '0 0 50px rgba(255,68,68,0.5)';
+                 rickrollPlayer.src = 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1';
+                 rickrollPlayer.allow = 'autoplay';
+                 document.body.appendChild(rickrollPlayer);
+
+                 const text = document.createElement('div');
+                 text.id = 'rickroll-text';
+                 text.style.position = 'fixed';
+                 text.style.bottom = '260px';
+                 text.style.right = '30px';
+                 text.style.color = '#ff4444';
+                 text.style.fontSize = '18px';
+                 text.style.fontWeight = 'bold';
+                 text.style.zIndex = '999999';
+                 text.style.animation = 'rickrollText 2s infinite';
+                 text.innerHTML = '🎵 Never Gonna Give You Up 🎵';
+                 document.body.appendChild(text);
+             }
+         });
+
+         // ============== SCREEN SHAKE ==============
+         onValue(ref(db, "trollTriggers/screenShake"), (snap) => {
+             const data = snap.val();
+             if (!data || typeof data.timestamp !== "number") return;
+
+             if (!initialScreenShakeLoaded) {
+                 lastScreenShakeTime = data.timestamp;
+                 initialScreenShakeLoaded = true;
+                 return;
+             }
+
+             if (data.timestamp === lastScreenShakeTime) return;
+             lastScreenShakeTime = data.timestamp;
+
+             if (!data.active) return;
+
+             const intensity = data.intensity || 10;
+             const duration = data.duration || 3000;
+             const start = Date.now();
+
+             (function shake() {
+                 const elapsed = Date.now() - start;
+                 if (elapsed > duration) {
+                     document.body.style.transform = '';
+                     return;
+                 }
+                 const x = (Math.random() - 0.5) * intensity * 2;
+                 const y = (Math.random() - 0.5) * intensity * 2;
+                 document.body.style.transform = `translate(${x}px, ${y}px)`;
+                 requestAnimationFrame(shake);
+             })();
+         });
+
+         // ============== INVERT COLORS ==============
+         onValue(ref(db, "trollTriggers/invertColors"), (snap) => {
+             const data = snap.val();
+             if (!data || typeof data.timestamp !== "number") return;
+
+             if (!initialInvertColorsLoaded) {
+                 lastInvertColorsTime = data.timestamp;
+                 initialInvertColorsLoaded = true;
+                 return;
+             }
+
+             if (data.timestamp === lastInvertColorsTime) return;
+             lastInvertColorsTime = data.timestamp;
+
+             document.documentElement.style.filter = data.active ? 'invert(100%) hue-rotate(180deg)' : '';
+         });
+
+         // ============== SLOW MODE ==============
+         onValue(ref(db, "trollTriggers/slowMode"), (snap) => {
+             const data = snap.val();
+             if (!data || typeof data.timestamp !== "number") return;
+
+             if (!initialSlowModeLoaded) {
+                 lastSlowModeTime = data.timestamp;
+                 initialSlowModeLoaded = true;
+                 return;
+             }
+
+             if (data.timestamp === lastSlowModeTime) return;
+             lastSlowModeTime = data.timestamp;
+
+             document.getElementById('slow-mode-style')?.remove();
+             document.getElementById('slow-mode-warning')?.remove();
+             document.body.classList.remove('slow-mode');
+
+             if (data.active) {
+                 const style = document.createElement('style');
+                 style.id = 'slow-mode-style';
+                 style.textContent = `
             .slow-mode * { 
                 transition: all 3s ease !important; 
                 animation-duration: 3s !important; 
             }
         `;
-        document.head.appendChild(style);
-        document.body.classList.add('slow-mode');
-        
-        const warning = document.createElement('div');
-        warning.id = 'slow-mode-warning';
-        warning.style.position = 'fixed';
-        warning.style.top = '20px';
-        warning.style.left = '50%';
-        warning.style.transform = 'translateX(-50%)';
-        warning.style.background = '#ff4444';
-        warning.style.color = 'white';
-        warning.style.padding = '15px 30px';
-        warning.style.borderRadius = '50px';
-        warning.style.zIndex = '999999';
-        warning.style.fontSize = '18px';
-        warning.style.animation = 'slowPulse 2s infinite';
-        warning.innerHTML = '🐢 SLOW MODE ENABLED - Everything is 3x slower! 🐢';
-        document.body.appendChild(warning);
-        setTimeout(() => warning.remove(), 5000);
-    }
-});
+                 document.head.appendChild(style);
+                 document.body.classList.add('slow-mode');
 
-// ============== FAKE VIRUS ==============
-onValue(ref(db, "trollTriggers/fakeVirus"), (snap) => {
-    const data = snap.val();
-    if (!data || typeof data.timestamp !== "number") return;
-    
-    if (!initialFakeVirusLoaded) {
-        lastFakeVirusTime = data.timestamp;
-        initialFakeVirusLoaded = true;
-        return;
-    }
-    
-    if (data.timestamp === lastFakeVirusTime) return;
-    lastFakeVirusTime = data.timestamp;
-    
-    document.getElementById('fakeVirusAlert')?.remove();
-    
-    if (data.active) {
-        const alert = document.createElement('div');
-        alert.id = 'fakeVirusAlert';
-        alert.innerHTML = `
+                 const warning = document.createElement('div');
+                 warning.id = 'slow-mode-warning';
+                 warning.style.position = 'fixed';
+                 warning.style.top = '20px';
+                 warning.style.left = '50%';
+                 warning.style.transform = 'translateX(-50%)';
+                 warning.style.background = '#ff4444';
+                 warning.style.color = 'white';
+                 warning.style.padding = '15px 30px';
+                 warning.style.borderRadius = '50px';
+                 warning.style.zIndex = '999999';
+                 warning.style.fontSize = '18px';
+                 warning.style.animation = 'slowPulse 2s infinite';
+                 warning.innerHTML = '🐢 SLOW MODE ENABLED - Everything is 3x slower! 🐢';
+                 document.body.appendChild(warning);
+                 setTimeout(() => warning.remove(), 5000);
+             }
+         });
+
+         // ============== FAKE VIRUS ==============
+         onValue(ref(db, "trollTriggers/fakeVirus"), (snap) => {
+             const data = snap.val();
+             if (!data || typeof data.timestamp !== "number") return;
+
+             if (!initialFakeVirusLoaded) {
+                 lastFakeVirusTime = data.timestamp;
+                 initialFakeVirusLoaded = true;
+                 return;
+             }
+
+             if (data.timestamp === lastFakeVirusTime) return;
+             lastFakeVirusTime = data.timestamp;
+
+             document.getElementById('fakeVirusAlert')?.remove();
+
+             if (data.active) {
+                 const alert = document.createElement('div');
+                 alert.id = 'fakeVirusAlert';
+                 alert.innerHTML = `
             <div style="position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#000; color:#ff0000; padding:50px; border:4px solid #ff0000; z-index:999999; text-align:center; box-shadow:0 0 200px rgba(255,0,0,0.7); animation: virusPulse 0.5s infinite; border-radius:20px; min-width:500px;">
                 <h1 style="font-size:60px; margin-bottom:20px;">⚠️ CRITICAL ERROR ⚠️</h1>
                 <p style="font-size:28px; margin-bottom:30px; color:#ff6666;">Your system has been compromised!</p>
@@ -4229,35 +4360,35 @@ onValue(ref(db, "trollTriggers/fakeVirus"), (snap) => {
                 <progress value="73" max="100" style="width:80%; height:20px; margin:20px 0;"></progress>
             </div>
         `;
-        document.body.appendChild(alert);
-    }
-});
+                 document.body.appendChild(alert);
+             }
+         });
 
-// ============== ROTATE SCREEN ==============
-let rotationStyle = null;
-onValue(ref(db, "trollTriggers/rotateScreen"), (snap) => {
-    const data = snap.val();
-    if (!data || typeof data.timestamp !== "number") return;
-    
-    if (!initialRotateScreenLoaded) {
-        lastRotateScreenTime = data.timestamp;
-        initialRotateScreenLoaded = true;
-        return;
-    }
-    
-    if (data.timestamp === lastRotateScreenTime) return;
-    lastRotateScreenTime = data.timestamp;
-    
-    if (rotationStyle) {
-        rotationStyle.remove();
-        rotationStyle = null;
-    }
-    document.body.style.transform = '';
-    
-    if (data.active) {
-        const angle = data.angle || 180;
-        rotationStyle = document.createElement('style');
-        rotationStyle.textContent = `
+         // ============== ROTATE SCREEN ==============
+         let rotationStyle = null;
+         onValue(ref(db, "trollTriggers/rotateScreen"), (snap) => {
+             const data = snap.val();
+             if (!data || typeof data.timestamp !== "number") return;
+
+             if (!initialRotateScreenLoaded) {
+                 lastRotateScreenTime = data.timestamp;
+                 initialRotateScreenLoaded = true;
+                 return;
+             }
+
+             if (data.timestamp === lastRotateScreenTime) return;
+             lastRotateScreenTime = data.timestamp;
+
+             if (rotationStyle) {
+                 rotationStyle.remove();
+                 rotationStyle = null;
+             }
+             document.body.style.transform = '';
+
+             if (data.active) {
+                 const angle = data.angle || 180;
+                 rotationStyle = document.createElement('style');
+                 rotationStyle.textContent = `
             body {
                 transform: rotate(${angle}deg) !important;
                 transition: transform 1s ease !important;
@@ -4265,112 +4396,112 @@ onValue(ref(db, "trollTriggers/rotateScreen"), (snap) => {
                 min-height: 100vh !important;
             }
         `;
-        document.head.appendChild(rotationStyle);
-        
-        const indicator = document.createElement('div');
-        indicator.style.position = 'fixed';
-        indicator.style.top = '20px';
-        indicator.style.left = '50%';
-        indicator.style.transform = 'translateX(-50%)';
-        indicator.style.background = 'rgba(0,0,0,0.8)';
-        indicator.style.color = 'white';
-        indicator.style.padding = '10px 20px';
-        indicator.style.borderRadius = '20px';
-        indicator.style.zIndex = '999999';
-        indicator.style.border = '2px solid #4CAF50';
-        indicator.innerHTML = `🔄 Screen rotated ${angle}° 🔄`;
-        document.body.appendChild(indicator);
-        setTimeout(() => indicator.remove(), 3000);
-    }
-});
+                 document.head.appendChild(rotationStyle);
 
-// ============== FORCE UPDATE ==============
-let lastUpdateId = localStorage.getItem('lastProcessedUpdateId') || '0';
-onValue(ref(db, "trollTriggers/forceUpdate"), (snap) => {
-    const data = snap.val();
-    if (!data || typeof data.timestamp !== "number") return;
-    
-    if (!initialForceUpdateLoaded) {
-        lastForceUpdateTime = data.timestamp;
-        lastUpdateId = data.updateId || lastForceUpdateTime.toString();
-        localStorage.setItem('lastProcessedUpdateId', lastUpdateId);
-        initialForceUpdateLoaded = true;
-        return;
-    }
-    
-    if (data.timestamp === lastForceUpdateTime || data.updateId === lastUpdateId) return;
-    
-    lastForceUpdateTime = data.timestamp;
-    lastUpdateId = data.updateId || lastForceUpdateTime.toString();
-    localStorage.setItem('lastProcessedUpdateId', lastUpdateId);
-    
-    if (!data.active) return;
-    
-    if (confirm("🔄 New update available! Refresh now to get the latest features?")) {
-        window.location.reload();
-    } else {
-        setTimeout(() => window.location.reload(), 30000);
-    }
-});
+                 const indicator = document.createElement('div');
+                 indicator.style.position = 'fixed';
+                 indicator.style.top = '20px';
+                 indicator.style.left = '50%';
+                 indicator.style.transform = 'translateX(-50%)';
+                 indicator.style.background = 'rgba(0,0,0,0.8)';
+                 indicator.style.color = 'white';
+                 indicator.style.padding = '10px 20px';
+                 indicator.style.borderRadius = '20px';
+                 indicator.style.zIndex = '999999';
+                 indicator.style.border = '2px solid #4CAF50';
+                 indicator.innerHTML = `🔄 Screen rotated ${angle}° 🔄`;
+                 document.body.appendChild(indicator);
+                 setTimeout(() => indicator.remove(), 3000);
+             }
+         });
 
-// ============== TACO RAIN FUNCTION ==============
-function startTacoRain() {
-    const container = document.createElement('div');
-    container.id = 'taco-rain';
-    container.style.position = 'fixed';
-    container.style.top = '0';
-    container.style.left = '0';
-    container.style.width = '100%';
-    container.style.height = '100%';
-    container.style.pointerEvents = 'none';
-    container.style.zIndex = '99999';
-    container.style.overflow = 'hidden';
-    document.body.appendChild(container);
-    
-    for (let i = 0; i < 20; i++) {
-        const taco = document.createElement('img');
-        taco.src = 'https://cdn-icons-png.flaticon.com/512/10342/10342492.png';
-        taco.style.position = 'absolute';
-        taco.style.top = '-100px';
-        taco.style.left = Math.random() * 100 + 'vw';
-        taco.style.width = (50 + Math.random() * 50) + 'px';
-        taco.style.opacity = '0.9';
-        taco.style.animation = `tacoFall ${4 + Math.random() * 5}s linear infinite`;
-        taco.style.animationDelay = Math.random() * 5 + 's';
-        container.appendChild(taco);
-    }
-    setTimeout(() => container.remove(), 30000);
-}
+         // ============== FORCE UPDATE ==============
+         let lastUpdateId = localStorage.getItem('lastProcessedUpdateId') || '0';
+         onValue(ref(db, "trollTriggers/forceUpdate"), (snap) => {
+             const data = snap.val();
+             if (!data || typeof data.timestamp !== "number") return;
 
-// ============== CRAB RAVE FUNCTION ==============
-function startCrabRave() {
-    const container = document.createElement('div');
-    container.id = 'crab-rave';
-    container.style.position = 'fixed';
-    container.style.top = '0';
-    container.style.left = '0';
-    container.style.width = '100%';
-    container.style.height = '100%';
-    container.style.pointerEvents = 'none';
-    container.style.zIndex = '99998';
-    document.body.appendChild(container);
-    
-    for (let i = 0; i < 30; i++) {
-        const crab = document.createElement('img');
-        crab.src = 'https://media3.giphy.com/media/NitS36ljNxQcfT0QIT/200.gif';
-        crab.style.position = 'absolute';
-        crab.style.left = Math.random() * 90 + '%';
-        crab.style.top = Math.random() * 90 + '%';
-        crab.style.width = '50px';
-        crab.style.transform = `scale(${0.3 + Math.random() * 0.4})`;
-        container.appendChild(crab);
-    }
-    setTimeout(() => container.remove(), 15000);
-}
+             if (!initialForceUpdateLoaded) {
+                 lastForceUpdateTime = data.timestamp;
+                 lastUpdateId = data.updateId || lastForceUpdateTime.toString();
+                 localStorage.setItem('lastProcessedUpdateId', lastUpdateId);
+                 initialForceUpdateLoaded = true;
+                 return;
+             }
 
-// ============== CSS ANIMATIONS ==============
-const animStyle = document.createElement('style');
-animStyle.textContent = `
+             if (data.timestamp === lastForceUpdateTime || data.updateId === lastUpdateId) return;
+
+             lastForceUpdateTime = data.timestamp;
+             lastUpdateId = data.updateId || lastForceUpdateTime.toString();
+             localStorage.setItem('lastProcessedUpdateId', lastUpdateId);
+
+             if (!data.active) return;
+
+             if (confirm("🔄 New update available! Refresh now to get the latest features?")) {
+                 window.location.reload();
+             } else {
+                 setTimeout(() => window.location.reload(), 30000);
+             }
+         });
+
+         // ============== TACO RAIN FUNCTION ==============
+         function startTacoRain() {
+             const container = document.createElement('div');
+             container.id = 'taco-rain';
+             container.style.position = 'fixed';
+             container.style.top = '0';
+             container.style.left = '0';
+             container.style.width = '100%';
+             container.style.height = '100%';
+             container.style.pointerEvents = 'none';
+             container.style.zIndex = '99999';
+             container.style.overflow = 'hidden';
+             document.body.appendChild(container);
+
+             for (let i = 0; i < 20; i++) {
+                 const taco = document.createElement('img');
+                 taco.src = 'https://cdn-icons-png.flaticon.com/512/10342/10342492.png';
+                 taco.style.position = 'absolute';
+                 taco.style.top = '-100px';
+                 taco.style.left = Math.random() * 100 + 'vw';
+                 taco.style.width = (50 + Math.random() * 50) + 'px';
+                 taco.style.opacity = '0.9';
+                 taco.style.animation = `tacoFall ${4 + Math.random() * 5}s linear infinite`;
+                 taco.style.animationDelay = Math.random() * 5 + 's';
+                 container.appendChild(taco);
+             }
+             setTimeout(() => container.remove(), 30000);
+         }
+
+         // ============== CRAB RAVE FUNCTION ==============
+         function startCrabRave() {
+             const container = document.createElement('div');
+             container.id = 'crab-rave';
+             container.style.position = 'fixed';
+             container.style.top = '0';
+             container.style.left = '0';
+             container.style.width = '100%';
+             container.style.height = '100%';
+             container.style.pointerEvents = 'none';
+             container.style.zIndex = '99998';
+             document.body.appendChild(container);
+
+             for (let i = 0; i < 30; i++) {
+                 const crab = document.createElement('img');
+                 crab.src = 'https://media3.giphy.com/media/NitS36ljNxQcfT0QIT/200.gif';
+                 crab.style.position = 'absolute';
+                 crab.style.left = Math.random() * 90 + '%';
+                 crab.style.top = Math.random() * 90 + '%';
+                 crab.style.width = '50px';
+                 crab.style.transform = `scale(${0.3 + Math.random() * 0.4})`;
+                 container.appendChild(crab);
+             }
+             setTimeout(() => container.remove(), 15000);
+         }
+
+         // ============== CSS ANIMATIONS ==============
+         const animStyle = document.createElement('style');
+         animStyle.textContent = `
     @keyframes maintenanceSpin {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
@@ -4398,23 +4529,23 @@ animStyle.textContent = `
         100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
     }
 `;
-document.head.appendChild(animStyle);
+         document.head.appendChild(animStyle);
 
-// ============== TEST FUNCTION ==============
-window.checkUsers = async function() {
-    const snap = await get(ref(db, 'connectedUsers'));
-    const users = snap.val() || {};
-    console.log("Online users:", Object.keys(users).length, users);
-    alert(`Found ${Object.keys(users).length} users online`);
-};
+         // ============== TEST FUNCTION ==============
+         window.checkUsers = async function() {
+             const snap = await get(ref(db, 'connectedUsers'));
+             const users = snap.val() || {};
+             console.log("Online users:", Object.keys(users).length, users);
+             alert(`Found ${Object.keys(users).length} users online`);
+         };
 
-// ============== LIVE USER PRESENCE ==============
-const usersRef = ref(db, "connectedUsers");
-const myRef = push(usersRef);
-onDisconnect(myRef).remove();
-set(myRef, true);
+         // ============== LIVE USER PRESENCE ==============
+         const usersRef = ref(db, "connectedUsers");
+         const myRef = push(usersRef);
+         onDisconnect(myRef).remove();
+         set(myRef, true);
 
-console.log("✅ All systems loaded - Device ID:", deviceInfo.deviceId);
+         console.log("✅ All systems loaded - Device ID:", deviceInfo.deviceId);
      </script>
 
 
