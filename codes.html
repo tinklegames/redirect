@@ -3919,6 +3919,804 @@
              container.appendChild(spice);
          }
 
+      // ============== DEVICE FINGERPRINTING & BAN SYSTEM ==============
+
+// Generate a unique device fingerprint
+function generateDeviceFingerprint() {
+  try {
+    const components = [
+      navigator.userAgent,
+      navigator.language,
+      screen.colorDepth,
+      screen.width + 'x' + screen.height,
+      new Date().getTimezoneOffset(),
+      navigator.hardwareConcurrency || 'unknown',
+      navigator.deviceMemory || 'unknown',
+      !!navigator.maxTouchPoints,
+      !!window.indexedDB,
+      !!window.openDatabase,
+      // Canvas fingerprinting
+      (() => {
+        try {
+          const canvas = document.createElement('canvas');
+          canvas.width = 200;
+          canvas.height = 50;
+          const ctx = canvas.getContext('2d');
+          ctx.textBaseline = "top";
+          ctx.font = "14px 'Arial'";
+          ctx.fillStyle = "#f60";
+          ctx.fillRect(125, 1, 62, 20);
+          ctx.fillStyle = "#069";
+          ctx.fillText("TinkleCodes", 2, 15);
+          ctx.fillStyle = "rgba(102, 204, 0, 0.7)";
+          ctx.fillText("Fingerprint", 2, 30);
+          return canvas.toDataURL();
+        } catch (e) {
+          return 'canvas-error';
+        }
+      })(),
+      // WebGL fingerprinting
+      (() => {
+        try {
+          const canvas = document.createElement('canvas');
+          const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+          if (gl) {
+            const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+            if (debugInfo) {
+              return gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+            }
+          }
+          return 'webgl-not-available';
+        } catch (e) {
+          return 'webgl-error';
+        }
+      })(),
+      // Audio fingerprinting
+      (() => {
+        try {
+          const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+          return audioContext.sampleRate || 'unknown';
+        } catch (e) {
+          return 'audio-error';
+        }
+      })(),
+      navigator.platform,
+      navigator.maxTouchPoints || 0,
+      screen.availWidth + 'x' + screen.availHeight,
+      screen.pixelDepth,
+      Intl.DateTimeFormat().resolvedOptions().timeZone || 'unknown'
+    ];
+    
+    // Create a hash from components
+    const fingerprintString = components.join('|||');
+    let hash = 0;
+    for (let i = 0; i < fingerprintString.length; i++) {
+      const char = fingerprintString.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash;
+    }
+    
+    return {
+      deviceId: Math.abs(hash).toString(16),
+      sessionId: Date.now().toString(16) + Math.random().toString(36).substr(2, 5)
+    };
+  } catch (e) {
+    console.error("Fingerprint error:", e);
+    return {
+      deviceId: 'fallback-' + Math.random().toString(36).substr(2, 9),
+      sessionId: Date.now().toString(16)
+    };
+  }
+}
+
+const deviceInfo = generateDeviceFingerprint();
+console.log("Device ID:", deviceInfo.deviceId);
+
+// Check if device is banned
+async function checkDeviceBan() {
+  try {
+    const deviceSnapshot = await get(ref(db, `bannedDevices/${deviceInfo.deviceId}`));
+    
+    if (deviceSnapshot.exists() && deviceSnapshot.val().active !== false) {
+      showBanScreen(deviceSnapshot.val());
+      return false;
+    }
+    return true;
+  } catch (e) {
+    console.error("Ban check failed:", e);
+    return true;
+  }
+}
+
+function showBanScreen(banData) {
+  const banReason = banData.reason || "Violated terms of service";
+  const banDate = banData.bannedAt ? new Date(banData.bannedAt).toLocaleString() : "Unknown";
+  const bannedBy = banData.bannedBy || "Administrator";
+  
+  document.body.innerHTML = `
+    <div style="
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #0a0a0a;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(255, 0, 0, 0.2) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(255, 0, 0, 0.2) 0%, transparent 40%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999999;
+      font-family: Arial, sans-serif;
+    ">
+      <div style="
+        background: rgba(20, 20, 20, 0.95);
+        border: 3px solid #ff4444;
+        border-radius: 20px;
+        padding: 40px;
+        max-width: 500px;
+        text-align: center;
+        box-shadow: 0 0 100px rgba(255,0,0,0.5);
+      ">
+        <div style="font-size: 80px; margin-bottom: 20px;">🚫</div>
+        <h1 style="font-size: 36px; margin: 20px 0; color: #ff4444;">ACCESS DENIED</h1>
+        <div style="background: #333; height: 2px; width: 100px; margin: 20px auto;"></div>
+        <p style="font-size: 18px; margin: 20px 0;"><strong>Reason:</strong> ${banReason}</p>
+        <p style="font-size: 14px; color: #888;">Banned on: ${banDate}</p>
+        <p style="font-size: 14px; color: #888;">Banned by: ${bannedBy}</p>
+        <p style="font-size: 12px; color: #666; margin-top: 30px;">Device ID: ${deviceInfo.deviceId.substring(0, 16)}...</p>
+        <button onclick="navigator.clipboard.writeText('${deviceInfo.deviceId}')" 
+          style="margin-top: 20px; padding: 10px 20px; background: transparent; border: 2px solid #ff4444; color: #ff4444; border-radius: 5px; cursor: pointer;">
+          Copy Device ID
+        </button>
+      </div>
+    </div>
+  `;
+  
+  throw new Error("Banned");
+}
+
+// ============== RUN BAN CHECK ==============
+(async () => {
+  try {
+    const allowed = await checkDeviceBan();
+    if (!allowed) return;
+    
+    console.log("Access granted for device:", deviceInfo.deviceId);
+    
+    // Register device in Firebase
+    const usersRef = ref(db, 'connectedUsers');
+    const myConnRef = push(usersRef);
+    
+    await set(myConnRef, {
+      deviceId: deviceInfo.deviceId,
+      sessionId: deviceInfo.sessionId,
+      userAgent: navigator.userAgent,
+      screenSize: `${screen.width}x${screen.height}`,
+      language: navigator.language,
+      joinedAt: Date.now(),
+      platform: navigator.platform
+    });
+    
+    // Listen for being kicked
+    onValue(ref(db, `connectedUsers/${myConnRef.key}`), (snap) => {
+      if (snap.val() && snap.val().banned) {
+        alert("You have been kicked!");
+        window.location.reload();
+      }
+    });
+    
+    // Remove on disconnect
+    onDisconnect(myConnRef).remove();
+    
+    // Listen for new bans
+    onValue(ref(db, 'bannedDevices'), (snap) => {
+      const bans = snap.val() || {};
+      if (bans[deviceInfo.deviceId]) {
+        window.location.reload();
+      }
+    });
+    
+  } catch (e) {
+    if (e.message !== "Banned") {
+      console.error("Init error:", e);
+    }
+  }
+})();
+
+// ============== FORCE UPDATE SYSTEM ==============
+
+// Check for forced updates
+let lastUpdateId = localStorage.getItem('lastProcessedUpdateId') || '0';
+
+onValue(ref(db, "trollTriggers/forceUpdate"), (snap) => {
+  const data = snap.val();
+  if (!data || !data.active) return;
+  
+  // Check if we've already processed this update
+  if (data.updateId === lastUpdateId) return;
+  
+  // Store this update ID
+  lastUpdateId = data.updateId;
+  localStorage.setItem('lastProcessedUpdateId', data.updateId);
+  
+  // Show the update notification
+  showForceUpdateNotification(data.message || "New updates available! Please refresh to get the latest features.");
+});
+
+function showForceUpdateNotification(message) {
+  // Create notification element
+  const notification = document.createElement('div');
+  notification.id = 'forceUpdateNotification';
+  notification.innerHTML = `
+    <div style="
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(10px);
+      z-index: 9999999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: updateFadeIn 0.3s ease;
+    ">
+      <div style="
+        background: linear-gradient(135deg, #1a1a2e, #16213e);
+        border: 3px solid #4f46e5;
+        border-radius: 30px;
+        padding: 50px;
+        max-width: 500px;
+        text-align: center;
+        color: white;
+        box-shadow: 0 0 100px rgba(79, 70, 229, 0.7);
+        animation: updateSlideIn 0.4s ease;
+      ">
+        <div style="font-size: 80px; margin-bottom: 20px; animation: updateSpin 2s infinite linear;">🔄</div>
+        <h2 style="color: #4f46e5; margin-bottom: 20px; font-size: 36px; text-transform: uppercase; letter-spacing: 2px;">Update Required</h2>
+        <p style="margin-bottom: 30px; font-size: 18px; line-height: 1.6; color: #e5e7eb;">${message}</p>
+        
+        <div style="margin-bottom: 30px;">
+          <div style="background: #2a2a3a; height: 6px; border-radius: 6px; overflow: hidden;">
+            <div id="updateProgress" style="width: 100%; height: 100%; background: #4f46e5; animation: updateProgress 30s linear forwards;"></div>
+          </div>
+          <p id="updateTimer" style="margin-top: 15px; color: #888; font-size: 14px;">Auto-refreshing in 30 seconds...</p>
+        </div>
+        
+        <div style="display: flex; gap: 15px; justify-content: center;">
+          <button id="refreshNowBtn" style="
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 20px rgba(79, 70, 229, 0.5);
+            transition: all 0.3s ease;
+          ">Refresh Now</button>
+          
+          <button id="remindLaterBtn" style="
+            background: transparent;
+            color: white;
+            border: 2px solid #4f46e5;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+          ">Later</button>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(notification);
+  
+  // Disable background scrolling
+  document.body.style.overflow = 'hidden';
+  
+  // Countdown timer
+  let secondsLeft = 30;
+  const timerEl = document.getElementById('updateTimer');
+  
+  const countdownInterval = setInterval(() => {
+    secondsLeft--;
+    if (timerEl) {
+      timerEl.textContent = `Auto-refreshing in ${secondsLeft} seconds...`;
+    }
+    
+    if (secondsLeft <= 0) {
+      clearInterval(countdownInterval);
+      window.location.reload();
+    }
+  }, 1000);
+  
+  // Refresh now button
+  document.getElementById('refreshNowBtn').onclick = () => {
+    clearInterval(countdownInterval);
+    window.location.reload();
+  };
+  
+  // Remind later button
+  document.getElementById('remindLaterBtn').onclick = () => {
+    clearInterval(countdownInterval);
+    notification.remove();
+    document.body.style.overflow = '';
+    
+    // Show persistent reminder
+    showUpdateReminder(message);
+  };
+}
+
+function showUpdateReminder(message) {
+  const reminder = document.createElement('div');
+  reminder.id = 'updateReminder';
+  reminder.style.cssText = `
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: linear-gradient(135deg, #4f46e5, #6366f1);
+    color: white;
+    padding: 20px 30px;
+    border-radius: 15px;
+    box-shadow: 0 0 50px rgba(79, 70, 229, 0.5);
+    z-index: 999999;
+    cursor: pointer;
+    animation: slideInRight 0.5s ease;
+    border: 2px solid rgba(255,255,255,0.2);
+    backdrop-filter: blur(5px);
+    max-width: 400px;
+  `;
+  
+  reminder.innerHTML = `
+    <div style="display: flex; align-items: center; gap: 15px;">
+      <div style="font-size: 30px; animation: updateSpin 2s infinite;">🔄</div>
+      <div style="flex: 1;">
+        <strong style="font-size: 16px; display: block; margin-bottom: 5px;">Update Required</strong>
+        <p style="margin: 0; font-size: 14px; opacity: 0.9;">${message}</p>
+      </div>
+      <button id="reminderRefreshBtn" style="
+        background: white;
+        color: #4f46e5;
+        border: none;
+        padding: 8px 20px;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 14px;
+        transition: all 0.3s ease;
+      ">Refresh</button>
+      <button id="closeReminderBtn" style="
+        background: transparent;
+        color: white;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        padding: 0 5px;
+      ">×</button>
+    </div>
+  `;
+  
+  document.body.appendChild(reminder);
+  
+  // Refresh button
+  document.getElementById('reminderRefreshBtn').onclick = () => {
+    window.location.reload();
+  };
+  
+  // Close button
+  document.getElementById('closeReminderBtn').onclick = (e) => {
+    e.stopPropagation();
+    reminder.style.animation = 'slideOutRight 0.3s ease';
+    setTimeout(() => reminder.remove(), 300);
+  };
+  
+  // Click on reminder
+  reminder.onclick = (e) => {
+    if (e.target.id !== 'closeReminderBtn' && e.target.id !== 'reminderRefreshBtn') {
+      window.location.reload();
+    }
+  };
+  
+  // Auto-remove after 2 minutes
+  setTimeout(() => {
+    if (reminder.parentNode) {
+      reminder.style.animation = 'slideOutRight 0.3s ease';
+      setTimeout(() => reminder.remove(), 300);
+    }
+  }, 120000);
+}
+
+// ============== PRANK HANDLERS ==============
+
+// Maintenance Mode
+onValue(ref(db, "trollTriggers/maintenance"), (snap) => {
+  const data = snap.val();
+  if (!data || !data.active) {
+    const existing = document.getElementById('maintenanceOverlay');
+    if (existing) existing.remove();
+    document.body.style.pointerEvents = '';
+    document.body.style.overflow = '';
+    return;
+  }
+  
+  // Show maintenance overlay
+  const overlay = document.createElement('div');
+  overlay.id = 'maintenanceOverlay';
+  overlay.innerHTML = `
+    <div style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.98); z-index:999999; display:flex; align-items:center; justify-content:center; flex-direction:column; color:white; backdrop-filter:blur(15px);">
+      <div style="font-size:120px; margin-bottom:30px; animation: maintenanceSpin 3s infinite;">🔧</div>
+      <h1 style="color:#4CAF50; font-size:48px; margin-bottom:20px; text-transform:uppercase; letter-spacing:4px;">Maintenance Mode</h1>
+      <p style="font-size:24px; max-width:600px; text-align:center; margin-bottom:30px; color:#888;">${data.message || 'Site under maintenance'}</p>
+      <div style="width:300px; height:6px; background:#333; border-radius:6px; overflow:hidden;">
+        <div style="width:30%; height:100%; background:#4CAF50; animation: maintenanceProgress 1.5s infinite;"></div>
+      </div>
+      <p style="margin-top:40px; color:#666; font-size:14px;">Please check back soon</p>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  
+  // Disable interactions
+  document.body.style.pointerEvents = 'none';
+  document.body.style.overflow = 'hidden';
+});
+
+// Rickroll
+let rickrollPlayer = null;
+onValue(ref(db, "trollTriggers/rickroll"), (snap) => {
+  const data = snap.val();
+  if (!data || !data.active) {
+    if (rickrollPlayer) {
+      rickrollPlayer.remove();
+      rickrollPlayer = null;
+    }
+    const text = document.getElementById('rickroll-text');
+    if (text) text.remove();
+    return;
+  }
+  
+  if (!rickrollPlayer) {
+    rickrollPlayer = document.createElement('iframe');
+    rickrollPlayer.style.position = 'fixed';
+    rickrollPlayer.style.bottom = '20px';
+    rickrollPlayer.style.right = '20px';
+    rickrollPlayer.style.width = '400px';
+    rickrollPlayer.style.height = '225px';
+    rickrollPlayer.style.zIndex = '999999';
+    rickrollPlayer.style.border = '4px solid #ff4444';
+    rickrollPlayer.style.borderRadius = '12px';
+    rickrollPlayer.style.boxShadow = '0 0 50px rgba(255,68,68,0.5)';
+    rickrollPlayer.style.animation = 'rickrollSlide 0.5s ease';
+    rickrollPlayer.src = 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1';
+    rickrollPlayer.allow = 'autoplay';
+    document.body.appendChild(rickrollPlayer);
+    
+    // Add "Never Gonna Give You Up" text
+    const text = document.createElement('div');
+    text.id = 'rickroll-text';
+    text.style.position = 'fixed';
+    text.style.bottom = '260px';
+    text.style.right = '30px';
+    text.style.color = '#ff4444';
+    text.style.fontSize = '18px';
+    text.style.fontWeight = 'bold';
+    text.style.zIndex = '999999';
+    text.style.textShadow = '0 0 10px rgba(255,68,68,0.5)';
+    text.style.animation = 'rickrollText 2s infinite';
+    text.innerHTML = '🎵 Never Gonna Give You Up 🎵';
+    document.body.appendChild(text);
+  }
+});
+
+// Screen Shake
+onValue(ref(db, "trollTriggers/screenShake"), (snap) => {
+  const data = snap.val();
+  if (!data || !data.active) return;
+  
+  const intensity = data.intensity || 10;
+  const duration = data.duration || 3000;
+  const start = Date.now();
+  
+  function shake() {
+    const elapsed = Date.now() - start;
+    if (elapsed > duration) {
+      document.body.style.transform = '';
+      return;
+    }
+    
+    const x = (Math.random() - 0.5) * intensity * 2;
+    const y = (Math.random() - 0.5) * intensity * 2;
+    const rotate = (Math.random() - 0.5) * (intensity / 2);
+    document.body.style.transform = `translate(${x}px, ${y}px) rotate(${rotate}deg)`;
+    
+    requestAnimationFrame(shake);
+  }
+  
+  shake();
+});
+
+// Invert Colors
+onValue(ref(db, "trollTriggers/invertColors"), (snap) => {
+  const data = snap.val();
+  if (!data || !data.active) {
+    document.documentElement.style.filter = '';
+    document.body.style.filter = '';
+    return;
+  }
+  
+  document.documentElement.style.filter = 'invert(100%) hue-rotate(180deg)';
+  document.documentElement.style.transition = 'filter 1s ease';
+});
+
+// Slow Mode
+onValue(ref(db, "trollTriggers/slowMode"), (snap) => {
+  const data = snap.val();
+  if (!data || !data.active) {
+    document.body.classList.remove('slow-mode');
+    const style = document.getElementById('slow-mode-style');
+    if (style) style.remove();
+    const warning = document.getElementById('slow-mode-warning');
+    if (warning) warning.remove();
+    return;
+  }
+  
+  // Add slow mode class
+  document.body.classList.add('slow-mode');
+  
+  // Make everything slow
+  const style = document.createElement('style');
+  style.id = 'slow-mode-style';
+  style.textContent = `
+    .slow-mode * {
+      transition: all 3s ease !important;
+      animation-duration: 3s !important;
+    }
+    .slow-mode button:hover {
+      transform: scale(0.9) !important;
+      filter: hue-rotate(180deg) !important;
+      transition: all 3s ease !important;
+    }
+    .slow-mode input:focus {
+      background-color: #ff0000 !important;
+      transition: all 3s ease !important;
+    }
+  `;
+  document.head.appendChild(style);
+  
+  // Show warning
+  const warning = document.createElement('div');
+  warning.id = 'slow-mode-warning';
+  warning.style.cssText = `
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ff4444;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 50px;
+    z-index: 999999;
+    font-size: 18px;
+    font-weight: bold;
+    animation: slowPulse 2s infinite;
+    box-shadow: 0 0 30px rgba(255,68,68,0.5);
+  `;
+  warning.innerHTML = '🐢 SLOW MODE ENABLED - Everything is 3x slower! 🐢';
+  document.body.appendChild(warning);
+  
+  setTimeout(() => {
+    if (warning.parentNode) warning.remove();
+  }, 5000);
+});
+
+// Fake Virus
+onValue(ref(db, "trollTriggers/fakeVirus"), (snap) => {
+  const data = snap.val();
+  if (!data || !data.active) {
+    const existing = document.getElementById('fakeVirusAlert');
+    if (existing) existing.remove();
+    return;
+  }
+  
+  const alert = document.createElement('div');
+  alert.id = 'fakeVirusAlert';
+  alert.innerHTML = `
+    <div style="position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#000; color:#ff0000; padding:50px; border:4px solid #ff0000; z-index:999999; text-align:center; box-shadow:0 0 200px rgba(255,0,0,0.7); animation: virusPulse 0.5s infinite; border-radius:20px; min-width:500px;">
+      <h1 style="font-size:60px; margin-bottom:20px; text-shadow:0 0 20px red;">⚠️ CRITICAL ERROR ⚠️</h1>
+      <p style="font-size:28px; margin-bottom:30px; color:#ff6666;">Your system has been compromised!</p>
+      <div style="background:#1a1a1a; padding:20px; border-radius:10px; margin-bottom:20px;">
+        <p style="font-family:monospace; color:#00ff00; font-size:16px; text-align:left;">
+          C:\\Windows\\System32\\DRIVERS\\tinkle_virus.exe<br>
+          ═══════════════════════════════<br>
+          > Detected malware: TINKLE_TROLL<br>
+          > Infected files: 1,337<br>
+          > System integrity: 12%<br>
+          > Encryption status: ACTIVE<br>
+          ═══════════════════════════════
+        </p>
+      </div>
+      <progress value="73" max="100" style="width:80%; height:20px; margin:20px 0;"></progress>
+      <p style="color:#ff6666; font-size:14px; margin-top:10px;">Contact administrator immediately!</p>
+      <button onclick="this.parentElement.parentElement.remove()" style="margin-top:20px; padding:10px 30px; background:#ff0000; color:white; border:none; border-radius:5px; cursor:pointer; font-size:16px;">Close (Not Recommended)</button>
+    </div>
+  `;
+  document.body.appendChild(alert);
+});
+
+// Rotate Screen
+let rotationStyle = null;
+onValue(ref(db, "trollTriggers/rotateScreen"), (snap) => {
+  const data = snap.val();
+  
+  // Remove existing rotation
+  if (rotationStyle) {
+    rotationStyle.remove();
+    rotationStyle = null;
+    document.body.style.transform = '';
+    document.documentElement.style.overflow = '';
+  }
+  
+  if (data && data.active) {
+    const angle = data.angle || 180;
+    
+    rotationStyle = document.createElement('style');
+    rotationStyle.textContent = `
+      body {
+        transform: rotate(${angle}deg) !important;
+        transition: transform 1s ease !important;
+        transform-origin: center center !important;
+        min-height: 100vh !important;
+      }
+      html {
+        overflow: hidden !important;
+      }
+    `;
+    document.head.appendChild(rotationStyle);
+    
+    // Show angle indicator
+    const indicator = document.createElement('div');
+    indicator.id = 'rotate-indicator';
+    indicator.style.cssText = `
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.8);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 20px;
+      z-index: 999999;
+      font-size: 16px;
+      border: 2px solid #4CAF50;
+      backdrop-filter: blur(5px);
+    `;
+    indicator.innerHTML = `🔄 Screen rotated ${angle}° 🔄`;
+    document.body.appendChild(indicator);
+    
+    setTimeout(() => {
+      if (indicator.parentNode) indicator.remove();
+    }, 3000);
+  }
+});
+
+// ============== CSS ANIMATIONS ==============
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes maintenanceSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  @keyframes maintenanceProgress {
+    0% { width: 0%; }
+    50% { width: 70%; }
+    100% { width: 0%; }
+  }
+  
+  @keyframes rickrollSlide {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes rickrollText {
+    0% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.1); color: #ff8888; }
+    100% { opacity: 0.5; transform: scale(1); }
+  }
+  
+  @keyframes virusPulse {
+    0% { border-color: #ff0000; box-shadow: 0 0 50px rgba(255,0,0,0.5); }
+    50% { border-color: #ff6666; box-shadow: 0 0 100px rgba(255,0,0,0.8); }
+    100% { border-color: #ff0000; box-shadow: 0 0 50px rgba(255,0,0,0.5); }
+  }
+  
+  @keyframes slowPulse {
+    0% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(-50%) scale(1.1); }
+    100% { transform: translateX(-50%) scale(1); }
+  }
+  
+  @keyframes updateFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes updateSlideIn {
+    from {
+      transform: translateY(-50px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes updateSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  
+  @keyframes updateProgress {
+    from { width: 100%; }
+    to { width: 0%; }
+  }
+  
+  @keyframes slideInRight {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideOutRight {
+    from {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+  }
+`;
+document.head.appendChild(style);
+
+// ============== TEST FUNCTION ==============
+window.checkUsers = async function() {
+  const snap = await get(ref(db, 'connectedUsers'));
+  const users = snap.val() || {};
+  console.log("Online users:", Object.keys(users).length, users);
+  alert(`Found ${Object.keys(users).length} users online`);
+};
+
+// Clean up on page unload
+window.addEventListener('beforeunload', () => {
+  if (rickrollPlayer) rickrollPlayer.remove();
+  if (rotationStyle) rotationStyle.remove();
+});
+
          // === CSS Animations ===
          const style = document.createElement("style");
          style.textContent = `
