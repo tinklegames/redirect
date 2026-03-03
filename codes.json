@@ -244,5 +244,6 @@
     "CATNINJA": "https://tinklehost.github.io/catninja|true",
     "AMAZE": "https://tinklehost.github.io/amaze|false",
     "BM!": "https://tinklehost.github.io/bloodmoney|true",
-    "IDLEBREAK": "https://tinklehost.github.io/idle-breakout|true"
+    "IDLEBREAK": "https://tinklehost.github.io/idle-breakout|true",
+    "PINBALL": "https://pinball.flutter.dev/#/|true"
     }
