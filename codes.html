@@ -3784,40 +3784,7 @@
              }
          });
 
-         // Register device in connected users
-         const usersRef = ref(db, 'connectedUsers');
-         const myConnRef = push(usersRef);
-
-         // Check if this device was previously banned but now unbanned
-         const wasBanned = localStorage.getItem('tinkle_banned') === 'true';
-         if (wasBanned) {
-             console.log("Device was previously banned but now accessing - clearing local ban data");
-             localStorage.removeItem('tinkle_banned');
-             localStorage.removeItem('tinkle_ban_reason');
-             localStorage.removeItem('tinkle_ban_time');
-             localStorage.removeItem('tinkle_ban_by');
-             localStorage.removeItem('tinkle_banned_device');
-
-             sessionStorage.removeItem('tinkle_banned');
-             sessionStorage.removeItem('tinkle_ban_reason');
-
-             document.cookie = 'tinkle_banned=; max-age=0; path=/';
-             document.cookie = 'tinkle_ban_reason=; max-age=0; path=/';
-             document.cookie = 'tinkle_banned_device=; max-age=0; path=/';
-         }
-
-         await set(myConnRef, {
-             deviceId: deviceInfo.deviceId,
-             sessionId: deviceInfo.sessionId,
-             userAgent: navigator.userAgent,
-             screenSize: `${screen.width}x${screen.height}`,
-             language: navigator.language,
-             joinedAt: Date.now(),
-             platform: navigator.platform,
-             previouslyBanned: wasBanned // Track if they were banned before
-         });
-
-         // Listen for unban signal
+         // Listen for unban signal (using the myConnRef from the first registration)
          onValue(ref(db, `connectedUsers/${myConnRef.key}`), (snap) => {
              const data = snap.val();
              if (data && data.unbanned) {
@@ -3848,6 +3815,14 @@
          }
 
          // ============== GAME CLICK FUNCTIONS ==============
+         const allTimeCountsRef = ref(db, 'allTimeClickData');
+         window.listenToAllTimeCounts = function(callback) {
+             onValue(allTimeCountsRef, (snapshot) => {
+                 const counts = snapshot.exists() ? snapshot.val() : {};
+                 callback(counts);
+             });
+         };
+
          window.incrementGameClick = async function(name) {
              try {
                  const result = await window.incrementGameClicks(name);
