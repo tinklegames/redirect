@@ -5,9 +5,8 @@ async function checkCode() {
     const code = document.getElementById('codeInput').value.trim();
     const resultDiv = document.getElementById('result');
     const submitBtn = document.getElementById('submitBtn');
-    const actionBtn = document.getElementById('actionBtn');
+    const openPageBtn = document.getElementById('openPageBtn');
     const iframeHint = document.getElementById('iframeHint');
-    const codeInput = document.getElementById('codeInput');
 
     try {
         const response = await fetch('https://raw.githubusercontent.com/tinklegames/redirect/main/codes.json');
@@ -18,31 +17,29 @@ async function checkCode() {
             generatedLink = parts[0];
             iframeAllowed = parts[1] === 'true';
 
-            // Clear the input box
-            codeInput.value = "";
+            document.getElementById('codeInput').value = generatedLink;
+            resultDiv.innerHTML = "✅ Link generated successfully!";
+
+            const newBtn = submitBtn.cloneNode(true); // clone the button to remove old events
+            submitBtn.parentNode.replaceChild(newBtn, submitBtn);
+            newBtn.innerHTML = "Copy Link";
+            newBtn.addEventListener('click', () => copyLink(generatedLink));
+            newBtn.style.backgroundColor = "#4CAF50";
 
             if (iframeAllowed) {
-                // Directly open the page
-                openPage();
-                resultDiv.innerHTML = "✅ Opened page";
-                actionBtn.classList.add("hidden");
+                openPageBtn.classList.remove("hidden");
                 iframeHint.classList.add("hidden");
-                showNotification("✅ Opened page", "success");
             } else {
-                // Show copy button for non-iframe sites
-                resultDiv.innerHTML = "✅ Link generated!";
-                actionBtn.innerHTML = "Copy Link";
-                actionBtn.style.backgroundColor = "#4CAF50";
-                actionBtn.onclick = () => copyLink(generatedLink);
-                actionBtn.classList.remove("hidden");
+                openPageBtn.classList.add("hidden");
                 iframeHint.classList.remove("hidden");
-                iframeHint.textContent = "⚠️ This game cannot open automatically. Copy the link instead.";
-                showNotification("✅ Link generated! Click Copy Link", "success");
+                iframeHint.textContent = "⚠️ This site cannot open in an iframe. Copy and paste the link in your browser instead.";
             }
+
+            showNotification("✅ Valid code! Link generated.", "success");
         } else {
             resultDiv.innerHTML = "❌ Invalid code. Try again.";
             showNotification("❌ Invalid code. Please try again.", "error");
-            actionBtn.classList.add("hidden");
+            openPageBtn.classList.add("hidden");
             iframeHint.classList.add("hidden");
         }
     } catch (error) {
@@ -50,6 +47,32 @@ async function checkCode() {
         resultDiv.innerHTML = "⚠️ Error fetching codes. Please try again later.";
         showNotification("⚠️ Error fetching codes. Try again later.", "error");
     }
+}
+
+// Reset the UI to allow entering a new code
+function resetForNewCode() {
+    const submitBtn = document.getElementById('submitBtn');
+    const openPageBtn = document.getElementById('openPageBtn');
+    const iframeHint = document.getElementById('iframeHint');
+    const resultDiv = document.getElementById('result');
+    
+    // Reset button to original "Submit" state
+    const newBtn = submitBtn.cloneNode(true);
+    submitBtn.parentNode.replaceChild(newBtn, submitBtn);
+    newBtn.innerHTML = "Submit";
+    newBtn.style.backgroundColor = ""; // Reset to default
+    newBtn.addEventListener('click', checkCode);
+    
+    // Hide open page button and iframe hint
+    openPageBtn.classList.add("hidden");
+    iframeHint.classList.add("hidden");
+    
+    // Clear result message
+    resultDiv.innerHTML = "";
+    
+    // Reset variables
+    generatedLink = "";
+    iframeAllowed = false;
 }
 
 // Copy link to clipboard
@@ -63,7 +86,7 @@ function copyLink(link) {
 }
 
 function openPage() {
-    if (!generatedLink) return;
+    if (!generatedLink || !iframeAllowed) return;
 
     const newTab = window.open("about:blank", "_blank");
     if (!newTab) {
@@ -110,9 +133,6 @@ function openPage() {
         </html>
     `);
     newTab.document.close();
-    
-    // Clear the generated link after opening
-    generatedLink = "";
 }
 
 function showNotification(message, type) {
@@ -126,20 +146,13 @@ function showNotification(message, type) {
     }, 3000);
 }
 
-// Reset UI when user starts typing
+// Add input event listener to detect typing in the code input
 document.getElementById('codeInput').addEventListener('input', function() {
-    const resultDiv = document.getElementById('result');
-    const actionBtn = document.getElementById('actionBtn');
-    const iframeHint = document.getElementById('iframeHint');
-    
-    resultDiv.innerHTML = "";
-    actionBtn.classList.add("hidden");
-    iframeHint.classList.add("hidden");
-    generatedLink = "";
-    iframeAllowed = false;
+    resetForNewCode();
 });
 
-// Initialize
 document.getElementById('submitBtn').addEventListener('click', checkCode);
-document.getElementById('actionBtn').classList.add('hidden');
+document.getElementById('openPageBtn').addEventListener('click', openPage);
+
+document.getElementById('openPageBtn').classList.add('hidden');
 document.getElementById('iframeHint').classList.add('hidden');
