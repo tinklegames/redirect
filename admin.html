@@ -1,1157 +1,271 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <title>Admin Panel</title>
-    <style>
-        body {
-            background-color: #111;
-            color: white;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-        }
-
-        h1 {
-            color: #4CAF50;
-        }
-
-        h2 {
-            color: #FFA500;
-            margin-top: 30px;
-        }
-
-        h3 {
-            color: #4CAF50;
-            margin-top: 20px;
-            border-bottom: 1px solid #333;
-            padding-bottom: 5px;
-        }
-
-        input,
-        textarea,
-        select {
-            width: 100%;
-            padding: 8px;
-            margin: 10px 0;
-            border-radius: 6px;
-            border: none;
-            outline: none;
-            font-size: 14px;
-            background-color: #333;
-            color: white;
-        }
-
-        button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 8px 14px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #45a049;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
-        }
-
-        .revert {
-            background-color: #d9534f;
-            margin-left: 10px;
-        }
-
-        .revert:hover {
-            background-color: #c9302c;
-        }
-
-        .danger {
-            background-color: #c0392b;
-        }
-
-        .danger:hover {
-            background-color: #e74c3c;
-        }
-
-        #login-box {
-            text-align: center;
-            margin-top: 100px;
-            max-width: 400px;
-            margin-left: auto;
-            margin-right: auto;
-            background: #1a1a1a;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 30px rgba(76, 175, 80, 0.3);
-        }
-
-        #admin-content {
-            display: none;
-            max-width: 900px;
-            margin: auto;
-        }
-
-        label {
-            display: block;
-            margin-top: 20px;
-            font-weight: bold;
-        }
-
-        .group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-
-        input[type="color"] {
-            width: 60px;
-            height: 35px;
-            padding: 0;
-            border-radius: 4px;
-        }
-
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .feature-card {
-            background: #1a1a1a;
-            border-radius: 10px;
-            padding: 15px;
-            border-left: 4px solid #4CAF50;
-        }
-
-        .online-counter {
-            font-size: 18px;
-            color: #4CAF50;
-            background: #1a1a1a;
-            padding: 10px 20px;
-            border-radius: 8px;
-            display: inline-block;
-        }
-
-        .stats-box {
-            background: #1a1a1a;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 10px 0;
-        }
-
-        .warning {
-            color: #ff6b6b;
-            font-size: 12px;
-            margin-top: 5px;
-        }
-
-        select {
-            background-color: #333;
-            color: white;
-            border: 1px solid #4CAF50;
-        }
-
-        .user-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            margin: 5px 0;
-            background: #2a2a2a;
-            border-radius: 4px;
-            border-left: 3px solid #4CAF50;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .user-item:hover {
-            background: #3a3a3a;
-            transform: translateX(5px);
-        }
-
-        .user-item.selected {
-            background: #4CAF50;
-            color: black;
-        }
-
-        .banned-item {
-            padding: 10px;
-            margin: 5px 0;
-            background: #2a2a2a;
-            border-radius: 4px;
-            border-left: 3px solid #c0392b;
-        }
-
-        .device-fingerprint {
-            font-family: monospace;
-            color: #888;
-            font-size: 11px;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: bold;
-        }
-
-        .status-online {
-            background: #27ae60;
-            color: white;
-        }
-
-        .status-banned {
-            background: #c0392b;
-            color: white;
-        }
-
-        .tab-container {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-            flex-wrap: wrap;
-        }
-
-        .tab {
-            padding: 8px 16px;
-            cursor: pointer;
-            border-radius: 20px;
-            background: #2a2a2a;
-            transition: all 0.3s ease;
-        }
-
-        .tab:hover {
-            background: #3a3a3a;
-        }
-
-        .tab.active {
-            background: #4CAF50;
-            color: white;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .ban-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .stat-card {
-            background: #2a2a2a;
-            padding: 10px;
-            border-radius: 6px;
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 24px;
-            font-weight: bold;
-            color: #4CAF50;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Admin Panel</title>
+<style>
+  body { background-color: #111; color: white; font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+  h1 { color: #4CAF50; }
+  input, textarea { width: 100%; padding: 8px; margin: 10px 0; border-radius: 6px; border: none; outline: none; font-size: 14px; }
+  button { background-color: #4CAF50; color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 14px; }
+  button:hover { background-color: #45a049; }
+  .revert { background-color: #d9534f; margin-left: 10px; }
+  .revert:hover { background-color: #c9302c; }
+  #login-box { text-align: center; margin-top: 100px; }
+  #admin-content { display: none; max-width: 600px; margin: auto; }
+  label { display: block; margin-top: 20px; font-weight: bold; }
+  .group { display: flex; align-items: center; gap: 10px; }
+  input[type="color"] { width: 60px; height: 35px; padding: 0; border-radius: 4px; }
+</style>
 </head>
-
 <body>
 
-    <div id="login-box">
-        <h2>🔒 Admin Login</h2>
-        <input type="email" id="admin-email" placeholder="Enter email..." />
-        <input type="password" id="admin-pass" placeholder="Enter password..." />
-        <button id="login-btn">Login</button>
+<div id="login-box">
+  <h2>🔒 Admin Login</h2>
+  <input type="email" id="admin-email" placeholder="Enter email..." />
+  <input type="password" id="admin-pass" placeholder="Enter password..." />
+  <button id="login-btn">Login</button>
+</div>
+
+<div id="admin-content">
+  <h1>🛠️ Live Site Controls</h1>
+
+  <label>🎨 Background Color:</label>
+  <div class="group">
+    <input type="color" id="bgColor">
+    <button class="revert" id="revert-bg">Revert</button>
+  </div>
+
+  <label>🧾 Announcement (HTML supported):</label>
+  <div class="group" style="flex-direction: column; align-items: flex-start;">
+    <textarea id="announcement" rows="3" placeholder="Enter announcement..."></textarea>
+    <div>
+      <button id="trigger-announcement">📢 Trigger Announcement</button>
+      <button class="revert" id="revert-ann">Revert</button>
     </div>
-
-    <div id="admin-content">
-        <h1>🛠️ Live Site Controls</h1>
-
-        <!-- Tabs Navigation -->
-        <div class="tab-container">
-            <div class="tab active" data-tab="basic">🎨 Basic</div>
-            <div class="tab" data-tab="site">🌐 Site</div>
-            <div class="tab" data-tab="pranks">🎯 Pranks</div>
-            <div class="tab" data-tab="audio">🎵 Audio</div>
-            <div class="tab" data-tab="ban">🔨 Banning</div>
-        </div>
-
-        <!-- Basic Controls Tab -->
-        <div class="tab-content active" id="tab-basic">
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>🎨 Appearance</h3>
-                    <label>Background Color:</label>
-                    <div class="group">
-                        <input type="color" id="bgColor">
-                        <button class="revert" id="revert-bg">Revert</button>
-                    </div>
-
-                    <label>🧾 Announcement:</label>
-                    <div class="group" style="flex-direction: column; align-items: flex-start;">
-                        <textarea id="announcement" rows="3" placeholder="Enter announcement..."></textarea>
-                        <div>
-                            <button id="trigger-announcement">📢 Trigger</button>
-                            <button class="revert" id="revert-ann">Clear</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="feature-card">
-                    <h3>😱 Jumpscare</h3>
-                    <label>Jumpscare Image URL:</label>
-                    <div class="group">
-                        <input type="text" id="jumpscareImage" placeholder="https://...">
-                        <button class="revert" id="revert-jumpimg">Revert</button>
-                    </div>
-                    <div class="group">
-                        <button id="trigger-jumpscare">⚡ Trigger Now</button>
-                    </div>
-                </div>
-
-                <div class="feature-card">
-                    <h3>📊 Stats</h3>
-                    <div class="stats-box">
-                        <div class="online-counter" id="online-now">👥 Loading users...</div>
-                    </div>
-                    <div class="group">
-                        <button id="export-users">📤 Export Data</button>
-                        <button id="reset-clickData">🗑️ Reset Popular</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Site Controls Tab -->
-        <div class="tab-content" id="tab-site">
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>🔧 Maintenance</h3>
-                    <div class="group">
-                        <button id="maintenance-mode">🔧 Enable Maintenance</button>
-                        <button id="disable-maintenance" class="revert">Disable</button>
-                    </div>
-                    <label>Maintenance Message:</label>
-                    <input type="text" id="maintenance-message" placeholder="Site under maintenance..." value="🚧 Site under maintenance. Please check back soon!">
-                </div>
-
-                <div class="feature-card">
-                    <h3>🔄 Force Update</h3>
-                    <div class="group">
-                        <button id="force-update">🔄 Force Update (Requires Refresh)</button>
-                    </div>
-                    <label>Update Message:</label>
-                    <input type="text" id="update-message" placeholder="Update message..." value="New updates available! Please refresh to get the latest features.">
-                    <p class="warning">Users will be forced to refresh their browser</p>
-                </div>
-
-                <div class="feature-card">
-                    <h3>🎮 Game Controls</h3>
-                    <div class="group">
-                        <button id="cursor-chaos">🌀 Cursor Chaos</button>
-                    </div>
-                    <div class="group">
-                        <button id="flashbang">💥 Flashbang</button>
-                        <button id="reverse-controls">🔄 Reverse Controls</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Pranks Tab -->
-        <div class="tab-content" id="tab-pranks">
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>🎵 Rickroll</h3>
-                    <div class="group">
-                        <button id="rickroll-all">🎵 Rickroll Everyone</button>
-                        <button id="stop-rickroll" class="revert">Stop</button>
-                    </div>
-                </div>
-
-                <div class="feature-card">
-                    <h3>📳 Screen Effects</h3>
-                    <div class="group">
-                        <button id="screen-shake">📳 Screen Shake</button>
-                        <select id="shake-intensity" style="width: auto;">
-                            <option value="5">Mild</option>
-                            <option value="10" selected>Medium</option>
-                            <option value="20">Intense</option>
-                            <option value="40">Earthquake</option>
-                        </select>
-                    </div>
-
-                    <div class="group">
-                        <button id="invert-colors">🌈 Invert Colors</button>
-                        <button id="normal-colors" class="revert">Revert</button>
-                    </div>
-
-                    <div class="group">
-                        <button id="rotate-screen">🔄 Rotate Screen</button>
-                        <select id="rotate-angle" style="width: auto;">
-                            <option value="180">180°</option>
-                            <option value="90">90°</option>
-                            <option value="270">270°</option>
-                            <option value="5">5° (annoying)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="feature-card">
-                    <h3>🐢 Performance</h3>
-                    <div class="group">
-                        <button id="slow-mode">🐢 Slow Mode (3s)</button>
-                        <button id="disable-slow" class="revert">Disable</button>
-                    </div>
-
-                    <div class="group">
-                        <button id="fake-virus">💀 Fake Virus Alert</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Audio Tab -->
-        <div class="tab-content" id="tab-audio">
-            <div class="feature-card">
-                <h3>🎵 Audio Controls</h3>
-                <div class="group" style="flex-direction: column; align-items: flex-start;">
-                    <button id="choose-sound">🎵 Play Sound</button>
-                    <button id="stop-sound">⏹️ Stop Audio</button>
-                    <div id="sound-menu" style="display:none; background:#222; padding:10px; border-radius:8px; margin-top:10px; max-height:200px; overflow:auto;"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Banning Tab -->
-        <div class="tab-content" id="tab-ban">
-            <div class="feature-card" style="border-left-color: #c0392b;">
-                <h3 style="color: #ff6b6b;">🔨 Device Banning System</h3>
-                <p class="warning">Ban devices by fingerprint - users cannot bypass this easily!</p>
-
-                <!-- Ban Stats -->
-                <div class="ban-stats">
-                    <div class="stat-card">
-                        <div class="stat-number" id="online-count">0</div>
-                        <div>Online Now</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="banned-count">0</div>
-                        <div>Banned Devices</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="total-visits">0</div>
-                        <div>Total Visits</div>
-                    </div>
-                </div>
-
-                <!-- Active Users List -->
-                <details open>
-                    <summary style="cursor: pointer; color: #4CAF50; margin-bottom: 10px;">👥 Online Users (click to ban)</summary>
-                    <div id="active-users-list" style="max-height: 300px; overflow-y: auto; margin-bottom: 10px; background: #222; padding: 10px; border-radius: 6px;"></div>
-                </details>
-
-                <!-- Selected User Info -->
-                <div id="selected-user-info" style="background: #333; padding: 12px; border-radius: 6px; margin-bottom: 15px; border-left: 3px solid #4CAF50;">
-                    <strong>No user selected</strong><br>
-                    <span style="font-size: 12px; color: #888;">Click on a user above to ban them</span>
-                </div>
-
-                <!-- Ban Controls -->
-                <div style="margin-bottom: 20px;">
-                    <label>Ban Reason:</label>
-                    <input type="text" id="ban-reason" placeholder="Reason for ban..." value="Violated terms of service">
-                    <input type="hidden" id="ban-user-id">
-                    <div style="display: flex; gap: 10px; margin-top: 10px;">
-                        <button id="ban-current" class="danger" style="flex: 2;">🔨 PERMANENTLY BAN SELECTED DEVICE</button>
-                        <button id="refresh-users" style="flex: 1;">🔄 Refresh</button>
-                    </div>
-                </div>
-
-                <!-- Banned Devices List -->
-                <details>
-                    <summary style="cursor: pointer; color: #ff6b6b; margin-bottom: 10px;">📋 Permanently Banned Devices</summary>
-                    <div id="banned-devices-list" style="max-height: 300px; overflow-y: auto; background: #222; padding: 10px; border-radius: 6px;"></div>
-                </details>
-
-                <!-- Quick Ban by Fingerprint -->
-                <details style="margin-top: 15px;">
-                    <summary style="cursor: pointer; color: #888; margin-bottom: 10px;">🔍 Quick Ban by Fingerprint</summary>
-                    <div style="display: flex; gap: 10px; margin-top: 10px;">
-                        <input type="text" id="quick-ban-fingerprint" placeholder="Enter device fingerprint..." style="flex: 2; font-family: monospace;">
-                        <button id="quick-ban-btn" style="background: #c0392b;">Permanently Ban</button>
-                    </div>
-                </details>
-
-                <!-- Unban Controls -->
-                <details style="margin-top: 15px;">
-                    <summary style="cursor: pointer; color: #27ae60; margin-bottom: 10px;">🔓 Unban Device</summary>
-                    <div style="display: flex; gap: 10px; margin-top: 10px;">
-                        <input type="text" id="unban-fingerprint" placeholder="Enter device fingerprint to unban..." style="flex: 2; font-family: monospace;">
-                        <button id="unban-btn" style="background: #27ae60;">Unban</button>
-                    </div>
-                </details>
-            </div>
-        </div>
-
-        <hr style="margin: 30px 0; border: 1px solid #333;">
-
-        <div class="group" style="justify-content: flex-end;">
-            <button id="save">💾 Save All Settings</button>
-        </div>
-    </div>
-
-    <!-- Firebase v9 compat build -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyC-IDS2wfF3ZgVzjwf0cHUazNGolLFhXVQ",
-            authDomain: "mostpopular-39c60.firebaseapp.com",
-            databaseURL: "https://mostpopular-39c60-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "mostpopular-39c60",
-            storageBucket: "mostpopular-39c60.appspot.com",
-            messagingSenderId: "939775132675",
-            appId: "1:939775132675:web:7d40bd8fff497c53553a36",
-            measurementId: "G-XTTQ03YFN9"
-        };
-
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-        const auth = firebase.auth();
-
-        const settingsRef = db.ref("siteSettings");
-        const trollRef = db.ref("trollTriggers");
-        const usersRef = db.ref("connectedUsers");
-        const bannedRef = db.ref("bannedDevices");
-
-        // ---------------- LOGIN ----------------
-        window.onload = () => {
-            const loginBtn = document.getElementById("login-btn");
-            const emailInput = document.getElementById("admin-email");
-            const passInput = document.getElementById("admin-pass");
-            const loginBox = document.getElementById("login-box");
-            const adminContent = document.getElementById("admin-content");
-
-            loginBtn.onclick = async () => {
-                const email = emailInput.value.trim();
-                const password = passInput.value.trim();
-                if (!email || !password) return alert("❌ Enter email and password!");
-
-                try {
-                    await auth.signInWithEmailAndPassword(email, password);
-                    loginBox.style.display = "none";
-                    adminContent.style.display = "block";
-
-                    loadSettings();
-                    watchUserCount();
-                    loadActiveUsers();
-                    loadBannedDevices();
-                    startAutoRefresh();
-                    setupTabs();
-
-                    alert("✅ Login successful!");
-                } catch (err) {
-                    console.error(err);
-                    alert("❌ Login failed: " + err.message);
-                }
-            };
-        };
-
-        // ---------------- TAB SETUP ----------------
-        function setupTabs() {
-            const tabs = document.querySelectorAll('.tab');
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    tabs.forEach(t => t.classList.remove('active'));
-                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                    tab.classList.add('active');
-                    document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
-                });
-            });
-        }
-
-        // ---------------- AUTO REFRESH ----------------
-        function startAutoRefresh() {
-            setInterval(() => {
-                watchUserCount();
-                loadActiveUsers();
-                loadBannedDevices();
-            }, 3000);
-        }
-
-        // ---------------- LOAD SETTINGS ----------------
-        function loadSettings() {
-            settingsRef.once("value").then(snapshot => {
-                const s = snapshot.val() || {
-                    backgroundColor: "#0a0a0a",
-                    announcement: "",
-                    jumpscareImage: ""
-                };
-                document.getElementById("bgColor").value = s.backgroundColor;
-                document.getElementById("announcement").value = s.announcement;
-                document.getElementById("jumpscareImage").value = s.jumpscareImage;
-            });
-        }
-
-        // ---------------- WATCH USERS ----------------
-        function watchUserCount() {
-            usersRef.once("value").then(snap => {
-                const count = snap.numChildren();
-                document.getElementById("online-now").textContent = `👥 ${count} users online now`;
-                document.getElementById("online-count").textContent = count;
-            });
-        }
-
-        // ---------------- LOAD ACTIVE USERS ----------------
-        async function loadActiveUsers() {
-            const snapshot = await usersRef.once("value");
-            const users = snapshot.val() || {};
-
-            const listElement = document.getElementById("active-users-list");
-            if (!listElement) return;
-
-            listElement.innerHTML = "";
-            document.getElementById("total-visits").textContent = Object.keys(users).length;
-
-            Object.entries(users).forEach(([userId, data]) => {
-                if (typeof data === 'object' && !data.banned) {
-                    const div = document.createElement("div");
-                    div.className = "user-item";
-                    div.setAttribute('data-userid', userId);
-
-                    const fingerprint = data.deviceId || userId;
-                    const shortFingerprint = fingerprint.substring(0, 12) + '...';
-                    const deviceInfo = data.userAgent ? data.userAgent.substring(0, 30) + '...' : 'Unknown';
-
-                    div.innerHTML = `
-        <div style="flex: 1;">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <span class="status-badge status-online">● Online</span>
-            <strong style="font-family: monospace;">${shortFingerprint}</strong>
-          </div>
-          <div class="device-fingerprint">${deviceInfo}</div>
-          <div style="font-size: 10px; color: #666;">${data.screenSize || 'Unknown'} | ${data.language || 'Unknown'}</div>
-        </div>
-        <div style="font-size: 11px; color: #888;">
-          ${new Date(data.joinedAt).toLocaleTimeString()}
-        </div>
-      `;
-
-                    div.onclick = () => selectUserForBan(userId, data);
-                    listElement.appendChild(div);
-                }
-            });
-        }
-
-        let selectedUserId = null;
-
-        function selectUserForBan(userId, data) {
-            selectedUserId = userId;
-            document.getElementById("ban-user-id").value = userId;
-
-            const fingerprint = data.deviceId || userId;
-
-            document.getElementById("selected-user-info").innerHTML = `
-    <strong>Selected Device:</strong> 
-    <span style="font-family: monospace; color: #4CAF50;">${fingerprint}</span><br>
-    <span style="font-size: 12px;">Device: ${data.userAgent ? data.userAgent.substring(0, 50) : 'Unknown'}</span><br>
-    <span style="font-size: 11px; color: #888;">Screen: ${data.screenSize || 'Unknown'} | Language: ${data.language || 'Unknown'}</span>
-  `;
-
-            document.querySelectorAll('.user-item').forEach(item => {
-                item.classList.remove('selected');
-                if (item.dataset.userid === userId) item.classList.add('selected');
-            });
-        }
-
-        // ---------------- LOAD BANNED DEVICES ----------------
-        async function loadBannedDevices() {
-            const snapshot = await bannedRef.once("value");
-            const bans = snapshot.val() || {};
-
-            const listElement = document.getElementById("banned-devices-list");
-            if (!listElement) return;
-
-            const bannedCount = Object.keys(bans).length;
-            document.getElementById("banned-count").textContent = bannedCount;
-
-            listElement.innerHTML = "";
-
-            if (bannedCount === 0) {
-                listElement.innerHTML = '<div style="color: #888; text-align: center; padding: 20px;">No permanently banned devices</div>';
-                return;
-            }
-
-            Object.entries(bans).forEach(([key, data]) => {
-                const div = document.createElement("div");
-                div.className = "banned-item";
-
-                const date = new Date(data.bannedAt).toLocaleString();
-                const shortFingerprint = key.substring(0, 16) + '...';
-
-                div.innerHTML = `
-      <div style="display: flex; justify-content: space-between; align-items: start;">
-        <div style="flex: 1;">
-          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
-            <span class="status-badge status-banned">🚫 PERMANENT</span>
-            <strong style="font-family: monospace; color: #ff6b6b;">${shortFingerprint}</strong>
-          </div>
-          <div style="font-size: 12px; margin-bottom: 3px;">
-            <strong>Reason:</strong> ${data.reason || 'No reason'}
-          </div>
-          <div style="font-size: 11px; color: #888;">
-            Banned: ${date} by ${data.bannedBy || 'Admin'}
-          </div>
-        </div>
-        <button onclick="unbanDevice('${key}')" style="background: #27ae60; padding: 4px 8px; font-size: 12px;">Unban</button>
-      </div>
-    `;
-
-                listElement.appendChild(div);
-            });
-        }
-
-        // ---------------- UNBAN DEVICE (COMPLETE FIX) ----------------
-        document.getElementById("unban-btn").onclick = async () => {
-            const fingerprint = document.getElementById("unban-fingerprint").value.trim();
-            if (!fingerprint) return alert("❌ Enter a device fingerprint!");
-
-            if (!confirm(`🔓 Unban device ${fingerprint.substring(0, 8)}...? They will be able to access the site again.`)) return;
-
-            try {
-                // Remove from Firebase banned list
-                await bannedRef.child(fingerprint).remove();
-
-                // Also remove any variations
-                await bannedRef.child(fingerprint + '_perm').remove();
-
-                // Find and notify any online users with this fingerprint
-                const usersSnapshot = await usersRef.once("value");
-                const users = usersSnapshot.val() || {};
-                let unbannedCount = 0;
-
-                const updatePromises = Object.entries(users).map(async ([userId, userData]) => {
-                    if (userData.deviceId === fingerprint || userId === fingerprint || userId === fingerprint + '_perm') {
-                        // Send unban signal to their session
-                        await usersRef.child(userId).update({
-                            unbanned: true,
-                            unbannedAt: Date.now()
-                        });
-                        unbannedCount++;
-                    }
-                });
-
-                await Promise.all(updatePromises);
-
-                alert(`✅ Device ${fingerprint.substring(0, 8)}... unbanned! ${unbannedCount > 0 ? `${unbannedCount} online user(s) notified.` : ''}`);
-
-                // Clear input and refresh lists
-                document.getElementById("unban-fingerprint").value = "";
-                loadBannedDevices();
-                loadActiveUsers();
-
-            } catch (err) {
-                console.error("Unban error:", err);
-                alert("❌ Unban failed: " + err.message);
-            }
-        };
-
-        // Global unban function for inline buttons
-        window.unbanDevice = async (fingerprint) => {
-            if (!confirm(`🔓 Unban device ${fingerprint.substring(0, 8)}...?`)) return;
-
-            try {
-                await bannedRef.child(fingerprint).remove();
-                await bannedRef.child(fingerprint + '_perm').remove();
-
-                // Notify online users
-                const usersSnapshot = await usersRef.once("value");
-                const users = usersSnapshot.val() || {};
-
-                Object.entries(users).forEach(([userId, userData]) => {
-                    if (userData.deviceId === fingerprint || userId === fingerprint) {
-                        usersRef.child(userId).update({
-                            unbanned: true
-                        });
-                    }
-                });
-
-                alert("✅ Device unbanned!");
-                loadBannedDevices();
-                loadActiveUsers();
-            } catch (err) {
-                console.error("Unban error:", err);
-                alert("❌ Unban failed: " + err.message);
-            }
-        };
-
-        // ---------------- QUICK BAN BY FINGERPRINT ----------------
-        document.getElementById("quick-ban-btn").onclick = async () => {
-            const fingerprint = document.getElementById("quick-ban-fingerprint").value.trim();
-            if (!fingerprint) return alert("❌ Enter a device fingerprint!");
-
-            const reason = document.getElementById("ban-reason").value.trim() || "Banned by admin";
-
-            if (!confirm(`⚠️ Permanently ban device ${fingerprint.substring(0, 8)}...?`)) return;
-
-            await bannedRef.child(fingerprint).set({
-                deviceId: fingerprint,
-                bannedAt: Date.now(),
-                bannedBy: auth.currentUser?.email || 'admin',
-                reason: reason,
-                permanent: true
-            });
-
-            alert(`🔨 Device ${fingerprint.substring(0, 8)}... permanently banned!`);
-            document.getElementById("quick-ban-fingerprint").value = "";
-            loadBannedDevices();
-        };
-
-        // ---------------- UNBAN DEVICE (with cleanup) ----------------
-        document.getElementById("unban-btn").onclick = async () => {
-            const fingerprint = document.getElementById("unban-fingerprint").value.trim();
-            if (!fingerprint) return alert("❌ Enter a device fingerprint!");
-
-            if (!confirm(`Unban device ${fingerprint.substring(0, 8)}...? This will allow them to access the site again.`)) return;
-
-            try {
-                // Remove from Firebase banned list
-                await bannedRef.child(fingerprint).remove();
-
-                // Also try to kick any currently online users with this fingerprint
-                const usersSnapshot = await usersRef.once("value");
-                const users = usersSnapshot.val() || {};
-
-                Object.entries(users).forEach(([userId, userData]) => {
-                    if (userData.deviceId === fingerprint || userId === fingerprint) {
-                        // Send unban signal to their session
-                        usersRef.child(userId).update({
-                            unbanned: true,
-                            unbannedAt: Date.now()
-                        });
-                    }
-                });
-
-                alert(`✅ Device ${fingerprint.substring(0, 8)}... unbanned! They can now access the site again.`);
-                document.getElementById("unban-fingerprint").value = "";
-                loadBannedDevices();
-            } catch (err) {
-                alert("❌ Unban failed: " + err.message);
-            }
-        };
-
-        // Make unban function global for inline buttons
-        window.unbanDevice = async (fingerprint) => {
-            if (!confirm(`Unban device ${fingerprint.substring(0, 8)}...?`)) return;
-
-            try {
-                await bannedRef.child(fingerprint).remove();
-
-                // Also try to kick any currently online users with this fingerprint
-                const usersSnapshot = await usersRef.once("value");
-                const users = usersSnapshot.val() || {};
-
-                Object.entries(users).forEach(([userId, userData]) => {
-                    if (userData.deviceId === fingerprint || userId === fingerprint) {
-                        usersRef.child(userId).update({
-                            unbanned: true
-                        });
-                    }
-                });
-
-                alert("✅ Device unbanned!");
-                loadBannedDevices();
-            } catch (err) {
-                alert("❌ Unban failed: " + err.message);
-            }
-        };
-
-        // ---------------- REFRESH USERS ----------------
-        document.getElementById("refresh-users").onclick = () => {
-            loadActiveUsers();
-            loadBannedDevices();
-            watchUserCount();
-            alert("🔄 Refreshed!");
-        };
-
-        // ---------------- SAFE WRITE ----------------
-        async function safeWrite(ref, data) {
-            const user = auth.currentUser;
-            if (!user) return alert("❌ You must be logged in!");
-            await ref.set(data);
-        }
-
-        // ---------------- SAVE SETTINGS ----------------
-        document.getElementById("save").onclick = async () => {
-            const settings = {
-                backgroundColor: document.getElementById("bgColor").value,
-                announcement: document.getElementById("announcement").value,
-                jumpscareImage: document.getElementById("jumpscareImage").value
-            };
-            try {
-                await safeWrite(settingsRef, settings);
-                alert("✅ Changes saved!");
-            } catch (err) {
-                console.error(err);
-                alert("❌ Save failed!");
-            }
-        };
-
-        // ---------------- ANNOUNCEMENT ----------------
-        document.getElementById("trigger-announcement").onclick = async () => {
-            const text = document.getElementById("announcement").value.trim();
-            if (!text) return alert("❌ No announcement!");
-            await safeWrite(db.ref("announcementTriggerNow"), {
-                text,
-                timestamp: Date.now()
-            });
-            alert("📢 Announcement triggered!");
-        };
-
-        document.getElementById("revert-ann").onclick = () => {
-            document.getElementById("announcement").value = "";
-        };
-
-        // ---------------- JUMPSCARE ----------------
-        document.getElementById("trigger-jumpscare").onclick = async () => {
-            const image = document.getElementById("jumpscareImage").value.trim();
-            if (!image) return alert("❌ Enter jumpscare image URL!");
-            await safeWrite(db.ref("jumpscareTriggerNow"), {
-                image,
-                timestamp: Date.now()
-            });
-            alert("😱 Jumpscare triggered!");
-        };
-
-        document.getElementById("revert-bg").onclick = () => document.getElementById("bgColor").value = "#0a0a0a";
-        document.getElementById("revert-jumpimg").onclick = () => document.getElementById("jumpscareImage").value = "";
-
-        // ---------------- RESET CLICK DATA ----------------
-        document.getElementById("reset-clickData").onclick = async () => {
-            if (!confirm("⚠️ Reset all Most Popular Games data?")) return;
-            await safeWrite(db.ref("clickData"), null);
-            alert("✅ Data reset!");
-        };
-
-        // ---------------- EXPORT USER DATA ----------------
-        document.getElementById("export-users").onclick = async () => {
-            const user = auth.currentUser;
-            if (!user) return alert("❌ You must be logged in!");
-
-            try {
-                const [connectedSnapshot, bannedSnapshot] = await Promise.all([
-                    usersRef.once("value"),
-                    bannedRef.once("value")
-                ]);
-
-                const connected = connectedSnapshot.val() || {};
-                const banned = bannedSnapshot.val() || {};
-
-                const data = {
-                    exportedAt: new Date().toISOString(),
-                    exportedBy: user.email,
-                    statistics: {
-                        onlineUsers: Object.keys(connected).length,
-                        bannedDevices: Object.keys(banned).length
-                    },
-                    onlineUsers: connected,
-                    bannedDevices: banned
-                };
-
-                const blob = new Blob([JSON.stringify(data, null, 2)], {
-                    type: 'application/json'
-                });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `user-data-${Date.now()}.json`;
-                a.click();
-
-                alert(`📤 Exported data for ${Object.keys(connected).length} online users, ${Object.keys(banned).length} banned devices`);
-            } catch (err) {
-                alert("❌ Export failed: " + err.message);
-            }
-        };
-
-        // ---------------- TROLL FUNCTIONS ----------------
-        async function triggerTroll(refName) {
-            const user = auth.currentUser;
-            if (!user) return alert("❌ You must be logged in!");
-            await trollRef.child(refName).set({
-                active: true,
-                timestamp: Date.now()
-            });
-            alert(`✅ ${refName} triggered!`);
-        }
-
-        document.getElementById("cursor-chaos").onclick = () => triggerTroll("cursorChaos");
-        document.getElementById("flashbang").onclick = () => triggerTroll("flashbang");
-        document.getElementById("reverse-controls").onclick = () => triggerTroll("reverseControls");
-
-        // ---------------- MAINTENANCE MODE ----------------
-        document.getElementById("maintenance-mode").onclick = async () => {
-            const message = document.getElementById("maintenance-message").value.trim() || "Site under maintenance";
-            await trollRef.child("maintenance").set({
-                active: true,
-                message,
-                timestamp: Date.now()
-            });
-            alert("🔧 Maintenance mode enabled!");
-        };
-
-        document.getElementById("disable-maintenance").onclick = async () => {
-            await trollRef.child("maintenance").set(null);
-            alert("✅ Maintenance mode disabled!");
-        };
-
-        // ---------------- FORCE UPDATE ----------------
-        document.getElementById("force-update").onclick = async () => {
-            const user = auth.currentUser;
-            if (!user) return alert("❌ You must be logged in!");
-
-            const message = document.getElementById("update-message").value.trim() || "New update available!";
-            const updateId = Date.now().toString();
-
-            await trollRef.child("forceUpdate").set({
-                active: true,
-                timestamp: Date.now(),
-                updateId: updateId,
-                message: message
-            });
-
-            alert(`✅ Force update triggered! Users will need to refresh.`);
-        };
-
-        // ---------------- RICKROLL ----------------
-        document.getElementById("rickroll-all").onclick = async () => {
-            await trollRef.child("rickroll").set({
-                active: true,
-                timestamp: Date.now()
-            });
-            alert("🎵 Rickrolling everyone!");
-        };
-
-        document.getElementById("stop-rickroll").onclick = async () => {
-            await trollRef.child("rickroll").set(null);
-            alert("⏹️ Rickroll stopped!");
-        };
-
-        // ---------------- SCREEN SHAKE ----------------
-        document.getElementById("screen-shake").onclick = async () => {
-            const intensity = document.getElementById("shake-intensity").value;
-            await trollRef.child("screenShake").set({
-                active: true,
-                intensity: parseInt(intensity),
-                duration: 3000,
-                timestamp: Date.now()
-            });
-            alert(`📳 Screen shake triggered (intensity: ${intensity})!`);
-        };
-
-        // ---------------- INVERT COLORS ----------------
-        document.getElementById("invert-colors").onclick = async () => {
-            await trollRef.child("invertColors").set({
-                active: true,
-                timestamp: Date.now()
-            });
-            alert("🌈 Colors inverted!");
-        };
-
-        document.getElementById("normal-colors").onclick = async () => {
-            await trollRef.child("invertColors").set(null);
-            alert("✅ Colors restored!");
-        };
-
-        // ---------------- SLOW MODE ----------------
-        document.getElementById("slow-mode").onclick = async () => {
-            await trollRef.child("slowMode").set({
-                active: true,
-                delay: 3000,
-                timestamp: Date.now()
-            });
-            alert("🐢 Slow mode enabled (3s delay)!");
-        };
-
-        document.getElementById("disable-slow").onclick = async () => {
-            await trollRef.child("slowMode").set(null);
-            alert("✅ Slow mode disabled!");
-        };
-
-        // ---------------- FAKE VIRUS ----------------
-        document.getElementById("fake-virus").onclick = async () => {
-            await trollRef.child("fakeVirus").set({
-                active: true,
-                message: "⚠️ CRITICAL SYSTEM ERROR",
-                timestamp: Date.now()
-            });
-            setTimeout(async () => await trollRef.child("fakeVirus").set(null), 10000);
-            alert("💀 Fake virus alert triggered!");
-        };
-
-        // ---------------- ROTATE SCREEN ----------------
-        document.getElementById("rotate-screen").onclick = async () => {
-            const angle = document.getElementById("rotate-angle").value;
-            await trollRef.child("rotateScreen").set({
-                active: true,
-                angle: parseInt(angle),
-                timestamp: Date.now()
-            });
-            alert(`🔄 Screen rotated ${angle}°!`);
-        };
-
-        // ---------------- SOUND CONTROL ----------------
-        const soundMenu = document.getElementById("sound-menu");
-        const soundFiles = [
-            "clashintro.mp3", "rainingtacos.mp3", "brainrot.mp3", "wideputin.mp3",
-            "crabrave.mp3", "sodapop.mp3", "galaxy.mp3", "67.mp3", "smokedetector.mp3"
-        ];
-
-        document.getElementById("choose-sound").onclick = () => {
-            const user = auth.currentUser;
-            if (!user) return alert("❌ You must be logged in!");
-
-            soundMenu.innerHTML = "";
-            soundFiles.forEach(file => {
-                const btn = document.createElement("button");
-                btn.textContent = "▶️ " + file;
-                btn.style.display = "block";
-                btn.style.margin = "5px 0";
-                btn.onclick = async () => {
-                    await trollRef.child("creepySound").set({
-                        url: file,
-                        timestamp: Date.now()
-                    });
-                    alert(`🔊 ${file} triggered!`);
-                };
-                soundMenu.appendChild(btn);
-            });
-            soundMenu.style.display = soundMenu.style.display === "none" ? "block" : "none";
-        };
-
-        document.getElementById("stop-sound").onclick = async () => {
-            const user = auth.currentUser;
-            if (!user) return alert("❌ You must be logged in!");
-            await trollRef.child("creepySound").set(null);
-            alert("⏹️ Audio stopped!");
-        };
-    </script>
+  </div>
+
+  <label>😱 Jumpscare Image URL:</label>
+  <div class="group">
+    <input type="text" id="jumpscareImage" placeholder="https://...">
+    <button class="revert" id="revert-jumpimg">Revert</button>
+  </div>
+
+  <label>🕹️ Trigger Jumpscare Manually:</label>
+  <div class="group">
+    <button id="trigger-jumpscare">⚡ Trigger Now</button>
+  </div>
+  
+  <div class="group">
+    <button id="reset-clickData">🗑️ Reset Most Popular Games</button>
+  </div>
+  
+  <hr style="margin: 30px 0; border: 1px solid #333;">
+
+  <h2>💀 Troll Controls</h2>
+
+  <div class="group">
+    <button id="cursor-chaos">🌀 Cursor Chaos</button>
+  </div>
+  
+  <div class="group" style="flex-direction: column; align-items: flex-start;">
+    <button id="choose-sound">🎵 Play Sound</button>
+    <button id="stop-sound">⏹️ Stop Audio</button>
+    <div id="sound-menu" style="display:none; background:#222; padding:10px; border-radius:8px; margin-top:10px; max-height:200px; overflow:auto;"></div>
+  </div>
+
+  <div class="group">
+    <button id="flashbang">💥 Flashbang Mode</button>
+    <button id="reverse-controls">🔄 Reverse Controls</button>
+  </div>
+  
+  <label>👥 Live User Counter:</label>
+  <div class="group">
+    <span id="user-count">Loading...</span>
+  </div>
+
+  <br>
+  <button id="save">💾 Save Changes</button>
+</div>
+
+<!-- Firebase v9 compat build -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyC-IDS2wfF3ZgVzjwf0cHUazNGolLFhXVQ",
+  authDomain: "mostpopular-39c60.firebaseapp.com",
+  databaseURL: "https://mostpopular-39c60-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "mostpopular-39c60",
+  storageBucket: "mostpopular-39c60.appspot.com",
+  messagingSenderId: "939775132675",
+  appId: "1:939775132675:web:7d40bd8fff497c53553a36",
+  measurementId: "G-XTTQ03YFN9"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const auth = firebase.auth();
+
+const settingsRef = db.ref("siteSettings");
+const trollRef = db.ref("trollTriggers");
+const usersRef = db.ref("connectedUsers");
+
+// ---------------- LOGIN ----------------
+window.onload = () => {
+  const loginBtn = document.getElementById("login-btn");
+  const emailInput = document.getElementById("admin-email");
+  const passInput = document.getElementById("admin-pass");
+  const loginBox = document.getElementById("login-box");
+  const adminContent = document.getElementById("admin-content");
+
+  loginBtn.onclick = async () => {
+    const email = emailInput.value.trim();
+    const password = passInput.value.trim();
+    if (!email || !password) return alert("❌ Enter email and password!");
+
+    try {
+      await auth.signInWithEmailAndPassword(email, password);
+      loginBox.style.display = "none";
+      adminContent.style.display = "block";
+
+      loadSettings();
+      watchUserCount();
+      alert("✅ Login successful!");
+    } catch (err) {
+      console.error(err);
+      alert("❌ Login failed: " + err.message);
+    }
+  };
+};
+
+// ---------------- LOAD SETTINGS ----------------
+function loadSettings() {
+  settingsRef.once("value").then(snapshot => {
+    const s = snapshot.val() || { backgroundColor: "#0a0a0a", announcement: "", jumpscareImage: "" };
+    document.getElementById("bgColor").value = s.backgroundColor;
+    document.getElementById("announcement").value = s.announcement;
+    document.getElementById("jumpscareImage").value = s.jumpscareImage;
+  });
+}
+
+// ---------------- WATCH USERS ----------------
+function watchUserCount() {
+  usersRef.on("value", snap => {
+    document.getElementById("user-count").textContent = snap.numChildren() + " online";
+  });
+}
+
+// ---------------- SAFE WRITE ----------------
+async function safeWrite(ref, data) {
+  const user = auth.currentUser;
+  if (!user) return alert("❌ You must be logged in!");
+  await ref.set(data);
+}
+
+// ---------------- SAVE SETTINGS ----------------
+document.getElementById("save").onclick = async () => {
+  const settings = {
+    backgroundColor: document.getElementById("bgColor").value,
+    announcement: document.getElementById("announcement").value,
+    jumpscareImage: document.getElementById("jumpscareImage").value
+  };
+  try {
+    await safeWrite(settingsRef, settings);
+    alert("✅ Changes saved!");
+  } catch (err) {
+    console.error(err);
+    alert("❌ Save failed!");
+  }
+};
+
+// ---------------- ANNOUNCEMENT ----------------
+document.getElementById("trigger-announcement").onclick = async () => {
+  const text = document.getElementById("announcement").value.trim();
+  if (!text) return alert("❌ No announcement!");
+  await safeWrite(db.ref("announcementTriggerNow"), { text, timestamp: Date.now() });
+  alert("📢 Announcement triggered!");
+};
+
+// ---------------- JUMPSCARE ----------------
+document.getElementById("trigger-jumpscare").onclick = async () => {
+  const image = document.getElementById("jumpscareImage").value.trim();
+  if (!image) return alert("❌ Enter jumpscare image URL!");
+  await safeWrite(db.ref("jumpscareTriggerNow"), { image, timestamp: Date.now() });
+  alert("😱 Jumpscare triggered!");
+};
+
+// ---------------- RESET CLICK DATA ----------------
+document.getElementById("reset-clickData").onclick = async () => {
+  if (!confirm("⚠️ Reset all Most Popular Games data?")) return;
+  await safeWrite(db.ref("clickData"), null);
+  alert("✅ Data reset!");
+};
+
+// ---------------- TROLL CONTROLS ----------------
+async function triggerTroll(refName) {
+  const user = auth.currentUser;
+  if (!user) return alert("❌ You must be logged in!");
+  await trollRef.child(refName).set({ active: true, timestamp: Date.now() });
+  alert(`✅ ${refName} triggered!`);
+}
+
+document.getElementById("cursor-chaos").onclick = () => triggerTroll("cursorChaos");
+document.getElementById("flashbang").onclick = () => triggerTroll("flashbang");
+document.getElementById("reverse-controls").onclick = () => triggerTroll("reverseControls");
+
+// ---------------- SOUND CONTROL ----------------
+const soundMenu = document.getElementById("sound-menu");
+const stopSoundBtn = document.getElementById("stop-sound");
+const chooseSoundBtn = document.getElementById("choose-sound");
+const soundFiles = [
+  "clashintro.mp3",
+  "rainingtacos.mp3",
+  "brainrot.mp3",
+  "wideputin.mp3",
+  "crabrave.mp3",
+  "sodapop.mp3",
+  "galaxy.mp3",
+  "67.mp3",
+  "smokedetector.mp3"
+];
+
+chooseSoundBtn.onclick = () => {
+  const user = auth.currentUser;
+  if (!user) return alert("❌ You must be logged in!");
+  
+  soundMenu.innerHTML = "";
+  soundFiles.forEach(file => {
+    const btn = document.createElement("button");
+    btn.textContent = "▶️ " + file;
+    btn.style.display = "block";
+    btn.style.margin = "5px 0";
+    btn.onclick = async () => {
+      await trollRef.child("creepySound").set({ url: file, timestamp: Date.now() });
+      alert(`🔊 ${file} triggered!`);
+    };
+    soundMenu.appendChild(btn);
+  });
+  soundMenu.style.display = soundMenu.style.display === "none" ? "block" : "none";
+};
+
+stopSoundBtn.onclick = async () => {
+  const user = auth.currentUser;
+  if (!user) return alert("❌ You must be logged in!");
+  await trollRef.child("creepySound").set(null);
+  alert("⏹️ Audio stopped!");
+};
+
+// ---------------- REVERT BUTTONS ----------------
+document.getElementById("revert-bg").onclick = () => document.getElementById("bgColor").value = "#0a0a0a";
+document.getElementById("revert-ann").onclick = () => document.getElementById("announcement").value = "";
+document.getElementById("revert-jumpimg").onclick = () => document.getElementById("jumpscareImage").value = "";
+</script>
+<script
+  src="https://cdn.jsdelivr.net/npm/whatareyoutryingtodo/disable-devtool.min.js"
+  disable-devtool-auto
+></script>
 </body>
-
 </html>
