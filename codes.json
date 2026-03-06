@@ -245,5 +245,6 @@
     "AMAZE": "https://tinklehost.github.io/amaze|false",
     "BM!": "https://tinklehost.github.io/bloodmoney|true",
     "IDLEBREAK": "https://tinklehost.github.io/idle-breakout|true",
-    "PINBALL": "https://pinball.flutter.dev/#/|true"
+    "PINBALL": "https://pinball.flutter.dev/#/|true",
+    "BALATRO": "https://imisaacwu.github.io/webatro/|true"
     }
