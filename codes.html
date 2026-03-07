@@ -1975,9 +1975,14 @@
              </section>
 
              <section class="filters">
-                 <div class="search-field-wrap">
-                     <span class="icon">🔍</span>
-                     <input id="searchInput" class="search-input" placeholder="Search by game name or code..." />
+                 <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                     <div class="search-field-wrap" style="flex: 1;">
+                         <span class="icon">🔍</span>
+                         <input id="searchInput" class="search-input" placeholder="Search by game name or code..." />
+                     </div>
+                     <button class="btn-glow" id="randomGameBtn" style="padding: 11px 20px; white-space: nowrap; margin-bottom: 0;">
+                         <span>🎲 Random Game</span>
+                     </button>
                  </div>
 
                  <div class="filters-bottom">
@@ -3365,6 +3370,16 @@
                  <li>🎰 Added Pinball</li>
                  <li>🃏 Added Balatro</li>
              </ul>
+             <h3></h3>
+             <h3>Features</h3>
+             <ul>
+                 <li>🔧 Random Game Button</li>
+             </ul>
+             <h3></h3>
+             <h3>Coming Soon</h3>
+             <ul>
+                 <li>🎮 More Suggested Games</li>
+             </ul>
              <div class="log-footer">
                  <span>Version 1.2.7 • Last updated Mar 6, 2026</span>
              </div>
@@ -4733,6 +4748,89 @@
 
                  return matchesSearch && matchesCategory;
              });
+         }
+
+         // Random Game Button - completely separate from search bar
+         document.getElementById("randomGameBtn").addEventListener("click", () => {
+             // Get all games
+             const allGames = games;
+
+             if (allGames.length === 0) {
+                 showToast("RANDOM", "No games available");
+                 return;
+             }
+
+             // Pick a random game
+             const randomIndex = Math.floor(Math.random() * allGames.length);
+             const randomGame = allGames[randomIndex];
+
+             // Copy the code to clipboard
+             tryCopyToClipboard(randomGame.code);
+
+             // Show sparkle effect on the button
+             const btn = document.getElementById("randomGameBtn");
+             if (typeof playSparkleBurst === "function") {
+                 playSparkleBurst(btn);
+             }
+
+             // Show toast with game name and code
+             showToast("🎲 RANDOM GAME", `${randomGame.name}: ${randomGame.code}`);
+
+             // Also show the bottom toast
+             showCopyToast(`🎲 ${randomGame.name}: ${randomGame.code} copied!`);
+
+             // Highlight the selected game in the grid
+             setTimeout(() => {
+                 const gameCards = document.querySelectorAll('.card');
+                 gameCards.forEach(card => {
+                     const title = card.querySelector('.card__title');
+                     if (title && title.textContent === randomGame.name) {
+                         // Highlight the card
+                         card.style.transition = 'all 0.3s ease';
+                         card.style.boxShadow = '0 0 30px rgba(79, 70, 229, 0.8)';
+                         card.style.transform = 'scale(1.05)';
+                         card.style.borderColor = 'rgba(79, 70, 229, 0.9)';
+
+                         // Scroll to the card
+                         card.scrollIntoView({
+                             behavior: 'smooth',
+                             block: 'center'
+                         });
+
+                         // Remove highlight after 2 seconds
+                         setTimeout(() => {
+                             card.style.boxShadow = '';
+                             card.style.transform = '';
+                             card.style.borderColor = '';
+                         }, 2000);
+
+                         // Add a subtle pulse animation
+                         card.style.animation = 'pulse 0.5s ease 3';
+                         setTimeout(() => {
+                             card.style.animation = '';
+                         }, 1500);
+                     }
+                 });
+             }, 100);
+
+             // Optional: Increment play count for this game
+             if (window.incrementGameClick) {
+                 window.incrementGameClick(randomGame.name).catch(console.error);
+             }
+         });
+
+         // Add pulse animation if it doesn't exist
+         if (!document.querySelector('#pulse-animation')) {
+             const style = document.createElement('style');
+             style.id = 'pulse-animation';
+             style.textContent = `
+        @keyframes pulse {
+            0% { transform: scale(1.05); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1.05); }
+        }
+    `;
+             document.head.appendChild(style);
          }
 
          function tryCopyToClipboard(text) {
