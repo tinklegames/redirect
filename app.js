@@ -98,7 +98,6 @@ function openPage() {
         <!DOCTYPE html>
         <html>
         <head>
-        <script src="https://cdn.jsdelivr.net/npm/whatareyoutryingtodo/disable-devtool.min.js" disable-devtool-auto=""></script>
             <style>
                 html, body {
                     margin: 0;
