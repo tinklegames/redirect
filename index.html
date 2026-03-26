@@ -5,56 +5,6 @@
     <link rel="icon" type="image/png" href="yes.ico">
     <link rel="stylesheet" type="text/css" href="styles.css">
     <style>
-        /* Keep ALL your original styles, just add/update these */
-
-        /* Updated close button styles - perfect circle, draggable */
-        #closeIframeBtn {
-            position: fixed;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(148, 163, 184, 0.4);
-            color: #cbd5f5;
-            cursor: grab;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1001;
-            font-size: 18px;
-            font-weight: 300;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            user-select: none;
-            -webkit-user-select: none;
-            line-height: 1;
-            padding: 0;
-            margin: 0;
-        }
-
-        #closeIframeBtn:active {
-            cursor: grabbing;
-        }
-
-        #closeIframeBtn.dragging {
-            cursor: grabbing;
-            opacity: 0.85;
-            transition: none;
-            transform: scale(1.05);
-            pointer-events: none;
-        }
-
-        #closeIframeBtn:hover {
-            background: rgba(239, 68, 68, 0.95);
-            border-color: rgba(239, 68, 68, 0.7);
-            color: white;
-            transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
-            cursor: grab;
-        }
-        
         /* Keep your existing iframe container styles */
         #iframeContainer {
             position: fixed;
@@ -114,6 +64,30 @@
         .hidden {
             display: none;
         }
+        
+        /* Optional: Show a hint for the backslash key */
+        #backslashHint {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #cbd5f5;
+            z-index: 1002;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            white-space: nowrap;
+            font-family: monospace;
+        }
+        
+        #backslashHint.show {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -136,23 +110,15 @@
     <div id="iframeContainer">
         <iframe id="siteFrame" allowfullscreen></iframe>
     </div>
-    <button id="closeIframeBtn">✕</button>
+    
+    <!-- Hint for backslash key (appears when iframe is open) -->
+    <div id="backslashHint">Press \ (backslash) to exit</div>
 
     <div id="notification" class="hidden"></div>
 
     <script>
         let generatedLink = "";
         let iframeAllowed = false;
-        
-        // Draggable variables
-        let isDragging = false;
-        let hasMoved = false;
-        let dragStartX = 0;
-        let dragStartY = 0;
-        let buttonStartX = 0;
-        let buttonStartY = 0;
-        let dragHandler = null;
-        let dragEndHandler = null;
 
         async function checkCode() {
             const code = document.getElementById('codeInput').value.trim();
@@ -234,38 +200,33 @@
             if (!generatedLink || !iframeAllowed) return;
 
             const iframeContainer = document.getElementById('iframeContainer');
-            const closeBtn = document.getElementById('closeIframeBtn');
             const iframe = document.getElementById('siteFrame');
+            const backslashHint = document.getElementById('backslashHint');
             
             iframe.src = generatedLink;
             iframeContainer.style.display = 'block';
-            closeBtn.style.display = 'flex';
             document.body.classList.add('iframe-open');
             
-            // Reset button position to top-right when opening
-            closeBtn.style.top = '20px';
-            closeBtn.style.right = '20px';
-            closeBtn.style.left = 'auto';
-            closeBtn.style.bottom = 'auto';
+            // Show the backslash hint
+            backslashHint.classList.add('show');
             
-            // Reset drag flags
-            isDragging = false;
-            hasMoved = false;
+            // Hide hint after 5 seconds
+            setTimeout(() => {
+                backslashHint.classList.remove('show');
+            }, 5000);
         }
 
         function closeIframe() {
             const iframeContainer = document.getElementById('iframeContainer');
-            const closeBtn = document.getElementById('closeIframeBtn');
             const iframe = document.getElementById('siteFrame');
+            const backslashHint = document.getElementById('backslashHint');
             
             iframe.src = 'about:blank';
             iframeContainer.style.display = 'none';
-            closeBtn.style.display = 'none';
             document.body.classList.remove('iframe-open');
             
-            // Reset drag flags
-            isDragging = false;
-            hasMoved = false;
+            // Hide the hint
+            backslashHint.classList.remove('show');
         }
 
         function showNotification(message, type) {
@@ -279,106 +240,18 @@
             }, 3000);
         }
 
-        // Improved draggable functionality with proper mouse tracking
-        function initDraggable() {
-            const closeBtn = document.getElementById('closeIframeBtn');
-            
-            function startDrag(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                isDragging = true;
-                hasMoved = false;
-                closeBtn.classList.add('dragging');
-                
-                // Get mouse position
-                const clientX = e.clientX;
-                const clientY = e.clientY;
-                
-                dragStartX = clientX;
-                dragStartY = clientY;
-                
-                // Get button position
-                const rect = closeBtn.getBoundingClientRect();
-                buttonStartX = rect.left;
-                buttonStartY = rect.top;
-                
-                // Attach global event listeners to document (not just button)
-                dragHandler = onDrag;
-                dragEndHandler = stopDrag;
-                
-                document.addEventListener('mousemove', dragHandler);
-                document.addEventListener('mouseup', dragEndHandler);
-            }
-            
-            function onDrag(e) {
-                if (!isDragging) return;
-                e.preventDefault();
-                
-                // Mark that we've moved (to prevent click)
-                hasMoved = true;
-                
-                const clientX = e.clientX;
-                const clientY = e.clientY;
-                
-                // Calculate new position
-                let newX = buttonStartX + (clientX - dragStartX);
-                let newY = buttonStartY + (clientY - dragStartY);
-                
-                // Keep within viewport
-                const btnRect = closeBtn.getBoundingClientRect();
-                const maxX = window.innerWidth - btnRect.width - 10;
-                const maxY = window.innerHeight - btnRect.height - 10;
-                const minX = 10;
-                const minY = 10;
-                
-                newX = Math.min(Math.max(newX, minX), maxX);
-                newY = Math.min(Math.max(newY, minY), maxY);
-                
-                // Apply position
-                closeBtn.style.left = newX + 'px';
-                closeBtn.style.top = newY + 'px';
-                closeBtn.style.right = 'auto';
-                closeBtn.style.bottom = 'auto';
-                
-                // Update button start position for smoother dragging
-                buttonStartX = newX;
-                buttonStartY = newY;
-                dragStartX = clientX;
-                dragStartY = clientY;
-            }
-            
-            function stopDrag(e) {
-                if (!isDragging) return;
-                
-                isDragging = false;
-                closeBtn.classList.remove('dragging');
-                
-                // Remove global event listeners
-                document.removeEventListener('mousemove', dragHandler);
-                document.removeEventListener('mouseup', dragEndHandler);
-                
-                // If we didn't move, trigger the click
-                if (!hasMoved && e && e.target === closeBtn) {
-                    // Small delay to ensure click doesn't interfere with drag end
-                    setTimeout(() => {
-                        if (closeBtn.style.display === 'flex') {
-                            closeIframe();
-                        }
-                    }, 10);
-                }
-            }
-            
-            // Handle click separately to prevent clicks after drag
-            closeBtn.addEventListener('mousedown', startDrag);
-            
-            // Prevent the click event if we dragged
-            closeBtn.addEventListener('click', (e) => {
-                if (hasMoved) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    hasMoved = false;
-                    return false;
+        // Keyboard listener for backslash key to exit game
+        function setupKeyboardExit() {
+            document.addEventListener('keydown', (e) => {
+                // Check if backslash key is pressed (key code 220)
+                if (e.key === '\\' || e.keyCode === 220) {
+                    const iframeContainer = document.getElementById('iframeContainer');
+                    // Only close if iframe is currently open
+                    if (iframeContainer.style.display === 'block') {
+                        e.preventDefault(); // Prevent default backslash behavior
+                        closeIframe();
+                        showNotification("🔙 Game closed. Press backslash to exit.", "success");
+                    }
                 }
             });
         }
@@ -390,17 +263,13 @@
 
         document.getElementById('submitBtn').addEventListener('click', checkCode);
         document.getElementById('openPageBtn').addEventListener('click', openPage);
-        
-        // Don't add click listener directly to close button - handled in draggable
-        // document.getElementById('closeIframeBtn').addEventListener('click', closeIframe);
 
         document.getElementById('openPageBtn').classList.add('hidden');
         document.getElementById('iframeHint').classList.add('hidden');
         document.getElementById('iframeContainer').style.display = 'none';
-        document.getElementById('closeIframeBtn').style.display = 'none';
         
-        // Initialize draggable
-        initDraggable();
+        // Setup keyboard exit listener
+        setupKeyboardExit();
     </script>
 </body>
 </html>
