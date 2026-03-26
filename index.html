@@ -43,6 +43,7 @@
             opacity: 0.85;
             transition: none;
             transform: scale(1.05);
+            pointer-events: none;
         }
 
         #closeIframeBtn:hover {
@@ -145,6 +146,7 @@
         
         // Draggable variables
         let isDragging = false;
+        let hasMoved = false;
         let dragStartX = 0;
         let dragStartY = 0;
         let buttonStartX = 0;
@@ -245,6 +247,10 @@
             closeBtn.style.right = '20px';
             closeBtn.style.left = 'auto';
             closeBtn.style.bottom = 'auto';
+            
+            // Reset drag flags
+            isDragging = false;
+            hasMoved = false;
         }
 
         function closeIframe() {
@@ -256,6 +262,10 @@
             iframeContainer.style.display = 'none';
             closeBtn.style.display = 'none';
             document.body.classList.remove('iframe-open');
+            
+            // Reset drag flags
+            isDragging = false;
+            hasMoved = false;
         }
 
         function showNotification(message, type) {
@@ -275,7 +285,10 @@
             
             function startDrag(e) {
                 e.preventDefault();
+                e.stopPropagation();
+                
                 isDragging = true;
+                hasMoved = false;
                 closeBtn.classList.add('dragging');
                 
                 // Get mouse position
@@ -290,7 +303,7 @@
                 buttonStartX = rect.left;
                 buttonStartY = rect.top;
                 
-                // Attach global event listeners
+                // Attach global event listeners to document (not just button)
                 dragHandler = onDrag;
                 dragEndHandler = stopDrag;
                 
@@ -301,6 +314,9 @@
             function onDrag(e) {
                 if (!isDragging) return;
                 e.preventDefault();
+                
+                // Mark that we've moved (to prevent click)
+                hasMoved = true;
                 
                 const clientX = e.clientX;
                 const clientY = e.clientY;
@@ -324,18 +340,47 @@
                 closeBtn.style.top = newY + 'px';
                 closeBtn.style.right = 'auto';
                 closeBtn.style.bottom = 'auto';
+                
+                // Update button start position for smoother dragging
+                buttonStartX = newX;
+                buttonStartY = newY;
+                dragStartX = clientX;
+                dragStartY = clientY;
             }
             
-            function stopDrag() {
+            function stopDrag(e) {
+                if (!isDragging) return;
+                
                 isDragging = false;
                 closeBtn.classList.remove('dragging');
                 
                 // Remove global event listeners
                 document.removeEventListener('mousemove', dragHandler);
                 document.removeEventListener('mouseup', dragEndHandler);
+                
+                // If we didn't move, trigger the click
+                if (!hasMoved && e && e.target === closeBtn) {
+                    // Small delay to ensure click doesn't interfere with drag end
+                    setTimeout(() => {
+                        if (closeBtn.style.display === 'flex') {
+                            closeIframe();
+                        }
+                    }, 10);
+                }
             }
             
+            // Handle click separately to prevent clicks after drag
             closeBtn.addEventListener('mousedown', startDrag);
+            
+            // Prevent the click event if we dragged
+            closeBtn.addEventListener('click', (e) => {
+                if (hasMoved) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    hasMoved = false;
+                    return false;
+                }
+            });
         }
 
         // Input event listener
@@ -345,7 +390,9 @@
 
         document.getElementById('submitBtn').addEventListener('click', checkCode);
         document.getElementById('openPageBtn').addEventListener('click', openPage);
-        document.getElementById('closeIframeBtn').addEventListener('click', closeIframe);
+        
+        // Don't add click listener directly to close button - handled in draggable
+        // document.getElementById('closeIframeBtn').addEventListener('click', closeIframe);
 
         document.getElementById('openPageBtn').classList.add('hidden');
         document.getElementById('iframeHint').classList.add('hidden');
