@@ -3,20 +3,119 @@
 <head>
     <title>Tinkle Party Games</title>
     <link rel="icon" type="image/png" href="yes.ico">
-    <link rel="stylesheet" type="text/css" href="styles.css">
     <style>
-        /* Added styles for iframe container */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: radial-gradient(circle at 10% 0%, rgba(79, 70, 229, 0.45) 0%, transparent 40%),
+                        radial-gradient(circle at 90% 0%, rgba(34, 211, 238, 0.28) 0%, transparent 40%),
+                        radial-gradient(circle at 50% 100%, rgba(168, 85, 247, 0.38) 0%, transparent 40%),
+                        #020617;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #f9fafb;
+        }
+
+        #container {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 22px;
+            border: 1px solid rgba(148, 163, 184, 0.45);
+            padding: 40px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 32px 80px rgba(0, 0, 0, 0.9);
+            transition: all 0.3s ease;
+        }
+
+        body.iframe-open #container {
+            display: none;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 24px;
+            background: linear-gradient(120deg, #22d3ee, #a855f7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        #codeInput {
+            width: 100%;
+            padding: 14px 20px;
+            font-size: 1rem;
+            border: 2px solid rgba(148, 163, 184, 0.4);
+            border-radius: 12px;
+            background: rgba(15, 23, 42, 0.9);
+            color: #f9fafb;
+            outline: none;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        #codeInput:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        }
+
+        #codeInput::placeholder {
+            color: #94a3b8;
+        }
+
+        button {
+            background: linear-gradient(135deg, #4f46e5, #a855f7);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 8px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(79, 70, 229, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Iframe container */
         #iframeContainer {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: black;
+            background-color: #000;
             z-index: 1000;
             display: none;
         }
-        
+
         #iframeContainer iframe {
             border: none;
             position: absolute;
@@ -25,132 +124,74 @@
             width: 100%;
             height: 100%;
         }
-        
+
+        /* Smaller draggable close button */
         #closeIframeBtn {
             position: fixed;
-            top: 10px;
-            right: 10px;
-            z-index: 1001;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            border: 1px solid white;
-            border-radius: 5px;
-            padding: 8px 16px;
-            cursor: pointer;
-            font-size: 14px;
-            display: none;
-        }
-        
-        #closeIframeBtn:hover {
-            background-color: rgba(255, 0, 0, 0.7);
-        }
-        
-        #closeIframeBtn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 44px;
-            height: 44px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
-            background: rgba(15, 23, 42, 0.85);
+            background: rgba(15, 23, 42, 0.9);
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(148, 163, 184, 0.4);
-            color: var(--text-soft);
-            cursor: pointer;
+            border: 1px solid rgba(148, 163, 184, 0.5);
+            color: #cbd5f5;
+            cursor: grab;
             display: none;
             align-items: center;
             justify-content: center;
             z-index: 1001;
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 300;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            line-height: 1;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            user-select: none;
+            -webkit-user-select: none;
         }
-        
-        #closeIframeBtn:hover {
-            background: rgba(239, 68, 68, 0.9);
-            border-color: rgba(239, 68, 68, 0.6);
-            color: white;
-            transform: scale(1.1) rotate(90deg);
-            box-shadow: 0 8px 30px rgba(239, 68, 68, 0.4);
-        }
-        
+
         #closeIframeBtn:active {
-            transform: scale(0.95);
+            cursor: grabbing;
         }
-        
-        /* Optional: Add a subtle glow effect */
-        #closeIframeBtn::before {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            border-radius: 50%;
-            background: radial-gradient(circle at center, rgba(239, 68, 68, 0.3), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
+
+        #closeIframeBtn.dragging {
+            cursor: grabbing;
+            opacity: 0.85;
+            transition: none;
+            transform: scale(1.05);
         }
-        
-        #closeIframeBtn:hover::before {
-            opacity: 1;
+
+        #closeIframeBtn:hover {
+            background: rgba(239, 68, 68, 0.95);
+            border-color: rgba(239, 68, 68, 0.7);
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.5);
+            cursor: grab;
         }
-        
-        /* Iframe container styling */
-        #iframeContainer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: black;
-            z-index: 1000;
-            display: none;
-        }
-        
-        #iframeContainer iframe {
-            border: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-        
-        body.iframe-open #container {
-            display: none;
-        }
-        
-        .hidden {
-            display: none;
-        }
-        
-        /* Keep original container visible when iframe is open */
-        body.iframe-open #container {
-            display: none;
-        }
-        
+
+        /* Notification */
         #notification {
             position: fixed;
-            top: 20px;
+            bottom: 20px;
             right: 20px;
             padding: 12px 20px;
-            border-radius: 5px;
+            border-radius: 12px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            color: #f9fafb;
+            font-size: 0.9rem;
             z-index: 2000;
             animation: slideIn 0.3s ease-out;
         }
-        
+
         #notification.success {
-            background-color: #4CAF50;
-            color: white;
+            border-left: 4px solid #22c55e;
         }
-        
+
         #notification.error {
-            background-color: #f44336;
-            color: white;
+            border-left: 4px solid #ef4444;
         }
-        
+
         @keyframes slideIn {
             from {
                 transform: translateX(100%);
@@ -161,25 +202,27 @@
                 opacity: 1;
             }
         }
+
+        #iframeHint {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            font-size: 0.85rem;
+        }
     </style>
 </head>
 <body>
     <div id="container">
-        <h2>Enter Code</h2>
+        <h2>🎮 Enter Code</h2>
         <input type="text" id="codeInput" placeholder="Enter your code..." />
-
         <button id="submitBtn">Submit</button>
-
         <div id="result"></div>
-
-        <!-- Open Page button -->
         <button id="openPageBtn" class="hidden">Open Page</button>
-
-        <!-- Hint for sites that cannot open in iframe -->
-        <div id="iframeHint" class="hidden" style="color: yellow; margin-top: 10px;"></div>
+        <div id="iframeHint" class="hidden"></div>
     </div>
 
-    <!-- Iframe container for same-tab display -->
     <div id="iframeContainer">
         <iframe id="siteFrame" allowfullscreen></iframe>
     </div>
@@ -190,6 +233,13 @@
     <script>
         let generatedLink = "";
         let iframeAllowed = false;
+
+        // Draggable button variables
+        let isDragging = false;
+        let dragStartX = 0;
+        let dragStartY = 0;
+        let buttonStartX = 0;
+        let buttonStartY = 0;
 
         async function checkCode() {
             const code = document.getElementById('codeInput').value.trim();
@@ -209,12 +259,13 @@
 
                     document.getElementById('codeInput').value = generatedLink;
                     resultDiv.innerHTML = "✅ Link generated successfully!";
+                    resultDiv.style.color = "#22c55e";
 
                     const newBtn = submitBtn.cloneNode(true);
                     submitBtn.parentNode.replaceChild(newBtn, submitBtn);
                     newBtn.innerHTML = "Copy Link";
                     newBtn.addEventListener('click', () => copyLink(generatedLink));
-                    newBtn.style.backgroundColor = "#4CAF50";
+                    newBtn.style.background = "linear-gradient(135deg, #22c55e, #16a34a)";
 
                     if (iframeAllowed) {
                         openPageBtn.classList.remove("hidden");
@@ -228,6 +279,7 @@
                     showNotification("✅ Valid code! Link generated.", "success");
                 } else {
                     resultDiv.innerHTML = "❌ Invalid code. Try again.";
+                    resultDiv.style.color = "#ef4444";
                     showNotification("❌ Invalid code. Please try again.", "error");
                     openPageBtn.classList.add("hidden");
                     iframeHint.classList.add("hidden");
@@ -235,6 +287,7 @@
             } catch (error) {
                 console.error(error);
                 resultDiv.innerHTML = "⚠️ Error fetching codes. Please try again later.";
+                resultDiv.style.color = "#f97316";
                 showNotification("⚠️ Error fetching codes. Try again later.", "error");
             }
         }
@@ -248,7 +301,7 @@
             const newBtn = submitBtn.cloneNode(true);
             submitBtn.parentNode.replaceChild(newBtn, submitBtn);
             newBtn.innerHTML = "Submit";
-            newBtn.style.backgroundColor = "";
+            newBtn.style.background = "linear-gradient(135deg, #4f46e5, #a855f7)";
             newBtn.addEventListener('click', checkCode);
             
             openPageBtn.classList.add("hidden");
@@ -274,15 +327,16 @@
             const closeBtn = document.getElementById('closeIframeBtn');
             const iframe = document.getElementById('siteFrame');
             
-            // Set iframe source
             iframe.src = generatedLink;
-            
-            // Show iframe container and close button
             iframeContainer.style.display = 'block';
             closeBtn.style.display = 'flex';
-            
-            // Add class to body to hide main container
             document.body.classList.add('iframe-open');
+            
+            // Reset button position to default when opening iframe
+            closeBtn.style.top = '20px';
+            closeBtn.style.right = '20px';
+            closeBtn.style.left = 'auto';
+            closeBtn.style.bottom = 'auto';
         }
 
         function closeIframe() {
@@ -290,14 +344,9 @@
             const closeBtn = document.getElementById('closeIframeBtn');
             const iframe = document.getElementById('siteFrame');
             
-            // Clear iframe source to stop any ongoing processes
             iframe.src = 'about:blank';
-            
-            // Hide iframe container and close button
             iframeContainer.style.display = 'none';
             closeBtn.style.display = 'none';
-            
-            // Remove class from body to show main container
             document.body.classList.remove('iframe-open');
         }
 
@@ -312,7 +361,71 @@
             }, 3000);
         }
 
-        // Add input event listener to detect typing in the code input
+        // Draggable functionality
+        function initDraggable() {
+            const closeBtn = document.getElementById('closeIframeBtn');
+            
+            closeBtn.addEventListener('mousedown', startDrag);
+            closeBtn.addEventListener('touchstart', startDrag, { passive: false });
+            
+            function startDrag(e) {
+                e.preventDefault();
+                isDragging = true;
+                closeBtn.classList.add('dragging');
+                
+                const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+                const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+                
+                dragStartX = clientX;
+                dragStartY = clientY;
+                
+                const rect = closeBtn.getBoundingClientRect();
+                buttonStartX = rect.left;
+                buttonStartY = rect.top;
+                
+                document.addEventListener('mousemove', onDrag);
+                document.addEventListener('mouseup', stopDrag);
+                document.addEventListener('touchmove', onDrag, { passive: false });
+                document.addEventListener('touchend', stopDrag);
+            }
+            
+            function onDrag(e) {
+                if (!isDragging) return;
+                e.preventDefault();
+                
+                const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+                const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+                
+                let newX = buttonStartX + (clientX - dragStartX);
+                let newY = buttonStartY + (clientY - dragStartY);
+                
+                // Keep button within viewport bounds
+                const btnRect = closeBtn.getBoundingClientRect();
+                const maxX = window.innerWidth - btnRect.width - 10;
+                const maxY = window.innerHeight - btnRect.height - 10;
+                const minX = 10;
+                const minY = 10;
+                
+                newX = Math.min(Math.max(newX, minX), maxX);
+                newY = Math.min(Math.max(newY, minY), maxY);
+                
+                closeBtn.style.left = newX + 'px';
+                closeBtn.style.top = newY + 'px';
+                closeBtn.style.right = 'auto';
+                closeBtn.style.bottom = 'auto';
+            }
+            
+            function stopDrag() {
+                isDragging = false;
+                closeBtn.classList.remove('dragging');
+                document.removeEventListener('mousemove', onDrag);
+                document.removeEventListener('mouseup', stopDrag);
+                document.removeEventListener('touchmove', onDrag);
+                document.removeEventListener('touchend', stopDrag);
+            }
+        }
+
+        // Input event listener
         document.getElementById('codeInput').addEventListener('input', function() {
             resetForNewCode();
         });
@@ -323,11 +436,21 @@
 
         document.getElementById('openPageBtn').classList.add('hidden');
         document.getElementById('iframeHint').classList.add('hidden');
-        
-        // Initialize iframe container as hidden
         document.getElementById('iframeContainer').style.display = 'none';
         document.getElementById('closeIframeBtn').style.display = 'none';
+        
+        // Initialize draggable functionality
+        initDraggable();
+
+        // Optional: Add keyboard shortcut (ESC to close iframe)
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const iframeContainer = document.getElementById('iframeContainer');
+                if (iframeContainer.style.display === 'block') {
+                    closeIframe();
+                }
+            }
+        });
     </script>
 </body>
-
 </html>
