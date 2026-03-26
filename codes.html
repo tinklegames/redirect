@@ -1154,73 +1154,255 @@
          }
 
          .settings-grid {
-             display: grid;
-             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-             gap: 18px 20px;
-             margin-top: 10px;
+             display: flex;
+             flex-direction: column;
+             gap: 24px;
+             margin-top: 24px;
          }
 
-         .toggle-row {
+         /* Individual setting cards */
+         .setting-card {
+             background: rgba(15, 23, 42, 0.6);
+             border-radius: 24px;
+             padding: 20px 24px;
+             border: 1px solid rgba(148, 163, 184, 0.25);
+             transition: all 0.2s ease;
+         }
+
+         .setting-card:hover {
+             border-color: rgba(79, 70, 229, 0.5);
+             background: rgba(15, 23, 42, 0.7);
+         }
+
+         .setting-header {
+             display: flex;
+             align-items: center;
+             gap: 12px;
+             margin-bottom: 16px;
+         }
+
+         .setting-icon {
+             font-size: 1.4rem;
+         }
+
+         .setting-header h3 {
+             font-size: 1rem;
+             font-weight: 600;
+             color: var(--text);
+             margin: 0;
+         }
+
+         .setting-desc {
+             font-size: 0.8rem;
+             color: var(--text-soft);
+             margin-bottom: 20px;
+             line-height: 1.4;
+         }
+
+         .setting-controls {
              display: flex;
              align-items: center;
              justify-content: space-between;
-             gap: 10px;
-             padding: 10px 12px;
-             border-radius: 12px;
-             background: rgba(15, 23, 42, 0.9);
-             border: 1px solid rgba(148, 163, 184, 0.5);
+             flex-wrap: wrap;
+             gap: 16px;
          }
 
-         .toggle-label {
-             font-size: 0.86rem;
+         /* Larger, more spacious toggles */
+         .toggle-row-large {
+             display: flex;
+             align-items: center;
+             justify-content: space-between;
+             padding: 12px 0;
+             border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+         }
+
+         .toggle-row-large:last-child {
+             border-bottom: none;
+         }
+
+         .toggle-info {
+             flex: 1;
+         }
+
+         .toggle-label-large {
+             font-size: 0.95rem;
+             font-weight: 500;
              color: var(--text);
+             margin-bottom: 4px;
          }
 
-         .toggle-sub {
-             font-size: 0.76rem;
+         .toggle-sub-large {
+             font-size: 0.75rem;
              color: var(--text-soft);
-             margin-top: 2px;
          }
 
-         .toggle-switch {
+         /* Bigger toggle switch */
+         .toggle-switch-large {
              position: relative;
-             width: 40px;
-             height: 22px;
+             width: 52px;
+             height: 28px;
+             flex-shrink: 0;
          }
 
-         .toggle-switch input {
+         .toggle-switch-large input {
              opacity: 0;
              width: 0;
              height: 0;
          }
 
-         .toggle-slider {
+         .toggle-slider-large {
              position: absolute;
              cursor: pointer;
-             inset: 0;
-             background: rgba(30, 64, 175, 0.7);
-             border-radius: 999px;
-             transition: 0.2s;
+             top: 0;
+             left: 0;
+             right: 0;
+             bottom: 0;
+             background: rgba(71, 85, 105, 0.6);
+             border-radius: 34px;
+             transition: 0.25s;
          }
 
-         .toggle-slider::before {
-             content: "";
+         .toggle-slider-large:before {
              position: absolute;
-             height: 16px;
-             width: 16px;
+             content: "";
+             height: 22px;
+             width: 22px;
              left: 3px;
-             top: 3px;
-             background-color: #e5e7eb;
+             bottom: 3px;
+             background-color: white;
              border-radius: 50%;
-             transition: 0.2s;
+             transition: 0.25s;
          }
 
-         .toggle-switch input:checked+.toggle-slider {
-             background: linear-gradient(120deg, var(--accent-3), var(--accent-2));
+         input:checked+.toggle-slider-large {
+             background: linear-gradient(120deg, var(--accent), var(--accent-2));
          }
 
-         .toggle-switch input:checked+.toggle-slider::before {
-             transform: translateX(16px);
+         input:checked+.toggle-slider-large:before {
+             transform: translateX(23px);
+         }
+
+         /* Larger select dropdown */
+         .select-large {
+             width: 100%;
+             max-width: 280px;
+             padding: 12px 18px;
+             border-radius: 16px;
+             background: rgba(0, 0, 0, 0.4);
+             border: 1px solid rgba(148, 163, 184, 0.4);
+             color: var(--text);
+             font-size: 0.9rem;
+             cursor: pointer;
+             transition: all 0.2s;
+         }
+
+         .select-large:focus {
+             border-color: var(--accent);
+             outline: none;
+             box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+         }
+
+         /* Panic section - more spacious */
+         .panic-section-spacious {
+             background: rgba(0, 0, 0, 0.3);
+             border-radius: 24px;
+             padding: 20px;
+             margin-top: 8px;
+             border: 1px solid rgba(148, 163, 184, 0.2);
+         }
+
+         .panic-row-spacious {
+             display: flex;
+             flex-wrap: wrap;
+             gap: 20px;
+             margin-bottom: 20px;
+         }
+
+         .panic-field-spacious {
+             flex: 1;
+             min-width: 200px;
+         }
+
+         .panic-field-spacious label {
+             display: block;
+             font-size: 0.7rem;
+             text-transform: uppercase;
+             letter-spacing: 0.1em;
+             color: var(--text-soft);
+             margin-bottom: 8px;
+         }
+
+         .panic-input-large {
+             width: 100%;
+             padding: 12px 16px;
+             border-radius: 16px;
+             background: rgba(0, 0, 0, 0.5);
+             border: 1px solid rgba(148, 163, 184, 0.4);
+             color: white;
+             font-size: 0.9rem;
+             font-family: monospace;
+         }
+
+         .panic-preview-spacious {
+             display: flex;
+             align-items: center;
+             justify-content: space-between;
+             flex-wrap: wrap;
+             gap: 16px;
+             padding-top: 16px;
+             border-top: 1px solid rgba(148, 163, 184, 0.2);
+         }
+
+         .key-badge {
+             background: linear-gradient(135deg, var(--accent), var(--accent-2));
+             padding: 6px 18px;
+             border-radius: 40px;
+             font-weight: 700;
+             font-family: monospace;
+             font-size: 0.9rem;
+         }
+
+         .button-group {
+             display: flex;
+             gap: 12px;
+         }
+
+         .btn-small-spacious {
+             padding: 8px 20px;
+             border-radius: 40px;
+             background: rgba(255, 255, 255, 0.05);
+             border: 1px solid rgba(148, 163, 184, 0.4);
+             color: var(--text);
+             font-size: 0.75rem;
+             cursor: pointer;
+             transition: all 0.2s;
+         }
+
+         .btn-small-spacious:hover {
+             background: var(--accent);
+             border-color: var(--accent);
+         }
+
+         /* Spacing improvements for settings page */
+         .page-card {
+             padding: 28px 32px !important;
+         }
+
+         .page-card-header {
+             font-size: 0.85rem !important;
+             letter-spacing: 0.2em;
+             margin-bottom: 12px;
+         }
+
+         .page-card-title {
+             font-size: 1.6rem !important;
+             margin-bottom: 8px;
+         }
+
+         .page-card-sub {
+             font-size: 0.9rem !important;
+             margin-bottom: 28px !important;
+             line-height: 1.5;
          }
 
          body.reduce-motion * {
@@ -1885,6 +2067,31 @@
              color: white;
              text-shadow: 0 0 20px white;
          }
+
+         /* Recently Played Horizontal Scroll */
+         .recent-row {
+             display: flex;
+             gap: 16px;
+             overflow-x: auto;
+             padding-bottom: 6px;
+             scroll-behavior: smooth;
+         }
+
+         .recent-row::-webkit-scrollbar {
+             height: 6px;
+         }
+
+         .recent-row::-webkit-scrollbar-thumb {
+             background: rgba(148, 163, 184, 0.5);
+             border-radius: 999px;
+         }
+
+         /* Make cards fixed width in scroll row */
+         .recent-row .card {
+             min-width: 240px;
+             max-width: 240px;
+             flex: 0 0 auto;
+         }
      </style>
  </head>
 
@@ -2000,6 +2207,15 @@
              </section>
 
 
+             <!-- RECENTLY PLAYED -->
+             <section class="grid-shell" id="recentSection" style="display:none;">
+                 <div class="grid-header">
+                     <div class="grid-title">Recently Played</div>
+                 </div>
+                 <div class="recent-row" id="recentGrid"></div>
+
+             </section>
+
 
              <!-- GRID -->
              <section class="grid-shell">
@@ -2084,53 +2300,92 @@
              </div>
          </div>
 
-         <!-- PAGE: SETTINGS -->
          <div class="page" id="page-settings">
-             <div class="page-card">
-                 <div class="page-card-header">Control room</div>
-                 <div class="page-card-title">Settings</div>
-                 <div class="page-card-sub">
-                     Tweak the look and feel of the deck. These settings only change this page, not the actual games.
+             <div class="page-card" style="padding: 28px 32px;">
+                 <div class="page-card-header" style="font-size: 0.85rem;">Control Room</div>
+                 <div class="page-card-title" style="font-size: 1.6rem; margin-bottom: 8px;">Settings</div>
+                 <div class="page-card-sub" style="font-size: 0.9rem; margin-bottom: 28px;">
+                     Customize your experience — all settings are saved.
                  </div>
+
                  <div class="settings-grid">
-                     <div>
-                         <div class="field-label">Theme</div>
-                         <select class="field-select" id="themeSelect">
-                             <option value="galaxy">Galaxy (default)</option>
-                             <option value="midnight">Midnight</option>
-                             <option value="neon">Neon grid</option>
-                             <option value="aurora">Aurora</option>
-                         </select>
-                     </div>
-                     <div class="toggle-row">
-                         <div>
-                             <div class="toggle-label">Compact card grid</div>
-                             <div class="toggle-sub">Slightly tighter spacing between cards.</div>
+                     <!-- Appearance Card -->
+                     <div class="setting-card">
+                         <div class="setting-header">
+                             <span class="setting-icon">🎨</span>
+                             <h3>Appearance</h3>
                          </div>
-                         <label class="toggle-switch">
-                             <input type="checkbox" id="compactToggle" />
-                             <span class="toggle-slider"></span>
-                         </label>
-                     </div>
-                     <div class="toggle-row">
-                         <div>
-                             <div class="toggle-label">Hide intro hero</div>
-                             <div class="toggle-sub">Focus on the grid only, no description panel.</div>
+                         <div class="setting-desc">Change the look and feel of the interface.</div>
+                         <div class="setting-controls">
+                             <select id="themeSelect" class="select-large">
+                                 <option value="galaxy">Galaxy (default)</option>
+                                 <option value="midnight">Midnight</option>
+                                 <option value="neon">Neon Grid</option>
+                                 <option value="aurora">Aurora</option>
+                             </select>
                          </div>
-                         <label class="toggle-switch">
-                             <input type="checkbox" id="heroToggle" />
-                             <span class="toggle-slider"></span>
-                         </label>
                      </div>
-                     <div class="toggle-row">
-                         <div>
-                             <div class="toggle-label">Reduce motion</div>
-                             <div class="toggle-sub">Tone down animations and hover flips.</div>
+
+                     <!-- Layout Card -->
+                     <div class="setting-card">
+                         <div class="setting-header">
+                             <span class="setting-icon">⚜️</span>
+                             <h3>Design</h3>
                          </div>
-                         <label class="toggle-switch">
-                             <input type="checkbox" id="motionToggle" />
-                             <span class="toggle-slider"></span>
-                         </label>
+                         <div class="toggle-row-large">
+                             <div class="toggle-info">
+                                 <div class="toggle-label-large">Hide Title</div>
+                                 <div class="toggle-sub-large">Remove the title/welcome block.</div>
+                             </div>
+                             <label class="toggle-switch-large">
+                                 <input type="checkbox" id="heroToggle">
+                                 <span class="toggle-slider-large"></span>
+                             </label>
+                         </div>
+                         <div class="toggle-row-large">
+                             <div class="toggle-info">
+                                 <div class="toggle-label-large">Reduce Motion</div>
+                                 <div class="toggle-sub-large">Disable animations and card flips.</div>
+                             </div>
+                             <label class="toggle-switch-large">
+                                 <input type="checkbox" id="motionToggle">
+                                 <span class="toggle-slider-large"></span>
+                             </label>
+                         </div>
+                     </div>
+
+                     <!-- Safety Card -->
+                     <div class="setting-card">
+                         <div class="setting-header">
+                             <span class="setting-icon">🛡️</span>
+                             <h3>Panic Button</h3>
+                         </div>
+                         <div class="setting-desc">Press a key to instantly redirect to a safe URL.</div>
+
+                         <div class="panic-section-spacious">
+                             <div class="panic-row-spacious">
+                                 <div class="panic-field-spacious">
+                                     <label>🔗 Panic URL</label>
+                                     <input type="text" id="panicUrl" class="panic-input-large" placeholder="https://google.com" value="https://google.com">
+                                 </div>
+                                 <div class="panic-field-spacious">
+                                     <label>⌨️ Panic Key</label>
+                                     <div style="display: flex; gap: 10px;">
+                                         <input type="text" id="panicKeyInput" class="panic-input-large" readonly placeholder="Click 'Set Key'" style="cursor: pointer; background: #0f172a;" value="` (backtick)">
+                                         <button id="setPanicKeyBtn" class="btn-small-spacious">Set Key</button>
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="panic-preview-spacious">
+                                 <div>Current keybind: <span id="currentPanicKey" class="key-badge">` (backtick)</span></div>
+                                 <div class="button-group">
+                                     <button id="clearPanicKeyBtn" class="btn-small-spacious">Reset to default</button>
+                                 </div>
+                             </div>
+                             <div class="setting-desc" style="margin-top: 16px; font-size: 0.7rem;">
+                                 💡 Press your panic key anytime to instantly redirect.
+                             </div>
+                         </div>
                      </div>
                  </div>
              </div>
@@ -3365,23 +3620,19 @@
          <div class="log-content" onclick="event.stopPropagation()">
              <button class="close-btn" type="button" aria-label="Close">&times;</button>
              <h2>Update Log</h2>
-             <h3>Games</h3>
-             <ul>
-                 <li>🎰 Added Pinball</li>
-                 <li>🃏 Added Balatro</li>
-             </ul>
-             <h3></h3>
              <h3>Features</h3>
              <ul>
-                 <li>🔧 Random Game Button</li>
+                 <li>📋 Added Recently Played Section</li>
+                 <li>⚙️ Added Panic Key in Settings (Default Key: `)</li>
+                 <li>🎮 Games now open in same tab when you enter code</li>
              </ul>
              <h3></h3>
              <h3>Coming Soon</h3>
              <ul>
-                 <li>🎮 More Suggested Games</li>
+                 <li>🎮 More Games (currently looking at suggestions and game requests)</li>
              </ul>
              <div class="log-footer">
-                 <span>Version 1.2.7 • Last updated Mar 6, 2026</span>
+                 <span>Version 1.3.0 • Last updated Mar 26, 2026</span>
              </div>
 
          </div>
@@ -4234,6 +4485,288 @@
              });
          });
 
+         // Panic Key System - Targets the actual browser tab, not the iframe
+         const panicUrlInput = document.getElementById("panicUrl");
+         const panicKeyInput = document.getElementById("panicKeyInput");
+         const setPanicKeyBtn = document.getElementById("setPanicKeyBtn");
+         const clearPanicKeyBtn = document.getElementById("clearPanicKeyBtn");
+         const testPanicBtn = document.getElementById("testPanicBtn");
+         const currentPanicKeySpan = document.getElementById("currentPanicKey");
+
+         let panicKey = "`"; // Default key is backtick
+         let isSettingKey = false;
+
+         // Load panic settings from localStorage
+         function loadPanicSettings() {
+             try {
+                 const savedKey = localStorage.getItem("panicKey");
+                 const savedUrl = localStorage.getItem("panicUrl");
+
+                 if (savedKey) {
+                     panicKey = savedKey;
+                     let displayKey = panicKey;
+                     if (panicKey === "`") displayKey = "` (backtick)";
+                     else if (panicKey === "esc") displayKey = "ESC";
+                     else if (panicKey === "space") displayKey = "SPACE";
+                     else displayKey = panicKey.toUpperCase();
+
+                     currentPanicKeySpan.textContent = displayKey;
+                     if (panicKeyInput) panicKeyInput.value = displayKey;
+                 } else {
+                     panicKey = "`";
+                     currentPanicKeySpan.textContent = "` (backtick)";
+                     if (panicKeyInput) panicKeyInput.value = "` (backtick)";
+                     localStorage.setItem("panicKey", "`");
+                 }
+
+                 if (savedUrl && panicUrlInput) {
+                     panicUrlInput.value = savedUrl;
+                 } else if (panicUrlInput) {
+                     panicUrlInput.value = "https://google.com";
+                 }
+
+                 // Always setup the panic listener (always active)
+                 setupPanicListener();
+
+             } catch (e) {
+                 console.error("Failed to load panic settings:", e);
+             }
+         }
+
+         // Save panic settings
+         function savePanicSettings() {
+             try {
+                 if (panicKey) localStorage.setItem("panicKey", panicKey);
+                 if (panicUrlInput) localStorage.setItem("panicUrl", panicUrlInput.value);
+             } catch (e) {
+                 console.error("Failed to save panic settings:", e);
+             }
+         }
+
+         // Panic function - REPLACES THE PARENT WINDOW (actual browser tab)
+         function triggerPanic() {
+             let url = panicUrlInput ? panicUrlInput.value.trim() : "https://google.com";
+
+             // Add https:// if no protocol is specified
+             if (!url.startsWith("http://") && !url.startsWith("https://")) {
+                 url = "https://" + url;
+             }
+
+             // Show a quick flash effect for visual feedback
+             const flash = document.createElement("div");
+             flash.style.position = "fixed";
+             flash.style.top = "0";
+             flash.style.left = "0";
+             flash.style.width = "100%";
+             flash.style.height = "100%";
+             flash.style.backgroundColor = "rgba(0,0,0,0.9)";
+             flash.style.zIndex = "999999";
+             flash.style.pointerEvents = "none";
+             flash.style.transition = "opacity 0.2s ease";
+             flash.style.opacity = "1";
+             document.body.appendChild(flash);
+
+             setTimeout(() => {
+                 flash.style.opacity = "0";
+                 setTimeout(() => flash.remove(), 200);
+             }, 150);
+
+             // CRITICAL: Target the TOP window (actual browser tab), not the iframe
+             setTimeout(() => {
+                 try {
+                     // This targets the actual browser tab, even if inside an iframe
+                     if (window.top && window.top !== window.self) {
+                         // We're in an iframe - redirect the parent
+                         window.top.location.replace(url);
+                     } else {
+                         // We're in the main window
+                         window.location.replace(url);
+                     }
+                 } catch (e) {
+                     // Cross-origin error fallback
+                     window.location.replace(url);
+                 }
+             }, 150);
+         }
+
+         // Setup keyboard listener for panic key (always active)
+         let panicListenerActive = false;
+
+         function setupPanicListener() {
+             if (panicListenerActive) return;
+
+             const keyHandler = (e) => {
+                 // Check if the pressed key matches the panic key
+                 let pressedKey = e.key.toLowerCase();
+
+                 // Handle special keys
+                 if (pressedKey === "escape") pressedKey = "esc";
+                 if (pressedKey === " ") pressedKey = "space";
+
+                 let currentKey = panicKey.toLowerCase();
+
+                 if (pressedKey === currentKey) {
+                     e.preventDefault();
+                     e.stopPropagation();
+                     triggerPanic();
+                 }
+             };
+
+             document.addEventListener("keydown", keyHandler);
+             panicListenerActive = true;
+
+             // Store the handler for cleanup
+             window.panicKeyHandler = keyHandler;
+         }
+
+         // Remove panic listener
+         function removePanicListener() {
+             if (window.panicKeyHandler) {
+                 document.removeEventListener("keydown", window.panicKeyHandler);
+                 panicListenerActive = false;
+                 window.panicKeyHandler = null;
+             }
+         }
+
+         // Set panic key
+         function startSettingKey() {
+             if (isSettingKey) return;
+             isSettingKey = true;
+
+             const originalPlaceholder = panicKeyInput.placeholder;
+             panicKeyInput.placeholder = "Press any key...";
+             panicKeyInput.style.backgroundColor = "rgba(79, 70, 229, 0.3)";
+             panicKeyInput.style.borderColor = "rgba(79, 70, 229, 0.8)";
+             panicKeyInput.value = "";
+
+             const keyHandler = (e) => {
+                 e.preventDefault();
+                 e.stopPropagation();
+
+                 let key = e.key.toLowerCase();
+
+                 // Handle special keys
+                 if (key === "escape") key = "esc";
+                 if (key === " ") key = "space";
+
+                 // Don't allow setting modifier keys alone
+                 if (key === "control" || key === "alt" || key === "shift" || key === "meta") {
+                     panicKeyInput.placeholder = "Cannot use modifier keys alone";
+                     setTimeout(() => {
+                         panicKeyInput.placeholder = originalPlaceholder;
+                     }, 1000);
+                     return;
+                 }
+
+                 panicKey = key;
+
+                 // Display the key nicely
+                 let displayKey = key;
+                 if (key === "`") displayKey = "` (backtick)";
+                 else if (key === "esc") displayKey = "ESC";
+                 else if (key === "space") displayKey = "SPACE";
+                 else displayKey = key.toUpperCase();
+
+                 panicKeyInput.value = displayKey;
+                 currentPanicKeySpan.textContent = displayKey;
+
+                 // Save the key
+                 savePanicSettings();
+
+                 // Re-setup listener with new key
+                 removePanicListener();
+                 setupPanicListener();
+
+                 // Reset UI
+                 panicKeyInput.placeholder = originalPlaceholder;
+                 panicKeyInput.style.backgroundColor = "";
+                 panicKeyInput.style.borderColor = "";
+                 isSettingKey = false;
+
+                 document.removeEventListener("keydown", keyHandler);
+
+                 showToast("PANIC KEY", `Panic key set to: ${displayKey}`);
+             };
+
+             document.addEventListener("keydown", keyHandler);
+
+             // Timeout after 10 seconds
+             setTimeout(() => {
+                 if (isSettingKey) {
+                     isSettingKey = false;
+                     panicKeyInput.placeholder = originalPlaceholder;
+                     panicKeyInput.style.backgroundColor = "";
+                     panicKeyInput.style.borderColor = "";
+                     let displayKey = panicKey;
+                     if (panicKey === "`") displayKey = "` (backtick)";
+                     else if (panicKey === "esc") displayKey = "ESC";
+                     else if (panicKey === "space") displayKey = "SPACE";
+                     else displayKey = panicKey.toUpperCase();
+                     panicKeyInput.value = displayKey;
+                     document.removeEventListener("keydown", keyHandler);
+                     showToast("PANIC KEY", "Key setting cancelled (timeout)");
+                 }
+             }, 10000);
+         }
+
+         // Clear panic key (reset to default backtick)
+         function clearPanicKey() {
+             panicKey = "`";
+             panicKeyInput.value = "` (backtick)";
+             currentPanicKeySpan.textContent = "` (backtick)";
+             savePanicSettings();
+
+             // Re-setup listener with default key
+             removePanicListener();
+             setupPanicListener();
+
+             showToast("PANIC KEY", "Panic key reset to ` (backtick)");
+         }
+
+         // Save URL when changed
+         if (panicUrlInput) {
+             panicUrlInput.addEventListener("change", () => {
+                 savePanicSettings();
+                 showToast("PANIC KEY", "Panic URL saved");
+             });
+         }
+
+         // Set key button
+         if (setPanicKeyBtn) {
+             setPanicKeyBtn.addEventListener("click", startSettingKey);
+         }
+
+         // Clear key button
+         if (clearPanicKeyBtn) {
+             clearPanicKeyBtn.addEventListener("click", clearPanicKey);
+         }
+
+         // Test panic button
+         if (testPanicBtn) {
+             testPanicBtn.addEventListener("click", () => {
+                 triggerPanic();
+             });
+         }
+
+         // Load panic settings on page load
+         loadPanicSettings();
+
+         // Keyboard shortcut to show current panic key (Ctrl+Shift+K)
+         document.addEventListener("keydown", (e) => {
+             if (e.ctrlKey && e.shiftKey && e.key === "K") {
+                 e.preventDefault();
+                 let displayKey = panicKey;
+                 if (panicKey === "`") displayKey = "` (backtick)";
+                 else if (panicKey === "esc") displayKey = "ESC";
+                 else if (panicKey === "space") displayKey = "SPACE";
+                 else displayKey = panicKey.toUpperCase();
+                 showToast("PANIC KEY", `Current panic key: ${displayKey} | URL: ${panicUrlInput?.value || "https://google.com"}`);
+             }
+         });
+
+         // Also add a special warning for about:blank iframe users
+         console.log("Panic key active! Press your panic key to escape (default: `)");
+
          // Theme + settings
          const themeSelect = document.getElementById("themeSelect");
          const compactToggle = document.getElementById("compactToggle");
@@ -4340,6 +4873,8 @@
          }
 
          loadSettings();
+
+
 
          function playSparkleBurst(anchorEl) {
              if (!anchorEl) return;
@@ -4520,6 +5055,11 @@
                  localStorage.removeItem("loaderSkipTime");
              }
 
+             // NEW: Check if we should show update log (first visit of the day)
+             const lastLogDate = localStorage.getItem("lastUpdateLogDate");
+             const today = new Date().toDateString();
+             const shouldShowUpdateLog = lastLogDate !== today;
+
              if (shouldSkipLoader && timeSinceSkip < 10000) {
                  // Skip loader entirely - hide immediately
                  if (loaderScreen) {
@@ -4540,6 +5080,14 @@
                  // Show AI button and update log button
                  if (aiButton) aiButton.style.display = 'flex';
                  if (updateLogBtn) updateLogBtn.style.display = 'flex';
+
+                 // Show update log if it's their first visit today
+                 if (shouldShowUpdateLog && typeof showUpdateLog === 'function') {
+                     setTimeout(() => {
+                         showUpdateLog(true);
+                         localStorage.setItem("lastUpdateLogDate", today);
+                     }, 500);
+                 }
 
                  // Clear skip flags after using them
                  setTimeout(() => {
@@ -4564,15 +5112,56 @@
                      if (aiButton) aiButton.style.display = 'flex';
                      if (updateLogBtn) updateLogBtn.style.display = 'flex';
 
-                     // Show update log automatically (optional)
-                     if (typeof showUpdateLog === 'function') {
+                     // Show update log only on first visit of the day
+                     if (shouldShowUpdateLog && typeof showUpdateLog === 'function') {
                          setTimeout(() => {
                              showUpdateLog(true);
+                             localStorage.setItem("lastUpdateLogDate", today);
                          }, 500);
                      }
                  }, 1200);
              }
          });
+
+         let recentGames = JSON.parse(localStorage.getItem("recentGames") || "[]");
+
+         function addRecentGame(game) {
+             // store ONLY code
+             recentGames = recentGames.filter(code => code !== game.code);
+
+             recentGames.unshift(game.code);
+
+             if (recentGames.length > 6) recentGames.pop();
+
+             localStorage.setItem("recentGames", JSON.stringify(recentGames));
+         }
+
+
+         function renderRecentGames() {
+             const section = document.getElementById("recentSection");
+             const grid = document.getElementById("recentGrid");
+
+             grid.innerHTML = "";
+
+             // Check if we're on "All Games" category AND sort mode is "az" (A-Z)
+             const shouldShowRecent = (currentCategory === "all" && sortMode === "az");
+
+             if (!shouldShowRecent || !recentGames.length) {
+                 section.style.display = "none";
+                 return;
+             }
+
+             section.style.display = "block";
+
+             recentGames.forEach(code => {
+                 const game = games.find(g => g.code === code);
+
+                 if (!game) return;
+
+                 const card = createGameCard(game);
+                 grid.appendChild(card);
+             });
+         }
 
          // Add this function to check URL parameters for return flag
          function checkForReturnFromCodeSite() {
@@ -4700,6 +5289,7 @@
                  btn.classList.add("active");
                  currentCategory = value;
                  renderCards();
+                 renderRecentGames();
                  if (value === "all") showToast("FILTER", "Showing all games");
                  else showToast("FILTER", "Category: " + label);
              });
@@ -4728,6 +5318,7 @@
                  }
 
                  renderCards();
+                 renderRecentGames();
              });
          }
 
@@ -4832,6 +5423,13 @@
     `;
              document.head.appendChild(style);
          }
+
+         function setCategory(category) {
+             currentCategory = category;
+             renderGames(); // your existing function
+             renderRecentGames(); // update visibility
+         }
+
 
          function tryCopyToClipboard(text) {
              try {
@@ -5025,6 +5623,7 @@
              btn.addEventListener("click", (e) => {
                  e.stopPropagation();
                  handleCopy();
+                 addRecentGame(game);
              });
 
              return card;
@@ -5051,7 +5650,7 @@
              } else if (sortMode === "recent") {
                  // higher id = added later
                  toRender.sort((a, b) => b.id - a.id);
-                 toRender = toRender.slice(0, 8);
+                 toRender = toRender.slice(0, 12);
              } // Update the popular sorting in renderCards function
              else if (sortMode === "popular") {
                  // Use weekly click data for popular section
@@ -5074,7 +5673,7 @@
                      })
                      .filter(entry => entry.count > 0)
                      .sort((a, b) => b.count - a.count)
-                     .slice(0, 8);
+                     .slice(0, 12);
 
                  if (ranked.length) {
                      toRender = ranked.map(e => e.game);
@@ -5143,6 +5742,7 @@
 
          // initial render
          renderCards();
+         renderRecentGames();
 
          // Set up real-time counter updates
          if (window.listenToAllTimeCounts) {
@@ -5174,7 +5774,7 @@
              noResults.style.display = "none";
 
              // Get last 8 games added (in original order)
-             const recent = games.slice(-8).reverse();
+             const recent = games.slice(-12).reverse();
              // newest = top
 
              // Nothing found fallback
