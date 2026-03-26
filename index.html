@@ -45,6 +45,83 @@
             background-color: rgba(255, 0, 0, 0.7);
         }
         
+        #closeIframeBtn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            color: var(--text-soft);
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+            font-size: 24px;
+            font-weight: 300;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            line-height: 1;
+        }
+        
+        #closeIframeBtn:hover {
+            background: rgba(239, 68, 68, 0.9);
+            border-color: rgba(239, 68, 68, 0.6);
+            color: white;
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 8px 30px rgba(239, 68, 68, 0.4);
+        }
+        
+        #closeIframeBtn:active {
+            transform: scale(0.95);
+        }
+        
+        /* Optional: Add a subtle glow effect */
+        #closeIframeBtn::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, rgba(239, 68, 68, 0.3), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        
+        #closeIframeBtn:hover::before {
+            opacity: 1;
+        }
+        
+        /* Iframe container styling */
+        #iframeContainer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index: 1000;
+            display: none;
+        }
+        
+        #iframeContainer iframe {
+            border: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        body.iframe-open #container {
+            display: none;
+        }
+        
         .hidden {
             display: none;
         }
@@ -106,7 +183,7 @@
     <div id="iframeContainer">
         <iframe id="siteFrame" allowfullscreen></iframe>
     </div>
-    <button id="closeIframeBtn">✕ Close</button>
+    <button id="closeIframeBtn">✕</button>
 
     <div id="notification" class="hidden"></div>
 
@@ -202,7 +279,7 @@
             
             // Show iframe container and close button
             iframeContainer.style.display = 'block';
-            closeBtn.style.display = 'block';
+            closeBtn.style.display = 'flex';
             
             // Add class to body to hide main container
             document.body.classList.add('iframe-open');
@@ -252,4 +329,5 @@
         document.getElementById('closeIframeBtn').style.display = 'none';
     </script>
 </body>
+
 </html>
