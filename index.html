@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Tinkle Party Games</title>
     <link rel="icon" type="image/png" href="yes.ico">
@@ -16,7 +17,7 @@
             z-index: 1000;
             display: none;
         }
-        
+
         #iframeContainer iframe {
             border: none;
             position: absolute;
@@ -25,11 +26,11 @@
             width: 100%;
             height: 100%;
         }
-        
+
         body.iframe-open #container {
             display: none;
         }
-        
+
         #notification {
             position: fixed;
             top: 20px;
@@ -39,32 +40,33 @@
             z-index: 2000;
             animation: slideIn 0.3s ease-out;
         }
-        
+
         #notification.success {
             background-color: #4CAF50;
             color: white;
         }
-        
+
         #notification.error {
             background-color: #f44336;
             color: white;
         }
-        
+
         @keyframes slideIn {
             from {
                 transform: translateX(100%);
                 opacity: 0;
             }
+
             to {
                 transform: translateX(0);
                 opacity: 1;
             }
         }
-        
+
         .hidden {
             display: none;
         }
-        
+
         /* Optional: Show a hint for the backslash key */
         #backslashHint {
             position: fixed;
@@ -84,16 +86,16 @@
             white-space: nowrap;
             font-family: monospace;
         }
-        
+
         #backslashHint.show {
             opacity: 1;
         }
-        
+
         /* Back button styles for messages */
         .back-button {
             transition: opacity 0.3s ease, transform 0.3s ease;
         }
-        
+
         .back-button.hidden {
             opacity: 0;
             pointer-events: none;
@@ -101,6 +103,7 @@
         }
     </style>
 </head>
+
 <body>
     <div id="container">
         <h2>Enter Code</h2>
@@ -121,7 +124,7 @@
     <div id="iframeContainer">
         <iframe id="siteFrame" allowfullscreen></iframe>
     </div>
-    
+
     <!-- Hint for backslash key (appears when iframe is open) -->
     <div id="backslashHint">Press \ (backslash) to exit</div>
 
@@ -184,13 +187,13 @@
             const openPageBtn = document.getElementById('openPageBtn');
             const iframeHint = document.getElementById('iframeHint');
             const resultDiv = document.getElementById('result');
-            
+
             const newBtn = submitBtn.cloneNode(true);
             submitBtn.parentNode.replaceChild(newBtn, submitBtn);
             newBtn.innerHTML = "Submit";
             newBtn.style.backgroundColor = "";
             newBtn.addEventListener('click', checkCode);
-            
+
             openPageBtn.classList.add("hidden");
             iframeHint.classList.add("hidden");
             resultDiv.innerHTML = "";
@@ -210,47 +213,17 @@
         function openPage() {
             if (!generatedLink || !iframeAllowed) return;
 
-            // Tell the TOP window (where back button is) that game started
+            // Tell the TOP window that game started
             window.top.postMessage('game_started', '*');
 
             const iframeContainer = document.getElementById('iframeContainer');
             const iframe = document.getElementById('siteFrame');
             const backslashHint = document.getElementById('backslashHint');
-            
+
             iframe.src = generatedLink;
             iframeContainer.style.display = 'block';
             document.body.classList.add('iframe-open');
-            
-            // Wait for iframe to load, then try to inject key listener
-            iframe.onload = function() {
-                try {
-                    // Try to inject a script into the iframe to listen for backslash
-                    const script = `
-                        document.addEventListener('keydown', function(e) {
-                            if (e.key === '\\\\' || e.keyCode === 220) {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                window.parent.postMessage('close_game', '*');
-                            }
-                        });
-                    `;
-                    
-                    // Try to inject into iframe (may fail for cross-origin)
-                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-                    if (iframeDoc) {
-                        const scriptTag = iframeDoc.createElement('script');
-                        scriptTag.textContent = script;
-                        iframeDoc.head.appendChild(scriptTag);
-                        console.log("Backslash listener injected into iframe");
-                    }
-                } catch(e) {
-                    // Cross-origin iframe - can't inject directly
-                    console.log("Can't inject script due to cross-origin, using fallback");
-                    // Show a persistent hint
-                    backslashHint.classList.add('show');
-                }
-            };
-            
+
             backslashHint.classList.add('show');
             setTimeout(() => {
                 backslashHint.classList.remove('show');
@@ -258,13 +231,13 @@
         }
 
         function closeIframe() {
-            // Tell the TOP window (where back button is) that game ended
+            // Tell the TOP window that game ended
             window.top.postMessage('game_ended', '*');
 
             const iframeContainer = document.getElementById('iframeContainer');
             const iframe = document.getElementById('siteFrame');
             const backslashHint = document.getElementById('backslashHint');
-            
+
             iframe.src = 'about:blank';
             iframeContainer.style.display = 'none';
             document.body.classList.remove('iframe-open');
@@ -302,4 +275,5 @@
         document.getElementById('iframeContainer').style.display = 'none';
     </script>
 </body>
+
 </html>
