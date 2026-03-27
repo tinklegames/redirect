@@ -89,7 +89,7 @@
             opacity: 1;
         }
         
-        /* ADDED: Back button hide/show animation */
+        /* Back button styles for messages */
         .back-button {
             transition: opacity 0.3s ease, transform 0.3s ease;
         }
@@ -207,13 +207,11 @@
             });
         }
 
-        // MODIFIED: Added code to hide back button when iframe opens
         function openPage() {
             if (!generatedLink || !iframeAllowed) return;
 
-            // HIDE the back button when game iframe opens
-            const backButton = document.querySelector('.back-button');
-            if (backButton) backButton.classList.add('hidden');
+            // Tell the TOP window (where back button is) that game started
+            window.top.postMessage('game_started', '*');
 
             const iframeContainer = document.getElementById('iframeContainer');
             const iframe = document.getElementById('siteFrame');
@@ -223,17 +221,16 @@
             iframeContainer.style.display = 'block';
             document.body.classList.add('iframe-open');
             
-            // Show the backslash hint
             backslashHint.classList.add('show');
-            
-            // Hide hint after 5 seconds
             setTimeout(() => {
                 backslashHint.classList.remove('show');
             }, 5000);
         }
 
-        // MODIFIED: Added code to show back button when iframe closes
         function closeIframe() {
+            // Tell the TOP window (where back button is) that game ended
+            window.top.postMessage('game_ended', '*');
+
             const iframeContainer = document.getElementById('iframeContainer');
             const iframe = document.getElementById('siteFrame');
             const backslashHint = document.getElementById('backslashHint');
@@ -241,13 +238,7 @@
             iframe.src = 'about:blank';
             iframeContainer.style.display = 'none';
             document.body.classList.remove('iframe-open');
-            
-            // Hide the hint
             backslashHint.classList.remove('show');
-            
-            // SHOW the back button again when game iframe closes
-            const backButton = document.querySelector('.back-button');
-            if (backButton) backButton.classList.remove('hidden');
         }
 
         function showNotification(message, type) {
@@ -264,12 +255,10 @@
         // Keyboard listener for backslash key to exit game
         function setupKeyboardExit() {
             document.addEventListener('keydown', (e) => {
-                // Check if backslash key is pressed (key code 220)
                 if (e.key === '\\' || e.keyCode === 220) {
                     const iframeContainer = document.getElementById('iframeContainer');
-                    // Only close if iframe is currently open
                     if (iframeContainer.style.display === 'block') {
-                        e.preventDefault(); // Prevent default backslash behavior
+                        e.preventDefault();
                         closeIframe();
                     }
                 }
@@ -288,7 +277,6 @@
         document.getElementById('iframeHint').classList.add('hidden');
         document.getElementById('iframeContainer').style.display = 'none';
         
-        // Setup keyboard exit listener
         setupKeyboardExit();
     </script>
 </body>
