@@ -5812,9 +5812,13 @@
          const returnURL = window.location.href;
 
          codeSiteBtn.addEventListener("click", () => {
+             // Set flags for skipping loader
              localStorage.setItem("skipGate", "true");
              localStorage.setItem("skipLoader", "true");
              localStorage.setItem("loaderSkipTime", Date.now().toString());
+
+             const returnURL = window.location.href;
+             const codeSiteURL = "https://tinklegames.github.io/redirect/";
 
              const newDoc = window.open("about:blank", "_self");
 
@@ -5895,11 +5899,11 @@
                         gameFrame.src = currentSrc;
                     }, 50);
                 }
-            }, true); // <-- THIS IS KEY: capture: true catches event before iframe
+            }, true);
             
             // Listen for messages from the iframe (index.html)
             window.addEventListener('message', function(event) {
-                console.log('Message:', event.data);
+                console.log('Message received:', event.data);
                 if (event.data === 'game_started') {
                     backButton.classList.add('hidden');
                 } else if (event.data === 'game_ended') {
