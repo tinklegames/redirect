@@ -5808,24 +5808,26 @@
      </script>
      <script>
          const codeSiteBtn = document.getElementById("openCodeSiteBtn");
-         const codeSiteURL = "https://tinklegames.github.io/redirect/";
-         const returnURL = window.location.href;
+const codeSiteURL = "https://tinklegames.github.io/redirect/";
+const returnURL = window.location.href;
 
-         enterCodeBtn.addEventListener("click", () => {
-    // Set flags for skipping loader
+// Remove any existing listeners
+const newBtn = codeSiteBtn.cloneNode(true);
+codeSiteBtn.parentNode.replaceChild(newBtn, codeSiteBtn);
+const freshBtn = document.getElementById("openCodeSiteBtn");
+
+freshBtn.addEventListener("click", () => {
     localStorage.setItem("skipGate", "true");
     localStorage.setItem("skipLoader", "true");
     localStorage.setItem("loaderSkipTime", Date.now().toString());
 
-    const returnURL = window.location.href;
-    
     const newDoc = window.open("about:blank", "_self");
 
     if (newDoc) {
         newDoc.document.write(`
 <html>
     <head>
-        <title>Tinkle Party Codes - Game Entry</title>
+        <title>Tinkle Party Codes</title>
         <style>
             body {
                 margin: 0;
@@ -5878,31 +5880,24 @@
 
      <body>
          <button class="back-button" onclick="window.location.href='${returnURL}'">🔙 Go Back</button>
-         <iframe id="gameFrame" src="${codeEntryURL}" allowfullscreen></iframe>
+         <iframe id="gameFrame" src="${codeSiteURL}" allowfullscreen></iframe>
          <script>
             const backButton = document.querySelector('.back-button');
             const gameFrame = document.getElementById('gameFrame');
             
-            // Capture backslash key BEFORE it reaches the iframe
             document.addEventListener('keydown', function(e) {
                 if (e.key === '\\\\' || e.keyCode === 220) {
                     e.preventDefault();
                     e.stopPropagation();
-                    console.log('Backslash pressed - closing game');
-                    // Show the back button
                     backButton.classList.remove('hidden');
-                    // Reload the iframe to exit the game
-                    const currentSrc = gameFrame.src;
                     gameFrame.src = 'about:blank';
                     setTimeout(() => {
-                        gameFrame.src = currentSrc;
+                        gameFrame.src = '${codeSiteURL}';
                     }, 50);
                 }
             }, true);
             
-            // Listen for messages from the iframe (index.html)
             window.addEventListener('message', function(event) {
-                console.log('Message received:', event.data);
                 if (event.data === 'game_started') {
                     backButton.classList.add('hidden');
                 } else if (event.data === 'game_ended') {
