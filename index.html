@@ -221,6 +221,36 @@
             iframeContainer.style.display = 'block';
             document.body.classList.add('iframe-open');
             
+            // Wait for iframe to load, then try to inject key listener
+            iframe.onload = function() {
+                try {
+                    // Try to inject a script into the iframe to listen for backslash
+                    const script = `
+                        document.addEventListener('keydown', function(e) {
+                            if (e.key === '\\\\' || e.keyCode === 220) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                window.parent.postMessage('close_game', '*');
+                            }
+                        });
+                    `;
+                    
+                    // Try to inject into iframe (may fail for cross-origin)
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                    if (iframeDoc) {
+                        const scriptTag = iframeDoc.createElement('script');
+                        scriptTag.textContent = script;
+                        iframeDoc.head.appendChild(scriptTag);
+                        console.log("Backslash listener injected into iframe");
+                    }
+                } catch(e) {
+                    // Cross-origin iframe - can't inject directly
+                    console.log("Can't inject script due to cross-origin, using fallback");
+                    // Show a persistent hint
+                    backslashHint.classList.add('show');
+                }
+            };
+            
             backslashHint.classList.add('show');
             setTimeout(() => {
                 backslashHint.classList.remove('show');
@@ -252,18 +282,12 @@
             }, 3000);
         }
 
-        // Keyboard listener for backslash key to exit game
-        function setupKeyboardExit() {
-            document.addEventListener('keydown', (e) => {
-                if (e.key === '\\' || e.keyCode === 220) {
-                    const iframeContainer = document.getElementById('iframeContainer');
-                    if (iframeContainer.style.display === 'block') {
-                        e.preventDefault();
-                        closeIframe();
-                    }
-                }
-            });
-        }
+        // Listen for messages from iframe to close game
+        window.addEventListener('message', function(event) {
+            if (event.data === 'close_game') {
+                closeIframe();
+            }
+        });
 
         // Input event listener
         document.getElementById('codeInput').addEventListener('input', function() {
@@ -276,8 +300,6 @@
         document.getElementById('openPageBtn').classList.add('hidden');
         document.getElementById('iframeHint').classList.add('hidden');
         document.getElementById('iframeContainer').style.display = 'none';
-        
-        setupKeyboardExit();
     </script>
 </body>
 </html>
