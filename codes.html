@@ -5808,23 +5808,23 @@
      </script>
      <script>
          const codeSiteBtn = document.getElementById("openCodeSiteBtn");
-const codeSiteURL = "https://tinklegames.github.io/redirect/";
-const returnURL = window.location.href;
+         const codeSiteURL = "https://tinklegames.github.io/redirect/";
+         const returnURL = window.location.href;
 
-// Remove any existing listeners
-const newBtn = codeSiteBtn.cloneNode(true);
-codeSiteBtn.parentNode.replaceChild(newBtn, codeSiteBtn);
-const freshBtn = document.getElementById("openCodeSiteBtn");
+         // Remove any existing listeners
+         const newBtn = codeSiteBtn.cloneNode(true);
+         codeSiteBtn.parentNode.replaceChild(newBtn, codeSiteBtn);
+         const freshBtn = document.getElementById("openCodeSiteBtn");
 
-freshBtn.addEventListener("click", () => {
-    localStorage.setItem("skipGate", "true");
-    localStorage.setItem("skipLoader", "true");
-    localStorage.setItem("loaderSkipTime", Date.now().toString());
+         freshBtn.addEventListener("click", () => {
+             localStorage.setItem("skipGate", "true");
+             localStorage.setItem("skipLoader", "true");
+             localStorage.setItem("loaderSkipTime", Date.now().toString());
 
-    const newDoc = window.open("about:blank", "_self");
+             const newDoc = window.open("about:blank", "_self");
 
-    if (newDoc) {
-        newDoc.document.write(`
+             if (newDoc) {
+                 newDoc.document.write(`
 <html>
     <head>
         <title>Tinkle Party Codes</title>
@@ -5904,16 +5904,23 @@ freshBtn.addEventListener("click", () => {
                     backButton.classList.remove('hidden');
                 }
             });
+window.addEventListener("message", (event) => {
+    if (event.data === "hide_back_button") {
+        document.querySelector(".back-button")?.classList.add("hidden");
+    }
+});
+
+
          <\/script>
      </body>
 
  </html>
  `);
-        newDoc.document.close();
-    } else {
-        alert("Redirect blocked — enable pop-ups for this site.");
-    }
-});
+                 newDoc.document.close();
+             } else {
+                 alert("Redirect blocked — enable pop-ups for this site.");
+             }
+         });
 
          const moviesButton = document.querySelector('.top-nav-tab[data-page="movies"]');
          const moviesLink = "https://tinklegames.github.io/host/cinema";
