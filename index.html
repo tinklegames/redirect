@@ -213,7 +213,6 @@
         function openPage() {
             if (!generatedLink || !iframeAllowed) return;
 
-            console.log('Sending game_started message');
             // Tell the TOP window that game started
             window.top.postMessage('game_started', '*');
 
@@ -232,7 +231,6 @@
         }
 
         function closeIframe() {
-            console.log('Sending game_ended message');
             // Tell the TOP window that game ended
             window.top.postMessage('game_ended', '*');
 
