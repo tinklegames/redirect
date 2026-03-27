@@ -88,6 +88,17 @@
         #backslashHint.show {
             opacity: 1;
         }
+        
+        /* ADDED: Back button hide/show animation */
+        .back-button {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        
+        .back-button.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-8px);
+        }
     </style>
 </head>
 <body>
@@ -196,8 +207,13 @@
             });
         }
 
+        // MODIFIED: Added code to hide back button when iframe opens
         function openPage() {
             if (!generatedLink || !iframeAllowed) return;
+
+            // HIDE the back button when game iframe opens
+            const backButton = document.querySelector('.back-button');
+            if (backButton) backButton.classList.add('hidden');
 
             const iframeContainer = document.getElementById('iframeContainer');
             const iframe = document.getElementById('siteFrame');
@@ -216,6 +232,7 @@
             }, 5000);
         }
 
+        // MODIFIED: Added code to show back button when iframe closes
         function closeIframe() {
             const iframeContainer = document.getElementById('iframeContainer');
             const iframe = document.getElementById('siteFrame');
@@ -227,6 +244,10 @@
             
             // Hide the hint
             backslashHint.classList.remove('show');
+            
+            // SHOW the back button again when game iframe closes
+            const backButton = document.querySelector('.back-button');
+            if (backButton) backButton.classList.remove('hidden');
         }
 
         function showNotification(message, type) {
