@@ -5812,11 +5812,8 @@
          const returnURL = window.location.href;
 
          codeSiteBtn.addEventListener("click", () => {
-             // Set TWO flags: one for skipping gate, one for skipping loader
              localStorage.setItem("skipGate", "true");
              localStorage.setItem("skipLoader", "true");
-
-             // Also set a timestamp to prevent race conditions
              localStorage.setItem("loaderSkipTime", Date.now().toString());
 
              const newDoc = window.open("about:blank", "_self");
@@ -5878,11 +5875,30 @@
 
      <body>
          <button class="back-button" onclick="window.location.href='${returnURL}'">🔙 Go Back</button>
-         <iframe src="${codeSiteURL}" allowfullscreen></iframe>
+         <iframe id="gameFrame" src="${codeSiteURL}" allowfullscreen></iframe>
          <script>
-            // Listen for messages from the iframe (index.html)
+            const backButton = document.querySelector('.back-button');
+            const gameFrame = document.getElementById('gameFrame');
+            
+            // Listen for backslash key globally
+            document.addEventListener('keydown', function(e) {
+                if (e.key === '\\\\' || e.keyCode === 220) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    // Show back button again
+                    if (backButton) backButton.classList.remove('hidden');
+                    // Also try to close/reload the iframe
+                    if (gameFrame) {
+                        gameFrame.src = 'about:blank';
+                        setTimeout(() => {
+                            gameFrame.src = '${codeSiteURL}';
+                        }, 100);
+                    }
+                }
+            });
+            
+            // Listen for messages from the iframe
             window.addEventListener('message', function(event) {
-                const backButton = document.querySelector('.back-button');
                 if (event.data === 'game_started') {
                     if (backButton) backButton.classList.add('hidden');
                 } else if (event.data === 'game_ended') {
