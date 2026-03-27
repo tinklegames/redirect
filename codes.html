@@ -5811,22 +5811,21 @@
          const codeSiteURL = "https://tinklegames.github.io/redirect/";
          const returnURL = window.location.href;
 
-         codeSiteBtn.addEventListener("click", () => {
-             // Set flags for skipping loader
-             localStorage.setItem("skipGate", "true");
-             localStorage.setItem("skipLoader", "true");
-             localStorage.setItem("loaderSkipTime", Date.now().toString());
+         enterCodeBtn.addEventListener("click", () => {
+    // Set flags for skipping loader
+    localStorage.setItem("skipGate", "true");
+    localStorage.setItem("skipLoader", "true");
+    localStorage.setItem("loaderSkipTime", Date.now().toString());
 
-             const returnURL = window.location.href;
-             const codeSiteURL = "https://tinklegames.github.io/redirect/";
+    const returnURL = window.location.href;
+    
+    const newDoc = window.open("about:blank", "_self");
 
-             const newDoc = window.open("about:blank", "_self");
-
-             if (newDoc) {
-                 newDoc.document.write(`
+    if (newDoc) {
+        newDoc.document.write(`
 <html>
     <head>
-        <title>Tinkle Party Codes</title>
+        <title>Tinkle Party Codes - Game Entry</title>
         <style>
             body {
                 margin: 0;
@@ -5879,7 +5878,7 @@
 
      <body>
          <button class="back-button" onclick="window.location.href='${returnURL}'">🔙 Go Back</button>
-         <iframe id="gameFrame" src="${codeSiteURL}" allowfullscreen></iframe>
+         <iframe id="gameFrame" src="${codeEntryURL}" allowfullscreen></iframe>
          <script>
             const backButton = document.querySelector('.back-button');
             const gameFrame = document.getElementById('gameFrame');
@@ -5915,11 +5914,11 @@
 
  </html>
  `);
-                 newDoc.document.close();
-             } else {
-                 alert("Redirect blocked — enable pop-ups for this site.");
-             }
-         });
+        newDoc.document.close();
+    } else {
+        alert("Redirect blocked — enable pop-ups for this site.");
+    }
+});
 
          const moviesButton = document.querySelector('.top-nav-tab[data-page="movies"]');
          const moviesLink = "https://tinklegames.github.io/host/cinema";
