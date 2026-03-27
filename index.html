@@ -216,6 +216,9 @@
             // Tell the TOP window that game started
             window.top.postMessage('game_started', '*');
 
+            window.top.postMessage('hide_back_button', '*');
+
+
             const iframeContainer = document.getElementById('iframeContainer');
             const iframe = document.getElementById('siteFrame');
             const backslashHint = document.getElementById('backslashHint');
@@ -273,6 +276,12 @@
         document.getElementById('openPageBtn').classList.add('hidden');
         document.getElementById('iframeHint').classList.add('hidden');
         document.getElementById('iframeContainer').style.display = 'none';
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "\\") {
+                closeIframe();
+            }
+        });
     </script>
 </body>
 
