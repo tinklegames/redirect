@@ -5849,10 +5849,6 @@
                 z-index: 1000;
                 backdrop-filter: blur(8px);
                 transition: all 0.4s ease;
-                opacity: 0;
-                transform: translateY(-8px);
-                animation: fadeIn 0.6s ease forwards;
-                animation-delay: 0.5s;
                 text-decoration: none;
                 display: inline-block;
             }
@@ -5861,50 +5857,84 @@
                 transform: scale(1.05);
             }
             .back-button.hidden {
-                opacity: 0;
-                pointer-events: none;
-                transform: translateY(-8px);
-                animation: none;
+                display: none;
             }
-            @keyframes fadeIn {
-                from { opacity: 0; transform: translateY(-8px); }
-                to   { opacity: 1; transform: translateY(0); }
+            #keyCapture {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 999;
+                background: transparent;
+                pointer-events: none;
             }
         </style>
      </head>
 
      <body>
+         <div id="keyCapture" tabindex="0"></div>
          <button class="back-button" onclick="window.location.href='${returnURL}'">🔙 Go Back</button>
          <iframe id="gameFrame" src="${codeSiteURL}" allowfullscreen></iframe>
          <script>
             const backButton = document.querySelector('.back-button');
             const gameFrame = document.getElementById('gameFrame');
+            const keyCapture = document.getElementById('keyCapture');
             
-            // Listen for backslash key globally
-            document.addEventListener('keydown', function(e) {
+            // Focus the keyCapture div to receive keyboard events
+            keyCapture.focus();
+            
+            // Re-focus when clicking anywhere
+            document.body.addEventListener('click', function() {
+                keyCapture.focus();
+            });
+            
+            // Listen for backslash key
+            keyCapture.addEventListener('keydown', function(e) {
                 if (e.key === '\\\\' || e.keyCode === 220) {
                     e.preventDefault();
                     e.stopPropagation();
-                    // Show back button again
-                    if (backButton) backButton.classList.remove('hidden');
-                    // Also try to close/reload the iframe
-                    if (gameFrame) {
-                        gameFrame.src = 'about:blank';
-                        setTimeout(() => {
-                            gameFrame.src = '${codeSiteURL}';
-                        }, 100);
-                    }
+                    console.log('Backslash pressed - closing game');
+                    // Show back button
+                    backButton.classList.remove('hidden');
+                    // Reload iframe to exit game
+                    gameFrame.src = 'about:blank';
+                    setTimeout(() => {
+                        gameFrame.src = '${codeSiteURL}';
+                    }, 100);
+                }
+            });
+            
+            // Also listen on window as fallback
+            window.addEventListener('keydown', function(e) {
+                if (e.key === '\\\\' || e.keyCode === 220) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Window backslash pressed');
+                    backButton.classList.remove('hidden');
+                    gameFrame.src = 'about:blank';
+                    setTimeout(() => {
+                        gameFrame.src = '${codeSiteURL}';
+                    }, 100);
                 }
             });
             
             // Listen for messages from the iframe
             window.addEventListener('message', function(event) {
+                console.log('Message received:', event.data);
                 if (event.data === 'game_started') {
-                    if (backButton) backButton.classList.add('hidden');
+                    backButton.classList.add('hidden');
                 } else if (event.data === 'game_ended') {
-                    if (backButton) backButton.classList.remove('hidden');
+                    backButton.classList.remove('hidden');
                 }
             });
+            
+            // Keep keyCapture focused
+            setInterval(function() {
+                if (document.activeElement !== keyCapture) {
+                    keyCapture.focus();
+                }
+            }, 500);
          <\/script>
      </body>
 
