@@ -5811,7 +5811,6 @@
          const codeSiteURL = "https://tinklegames.github.io/redirect/";
          const returnURL = window.location.href;
 
-
          codeSiteBtn.addEventListener("click", () => {
              // Set TWO flags: one for skipping gate, one for skipping loader
              localStorage.setItem("skipGate", "true");
@@ -5864,6 +5863,12 @@
                 background: rgba(255,255,255,0.25);
                 transform: scale(1.05);
             }
+            .back-button.hidden {
+                opacity: 0;
+                pointer-events: none;
+                transform: translateY(-8px);
+                animation: none;
+            }
             @keyframes fadeIn {
                 from { opacity: 0; transform: translateY(-8px); }
                 to   { opacity: 1; transform: translateY(0); }
@@ -5874,6 +5879,17 @@
      <body>
          <button class="back-button" onclick="window.location.href='${returnURL}'">🔙 Go Back</button>
          <iframe src="${codeSiteURL}" allowfullscreen></iframe>
+         <script>
+            // Listen for messages from the iframe (index.html)
+            window.addEventListener('message', function(event) {
+                const backButton = document.querySelector('.back-button');
+                if (event.data === 'game_started') {
+                    if (backButton) backButton.classList.add('hidden');
+                } else if (event.data === 'game_ended') {
+                    if (backButton) backButton.classList.remove('hidden');
+                }
+            });
+         <\/script>
      </body>
 
  </html>
