@@ -3616,9 +3616,9 @@
      <div id="copyToast" class="copy-toast">Code Copied!</div>
 
      <!-- UPDATE LOG OVERLAY -->
-     <div id="updateLog" class="update-log hidden-start" style="display:none;">
-         <div class="log-content" onclick="event.stopPropagation()">
-             <button class="close-btn" type="button" aria-label="Close">&times;</button>
+     <div id="updateLog" style="position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 99999; opacity: 0; transition: opacity 0.3s ease;">
+         <div class="log-content" style="background: rgba(10,20,40,0.95); backdrop-filter: blur(20px); border-radius: 28px; padding: 32px 40px; max-width: 450px; width: 90%; color: white; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 20px 60px rgba(0,0,0,0.5);">
+             <button class="close-btn" style="position: absolute; top: 12px; right: 18px; font-size: 28px; background: none; border: none; color: white; cursor: pointer;">&times;</button>
              <h2>Update Log</h2>
              <h3>Features</h3>
              <ul>
@@ -3631,7 +3631,7 @@
              <ul>
                  <li>🎮 More Games (currently looking at suggestions and game requests)</li>
              </ul>
-             <div class="log-footer">
+             <div class="log-footer" style="margin-top: 20px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.2); font-size: 0.75rem; text-align: center;">
                  <span>Version 1.3.0 • Last updated Mar 26, 2026</span>
              </div>
 
@@ -4364,27 +4364,22 @@
          const updateLog = document.getElementById("updateLog");
          const updateLogBtn = document.getElementById("updateLogBtn");
 
-         function showUpdateLog(initial = false) {
+         function showUpdateLog() {
+             const updateLog = document.getElementById("updateLog");
              if (!updateLog) return;
              updateLog.style.display = "flex";
-             // ensure base state
-             updateLog.classList.remove("fade-out");
-             if (initial) {
-                 updateLog.classList.add("hidden-start");
-                 // kick in transition
-                 setTimeout(() => {
-                     updateLog.classList.remove("hidden-start");
-                 }, 40);
-             }
+             setTimeout(() => {
+                 updateLog.style.opacity = "1";
+             }, 10);
          }
 
          function hideUpdateLog() {
+             const updateLog = document.getElementById("updateLog");
              if (!updateLog) return;
-             updateLog.classList.add("fade-out");
+             updateLog.style.opacity = "0";
              setTimeout(() => {
                  updateLog.style.display = "none";
-                 updateLog.classList.remove("fade-out");
-             }, 500); // match CSS transition
+             }, 300);
          }
 
          if (updateLog) {
@@ -4403,7 +4398,7 @@
          if (updateLogBtn) {
              updateLogBtn.addEventListener("click", (e) => {
                  e.preventDefault();
-                 showUpdateLog(true);
+                 showUpdateLog();
              });
          }
 
@@ -5055,10 +5050,6 @@
                  localStorage.removeItem("loaderSkipTime");
              }
 
-             // NEW: Check if we should show update log (first visit of the day)
-             const lastLogDate = localStorage.getItem("lastUpdateLogDate");
-             const today = new Date().toDateString();
-             const shouldShowUpdateLog = lastLogDate !== today;
 
              if (shouldSkipLoader && timeSinceSkip < 10000) {
                  // Skip loader entirely - hide immediately
@@ -5082,12 +5073,11 @@
                  if (updateLogBtn) updateLogBtn.style.display = 'flex';
 
                  // Show update log if it's their first visit today
-                 if (shouldShowUpdateLog && typeof showUpdateLog === 'function') {
-                     setTimeout(() => {
-                         showUpdateLog(true);
-                         localStorage.setItem("lastUpdateLogDate", today);
-                     }, 500);
-                 }
+                 setTimeout(() => {
+                     if (typeof showUpdateLog === 'function') {
+                         showUpdateLog();
+                     }
+                 }, 800);
 
                  // Clear skip flags after using them
                  setTimeout(() => {
@@ -5115,13 +5105,39 @@
                      // Show update log only on first visit of the day
                      if (shouldShowUpdateLog && typeof showUpdateLog === 'function') {
                          setTimeout(() => {
-                             showUpdateLog(true);
-                             localStorage.setItem("lastUpdateLogDate", today);
+                             showUpdateLog();
                          }, 500);
                      }
                  }, 1200);
              }
          });
+
+         // Re-attach update log event listeners
+         setTimeout(() => {
+             const updateLogEl = document.getElementById("updateLog");
+             const closeBtn = updateLogEl?.querySelector(".close-btn");
+             const updateLogBtn = document.getElementById("updateLogBtn");
+
+             if (updateLogEl) {
+                 updateLogEl.addEventListener("click", (e) => {
+                     if (e.target === updateLogEl) hideUpdateLog();
+                 });
+             }
+             if (closeBtn) {
+                 closeBtn.addEventListener("click", (e) => {
+                     e.stopPropagation();
+                     hideUpdateLog();
+                 });
+             }
+             if (updateLogBtn) {
+                 // Remove old listeners by cloning
+                 const newBtn = updateLogBtn.cloneNode(true);
+                 updateLogBtn.parentNode.replaceChild(newBtn, updateLogBtn);
+                 newBtn.addEventListener("click", () => {
+                     showUpdateLog();
+                 });
+             }
+         }, 100);
 
          let recentGames = JSON.parse(localStorage.getItem("recentGames") || "[]");
 
@@ -5805,6 +5821,19 @@
                  toast.classList.remove("show");
              }, 2000);
          }
+
+         // Force show update log when page is fully loaded
+         window.addEventListener('load', function() {
+             setTimeout(function() {
+                 var log = document.getElementById("updateLog");
+                 if (log && log.style.display !== "flex") {
+                     log.style.display = "flex";
+                     setTimeout(function() {
+                         log.style.opacity = "1";
+                     }, 10);
+                 }
+             }, 1000);
+         });
      </script>
      <script>
          const codeSiteBtn = document.getElementById("openCodeSiteBtn");
