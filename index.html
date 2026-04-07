@@ -101,6 +101,14 @@
             pointer-events: none;
             transform: translateY(-8px);
         }
+
+        /* Button group for side-by-side buttons */
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 10px;
+        }
     </style>
 </head>
 
@@ -113,8 +121,11 @@
 
         <div id="result"></div>
 
-        <!-- Open Page button -->
-        <button id="openPageBtn" class="hidden">Open Page</button>
+        <!-- Button group for Open Page buttons -->
+        <div class="button-group">
+            <button id="openPageBtn" class="hidden">Play</button>
+            <button id="openPrivateTabBtn" class="hidden">Open in Private Tab</button>
+        </div>
 
         <!-- Hint for sites that cannot open in iframe -->
         <div id="iframeHint" class="hidden" style="color: yellow; margin-top: 10px;"></div>
@@ -139,6 +150,7 @@
             const resultDiv = document.getElementById('result');
             const submitBtn = document.getElementById('submitBtn');
             const openPageBtn = document.getElementById('openPageBtn');
+            const openPrivateTabBtn = document.getElementById('openPrivateTabBtn');
             const iframeHint = document.getElementById('iframeHint');
 
             try {
@@ -161,11 +173,13 @@
 
                     if (iframeAllowed) {
                         openPageBtn.classList.remove("hidden");
+                        openPrivateTabBtn.classList.remove("hidden");
                         iframeHint.classList.add("hidden");
                     } else {
                         openPageBtn.classList.add("hidden");
+                        openPrivateTabBtn.classList.remove("hidden");
                         iframeHint.classList.remove("hidden");
-                        iframeHint.textContent = "⚠️ This site cannot open in an iframe. Copy and paste the link in your browser instead.";
+                        iframeHint.textContent = "⚠️ This site cannot open in an iframe. Use 'Open in Private Tab' instead.";
                     }
 
                     showNotification("✅ Valid code! Link generated.", "success");
@@ -173,6 +187,7 @@
                     resultDiv.innerHTML = "❌ Invalid code. Try again.";
                     showNotification("❌ Invalid code. Please try again.", "error");
                     openPageBtn.classList.add("hidden");
+                    openPrivateTabBtn.classList.add("hidden");
                     iframeHint.classList.add("hidden");
                 }
             } catch (error) {
@@ -185,6 +200,7 @@
         function resetForNewCode() {
             const submitBtn = document.getElementById('submitBtn');
             const openPageBtn = document.getElementById('openPageBtn');
+            const openPrivateTabBtn = document.getElementById('openPrivateTabBtn');
             const iframeHint = document.getElementById('iframeHint');
             const resultDiv = document.getElementById('result');
 
@@ -195,6 +211,7 @@
             newBtn.addEventListener('click', checkCode);
 
             openPageBtn.classList.add("hidden");
+            openPrivateTabBtn.classList.add("hidden");
             iframeHint.classList.add("hidden");
             resultDiv.innerHTML = "";
             generatedLink = "";
@@ -218,7 +235,6 @@
 
             window.top.postMessage('hide_back_button', '*');
 
-
             const iframeContainer = document.getElementById('iframeContainer');
             const iframe = document.getElementById('siteFrame');
             const backslashHint = document.getElementById('backslashHint');
@@ -231,6 +247,133 @@
             setTimeout(() => {
                 backslashHint.classList.remove('show');
             }, 5000);
+        }
+
+        // New function: Open in new tab with iframe wrapper (hides URL)
+        function openInPrivateTab() {
+            if (!generatedLink) {
+                showNotification("❌ No link generated. Please enter a valid code first.", "error");
+                return;
+            }
+
+            // Tell the TOP window that game started in private tab
+            window.top.postMessage('game_started', '*');
+
+            // Create a new blank tab
+            const newTab = window.open('about:blank', '_blank');
+            
+            if (!newTab) {
+                showNotification("⚠️ Popup blocked! Please allow popups for this site.", "error");
+                return;
+            }
+
+            // Create HTML with iframe that loads the game (hides real URL)
+            const wrapperHTML = `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Tinkle Party Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #000;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+        #gameFrame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        #exitHint {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #cbd5f5;
+            z-index: 1002;
+            font-family: monospace;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+        #loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-family: Arial, sans-serif;
+            background: rgba(0,0,0,0.8);
+            padding: 20px 30px;
+            border-radius: 10px;
+            z-index: 1001;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <iframe id="gameFrame" allowfullscreen></iframe>
+    
+    <script>
+        const gameUrl = ${JSON.stringify(generatedLink)};
+        const iframe = document.getElementById('gameFrame');
+        const loading = document.getElementById('loading');
+        
+        iframe.src = gameUrl;
+        
+        iframe.onload = function() {
+            loading.style.display = 'none';
+        };
+        
+        iframe.onerror = function() {
+            loading.innerHTML = '⚠️ Failed to load game';
+            loading.style.background = 'rgba(0,0,0,0.9)';
+        };
+        
+        setTimeout(function() {
+            if (loading.style.display !== 'none') {
+                loading.style.display = 'none';
+            }
+        }, 5000);
+        
+        window.addEventListener('message', function(event) {
+            if (event.data === 'close_game') {
+                window.close();
+            }
+        });
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.key === '\\\\') {
+                window.close();
+            }
+        });
+        
+        if (window.opener && !window.opener.closed) {
+            try {
+                window.opener.postMessage('game_started_private_tab', '*');
+            } catch(e) {}
+        }
+    <\/script>
+</body>
+</html>`;
+
+            newTab.document.write(wrapperHTML);
+            newTab.document.close();
+            
+            showNotification("🎮 Game opened in private tab.", "success");
         }
 
         function closeIframe() {
@@ -270,13 +413,18 @@
             resetForNewCode();
         });
 
+        // Set up event listeners
         document.getElementById('submitBtn').addEventListener('click', checkCode);
         document.getElementById('openPageBtn').addEventListener('click', openPage);
+        document.getElementById('openPrivateTabBtn').addEventListener('click', openInPrivateTab);
 
+        // Initial hidden states
         document.getElementById('openPageBtn').classList.add('hidden');
+        document.getElementById('openPrivateTabBtn').classList.add('hidden');
         document.getElementById('iframeHint').classList.add('hidden');
         document.getElementById('iframeContainer').style.display = 'none';
 
+        // Backslash key to close iframe
         document.addEventListener("keydown", (e) => {
             if (e.key === "\\") {
                 closeIframe();
