@@ -4058,6 +4058,9 @@
          if (heroStats) heroStats.textContent = games.length + " games loaded";
          if (cardsCount) cardsCount.textContent = "Showing " + games.length;
 
+         const categoryPillsContainer = document.getElementById("categoryPills");
+         const sortSelect = document.getElementById("sortSelect");
+
          let currentCategory = "all";
          let sortMode = "az"; // "az" | "popular" | "recent"
 
@@ -4067,25 +4070,38 @@
              btn.className = "cat-tab" + (active ? " active" : "");
              btn.textContent = label;
              btn.dataset.value = value;
+
              btn.addEventListener("click", () => {
                  const allTabs = categoryPillsContainer.querySelectorAll(".cat-tab");
                  allTabs.forEach(t => t.classList.remove("active"));
+
                  btn.classList.add("active");
                  currentCategory = value;
+
                  renderCards();
                  renderRecentGames();
-                 if (value === "all") showToast("FILTER", "Showing all games");
-                 else showToast("FILTER", "Category: " + label);
+
+                 if (value === "all") {
+                     showToast("FILTER", "Showing all games");
+                 } else {
+                     showToast("FILTER", "Category: " + label);
+                 }
              });
+
              return btn;
          }
 
          // "All" tab
          if (categoryPillsContainer) {
              categoryPillsContainer.appendChild(createTab("ALL", "all", true));
-             Array.from(categorySet).sort((a, b) => a.localeCompare(b)).forEach(cat => {
-                 categoryPillsContainer.appendChild(createTab(cat.toUpperCase(), cat.toLowerCase(), false));
-             });
+
+             Array.from(categorySet)
+                 .sort((a, b) => a.localeCompare(b))
+                 .forEach(cat => {
+                     categoryPillsContainer.appendChild(
+                         createTab(cat.toUpperCase(), cat.toLowerCase(), false)
+                     );
+                 });
          }
 
          // Sort dropdown (A–Z / Popular / Recently added)
