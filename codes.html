@@ -2436,6 +2436,8 @@
      <div id="snow-container"></div>
 
      <script src="live-notices.js"></script>
+     <script src="event-core.js"></script>
+     <script src="live-events.js"></script>
      <!-- Firebase / Troll / Presence logic -->
      <script type="module">
          import {
@@ -2821,6 +2823,22 @@
          let initialFlashbangLoaded = false;
          let initialReverseLoaded = false;
 
+         let liveEventClockOffset = 0;
+         onValue(ref(db, '.info/serverTimeOffset'), snapshot => { liveEventClockOffset = Number(snapshot.val()) || 0; });
+         const liveEventView = LiveEvents.mount({
+             now: () => Date.now() + liveEventClockOffset,
+             recruit: async id => {
+                 await anonymousSignIn;
+                 if (!auth.currentUser) throw new Error('Sign-in is still connecting. Try again.');
+                 const result = await runTransaction(ref(db, 'siteSettings/liveEvent'), current =>
+                     EventCore.recruit(current, id, Date.now() + liveEventClockOffset), { applyLocally: false });
+                 if (!result.committed) throw new Error('This Crab Rave has ended.');
+             }
+         });
+         onValue(ref(db, 'siteSettings/liveEvent'), snapshot => liveEventView.render(snapshot.val()), error => {
+             console.error('Live event unavailable:', error);
+             liveEventView.render(null);
+         });
          const liveNotices = LiveNotices.mount();
          onValue(ref(db, '.info/serverTimeOffset'), snapshot => liveNotices.setClockOffset(snapshot.val()));
          // Listen-only: visitors never delete announcement records.

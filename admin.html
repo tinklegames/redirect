@@ -80,6 +80,14 @@
     </section>
     <section id="panel-live" class="tab-panel" hidden>
       <div class="page-heading"><div><p class="eyebrow">LIVE CONTROLS</p><h1>On the site, right now</h1><p class="muted">These actions affect visitors currently on the site.</p></div></div>
+      <section class="panel event-admin">
+        <div class="panel-heading"><div><h2>Live events</h2><p class="muted">One shared event at a time. Everyone follows the same countdown.</p></div><button id="stop-event" class="danger" type="button" disabled>Stop live event</button></div>
+        <p id="event-status" role="status" aria-live="polite">Connecting to event status…</p>
+        <div class="event-options">
+          <form id="mystery-event-form"><h2>✦ Mystery game reveal</h2><label for="mystery-game">Game to reveal</label><select id="mystery-game" required></select><button type="button" id="reload-event-games" class="subtle">Refresh game list</button><label for="mystery-countdown">Countdown (seconds)</label><input id="mystery-countdown" type="number" min="0" max="120" value="10" required><label for="mystery-duration">Keep the reveal visible (seconds)</label><input id="mystery-duration" type="number" min="10" max="600" value="45" required><p class="muted small">Upload the game card and its codes.json destination first. The reveal shows the cover and a Copy code button.</p><button id="start-mystery" type="submit" class="primary">Start mystery reveal</button></form>
+          <form id="crab-event-form"><h2>🦀 Crab Rave takeover</h2><label for="crab-countdown">Countdown (seconds)</label><input id="crab-countdown" type="number" min="0" max="120" value="10" required><label for="crab-duration">Party duration (seconds)</label><input id="crab-duration" type="number" min="10" max="600" value="90" required><p class="muted">Crab Rave music, an ocean glow, and a shared crab army. Every recruit adds another crab to everyone's crowd.</p><p class="muted small">Starts with 8 crabs. The visible crowd is capped at 248 for performance; the recruitment counter keeps growing.</p><button id="start-crabs" type="submit" class="primary">Start Crab Rave</button></form>
+        </div>
+      </section>
       <div class="live-grid"><section class="panel"><h2>Live announcement</h2><label for="live-message">Message</label><textarea id="live-message" rows="3" maxlength="1500" placeholder="What's happening?"></textarea><label for="live-style">Show as</label><select id="live-style"><option value="toast">Small toast</option><option value="banner">Persistent banner</option><option value="modal">Full-screen message</option></select><label for="live-duration">Duration</label><select id="live-duration"><option value="15">15 seconds</option><option value="60">1 minute</option><option value="300">5 minutes</option><option value="0">Until cleared</option></select><div class="file-actions"><button id="send-live">Send announcement</button><button id="clear-live">Clear announcement</button></div><p id="live-status" class="muted small" role="status"></p></section>
       <section class="panel"><h2>Update available</h2><label for="update-message">Message</label><input id="update-message" maxlength="300" value="A new version is available. Refresh when you're ready."><p class="muted small">Visitors choose Refresh now or Later. Publishing this notice does not upload your files or force a reload.</p><div class="file-actions"><button id="publish-update">Show update banner</button><button id="clear-update">Clear update banner</button></div><p id="update-status" role="status" class="muted small"></p></section>
       <section class="panel"><h2>Saved announcement & jumpscare</h2><p class="muted">Uses the text or image entered in Site settings.</p><button id="trigger-announcement">Send saved announcement</button><button id="trigger-jumpscare">Trigger jumpscare</button></section>
@@ -96,5 +104,7 @@
 <script src="admin-data.js"></script>
 <script src="admin.js"></script>
 <script src="admin-tools.js"></script>
+<script src="event-core.js"></script>
+<script src="admin-events.js"></script>
 </body>
 </html>
