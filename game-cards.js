@@ -1,3 +1,4 @@
+// Add new cards at the end to preserve saved favorites.
 window.GAME_CARDS = [
   {
     "name": "FeedVid Live",
@@ -2062,5 +2063,14 @@ window.GAME_CARDS = [
       "puzzle"
     ],
     "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimg.youtube.com%2Fvi%2F2n9pkiuSZLU%2Fmaxresdefault.jpg&f=1&nofb=1&ipt=a1d0baad0966f827ed03c3f967f6121b215bd45fbcec6d80bdefdb1c771f495f"
+  },
+  {
+    "name": "Deadly Descent",
+    "code": "DEADLYD",
+    "categories": [
+      "arcade",
+      "simulator"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwheeliegames.com%2Fthumb%2Fdeadly-descent.webp&f=1&nofb=1&ipt=04f55b545291a6258ad6fef5c0c4ccaaef88b3ba4ac4529200ab8ebc7b65eb8e"
   }
 ];
