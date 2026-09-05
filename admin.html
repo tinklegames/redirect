@@ -1,286 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Admin Panel</title>
-<style>
-  body { background-color: #111; color: white; font-family: Arial, sans-serif; margin: 0; padding: 20px; }
-  h1 { color: #4CAF50; }
-  input, textarea { width: 100%; padding: 8px; margin: 10px 0; border-radius: 6px; border: none; outline: none; font-size: 14px; }
-  button { background-color: #4CAF50; color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 14px; }
-  button:hover { background-color: #45a049; }
-  .revert { background-color: #d9534f; margin-left: 10px; }
-  .revert:hover { background-color: #c9302c; }
-  #login-box { text-align: center; margin-top: 100px; }
-  #admin-content { display: none; max-width: 600px; margin: auto; }
-  label { display: block; margin-top: 20px; font-weight: bold; }
-  .group { display: flex; align-items: center; gap: 10px; }
-  input[type="color"] { width: 60px; height: 35px; padding: 0; border-radius: 4px; }
-</style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tinkle · Admin</title><link rel="stylesheet" href="admin.css">
 </head>
 <body>
-
-<div id="login-box">
-  <h2>🔒 Admin Login</h2>
-  <input type="email" id="admin-email" placeholder="Enter email..." />
-  <input type="password" id="admin-pass" placeholder="Enter password..." />
-  <button id="login-btn">Login</button>
+<section id="login-box" class="login">
+  <div class="brand"><span class="brand-icon">t</span> Tinkle <span class="muted">/ admin</span></div>
+  <h1>Welcome back.</h1><p class="muted">Sign in to manage your games and live site.</p>
+  <form id="login-form">
+    <label for="admin-email">Email</label><input type="email" id="admin-email" autocomplete="username" required>
+    <label for="admin-pass">Password</label><input type="password" id="admin-pass" autocomplete="current-password" required>
+    <button class="primary wide" id="login-btn">Sign in →</button>
+    <p id="login-status" role="status"></p>
+  </form>
+</section>
+<div id="admin-content" hidden>
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-icon">t</span> Tinkle <span class="tag">ADMIN</span></div>
+    <p class="nav-label">WORKSPACE</p>
+    <nav aria-label="Admin sections">
+      <button data-tab="games" class="active">▦ <span>Games</span></button>
+      <button data-tab="settings">◉ <span>Site settings</span></button>
+      <button data-tab="live">ϟ <span>Live controls</span></button>
+    </nav>
+    <div class="sidebar-bottom"><a href="codes.html" target="_blank" rel="noopener">Open game library ↗</a><span id="account-email" class="muted"></span><button id="logout">Sign out</button></div>
+  </aside>
+  <main>
+    <header class="topbar"><span id="section-label">Workspace / Games</span><span class="online"><i></i><span id="user-count">Connecting…</span></span></header>
+    <section id="panel-games" class="tab-panel">
+      <div class="page-heading"><div><p class="eyebrow">YOUR COLLECTION</p><h1>Game library</h1><p class="muted">Add a game, choose its cover, and save it to game-cards.js.</p></div><span class="count-pill" id="catalog-count">Loading games…</span></div>
+      <div class="file-toolbar panel"><div><strong id="file-name">game-cards.js</strong><p id="file-status" class="muted small" role="status">Loaded from this website. Open a local file to save changes directly.</p></div><div class="file-actions"><button id="open-cards" type="button">Open local file</button><button id="download-cards" type="button">Download file</button></div><input id="file-upload" type="file" accept=".js" hidden></div>
+      <div class="editor-layout">
+        <div class="panel">
+          <div class="panel-heading"><h2 id="editor-title">New game</h2><button type="button" id="new-game" class="subtle">Clear form</button></div>
+          <form id="game-form">
+            <div class="field-row"><div><label for="game-name">Game name</label><input id="game-name" placeholder="e.g. Minecraft" maxlength="120" required></div><div><label for="game-code">Code</label><input id="game-code" placeholder="MINECRAFT" maxlength="40" pattern="[A-Z0-9_!\-]+" required><small>Letters, numbers, !, _ or -</small></div></div>
+            <fieldset><legend>Categories <span class="muted">· choose one or more</span></legend><div id="categories" class="category-options"></div></fieldset>
+            <label for="game-image">Cover image URL</label><input id="game-image" type="url" placeholder="Choose an image below or paste a URL" required>
+            <div class="form-footer"><span id="save-hint" class="muted">Saves the complete game-cards.js file.</span><button class="primary" id="save-game">Save card →</button></div>
+          </form>
+        </div>
+        <aside class="preview-panel"><p class="eyebrow">CARD PREVIEW</p><div class="game-preview"><div class="preview-art"><img id="preview-image" alt="Game cover preview" hidden><span id="preview-placeholder">▦<small>Choose a cover image</small></span></div><div class="preview-copy"><span id="preview-code" class="tag">CODE</span><h2 id="preview-name">Your next game</h2><p id="preview-categories" class="muted">Select categories</p></div></div><p id="image-status" class="muted small" role="status">Preview updates as you edit.</p></aside>
+      </div>
+      <section class="panel image-panel"><div class="panel-heading"><div><h2>Find a cover</h2><p class="muted">Search, then select an image to use it on your card.</p></div><a id="duckduckgo-link" href="https://duckduckgo.com/?iax=images&ia=images" target="_blank" rel="noopener">DuckDuckGo ↗</a></div>
+        <form id="image-search-form" class="search-row"><input id="image-query" placeholder="Search for a game…" aria-label="Image search" required><select id="image-source" aria-label="Image source"><option value="wikipedia">Wikipedia covers</option><option value="commons">Wikimedia Commons</option><option value="catalog">Existing game covers</option></select><button id="search-images">Search images</button></form>
+        <p id="image-search-status" class="muted small" role="status">Wikipedia works best for well-known games. DuckDuckGo opens separately; paste its image URL above.</p><div id="image-results" class="image-results"></div>
+      </section>
+      <section class="panel"><div class="panel-heading"><h2>All games</h2><input id="catalog-search" type="search" placeholder="Find a name or code…" aria-label="Find game"></div><p class="muted small">Select a game to edit. Changes to existing cards keep their favorites and order.</p><div id="catalog-list" class="catalog-list"></div></section>
+      <details class="panel"><summary>How saving works</summary><p>Open your local <strong>game-cards.js</strong> to edit it directly. If your browser cannot write local files, Save card downloads the updated file instead. Upload that file to your website when ready.</p><p>New cards go at the end so existing favorites keep working. Add each new code’s destination to <strong>codes.json</strong> as usual.</p><p>Only card data is changed. Keep your existing game-cards.js filename.</p></details>
+    </section>
+    <section id="panel-settings" class="tab-panel" hidden>
+      <div class="page-heading"><div><p class="eyebrow">SITE SETTINGS</p><h1>Make it yours</h1><p class="muted">Update the appearance and saved announcement.</p></div></div>
+      <form id="settings-form" class="panel settings-panel"><h2>Appearance & content</h2><label for="bgColor">Background color</label><div class="search-row"><input type="color" id="bgColor" value="#0a0a0a"><button type="button" id="revert-bg">Reset color</button></div><label for="announcement">Announcement <span class="muted">· HTML supported</span></label><textarea id="announcement" rows="5" placeholder="What's new?"></textarea><button type="button" id="revert-ann" class="subtle">Clear announcement</button><label for="jumpscareImage">Jumpscare image URL</label><input id="jumpscareImage" type="url" placeholder="https://…"><button type="button" id="revert-jumpimg" class="subtle">Clear image</button><div class="form-footer"><span class="muted">Save before leaving this section.</span><button class="primary" id="save">Save settings</button></div></form>
+    </section>
+    <section id="panel-live" class="tab-panel" hidden>
+      <div class="page-heading"><div><p class="eyebrow">LIVE CONTROLS</p><h1>On the site, right now</h1><p class="muted">These actions affect visitors currently on the site.</p></div></div>
+      <div class="live-grid"><section class="panel"><h2>Announcements & images</h2><p class="muted">Uses the text and image currently entered in Site settings.</p><button id="trigger-announcement">Send announcement</button><button id="trigger-jumpscare">Trigger jumpscare</button></section>
+      <section class="panel"><h2>Effects</h2><p class="muted">Send an effect to connected visitors.</p><div class="effect-grid"><button id="cursor-chaos">Cursor chaos</button><button id="flashbang">Flashbang</button><button id="reverse-controls">Reverse controls</button></div></section>
+      <section class="panel"><h2>Audio</h2><label for="sound-select">Sound</label><select id="sound-select"></select><div class="form-footer"><button id="play-sound">Play sound</button><button id="stop-sound" class="danger">Stop audio</button></div></section>
+      <section class="panel"><h2>Weekly popularity</h2><p class="muted">Automatically starts a new week Sundays at 12 PM Eastern.</p><p id="weekly-period" class="small"></p><button id="reset-clickData" class="danger">Reset this week’s counts</button><p class="muted small">All-time counts stay intact.</p></section></div>
+    </section>
+    <div id="status-message" class="status-message" role="status" aria-live="polite" hidden></div>
+  </main>
 </div>
-
-<div id="admin-content">
-  <h1>🛠️ Live Site Controls</h1>
-
-  <label>🎨 Background Color:</label>
-  <div class="group">
-    <input type="color" id="bgColor">
-    <button class="revert" id="revert-bg">Revert</button>
-  </div>
-
-  <label>🧾 Announcement (HTML supported):</label>
-  <div class="group" style="flex-direction: column; align-items: flex-start;">
-    <textarea id="announcement" rows="3" placeholder="Enter announcement..."></textarea>
-    <div>
-      <button id="trigger-announcement">📢 Trigger Announcement</button>
-      <button class="revert" id="revert-ann">Revert</button>
-    </div>
-  </div>
-
-  <label>😱 Jumpscare Image URL:</label>
-  <div class="group">
-    <input type="text" id="jumpscareImage" placeholder="https://...">
-    <button class="revert" id="revert-jumpimg">Revert</button>
-  </div>
-
-  <label>🕹️ Trigger Jumpscare Manually:</label>
-  <div class="group">
-    <button id="trigger-jumpscare">⚡ Trigger Now</button>
-  </div>
-  
-  <div class="group">
-    <button id="reset-clickData">🗑️ Reset Most Popular Games</button>
-  </div>
-  
-  <hr style="margin: 30px 0; border: 1px solid #333;">
-
-  <h2>💀 Troll Controls</h2>
-
-  <div class="group">
-    <button id="cursor-chaos">🌀 Cursor Chaos</button>
-  </div>
-  
-  <div class="group" style="flex-direction: column; align-items: flex-start;">
-    <button id="choose-sound">🎵 Play Sound</button>
-    <button id="stop-sound">⏹️ Stop Audio</button>
-    <div id="sound-menu" style="display:none; background:#222; padding:10px; border-radius:8px; margin-top:10px; max-height:200px; overflow:auto;"></div>
-  </div>
-
-  <div class="group">
-    <button id="flashbang">💥 Flashbang Mode</button>
-    <button id="reverse-controls">🔄 Reverse Controls</button>
-  </div>
-  
-  <label>👥 Live User Counter:</label>
-  <div class="group">
-    <span id="user-count">Loading...</span>
-  </div>
-
-  <br>
-  <button id="save">💾 Save Changes</button>
-</div>
-
-<!-- Firebase v9 compat build -->
-<script src="weekly-popularity.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-
-<script>
-const firebaseConfig = {
-  apiKey: "AIzaSyC-IDS2wfF3ZgVzjwf0cHUazNGolLFhXVQ",
-  authDomain: "mostpopular-39c60.firebaseapp.com",
-  databaseURL: "https://mostpopular-39c60-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "mostpopular-39c60",
-  storageBucket: "mostpopular-39c60.appspot.com",
-  messagingSenderId: "939775132675",
-  appId: "1:939775132675:web:7d40bd8fff497c53553a36",
-  measurementId: "G-XTTQ03YFN9"
-};
-
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-const auth = firebase.auth();
-let resolveWeeklyClock;
-const weeklyClockReady = new Promise(resolve => { resolveWeeklyClock = resolve; });
-db.ref(".info/serverTimeOffset").on("value", snapshot => {
-  WeeklyPopularity.setServerOffset(snapshot.val());
-  resolveWeeklyClock();
-});
-
-const settingsRef = db.ref("siteSettings");
-const trollRef = db.ref("trollTriggers");
-const usersRef = db.ref("connectedUsers");
-
-// ---------------- LOGIN ----------------
-window.onload = () => {
-  const loginBtn = document.getElementById("login-btn");
-  const emailInput = document.getElementById("admin-email");
-  const passInput = document.getElementById("admin-pass");
-  const loginBox = document.getElementById("login-box");
-  const adminContent = document.getElementById("admin-content");
-
-  loginBtn.onclick = async () => {
-    const email = emailInput.value.trim();
-    const password = passInput.value.trim();
-    if (!email || !password) return alert("❌ Enter email and password!");
-
-    try {
-      await auth.signInWithEmailAndPassword(email, password);
-      loginBox.style.display = "none";
-      adminContent.style.display = "block";
-
-      loadSettings();
-      watchUserCount();
-      alert("✅ Login successful!");
-    } catch (err) {
-      console.error(err);
-      alert("❌ Login failed: " + err.message);
-    }
-  };
-};
-
-// ---------------- LOAD SETTINGS ----------------
-function loadSettings() {
-  settingsRef.once("value").then(snapshot => {
-    const s = snapshot.val() || { backgroundColor: "#0a0a0a", announcement: "", jumpscareImage: "" };
-    document.getElementById("bgColor").value = s.backgroundColor;
-    document.getElementById("announcement").value = s.announcement;
-    document.getElementById("jumpscareImage").value = s.jumpscareImage;
-  });
-}
-
-// ---------------- WATCH USERS ----------------
-function watchUserCount() {
-  usersRef.on("value", snap => {
-    document.getElementById("user-count").textContent = snap.numChildren() + " online";
-  });
-}
-
-// ---------------- SAFE WRITE ----------------
-async function safeWrite(ref, data) {
-  const user = auth.currentUser;
-  if (!user) return alert("❌ You must be logged in!");
-  await ref.set(data);
-}
-
-// ---------------- SAVE SETTINGS ----------------
-document.getElementById("save").onclick = async () => {
-  const settings = {
-    backgroundColor: document.getElementById("bgColor").value,
-    announcement: document.getElementById("announcement").value,
-    jumpscareImage: document.getElementById("jumpscareImage").value
-  };
-  try {
-    await safeWrite(settingsRef, settings);
-    alert("✅ Changes saved!");
-  } catch (err) {
-    console.error(err);
-    alert("❌ Save failed!");
-  }
-};
-
-// ---------------- ANNOUNCEMENT ----------------
-document.getElementById("trigger-announcement").onclick = async () => {
-  const text = document.getElementById("announcement").value.trim();
-  if (!text) return alert("❌ No announcement!");
-  await safeWrite(db.ref("announcementTriggerNow"), { text, timestamp: Date.now() });
-  alert("📢 Announcement triggered!");
-};
-
-// ---------------- JUMPSCARE ----------------
-document.getElementById("trigger-jumpscare").onclick = async () => {
-  const image = document.getElementById("jumpscareImage").value.trim();
-  if (!image) return alert("❌ Enter jumpscare image URL!");
-  await safeWrite(db.ref("jumpscareTriggerNow"), { image, timestamp: Date.now() });
-  alert("😱 Jumpscare triggered!");
-};
-
-// ---------------- RESET CLICK DATA ----------------
-document.getElementById("reset-clickData").onclick = async () => {
-  if (!confirm("Reset this week's Most Popular Games counts? All-time counts will stay.")) return;
-  if (!auth.currentUser) return alert("❌ You must be logged in!");
-  try {
-    await weeklyClockReady;
-    const week = WeeklyPopularity.weekKey();
-    await db.ref("weeklyClickData").transaction(current => WeeklyPopularity.migrateLegacy(current, week));
-    await db.ref("weeklyClickData/" + week).remove();
-    alert("✅ Weekly popularity reset!");
-  } catch (error) {
-    alert("❌ Reset failed: " + error.message);
-  }
-};
-
-// ---------------- TROLL CONTROLS ----------------
-async function triggerTroll(refName) {
-  const user = auth.currentUser;
-  if (!user) return alert("❌ You must be logged in!");
-  await trollRef.child(refName).set({ active: true, timestamp: Date.now() });
-  alert(`✅ ${refName} triggered!`);
-}
-
-document.getElementById("cursor-chaos").onclick = () => triggerTroll("cursorChaos");
-document.getElementById("flashbang").onclick = () => triggerTroll("flashbang");
-document.getElementById("reverse-controls").onclick = () => triggerTroll("reverseControls");
-
-// ---------------- SOUND CONTROL ----------------
-const soundMenu = document.getElementById("sound-menu");
-const stopSoundBtn = document.getElementById("stop-sound");
-const chooseSoundBtn = document.getElementById("choose-sound");
-const soundFiles = [
-  "clashintro.mp3",
-  "rainingtacos.mp3",
-  "brainrot.mp3",
-  "wideputin.mp3",
-  "crabrave.mp3",
-  "sodapop.mp3",
-  "galaxy.mp3",
-  "67.mp3",
-  "smokedetector.mp3"
-];
-
-chooseSoundBtn.onclick = () => {
-  const user = auth.currentUser;
-  if (!user) return alert("❌ You must be logged in!");
-  
-  soundMenu.innerHTML = "";
-  soundFiles.forEach(file => {
-    const btn = document.createElement("button");
-    btn.textContent = "▶️ " + file;
-    btn.style.display = "block";
-    btn.style.margin = "5px 0";
-    btn.onclick = async () => {
-      await trollRef.child("creepySound").set({ url: file, timestamp: Date.now() });
-      alert(`🔊 ${file} triggered!`);
-    };
-    soundMenu.appendChild(btn);
-  });
-  soundMenu.style.display = soundMenu.style.display === "none" ? "block" : "none";
-};
-
-stopSoundBtn.onclick = async () => {
-  const user = auth.currentUser;
-  if (!user) return alert("❌ You must be logged in!");
-  await trollRef.child("creepySound").set(null);
-  alert("⏹️ Audio stopped!");
-};
-
-// ---------------- REVERT BUTTONS ----------------
-document.getElementById("revert-bg").onclick = () => document.getElementById("bgColor").value = "#0a0a0a";
-document.getElementById("revert-ann").onclick = () => document.getElementById("announcement").value = "";
-document.getElementById("revert-jumpimg").onclick = () => document.getElementById("jumpscareImage").value = "";
-</script>
-<script
-  src="https://cdn.jsdelivr.net/npm/whatareyoutryingtodo/disable-devtool.min.js"
-  disable-devtool-auto
-></script>
+<script src="game-cards.js"></script><script src="card-editor.js"></script><script src="weekly-popularity.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="admin.js"></script>
 </body>
 </html>
