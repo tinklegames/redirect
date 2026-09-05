@@ -2554,14 +2554,16 @@
              });
          };
 
+         // .info is SDK-local metadata: receive it through onValue, not get().
+         let resolveWeeklyClock;
+         const weeklyClockReady = new Promise(resolve => { resolveWeeklyClock = resolve; });
          let weeklyMigration;
          function ensureWeeklyMigration() {
              if (!weeklyMigration) {
                  weeklyMigration = (async () => {
                      await anonymousSignIn;
                      if (!auth.currentUser) throw new Error('Sign-in is required to initialize weekly rankings.');
-                     const offset = await get(ref(db, '.info/serverTimeOffset'));
-                     WeeklyPopularity.setServerOffset(offset.val());
+                     await weeklyClockReady;
                      const marker = await get(ref(db, 'weeklyClickData/__legacyMigrated'));
                      if (!marker.val()) {
                          const week = WeeklyPopularity.weekKey();
@@ -2596,6 +2598,7 @@
          }
          onValue(ref(db, '.info/serverTimeOffset'), snapshot => {
              WeeklyPopularity.setServerOffset(snapshot.val());
+             resolveWeeklyClock();
              syncWeeklyPeriod();
          });
          onAuthStateChanged(auth, user => {

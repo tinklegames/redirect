@@ -109,8 +109,11 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 const auth = firebase.auth();
+let resolveWeeklyClock;
+const weeklyClockReady = new Promise(resolve => { resolveWeeklyClock = resolve; });
 db.ref(".info/serverTimeOffset").on("value", snapshot => {
   WeeklyPopularity.setServerOffset(snapshot.val());
+  resolveWeeklyClock();
 });
 
 const settingsRef = db.ref("siteSettings");
@@ -206,8 +209,7 @@ document.getElementById("reset-clickData").onclick = async () => {
   if (!confirm("Reset this week's Most Popular Games counts? All-time counts will stay.")) return;
   if (!auth.currentUser) return alert("❌ You must be logged in!");
   try {
-    const offset = await db.ref(".info/serverTimeOffset").get();
-    WeeklyPopularity.setServerOffset(offset.val());
+    await weeklyClockReady;
     const week = WeeklyPopularity.weekKey();
     await db.ref("weeklyClickData").transaction(current => WeeklyPopularity.migrateLegacy(current, week));
     await db.ref("weeklyClickData/" + week).remove();
