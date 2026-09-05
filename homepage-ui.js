@@ -60,9 +60,18 @@
                 if(target===$('searchInput')&&event.key==='Escape'){event.preventDefault();target.value='';target.dispatchEvent(new Event('input',{bubbles:true}));}
                 return;
             }
-            const card=target.closest('.card');if(!card)return;
+            const card=target.closest('.card');
+            if(!card){
+                // Enter card navigation from the page itself, not just an already-focused card.
+                if(['ArrowRight','ArrowLeft','ArrowUp','ArrowDown'].includes(event.key)){
+                    const list=availableCards();
+                    const first=list.find(item=>{const rect=item.getBoundingClientRect();return rect.bottom>0&&rect.top<window.innerHeight;})||list[0];
+                    if(first){event.preventDefault();first.focus({preventScroll:true});first.scrollIntoView({block:'nearest',inline:'nearest'});}
+                }
+                return;
+            }
             if(['ArrowRight','ArrowLeft','ArrowUp','ArrowDown','Home','End'].includes(event.key)){
-                const list=availableCards();const index=list.indexOf(card);if(index<0)return;event.preventDefault();const next=nextCard(list.map(item=>item.getBoundingClientRect()),index,event.key);list[next]?.focus();
+                const list=availableCards();const index=list.indexOf(card);if(index<0)return;event.preventDefault();const next=nextCard(list.map(item=>item.getBoundingClientRect()),index,event.key);if(list[next]){list[next].focus({preventScroll:true});list[next].scrollIntoView({block:'nearest',inline:'nearest'});}
             }else if((event.key==='Enter'||event.key===' ')&&target===card){event.preventDefault();if(!event.repeat)card.click();}
             else if(event.key.toLowerCase()==='f'){
                 event.preventDefault();if(!event.repeat){const container=card.parentElement,code=card.dataset.code;card.querySelector('.card__favorite-btn')?.click();

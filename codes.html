@@ -2135,7 +2135,6 @@
                  <div class="top-right">
                      <div class="top-nav" id="topNav">
                          <button class="top-nav-tab active" data-page="codes">Codes</button>
-                         <button class="top-nav-tab" data-page="favorites">Favorites</button>
                          <button class="top-nav-tab" data-page="music">Music</button>
                          <button class="top-nav-tab" data-page="requests">Requests</button>
                          <button class="top-nav-tab" data-page="suggestions">Suggestions</button>
@@ -2228,30 +2227,6 @@
              <section class="grid-shell" id="homeFavorites"><div class="grid-header"><div class="grid-title">Your favorites</div></div><div class="recent-row" id="homeFavoritesGrid"></div><p class="home-empty" id="homeFavoritesEmpty">Tap a heart on a card to add your favorites here.</p></section>
              </div>
          </div>
-
-         <!-- PAGE: FAVORITES -->
-         <div class="page" id="page-favorites">
-             <div class="page-card">
-                 <div class="page-card-header">Your picks</div>
-                 <div class="page-card-title">Favorited games</div>
-                 <div class="page-card-sub">
-                     Tap the heart on any card to add it here. Favorites are saved on this device only.
-                 </div>
-
-                 <section class="grid-shell">
-                     <div class="grid-header">
-                         <div class="grid-title">Favorites</div>
-                         <div class="grid-count" id="favoritesCount">No favorites yet</div>
-                     </div>
-
-                     <div class="cards-grid" id="favoritesGrid"></div>
-                     <div class="no-results" id="favoritesEmpty" style="display:none;">
-                         You haven't favorited any games yet.
-                     </div>
-                 </section>
-             </div>
-         </div>
-
 
          <!-- PAGE: SUGGESTIONS -->
          <div class="page" id="page-suggestions">
@@ -3285,9 +3260,6 @@
                  if (page === "popular") {
                      renderPopular();
                  }
-                 if (page === "favorites") {
-                     updateFavoritesGrid();
-                 }
                  switchPage(page);
              });
          });
@@ -4021,9 +3993,6 @@
          const popularEmpty = document.getElementById("popularEmpty");
          const sortSelect = document.getElementById("sortSelect");
 
-         const favoritesGrid = document.getElementById("favoritesGrid");
-         const favoritesCount = document.getElementById("favoritesCount");
-         const favoritesEmpty = document.getElementById("favoritesEmpty");
          const games = [];
          const categorySet = new Set();
 
@@ -4541,27 +4510,7 @@
 
          function updateFavoritesGrid() {
              window.dispatchEvent(new Event("favorites-changed"));
-             if (!favoritesGrid) return;
-
-             favoritesGrid.innerHTML = "";
-
-             const favGames = games.filter(g => favoriteIds.has(g.id));
-
-             if (!favGames.length) {
-                 if (favoritesEmpty) favoritesEmpty.style.display = "";
-                 if (favoritesCount) favoritesCount.textContent = "No favorites yet";
-                 return;
-             }
-
-             if (favoritesEmpty) favoritesEmpty.style.display = "none";
-             if (favoritesCount) favoritesCount.textContent = "Showing " + favGames.length;
-
-             favGames.forEach(game => {
-                 const card = createGameCard(game);
-                 favoritesGrid.appendChild(card);
-             });
          }
-
 
          if (searchInput) {
              searchInput.addEventListener("input", () => {
@@ -4574,7 +4523,7 @@
              const grid = document.getElementById('homeFavoritesGrid');
              grid.replaceChildren();
              if (!visible) return;
-             const favorites = games.filter(isFavorite).slice(0, 6);
+             const favorites = games.filter(isFavorite);
              favorites.forEach(game => grid.appendChild(createGameCard(game)));
              document.getElementById('homeFavoritesEmpty').hidden = favorites.length > 0;
          }
