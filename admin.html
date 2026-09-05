@@ -206,7 +206,11 @@ document.getElementById("reset-clickData").onclick = async () => {
   if (!confirm("Reset this week's Most Popular Games counts? All-time counts will stay.")) return;
   if (!auth.currentUser) return alert("❌ You must be logged in!");
   try {
-    await db.ref(WeeklyPopularity.path()).remove();
+    const offset = await db.ref(".info/serverTimeOffset").get();
+    WeeklyPopularity.setServerOffset(offset.val());
+    const week = WeeklyPopularity.weekKey();
+    await db.ref("weeklyClickData").transaction(current => WeeklyPopularity.migrateLegacy(current, week));
+    await db.ref("weeklyClickData/" + week).remove();
     alert("✅ Weekly popularity reset!");
   } catch (error) {
     alert("❌ Reset failed: " + error.message);

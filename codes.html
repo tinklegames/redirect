@@ -2477,7 +2477,7 @@
 
          // --- 🔐 Anonymous Auth ---
          const auth = getAuth(app);
-         signInAnonymously(auth)
+         const anonymousSignIn = signInAnonymously(auth)
              .then(() => console.log("✅ Signed in anonymously"))
              .catch((error) => console.error("❌ Auth error:", error));
 
@@ -2554,16 +2554,31 @@
              });
          };
 
-         // Add this to your existing Firebase module script
-         // Add this new function for getting weekly click data
-         window.getWeeklyClickData = async function() {
-             try {
-                 const snapshot = await get(ref(db, WeeklyPopularity.path()));
-                 return snapshot.exists() ? snapshot.val() : {};
-             } catch (e) {
-                 console.error("getWeeklyClickData failed:", e);
-                 return {};
+         let weeklyMigration;
+         function ensureWeeklyMigration() {
+             if (!weeklyMigration) {
+                 weeklyMigration = (async () => {
+                     await anonymousSignIn;
+                     if (!auth.currentUser) throw new Error('Sign-in is required to initialize weekly rankings.');
+                     const offset = await get(ref(db, '.info/serverTimeOffset'));
+                     WeeklyPopularity.setServerOffset(offset.val());
+                     const marker = await get(ref(db, 'weeklyClickData/__legacyMigrated'));
+                     if (!marker.val()) {
+                         const week = WeeklyPopularity.weekKey();
+                         await runTransaction(ref(db, 'weeklyClickData'), current =>
+                             WeeklyPopularity.migrateLegacy(current, week));
+                     }
+                 })().catch(error => {
+                     weeklyMigration = null;
+                     throw error;
+                 });
              }
+             return weeklyMigration;
+         }
+         window.getWeeklyClickData = async function() {
+             await ensureWeeklyMigration();
+             const snapshot = await get(ref(db, WeeklyPopularity.path()));
+             return snapshot.exists() ? snapshot.val() : {};
          };
 
          // Switch the active bucket even when a visitor leaves the page open over noon.
@@ -2625,6 +2640,7 @@
 
          window.incrementGameClicks = async function(name) {
              try {
+                 await ensureWeeklyMigration();
                  console.log("Incrementing clicks for:", name);
                  const safeKey = sanitizeKey(name);
 
@@ -4455,11 +4471,13 @@
          }
 
 
+         let cardsRenderVersion = 0;
          async function renderCards() {
+             const renderVersion = ++cardsRenderVersion;
              const filtered = getFilteredGames();
-             cardsGrid.innerHTML = "";
 
              if (!filtered.length) {
+                 cardsGrid.replaceChildren();
                  noResults.style.display = "";
                  cardsCount.textContent = "Showing 0";
                  return;
@@ -4485,6 +4503,10 @@
                          weeklyData = await window.getWeeklyClickData();
                      } catch (e) {
                          console.error("getWeeklyClickData error:", e);
+                         if (renderVersion === cardsRenderVersion) {
+                             cardsCount.textContent = "Weekly rankings could not load. Try again.";
+                         }
+                         return;
                      }
                  }
 
@@ -4507,6 +4529,8 @@
                  }
              }
 
+             if (renderVersion !== cardsRenderVersion) return;
+             cardsGrid.replaceChildren();
              toRender.forEach((game, index) => {
                  const card = createGameCard(game);
 

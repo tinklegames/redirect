@@ -14,7 +14,23 @@
         date.setUTCDate(date.getUTCDate() - daysBack);
         return date.toISOString().slice(0, 10);
     }
+    // Run once in a Firebase transaction before reading or incrementing weekly counts.
+    function migrateLegacy(current, targetWeek) {
+        if (current?.__legacyMigrated) return undefined;
+        const next = { ...(current || {}) };
+        const bucket = { ...(next[targetWeek] || {}) };
+        for (const [game, count] of Object.entries(next)) {
+            if (!game.startsWith('__') && typeof count === 'number' && Number.isFinite(count)) {
+                bucket[game] = (Number(bucket[game]) || 0) + count;
+                delete next[game];
+            }
+        }
+        if (Object.keys(bucket).length) next[targetWeek] = bucket;
+        next.__legacyMigrated = true;
+        return next;
+    }
     root.WeeklyPopularity = {
+        migrateLegacy,
         weekKey,
         path: () => 'weeklyClickData/' + weekKey(),
         setServerOffset: value => { serverOffset = Number(value) || 0; }
