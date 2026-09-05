@@ -118,6 +118,15 @@ function clearForm() {
 $('new-game').addEventListener('click', () => { if (!formDirty || confirm('Discard unsaved edits?')) clearForm(); });
 $('game-form').addEventListener('input', () => { formDirty = true; updatePreview(); });
 $('game-code').addEventListener('input', () => { $('game-code').value = $('game-code').value.toUpperCase(); });
+function editCard(index) {
+    const card = cards[index];
+    if (!card || (formDirty && !confirm('Discard unsaved edits and open this card?'))) return;
+    switchTab('games');
+    editingIndex = index; $('game-name').value = card.name; $('game-code').value = card.code; $('game-image').value = card.img;
+    $('image-query').value = card.name; buildCategories(card.categories); formDirty = false;
+    $('editor-title').textContent = 'Edit game'; $('save-game').textContent = 'Save changes →'; updatePreview();
+    $('game-form').scrollIntoView({ behavior: 'smooth', block: 'center' }); $('game-name').focus({ preventScroll: true });
+}
 function renderCatalog() {
     $('catalog-count').textContent = cards.length + ' games';
     $('catalog-list').replaceChildren();
@@ -132,13 +141,7 @@ function renderCatalog() {
         const meta = document.createElement('small'); meta.textContent = card.categories.join(' · '); info.append(name, meta);
         const code = document.createElement('span'); code.className = 'tag'; code.textContent = card.code;
         button.append(img, info, code);
-        button.addEventListener('click', () => {
-            if (formDirty && !confirm('Discard unsaved edits and open this card?')) return;
-            editingIndex = index; $('game-name').value = card.name; $('game-code').value = card.code; $('game-image').value = card.img;
-            $('image-query').value = card.name; buildCategories(card.categories); formDirty = false;
-            $('editor-title').textContent = 'Edit game'; $('save-game').textContent = 'Save changes →'; updatePreview();
-            $('game-form').scrollIntoView({ behavior: 'smooth', block: 'center' }); $('game-name').focus({ preventScroll: true });
-        });
+        button.addEventListener('click', () => editCard(index));
         $('catalog-list').append(button);
     });
     if (!count) $('catalog-list').textContent = 'No games match your search.';
@@ -156,6 +159,7 @@ $('download-cards').addEventListener('click', () => {
 async function loadFile(file, handle = null) {
     const text = await file.text();
     const imported = CardEditor.parse(text); // Fully validate before replacing the current list.
+    imageChecker.reset();
     cards = imported; fileHandle = handle; loadedFileText = text; clearForm(); renderCatalog();
     $('file-name').textContent = file.name;
     $('file-status').textContent = handle ? 'Local file connected. Save card writes back to this file.' : 'Local file loaded. Saving will download an updated game-cards.js.';
@@ -199,7 +203,7 @@ $('game-form').addEventListener('submit', event => {
         }
         const isNew = editingIndex === null;
         cards = next; editingIndex = isNew ? next.length - 1 : editingIndex; formDirty = false;
-        $('editor-title').textContent = 'Edit game'; $('save-game').textContent = 'Save changes →'; renderCatalog();
+        $('editor-title').textContent = 'Edit game'; $('save-game').textContent = 'Save changes →'; renderCatalog(); imageChecker.changed();
         notify(handle ? 'Card saved to ' + handle.name + '.' : 'Updated game-cards.js downloaded.');
     });
 });
@@ -295,4 +299,5 @@ $('reset-clickData').onclick = () => action($('reset-clickData'), async () => {
     await db.ref('weeklyClickData').transaction(current => WeeklyPopularity.migrateLegacy(current, week));
     await db.ref('weeklyClickData/' + week).remove(); notify('Weekly popularity reset.');
 });
+const imageChecker = AdminImageChecker.mount({ getCards: () => cards, editCard });
 buildCategories(); renderCatalog(); updatePreview(); switchTab('games');

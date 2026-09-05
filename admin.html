@@ -31,6 +31,16 @@
     <section id="panel-games" class="tab-panel">
       <div class="page-heading"><div><p class="eyebrow">YOUR COLLECTION</p><h1>Game library</h1><p class="muted">Add a game, choose its cover, and save it to game-cards.js.</p></div><span class="count-pill" id="catalog-count">Loading games…</span></div>
       <div class="file-toolbar panel"><div><strong id="file-name">game-cards.js</strong><p id="file-status" class="muted small" role="status">Loaded from this website. Open a local file to save changes directly.</p></div><div class="file-actions"><button id="open-cards" type="button">Open local file</button><button id="download-cards" type="button">Download file</button></div><input id="file-upload" type="file" accept=".js" hidden></div>
+      <details class="panel image-check-panel">
+        <summary>Check game images</summary>
+        <p class="muted small">Check covers in the current card list, then open any problem card to replace its image. Save your form edits before testing.</p>
+        <div class="file-actions"><button id="image-check-run" type="button">Check all images</button><button id="image-check-stop" type="button" disabled>Stop</button><button id="image-check-download" type="button" disabled>Download report</button></div>
+        <label class="check-line"><input id="image-check-problems" type="checkbox" checked> Show only problems</label>
+        <p id="image-check-status" class="muted small" role="status" aria-live="polite">Ready.</p>
+        <div class="image-check-table"><table><thead><tr><th>Game</th><th>Result</th><th>Image URL</th><th>Actions</th></tr></thead><tbody id="image-check-results"></tbody></table></div>
+        <p id="image-check-empty" class="muted small">Run a check to see image results here.</p>
+        <p class="muted small">Failed loads may also be blocked by the host or your network. Timeouts are inconclusive. Six images are checked at a time, with 15 seconds allowed per image.</p>
+      </details>
       <div class="editor-layout">
         <div class="panel">
           <div class="panel-heading"><h2 id="editor-title">New game</h2><button type="button" id="new-game" class="subtle">Clear form</button></div>
@@ -66,6 +76,7 @@
 </div>
 <script src="game-cards.js"></script><script src="card-editor.js"></script><script src="weekly-popularity.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="admin-image-checker.js"></script>
 <script src="admin.js"></script>
 </body>
 </html>
