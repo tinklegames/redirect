@@ -84,10 +84,17 @@ self.addEventListener('fetch', async event => {
     
     // Handle codes.html directly
     if (url.pathname === '/codes.html') {
-        event.respondWith(serveCodesPage());
+        event.respondWith(serveCodesPage(event.request));
         return;
     }
     
+    // Keep editable site assets fresh so update notices lead to the uploaded version.
+    const freshAssets = ['/admin.html', '/admin.css', '/admin.js', '/admin-tools.js', '/admin-data.js', '/card-editor.js', '/admin-image-checker.js', '/game-cards.js', '/codes.json', '/weekly-popularity.js', '/live-notices.js'];
+    if (url.origin === self.location.origin && freshAssets.includes(url.pathname)) {
+        event.respondWith(networkFirst(event.request));
+        return;
+    }
+
     // Handle BareMux requests
     if (url.pathname.startsWith('/baremux/')) {
         event.respondWith(handleBareMuxRequest(event));
@@ -120,31 +127,21 @@ self.addEventListener('fetch', async event => {
     );
 });
 
-// Service main page
-async function serveMainPage() {
+// Retain offline fallback, but check for the uploaded version on each visit.
+async function networkFirst(request) {
     try {
-        const cached = await caches.match('/codes.html');
-        if (cached) return cached;
-        
-        const response = await fetch('/codes.html');
-        const cache = await caches.open(APP_CACHE_NAME);
-        cache.put('/codes.html', response.clone());
+        const response = await fetch(request, { cache: 'no-cache' });
+        if (response.ok) {
+            const cache = await caches.open(APP_CACHE_NAME);
+            await cache.put(request, response.clone());
+        }
         return response;
     } catch (error) {
-        return new Response('App not available', { status: 500 });
+        return await caches.match(request) || new Response('Page unavailable offline', { status: 503 });
     }
 }
-
-// Service codes.html
-async function serveCodesPage() {
-    try {
-        const cached = await caches.match('/codes.html');
-        if (cached) return cached;
-        return await fetch('/codes.html');
-    } catch (error) {
-        return new Response('Page not available', { status: 500 });
-    }
-}
+async function serveMainPage() { return networkFirst('/codes.html'); }
+async function serveCodesPage(request) { return networkFirst(request || '/codes.html'); }
 
 // Handle BareMux requests
 async function handleBareMuxRequest(event) {

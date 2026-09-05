@@ -15,6 +15,8 @@ let editingIndex = null;
 let fileHandle = null;
 let loadedFileText = null;
 let formDirty = false;
+const fileHistory = [];
+let serverClockOffset = 0;
 let stopUsers = null;
 let searchController;
 let imageTimer;
@@ -22,7 +24,8 @@ let toastTimer;
 let resolveWeeklyClock;
 const weeklyClockReady = new Promise(resolve => { resolveWeeklyClock = resolve; });
 db.ref('.info/serverTimeOffset').on('value', snap => {
-    WeeklyPopularity.setServerOffset(snap.val());
+    serverClockOffset = Number(snap.val()) || 0;
+    WeeklyPopularity.setServerOffset(serverClockOffset);
     $('weekly-period').textContent = 'Current week: ' + WeeklyPopularity.weekKey();
     resolveWeeklyClock();
 });
@@ -32,11 +35,15 @@ function notify(message, error = false) {
     box.textContent = message; box.classList.toggle('error', error); box.hidden = false;
     toastTimer = setTimeout(() => { box.hidden = true; }, error ? 12000 : 6000);
 }
+let fileActionRunning = false;
 async function action(button, work, success) {
+    const isFileAction = ['save-game', 'save-code', 'undo-edit', 'open-cards', 'open-codes'].includes(button.id);
+    if (isFileAction && fileActionRunning) { notify('Wait for the current file operation to finish.', true); return; }
+    if (isFileAction) fileActionRunning = true;
     button.disabled = true;
     try { await work(); if (success) notify(success); }
     catch (error) { if (error.name !== 'AbortError') notify(error.message || 'Something went wrong. Please try again.', true); }
-    finally { button.disabled = false; }
+    finally { if (isFileAction) fileActionRunning = false; button.disabled = false; if (button.id === "undo-edit") syncUndoButton(); }
 }
 function requireAdmin() {
     if (!auth.currentUser || auth.currentUser.isAnonymous) throw new Error('Sign in with your admin account first.');
@@ -48,7 +55,8 @@ function switchTab(name) {
         if (active) button.setAttribute('aria-current', 'page'); else button.removeAttribute('aria-current');
     });
     document.querySelectorAll('.tab-panel').forEach(panel => { panel.hidden = panel.id !== 'panel-' + name; });
-    $('section-label').textContent = 'Workspace / ' + ({ games: 'Games', settings: 'Site settings', live: 'Live controls' }[name]);
+    if (name === 'stats' && window.loadWeeklyStats) window.loadWeeklyStats();
+    $('section-label').textContent = 'Workspace / ' + ({ games: 'Games', codes: 'Codes & links', stats: 'Weekly stats', settings: 'Site settings', live: 'Live controls' }[name]);
 }
 document.querySelectorAll('[data-tab]').forEach(button => button.addEventListener('click', () => switchTab(button.dataset.tab)));
 $('login-form').addEventListener('submit', async event => {
@@ -159,6 +167,7 @@ $('download-cards').addEventListener('click', () => {
 async function loadFile(file, handle = null) {
     const text = await file.text();
     const imported = CardEditor.parse(text); // Fully validate before replacing the current list.
+    fileHistory.length = 0; syncUndoButton();
     imageChecker.reset();
     cards = imported; fileHandle = handle; loadedFileText = text; clearForm(); renderCatalog();
     $('file-name').textContent = file.name;
@@ -176,11 +185,7 @@ $('file-upload').addEventListener('change', () => {
     if (file) action($('open-cards'), () => loadFile(file));
     $('file-upload').value = '';
 });
-$('game-form').addEventListener('submit', event => {
-    event.preventDefault();
-    action($('save-game'), async () => {
-        const card = { name: $('game-name').value.trim(), code: $('game-code').value.trim(), categories: selectedCategories(), img: $('game-image').value.trim() };
-        const next = CardEditor.upsert(cards, card, editingIndex);
+async function saveCardFile(next) {
         const source = CardEditor.serialize(next);
         let handle = fileHandle;
         let pickedNew = false;
@@ -201,10 +206,19 @@ $('game-form').addEventListener('submit', event => {
         } else {
             download(next); $('file-status').textContent = 'Updated file downloaded. Replace game-cards.js on your website.';
         }
+}
+$('game-form').addEventListener('submit', event => {
+    event.preventDefault();
+    action($('save-game'), async () => {
+        const card = { name: $('game-name').value.trim(), code: $('game-code').value.trim(), categories: selectedCategories(), img: $('game-image').value.trim() };
+        const next = CardEditor.upsert(cards, card, editingIndex);
+        await saveCardFile(next);
+        fileHistory.push({ kind: 'cards', before: structuredClone(cards) });
+        syncUndoButton();
         const isNew = editingIndex === null;
         cards = next; editingIndex = isNew ? next.length - 1 : editingIndex; formDirty = false;
         $('editor-title').textContent = 'Edit game'; $('save-game').textContent = 'Save changes →'; renderCatalog(); imageChecker.changed();
-        notify(handle ? 'Card saved to ' + handle.name + '.' : 'Updated game-cards.js downloaded.');
+        notify(fileHandle ? 'Card saved to ' + fileHandle.name + '.' : 'Updated game-cards.js downloaded.');
     });
 });
 window.addEventListener('beforeunload', event => { if (formDirty) { event.preventDefault(); event.returnValue = ''; } });
@@ -280,7 +294,7 @@ $('revert-ann').onclick = () => { $('announcement').value = ''; };
 $('revert-jumpimg').onclick = () => { $('jumpscareImage').value = ''; };
 $('trigger-announcement').onclick = () => action($('trigger-announcement'), async () => {
     requireAdmin(); const text = $('announcement').value.trim(); if (!text) throw new Error('Enter an announcement in Site settings first.');
-    await db.ref('announcementTriggerNow').set({ text, timestamp: Date.now() });
+    await db.ref('siteSettings/liveAnnouncement').set({ id: crypto.randomUUID(), text, style: 'toast', timestamp: firebase.database.ServerValue.TIMESTAMP, expiresAt: Date.now() + serverClockOffset + 15000 });
 }, 'Announcement sent.');
 $('trigger-jumpscare').onclick = () => action($('trigger-jumpscare'), async () => {
     requireAdmin(); const image = $('jumpscareImage').value.trim(); if (!CardEditor.validImage(image)) throw new Error('Enter a valid jumpscare URL in Site settings first.');

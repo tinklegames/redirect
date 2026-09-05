@@ -2435,6 +2435,7 @@
 
      <div id="snow-container"></div>
 
+     <script src="live-notices.js"></script>
      <!-- Firebase / Troll / Presence logic -->
      <script type="module">
          import {
@@ -2820,83 +2821,26 @@
          let initialFlashbangLoaded = false;
          let initialReverseLoaded = false;
 
-         // === Listen for site settings ===
-         onValue(settingsRef, (snapshot) => {
-             const s = snapshot.val();
-             if (!s) return;
-
-             document.body.style.backgroundColor = s.backgroundColor || "#0a0a0a";
-
-             setupBanner();
-             const content = document.getElementById("announcement-content");
-             if (content) content.innerHTML = s.announcement || "";
+         const liveNotices = LiveNotices.mount();
+         onValue(ref(db, '.info/serverTimeOffset'), snapshot => liveNotices.setClockOffset(snapshot.val()));
+         // Listen-only: visitors never delete announcement records.
+         onValue(settingsRef, snapshot => {
+             const settings = snapshot.val() || {};
+             document.body.style.backgroundColor = settings.backgroundColor || '#0a0a0a';
+             liveNotices.render(settings);
          });
-
-         // === Setup Announcement Banner if Missing ===
-         function setupBanner() {
-             if (document.getElementById("announcement")) return;
-
-             const banner = document.createElement("div");
-             banner.id = "announcement";
-             banner.style.position = "fixed";
-             banner.style.top = "50%";
-             banner.style.left = "50%";
-             banner.style.transform = "translate(-50%, -50%)";
-             banner.style.maxWidth = "80%";
-             banner.style.padding = "40px";
-             banner.style.borderRadius = "10px";
-             banner.style.textAlign = "center";
-             banner.style.color = "white";
-             banner.style.zIndex = "9999";
-             banner.style.background = "rgba(0, 0, 0, 0.85)";
-             banner.style.fontSize = "1.5em";
-             banner.style.opacity = "0";
-             banner.style.transition = "opacity 1s ease";
-             banner.style.display = "none";
-
-             const title = document.createElement("h2");
-             title.textContent = "📢 Announcement";
-             title.style.marginBottom = "15px";
-             title.style.color = "#FFD700";
-             title.style.textShadow = "0 0 10px rgba(255,255,255,0.5)";
-             banner.appendChild(title);
-
-             const content = document.createElement("div");
-             content.id = "announcement-content";
-             banner.appendChild(content);
-
-             document.body.appendChild(banner);
-         }
-
-         // === Manual Announcement Trigger ===
-         onValue(triggerAnnRef, (snapshot) => {
-             const t = snapshot.val();
-             if (!t || typeof t.timestamp !== "number") return;
-
-             if (!initialAnnounceLoaded) {
-                 lastAnnounceTriggerTime = t.timestamp;
-                 initialAnnounceLoaded = true;
-                 return;
+         // Legacy admin compatibility: show newly sent messages without clearing shared data.
+         let legacyAnnouncementInitialized = false;
+         onValue(triggerAnnRef, snapshot => {
+             const message = snapshot.val();
+             if (!legacyAnnouncementInitialized) { legacyAnnouncementInitialized = true; return; }
+             if (!message || message.timestamp === lastAnnounceTriggerTime) return;
+             lastAnnounceTriggerTime = message.timestamp;
+             if (typeof message.text === 'string') {
+                 get(settingsRef).then(snapshot => liveNotices.render({ ...(snapshot.val() || {}), liveAnnouncement: {
+                     id: 'legacy-' + message.timestamp, text: message.text, style: 'toast', expiresAt: Date.now() + 15000
+                 }}));
              }
-
-             if (t.timestamp === lastAnnounceTriggerTime) return;
-             lastAnnounceTriggerTime = t.timestamp;
-
-             setupBanner();
-             const banner = document.getElementById("announcement");
-             const content = document.getElementById("announcement-content");
-             if (content) content.innerHTML = t.text || "(no message)";
-
-             banner.style.display = "block";
-             setTimeout(() => banner.style.opacity = "1", 50);
-
-             setTimeout(() => {
-                 banner.style.opacity = "0";
-                 setTimeout(() => banner.style.display = "none", 1000);
-             }, 5000);
-
-             // Optional: clear after use
-             set(triggerAnnRef, null);
          });
 
          // === Manual Jumpscare Trigger ===
