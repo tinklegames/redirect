@@ -171,6 +171,7 @@
                     newBtn.addEventListener('click', () => copyLink(generatedLink));
                     newBtn.style.backgroundColor = "#4CAF50";
 
+                    openPrivateTabBtn.textContent = iframeAllowed ? "Open in Private Tab" : "Open in New Tab";
                     if (iframeAllowed) {
                         openPageBtn.classList.remove("hidden");
                         openPrivateTabBtn.classList.remove("hidden");
@@ -179,7 +180,7 @@
                         openPageBtn.classList.add("hidden");
                         openPrivateTabBtn.classList.remove("hidden");
                         iframeHint.classList.remove("hidden");
-                        iframeHint.textContent = "⚠️ This site cannot open in an iframe. Use 'Open in Private Tab' instead.";
+                        iframeHint.textContent = "⚠️ This site cannot open in an iframe. Use 'Open in New Tab' instead.";
                     }
 
                     showNotification("✅ Valid code! Link generated.", "success");
@@ -253,6 +254,13 @@
         function openInPrivateTab() {
             if (!generatedLink) {
                 showNotification("❌ No link generated. Please enter a valid code first.", "error");
+                return;
+            }
+
+            // Games that block embedding must load directly, without an iframe wrapper.
+            if (!iframeAllowed) {
+                window.open(generatedLink, '_blank', 'noopener,noreferrer');
+                window.top.postMessage('game_started', '*');
                 return;
             }
 
