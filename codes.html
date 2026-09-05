@@ -2390,6 +2390,7 @@
 
      <!-- Load game data before the page scripts initialize. -->
      <script src="game-cards.js"></script>
+     <script src="weekly-popularity.js"></script>
 
      <!-- Toast -->
      <div class="toast" id="toast">
@@ -2449,7 +2450,8 @@
              set,
              onValue,
              push,
-             onDisconnect
+             onDisconnect,
+             runTransaction
          } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
          import {
              getAuth,
@@ -2556,13 +2558,42 @@
          // Add this new function for getting weekly click data
          window.getWeeklyClickData = async function() {
              try {
-                 const snapshot = await get(ref(db, 'weeklyClickData'));
+                 const snapshot = await get(ref(db, WeeklyPopularity.path()));
                  return snapshot.exists() ? snapshot.val() : {};
              } catch (e) {
                  console.error("getWeeklyClickData failed:", e);
                  return {};
              }
          };
+
+         // Switch the active bucket even when a visitor leaves the page open over noon.
+         let activeWeeklyPath;
+         let stopWeeklyListener;
+         function syncWeeklyPeriod() {
+             const path = WeeklyPopularity.path();
+             if (path === activeWeeklyPath) return;
+             activeWeeklyPath = path;
+             if (stopWeeklyListener) stopWeeklyListener();
+             window.dispatchEvent(new Event('weekly-popularity-changed'));
+             stopWeeklyListener = onValue(ref(db, path), () => {
+                 window.dispatchEvent(new Event('weekly-popularity-changed'));
+             }, error => console.error('Weekly popularity listener failed:', error));
+         }
+         onValue(ref(db, '.info/serverTimeOffset'), snapshot => {
+             WeeklyPopularity.setServerOffset(snapshot.val());
+             syncWeeklyPeriod();
+         });
+         onAuthStateChanged(auth, user => {
+             if (user) {
+                 activeWeeklyPath = null;
+                 syncWeeklyPeriod();
+             }
+         });
+         setInterval(syncWeeklyPeriod, 1000);
+         document.addEventListener('visibilitychange', () => {
+             if (!document.hidden) syncWeeklyPeriod();
+         });
+         window.addEventListener('focus', syncWeeklyPeriod);
 
          // Update this function with debugging
          window.getAllTimeClickCount = async function(gameName) {
@@ -2618,7 +2649,7 @@
                      const allTimeSnapshot = await get(allTimeRef);
                      const allTimeCurrent = allTimeSnapshot.exists() ? allTimeSnapshot.val() : 0;
 
-                     const weeklyRef = ref(db, 'weeklyClickData/' + safeKey);
+                     const weeklyRef = ref(db, WeeklyPopularity.path() + '/' + safeKey);
                      const weeklySnapshot = await get(weeklyRef);
                      const weeklyCurrent = weeklySnapshot.exists() ? weeklySnapshot.val() : 0;
 
@@ -2649,7 +2680,7 @@
                      const allTimeSnapshot = await get(allTimeRef);
                      const allTimeCurrent = allTimeSnapshot.exists() ? allTimeSnapshot.val() : 0;
 
-                     const weeklyRef = ref(db, 'weeklyClickData/' + safeKey);
+                     const weeklyRef = ref(db, WeeklyPopularity.path() + '/' + safeKey);
                      const weeklySnapshot = await get(weeklyRef);
                      const weeklyCurrent = weeklySnapshot.exists() ? weeklySnapshot.val() : 0;
 
@@ -2667,10 +2698,10 @@
                  const allTimeCurrent = allTimeSnapshot.exists() ? allTimeSnapshot.val() : 0;
                  await set(allTimeRef, allTimeCurrent + 1);
 
-                 const weeklyRef = ref(db, 'weeklyClickData/' + safeKey);
-                 const weeklySnapshot = await get(weeklyRef);
-                 const weeklyCurrent = weeklySnapshot.exists() ? weeklySnapshot.val() : 0;
-                 await set(weeklyRef, weeklyCurrent + 1);
+                 const weeklyRef = ref(db, WeeklyPopularity.path() + '/' + safeKey);
+                 // Increment atomically in the current week; old weeks remain separate.
+                 const weeklyResult = await runTransaction(weeklyRef, count => (count || 0) + 1);
+                 const weeklyCurrent = weeklyResult.snapshot.val() - 1;
 
                  // Update timestamp in Firebase
                  await set(lastClickRef, now);
@@ -4063,6 +4094,13 @@
 
          let currentCategory = "all";
          let sortMode = "az"; // "az" | "popular" | "recent"
+         let weeklyRefreshTimer;
+         window.addEventListener('weekly-popularity-changed', () => {
+             clearTimeout(weeklyRefreshTimer);
+             weeklyRefreshTimer = setTimeout(() => {
+                 if (sortMode === 'popular') renderCards();
+             }, 250);
+         });
 
          function createTab(label, value, active = false) {
              const btn = document.createElement("button");
