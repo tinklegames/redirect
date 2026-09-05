@@ -4,6 +4,7 @@
  <head>
      <meta charset="UTF-8" />
      <title>Tinkle Codes</title>
+     <link rel="stylesheet" href="homepage-ui.css">
      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
@@ -2153,30 +2154,7 @@
 
          <!-- PAGE: CODES -->
          <div class="page active" id="page-codes">
-             <section class="hero">
-                 <div class="hero-left">
-                     <div class="hero-kicker">Tinkle games</div>
-                     <h1 class="hero-title">All your <span>codes</span>, floating in one clean space.</h1>
-                     <p class="hero-sub">
-                         A spaced-out deck for browsing and copying codes. Search by name or code, filter by game type, and paste into the main code site whenever you’re ready.
-                     </p>
-                     <div class="hero-meta-row">
-                         <div class="hero-stat-pill" id="heroStats">0 games loaded</div>
-                         <div class="hero-stat-pill">made by zaddy</div>
-                     </div>
-                 </div>
-                 <div class="hero-right">
-                     <div class="hero-card">
-                         <div class="hero-card-header">How it works</div>
-                         <div class="hero-card-body">
-                             <p><strong>1.</strong> Scroll through the grid of cards.</p>
-                             <p><strong>2.</strong> Click <strong>Copy code</strong> (or the card) to grab a code.</p>
-                             <p><strong>3.</strong> Hit <strong>Code site</strong> (top right) to open the codes page and paste.</p>
-                         </div>
-                     </div>
-                 </div>
-             </section>
-
+             <div class="home-toolbar"><small>/ Search · Arrows Browse · Enter Copy · F Favorite</small><button class="btn-glow" id="customizeHome">Customize home</button></div>
              <section class="filters">
                  <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
                      <div class="search-field-wrap" style="flex: 1;">
@@ -2203,6 +2181,31 @@
              </section>
 
 
+             <div id="homeSections">
+             <section class="hero" id="homeIntro">
+                 <div class="hero-left">
+                     <div class="hero-kicker">Tinkle games</div>
+                     <h1 class="hero-title">All your <span>codes</span>, floating in one clean space.</h1>
+                     <p class="hero-sub">
+                         A spaced-out deck for browsing and copying codes. Search by name or code, filter by game type, and paste into the main code site whenever you’re ready.
+                     </p>
+                     <div class="hero-meta-row">
+                         <div class="hero-stat-pill" id="heroStats">0 games loaded</div>
+                         <div class="hero-stat-pill">made by zaddy</div>
+                     </div>
+                 </div>
+                 <div class="hero-right">
+                     <div class="hero-card">
+                         <div class="hero-card-header">How it works</div>
+                         <div class="hero-card-body">
+                             <p><strong>1.</strong> Scroll through the grid of cards.</p>
+                             <p><strong>2.</strong> Click <strong>Copy code</strong> (or the card) to grab a code.</p>
+                             <p><strong>3.</strong> Hit <strong>Code site</strong> (top right) to open the codes page and paste.</p>
+                         </div>
+                     </div>
+                 </div>
+             </section>
+
              <!-- RECENTLY PLAYED -->
              <section class="grid-shell" id="recentSection" style="display:none;">
                  <div class="grid-header">
@@ -2214,7 +2217,7 @@
 
 
              <!-- GRID -->
-             <section class="grid-shell">
+             <section class="grid-shell" id="homeGames">
                  <div class="grid-header">
                      <div class="grid-title">Codes</div>
                      <div class="grid-count" id="cardsCount">Showing 0</div>
@@ -2222,6 +2225,8 @@
                  <div class="cards-grid" id="cardsGrid"></div>
                  <div class="no-results" id="noResults" style="display:none;">No games match that search or category.</div>
              </section>
+             <section class="grid-shell" id="homeFavorites"><div class="grid-header"><div class="grid-title">Your favorites</div></div><div class="recent-row" id="homeFavoritesGrid"></div><p class="home-empty" id="homeFavoritesEmpty">Tap a heart on a card to add your favorites here.</p></section>
+             </div>
          </div>
 
          <!-- PAGE: FAVORITES -->
@@ -2390,8 +2395,15 @@
 
      <!-- Load game data before the page scripts initialize. -->
      <script src="game-cards.js"></script>
+     <script src="homepage-ui.js"></script>
      <script src="weekly-popularity.js"></script>
 
+     <dialog id="homeCustomize" aria-labelledby="homeCustomizeTitle">
+       <form id="homeForm"><h2 id="homeCustomizeTitle">Make yourself at home</h2><p>Choose your sections and their order. Saved on this device.</p><div id="homeOrder"></div>
+       <label class="home-setting">Card density<select id="homeDensity"><option value="comfortable">Comfortable</option><option value="compact">Compact</option></select></label>
+       <label class="home-setting">Default game sort<select id="homeDefaultSort"><option value="az">All games (A–Z)</option><option value="popular">Popular (weekly)</option><option value="recent">Recently added</option></select></label>
+       <p id="homeSaveStatus" role="status"></p><div class="home-actions"><button type="button" id="homeReset">Reset layout</button><button type="button" id="homeClose">Cancel</button><button type="submit">Save layout</button></div></form>
+     </dialog>
      <!-- Toast -->
      <div class="toast" id="toast">
          <span class="toast-dot"></span>
@@ -4262,6 +4274,9 @@
          function createGameCard(game) {
              const card = document.createElement("div");
              card.className = "card";
+             card.tabIndex = 0;
+             card.setAttribute("role", "group");
+             card.dataset.code = game.code;
              card.setAttribute("aria-label", "Copy code for " + game.name);
 
              const front = document.createElement("div");
@@ -4423,13 +4438,13 @@
 
                  // Copy code to clipboard (ALWAYS copies, even on cooldown)
                  tryCopyToClipboard(game.code);
+                 addRecentGame(game);
              }
 
              card.addEventListener("click", handleCopy);
              btn.addEventListener("click", (e) => {
                  e.stopPropagation();
                  handleCopy();
-                 addRecentGame(game);
              });
 
              return card;
@@ -4525,6 +4540,7 @@
          }
 
          function updateFavoritesGrid() {
+             window.dispatchEvent(new Event("favorites-changed"));
              if (!favoritesGrid) return;
 
              favoritesGrid.innerHTML = "";
@@ -4554,9 +4570,20 @@
              });
          }
 
-         // initial render
-         renderCards();
-         renderRecentGames();
+         function renderHomeFavorites(visible = true) {
+             const grid = document.getElementById('homeFavoritesGrid');
+             grid.replaceChildren();
+             if (!visible) return;
+             const favorites = games.filter(isFavorite).slice(0, 6);
+             favorites.forEach(game => grid.appendChild(createGameCard(game)));
+             document.getElementById('homeFavoritesEmpty').hidden = favorites.length > 0;
+         }
+         HomepageUI.mount({
+             refreshFavorites: renderHomeFavorites,
+             panicKey: () => panicKey,
+             settingPanic: () => isSettingKey,
+             onSort: value => { sortMode = value; sortSelect.value = value; renderCards(); renderRecentGames(); }
+         });
 
          // Set up real-time counter updates
          if (window.listenToAllTimeCounts) {

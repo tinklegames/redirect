@@ -89,7 +89,7 @@ self.addEventListener('fetch', async event => {
     }
     
     // Keep editable site assets fresh so update notices lead to the uploaded version.
-    const freshAssets = ['/admin.html', '/admin.css', '/admin.js', '/admin-tools.js', '/admin-data.js', '/card-editor.js', '/admin-image-checker.js', '/game-cards.js', '/codes.json', '/weekly-popularity.js', '/live-notices.js', '/event-core.js', '/live-events.js', '/admin-events.js'];
+    const freshAssets = ['/admin.html', '/admin.css', '/admin.js', '/admin-tools.js', '/admin-data.js', '/card-editor.js', '/admin-image-checker.js', '/game-cards.js', '/codes.json', '/weekly-popularity.js', '/homepage-ui.js', '/homepage-ui.css', '/live-notices.js', '/event-core.js', '/live-events.js', '/admin-events.js'];
     if (url.origin === self.location.origin && freshAssets.includes(url.pathname)) {
         event.respondWith(networkFirst(event.request));
         return;
