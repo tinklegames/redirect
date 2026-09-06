@@ -1,0 +1,14 @@
+{
+  "name": "tinkle-browser",
+  "private": true,
+  "type": "module",
+  "scripts": { "start": "node server.mjs" },
+  "engines": { "node": ">=24" },
+  "dependencies": {
+    "@mercuryworkshop/bare-mux": "2.1.8",
+    "@mercuryworkshop/epoxy-transport": "2.1.28",
+    "@titaniumnetwork-dev/ultraviolet": "3.2.10",
+    "express": "5.2.1",
+    "@mercuryworkshop/wisp-js": "0.4.1"
+  }
+}

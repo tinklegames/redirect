@@ -2138,6 +2138,7 @@
                          <button class="top-nav-tab" data-page="music">Music</button>
                          <button class="top-nav-tab" data-page="requests">Requests</button>
                          <button class="top-nav-tab" data-page="suggestions">Suggestions</button>
+                         <button class="top-nav-tab" data-page="browser">Browser</button>
                          <button class="top-nav-tab" data-page="settings">Settings</button>
                          <button class="top-nav-tab" data-page="movies">Movies</button>
                      </div>
@@ -2275,6 +2276,17 @@
                  </form>
              </div>
          </div>
+
+         <div class="page" id="page-browser">
+             <div class="page-card">
+                 <div class="page-card-title">Browser</div>
+                 <p id="browserStatus" class="page-card-sub" role="status">Open websites and search the web.</p>
+                 <a id="browserOpen" class="btn-glow" target="_blank" rel="noopener noreferrer" hidden>Open browser in new tab</a>
+                 <iframe id="browserFrame" title="Tinkle Browser" hidden style="width:100%;height:75vh;border:1px solid var(--border-soft);border-radius:16px;margin-top:16px" allow="fullscreen" referrerpolicy="no-referrer"></iframe>
+             </div>
+         </div>
+         <script src="browser-config.js"></script>
+         <script src="browser-tab.js" defer></script>
 
          <div class="page" id="page-settings">
              <div class="page-card" style="padding: 28px 32px;">
