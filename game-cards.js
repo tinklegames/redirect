@@ -530,14 +530,6 @@ window.GAME_CARDS = [
     "img": "https://play-lh.googleusercontent.com/c3vpzjSr0_uxvmBvDJDMtDTSmla8wQeaSWDEn_pb92fHkD1AXSKLcrXDTxnULlAarlA=w240-h480-rw"
   },
   {
-    "name": "Watermelon Go!",
-    "code": "WATERMELON",
-    "categories": [
-      "arcade"
-    ],
-    "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzLBURxABwy5kMo_GQIT0uTJtgJ1slvo1Egw&s"
-  },
-  {
     "name": "Tiny Fishing",
     "code": "TINYFISH",
     "categories": [
@@ -1929,15 +1921,6 @@ window.GAME_CARDS = [
     "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.keygames.com%2F6%2F112986%2F92803%2F672x448%2Fknife-hit.webp&f=1&nofb=1&ipt=88e677b1dfcf36a796535a7eae751acec836bf60ac99eb979c1ec32689687f06"
   },
   {
-    "name": "LEGO Batman",
-    "code": "LEGOBATMAN",
-    "categories": [
-      "action",
-      "adventure"
-    ],
-    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fgaming-cdn.com%2Fimages%2Fproducts%2F1605%2Forig%2Flego-batman-the-videogame-pc-game-steam-cover.jpg%3Fv%3D1646122221&f=1&nofb=1&ipt=74a7a14b558d8c518f60da34a3f98e8f41cbf9d2305695fbd78f2f4ae24acb30"
-  },
-  {
     "name": "Level Devil",
     "code": "LEVELDEVIL",
     "categories": [
@@ -2003,14 +1986,6 @@ window.GAME_CARDS = [
       "puzzle"
     ],
     "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fm.media-amazon.com%2Fimages%2FI%2F710NABzGHHL.jpg&f=1&nofb=1&ipt=1df79c7fffc581e9abde7221cfedeaee8b14b662b820245f9d1a96cedc1a0ab4"
-  },
-  {
-    "name": "Dumb Ways to Die",
-    "code": "DWTD1",
-    "categories": [
-      "arcade"
-    ],
-    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn1.epicgames.com%2Fspt-assets%2F63dd97c2c58d47e195b51b2663337c9a%2Fdumb-ways-to-die-5662e.png&f=1&nofb=1&ipt=1c65a27037128f94f16258e8757fa95036cddd6301e0f48b1bbd540f874d6e34"
   },
   {
     "name": "Deltatraveler",
