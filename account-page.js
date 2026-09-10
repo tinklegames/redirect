@@ -1,6 +1,5 @@
 (() => {
  const $=id=>document.getElementById(id);
- $('rename-form').onsubmit=async event=>{event.preventDefault();if(!confirm('Change your username for 1,000 tokens?'))return;$('rename-submit').disabled=true;try{const result=await TinkleAccount.mutate('rename',{username:$('new-username').value.trim()});$('rename-status').textContent=result.message;$('new-username').value='';}catch(error){$('rename-status').textContent=error.message;}finally{$('rename-submit').disabled=false;}};
  $('replace-code').onclick=async()=>{
   if(!confirm('Replace your recovery code? The old code will stop working.'))return;
   $('replace-code').disabled=true;

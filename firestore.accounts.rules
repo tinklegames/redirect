@@ -12,17 +12,7 @@ service cloud.firestore {
      || request.time < get(/databases/$(database)/documents/tinkleBans/$(uid)).data.startedAt
        + duration.value(get(/databases/$(database)/documents/tinkleBans/$(uid)).data.durationSeconds,'s'));
   }
-  function canPlay(uid) { return owner(uid) && !banned(uid) && !exists(/databases/$(database)/documents/tinkleDeleted/$(uid)); }
-  function rename(uid,n,o) {
-   return n.operation.type=='rename' && n.usernameKey!=o.usernameKey && n.balance==o.balance-1000
-    && n.diff(o).affectedKeys().hasOnly(['username','usernameKey','balance','revision','updatedAt','operation'])
-    && getAfter(/databases/$(database)/documents/tinkleUsernames/$(n.usernameKey)).data.uid==uid
-    && !existsAfter(/databases/$(database)/documents/tinkleUsernames/$(o.usernameKey));
-  }
-  match /tinkleDeleted/{uid} {
-   allow get: if owner(uid) || isAdmin();
-   allow create: if isAdmin() && request.resource.data.by==request.auth.uid && request.resource.data.at==request.time;
-  }
+  function canPlay(uid) { return owner(uid) && !banned(uid); }
   function removeTokens(n,o) {
    return isAdmin() && n.operation.type=='admin-remove' && n.operation.by==request.auth.uid
     && n.operation.amount is int && n.operation.amount>0 && n.balance==o.balance-n.operation.amount
@@ -163,7 +153,7 @@ service cloud.firestore {
   match /tinkleModerationLogs/{id} {
    allow read: if isAdmin();
    allow create: if isAdmin() && request.resource.data.by==request.auth.uid && request.resource.data.at==request.time
-    && request.resource.data.target is string && request.resource.data.action in ['remove-tokens','ban','unban','delete'];
+    && request.resource.data.target is string && request.resource.data.action in ['remove-tokens','ban','unban'];
   }
   match /tinklePlayers/{uid} {
    allow read: if owner(uid) || isAdmin();
@@ -178,18 +168,15 @@ service cloud.firestore {
     && request.resource.data.rewards.daily=={'games':[],'categories':[],'rewardedClicks':0,'claimed':[]} 
     && getAfter(/databases/$(database)/documents/tinkleUsernames/$(request.resource.data.usernameKey)).data.uid==uid
     && scoreMatches(uid,request.resource.data);
-   allow delete: if isAdmin();
    allow update: if (canPlay(uid) || isAdmin()) && valid(request.resource.data)
-    && (request.resource.data.operation.type=='rename' || (request.resource.data.username==resource.data.username && request.resource.data.usernameKey==resource.data.usernameKey))
+    && request.resource.data.username==resource.data.username && request.resource.data.usernameKey==resource.data.usernameKey
     && request.resource.data.createdAt==resource.data.createdAt && request.resource.data.revision==resource.data.revision+1
     && scoreMatches(uid,request.resource.data)
-    && (removeTokens(request.resource.data,resource.data) || (canPlay(uid) && (request.resource.data.operation.type=='rename'?rename(uid,request.resource.data,resource.data)
-      :request.resource.data.operation.type=='buy'?buy(request.resource.data,resource.data)
+    && (removeTokens(request.resource.data,resource.data) || (canPlay(uid) && (request.resource.data.operation.type=='buy'?buy(request.resource.data,resource.data)
       :request.resource.data.operation.type=='equip'?equip(request.resource.data,resource.data)
       :request.resource.data.operation.type=='reward'?reward(request.resource.data,resource.data)
       :request.resource.data.operation.type in ['instant','start','move'] && game(request.resource.data,resource.data))));
    match /requests/{id} {
-    allow delete: if isAdmin();
     allow read: if owner(uid) || isAdmin();
     allow create: if canPlay(uid) && request.resource.data.keys().hasOnly(['result','revision'])
      && getAfter(/databases/$(database)/documents/tinklePlayers/$(uid)).data.operation.id==id
@@ -198,12 +185,10 @@ service cloud.firestore {
   }
   match /tinkleUsernames/{name} {
    allow get: if request.auth != null;
-   allow delete: if isAdmin() || (canPlay(resource.data.uid) && getAfter(/databases/$(database)/documents/tinklePlayers/$(resource.data.uid)).data.usernameKey!=name);
-   allow create: if canPlay(request.auth.uid) && request.resource.data=={'uid':request.auth.uid}
+   allow create: if request.auth != null && !banned(request.auth.uid) && request.resource.data=={'uid':request.auth.uid}
     && getAfter(/databases/$(database)/documents/tinklePlayers/$(request.auth.uid)).data.usernameKey==name;
   }
   match /tinkleLeaderboard/{uid} {
-   allow delete: if isAdmin();
    allow get: if request.auth != null;
    allow list: if request.auth != null && request.query.limit<=50;
    allow create,update: if (canPlay(uid) || isAdmin())
