@@ -1,7 +1,17 @@
 /* Device-persistent Firebase identity, with a high-entropy recovery secret. */
 (() => {
+ let currentBan=null,wasBanned=false;
  let state=null,backend,auth,authTools,resolveReady,busy=false,recovering=false,recoveryPending=false,switching=false;
  const ready=new Promise(resolve=>resolveReady=resolve),$=id=>document.getElementById(id);
+ function isBanned(){return !!currentBan&&(currentBan.permanent||currentBan.startedAt.toMillis()+currentBan.durationSeconds*1000>Date.now());}
+ function applyBan(ban){
+  currentBan=ban;
+  if(isBanned()){
+   wasBanned=true;showGate();$('player-title').textContent='Account banned';
+   for(const id of ['player-form','player-save-code','player-mode','player-cancel-restore','player-reconnect'])$(id).hidden=true;
+   status((ban.permanent?'This account is permanently banned.':'Banned until '+new Date(ban.startedAt.toMillis()+ban.durationSeconds*1000).toLocaleString()+'.')+(ban.reason?' '+ban.reason:''));
+  }else if(wasBanned){wasBanned=false;$('player-form').hidden=false;$('player-mode').hidden=false;setMode();if(state)finish();}
+ }
  function changed(){window.dispatchEvent(new Event('tinkle-wallet-change'));window.dispatchEvent(new Event('tinkle-player-change'));}
  function status(message){$('player-status').textContent=message;}
  function errorMessage(error){
@@ -19,6 +29,7 @@
  }
  async function call(action,payload={},requestId=crypto.randomUUID()){
   if(!backend||(!auth?.currentUser&&action!=='recover'))throw Error('Connect your account first.');
+  if(isBanned()&&!['load','recover'].includes(action))throw Error('This account is banned.');
   const callerUid=auth?.currentUser?.uid;
   let response;
   try{response=await backend.call(action,payload,requestId);}catch(error){throw Error(errorMessage(error));}
@@ -27,16 +38,18 @@
  }
  async function mutate(action,payload){await ready;return accept(await call(action,payload));}
  function showGate(){const dialog=$('player-gate');if(!dialog.open)dialog.showModal();}
- function finish(){switching=false;recoveryPending=false;$('player-gate').close();resolveReady();changed();}
+ function finish(){if(isBanned()){applyBan(currentBan);return;}switching=false;recoveryPending=false;$('player-gate').close();resolveReady();changed();}
  async function load(){
   const response=await call('load');
   if(!response.wallet||!state||response.wallet.username!==state.username||response.wallet.revision>=state.revision)state=response.wallet;
+  applyBan(response.ban);
+  if(isBanned())return;
   if(state&&!recoveryPending)finish();
   else if(!state){showGate();status('');}
  }
  window.TinkleAccount=Object.freeze({ready,get profile(){return state?{username:state.username,balance:state.balance,owned:state.owned,equipped:state.equipped}:null;},get wallet(){return state;},now:()=>Date.now(),mutate,
   leaderboard:async()=>{await ready;return (await call('leaderboard')).players;},
-  showRecovery:()=>{recovering=true;switching=true;$('player-cancel-restore').hidden=false;$('player-form').hidden=false;$('player-save-code').hidden=true;$('player-mode').hidden=true;showGate();setMode();},
+  showRecovery:()=>{if(isBanned())return;recovering=true;switching=true;$('player-cancel-restore').hidden=false;$('player-form').hidden=false;$('player-save-code').hidden=true;$('player-mode').hidden=true;showGate();setMode();},
   refresh:async()=>{if(auth?.currentUser&&state&&!busy&&!switching)await load();}
  });
  function setMode(){
@@ -72,11 +85,11 @@
  async function init(){
   mount();
   try{
-   const [appTools,a,spark]=await Promise.all([import('https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js'),import('https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js'),import('./spark-account.js')]);
+   const [appTools,a,spark]=await Promise.all([import('https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js'),import('https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js'),import('./spark-account.js?v=20260910-moderation')]);
    const useEmulators=['localhost','127.0.0.1'].includes(location.hostname)&&(new URLSearchParams(location.search).get('emulator')==='1'||sessionStorage.getItem('tinkle.emulator')==='1');
    if(useEmulators)sessionStorage.setItem('tinkle.emulator','1');
    const config=useEmulators?{...window.TINKLE_PLAYER_CONFIG.firebase,projectId:'demo-tinkle',apiKey:'demo-api-key',authDomain:'demo-tinkle.firebaseapp.com'}:window.TINKLE_PLAYER_CONFIG.firebase;
-   authTools=a;const app=appTools.initializeApp(config,'tinkle-player');auth=a.getAuth(app);backend=spark.createBackend(app,a,auth,useEmulators,wallet=>{if(state&&wallet.revision>=state.revision){state=wallet;changed();}});
+   authTools=a;const app=appTools.initializeApp(config,'tinkle-player');auth=a.getAuth(app);backend=spark.createBackend(app,a,auth,useEmulators,wallet=>{if(state&&wallet.revision>=state.revision){state=wallet;changed();}},applyBan);
    if(useEmulators){a.connectAuthEmulator(auth,'http://127.0.0.1:9099');}
    await a.setPersistence(auth,a.browserLocalPersistence);
    a.onAuthStateChanged(auth,async user=>{
@@ -87,6 +100,7 @@
    });
   }catch(error){status(errorMessage(error));$('player-reconnect').hidden=false;}
  }
+ setInterval(()=>{if(wasBanned&&!isBanned())load().catch(()=>{});},1000);
  init();
  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&state)window.TinkleAccount.refresh().catch(()=>{});});
 })();

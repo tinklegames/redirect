@@ -6,17 +6,18 @@ export function recoveryParts(code){
  if(!match)throw Error('Enter your complete recovery code.');
  return {alias:match[1],password:match[2],email:emailFor(match[1])};
 }
-export function createBackend(app,a,auth,useEmulators,onWallet){
+export function createBackend(app,a,auth,useEmulators,onWallet,onBan=()=>{}){
  const db=f.getFirestore(app);if(useEmulators)f.connectFirestoreEmulator(db,'127.0.0.1',8080);
- let stop=null;
+ let stop=null,stopBan=null;
  const ref=()=>{if(!auth.currentUser)throw Error('Connect your account first.');return f.doc(db,'tinklePlayers',auth.currentUser.uid);};
  const readWallet=data=>{if(!data)return null;const copy={...data};delete copy.updatedAt;delete copy.operation;delete copy.cardAt;delete copy.loginAt;return copy;};
  function watch(){
-  stop?.();const uid=auth.currentUser?.uid;if(!uid)return;
+  stop?.();stopBan?.();const uid=auth.currentUser?.uid;if(!uid)return;
+  stopBan=f.onSnapshot(f.doc(db,'tinkleBans',uid),snapshot=>{if(!snapshot.metadata.hasPendingWrites&&!snapshot.metadata.fromCache&&auth.currentUser?.uid===uid)onBan(snapshot.exists()?snapshot.data():null);},()=>{});
   stop=f.onSnapshot(ref(),snapshot=>{if(!snapshot.metadata.hasPendingWrites&&auth.currentUser?.uid===uid&&snapshot.exists())onWallet(engine.view(readWallet(snapshot.data())));},()=>{});
  }
  const publicData=wallet=>JSON.parse(JSON.stringify(engine.publicProfile(wallet)));
- async function load(){const snapshot=await f.getDocFromServer(ref());return {wallet:snapshot.exists()?engine.view(readWallet(snapshot.data())):null};}
+ async function load(){const [snapshot,ban]=await Promise.all([f.getDocFromServer(ref()),f.getDocFromServer(f.doc(db,'tinkleBans',auth.currentUser.uid))]);return {wallet:snapshot.exists()?engine.view(readWallet(snapshot.data())):null,ban:ban.exists()?ban.data():null};}
  async function register(payload,requestId){
   const name=engine.username(payload.username),user=auth.currentUser;
   // Link a random, private credential to the existing browser identity. No real email is requested or sent.

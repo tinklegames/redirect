@@ -46,6 +46,31 @@ test('Spark signup, recovery, purchases, cooldown rules and leaderboard work wit
    r=await one.backend.call('start',{game,stake:1,choice:'red',pick:0,options:{size:4,mineCount:3}});const round=r.wallet.games[game];
    if(!round.done)await one.backend.call('move',{game,id:round.id,revision:0,move:game==='blackjack'?'stand':game==='mines'?0:game==='scratch'?'all':game==='roulette'?'skip':'cash'});
   }
+  // Exercise the real admin store against the same rules, using an emulator-only role.
+  require('../moderation-core.js');
+  const adminUid='moderator-test',adminDb=env.authenticatedContext(adminUid).firestore();
+  await env.withSecurityRulesDisabled(context=>context.firestore().doc('tinkleAdmins/'+adminUid).set({enabled:true}));
+  const store=TinkleModeration.createStore(adminDb,()=>f.serverTimestamp(),()=>({uid:adminUid}));
+  assert.equal(await store.permitted(),true);assert.equal((await store.find(name)).uid,uid);
+  for(const [unit,seconds] of [['s',2],['m',120],['h',7200],['d',172800]])assert.equal(TinkleModeration.duration(2,unit),seconds);
+  assert.throws(()=>TinkleModeration.duration(-1,'s'));assert.throws(()=>TinkleModeration.duration(1,'bad'));
+  await assertFails(f.setDoc(f.doc(one.db,'tinkleAdmins',uid),{enabled:true}));
+  await assertFails(f.setDoc(f.doc(one.db,'tinkleBans',uid),{permanent:true,durationSeconds:0,startedAt:f.serverTimestamp(),reason:'',by:uid}));
+  const before=(await one.backend.call('load')).wallet.balance,removal=randomUUID();
+  await store.removeTokens(uid,10,removal);await store.removeTokens(uid,10,removal);
+  assert.equal((await one.backend.call('load')).wallet.balance,before-10);
+  assert.equal((await f.getDoc(f.doc(one.db,'tinkleLeaderboard',uid))).data().balance,before-10);
+  await assert.rejects(store.removeTokens(uid,before+100),/only has/);
+  await store.ban(uid,1,'h','Test');
+  assert.equal((await one.backend.call('load')).ban.durationSeconds,3600);
+  await assertFails(one.backend.call('instant',{game:'coin',stake:1,choice:'Heads'}));
+  await assertFails(f.deleteDoc(f.doc(one.db,'tinkleBans',uid)));
+  await env.withSecurityRulesDisabled(context=>context.firestore().doc('tinkleBans/'+uid).update({startedAt:new Date(Date.now()-3601000)}));
+  await one.backend.call('instant',{game:'coin',stake:1,choice:'Heads'});
+  await store.ban(uid,0,'forever');
+  await assertFails(one.backend.call('instant',{game:'coin',stake:1,choice:'Heads'}));
+  await store.removeTokens(uid,1);
+  await store.unban(uid);await one.backend.call('instant',{game:'coin',stake:1,choice:'Heads'});
   const recovered=await two.backend.call('recover',{code:recovery});assert.equal(two.auth.currentUser.uid,uid);assert.equal(recovered.wallet.username,name);assert.ok(recovered.wallet.owned.includes('badge-star'));
   const next=randomBytes(32).toString('hex');r=await two.backend.call('rotateRecovery',{currentCode:recovery,recovery:next});assert.ok(r.result.recoveryCode.endsWith(next));await assert.rejects(one.backend.call('recover',{code:recovery}));
   const scores=await two.backend.call('leaderboard');assert.ok(scores.players.some(p=>p.username===name));assert.ok(scores.players.length<=50);

@@ -58,3 +58,9 @@ The second command requires the local Auth and Firestore emulators. Tests create
 - Fifteen permanent cosmetics cost 250–1,500 tokens. Selecting a free theme in Settings unequips a shop theme; owned themes remain available.
 
 If changing reward amounts/codes, game categories, or shop prices, update the matching Firestore rules and deploy them along with the frontend. Client-only catalog edits cannot change rule-enforced prices or reward amounts. The free plan's rule evaluation limit is why the game-category lookup is split by code prefix.
+
+## Player moderation
+
+Deploy the updated Firestore rules with the command above, then open **Players** on the admin page. Sign in with your usual admin account. For the one-time permission setup, copy the UID shown there and, in the Firebase Firestore console, create `tinkleAdmins` → a document with that exact UID → field `enabled` of type **boolean**, set to **true**. Reload the admin page. Client accounts cannot grant themselves this role.
+
+Search by username to remove a whole-token amount, ban for seconds/minutes/hours/days or forever, or unban. Token removal updates the wallet and leaderboard together and cannot make a balance negative. Actions are recorded in `tinkleModerationLogs`. Bans block account writes in Firestore and show a live ban screen; timed bans expire automatically. These are account bans, not hardware/IP bans, so they do not prevent someone creating another account.

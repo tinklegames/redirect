@@ -56,7 +56,7 @@ function switchTab(name) {
     });
     document.querySelectorAll('.tab-panel').forEach(panel => { panel.hidden = panel.id !== 'panel-' + name; });
     if (name === 'stats' && window.loadWeeklyStats) window.loadWeeklyStats();
-    $('section-label').textContent = 'Workspace / ' + ({ games: 'Games', codes: 'Codes & links', stats: 'Weekly stats', settings: 'Site settings', live: 'Live controls' }[name]);
+    $('section-label').textContent = 'Workspace / ' + ({ games: 'Games', codes: 'Codes & links', stats: 'Weekly stats', players: 'Players', settings: 'Site settings', live: 'Live controls' }[name]);
 }
 document.querySelectorAll('[data-tab]').forEach(button => button.addEventListener('click', () => switchTab(button.dataset.tab)));
 $('login-form').addEventListener('submit', async event => {
