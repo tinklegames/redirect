@@ -24,7 +24,7 @@
     balance: () => read().balance,
     // resolve returns { payout, ... }; payout includes the original stake.
     wager: (stake, resolve) => transact(wallet => {
-      if (!Number.isSafeInteger(stake) || stake < 1 || stake > 500) throw new Error('Choose a whole-number bet from 1 to 500.');
+      if (!Number.isSafeInteger(stake) || stake < 1) throw new Error('Choose a positive whole-number bet.');
       if (stake > wallet.balance) throw new Error('You do not have enough tokens for that bet.');
       const result = resolve();
       if (!Number.isSafeInteger(result.payout) || result.payout < 0) throw new Error('Invalid payout.');
@@ -34,10 +34,10 @@
     // Versioned, reserved-stake rounds survive reloads and settle under one lock.
     gameRounds: () => read().games || {},
     startGame: (game, stake, create) => transact(wallet => {
-      if (!['mines', 'crash', 'plinko', 'wheel', 'scratch'].includes(game)) throw new Error('Unknown game.');
+      if (!['mines', 'crash', 'plinko', 'wheel', 'scratch', 'roulette'].includes(game)) throw new Error('Unknown game.');
       const rounds = wallet.games || (wallet.games = {});
       if (rounds[game] && !rounds[game].done) throw new Error('Finish your current round first.');
-      if (!Number.isSafeInteger(stake) || stake < 1 || stake > 500 || stake > wallet.balance) throw new Error('Choose a whole-number bet from 1 to 500 within your balance.');
+      if (!Number.isSafeInteger(stake) || stake < 1 || stake > wallet.balance) throw new Error('Choose a positive whole-number bet within your balance.');
       const round = create(stake);
       if (!Number.isSafeInteger(round.payout) || round.payout < 0) throw new Error('Invalid payout.');
       round.revision = 0;
@@ -56,11 +56,26 @@
       wallet.games[game] = next;
       return next;
     }),
+    finishRoulette: (id, skip = false) => transact(wallet => {
+      const round = wallet.games?.roulette;
+      if (!round || round.done || round.id !== id) throw new Error('This spin already finished or changed in another tab.');
+      const spinning = Date.now() < round.readyAt;
+      if (spinning && !skip) throw new Error('The ball is still spinning.');
+      const fee = spinning && skip ? 5 : 0;
+      if (fee > wallet.balance) throw new Error('You need 5 available tokens to skip. You can wait for free.');
+      if (!Number.isSafeInteger(round.result.payout) || round.result.payout < 0) throw new Error('Invalid payout.');
+      wallet.balance = wallet.balance - fee + round.result.payout;
+      round.payout = round.result.payout;
+      round.skipFee = fee;
+      round.done = true;
+      round.revision++;
+      return round;
+    }),
     hasActiveGames: () => Object.values(read().games || {}).some(round => !round.done),
     round: () => read().blackjack || null,
     startBlackjack: (stake, create) => transact(wallet => {
       if (wallet.blackjack && !wallet.blackjack.done) throw new Error('Finish your current blackjack hand first.');
-      if (!Number.isSafeInteger(stake) || stake < 2 || stake > 500 || stake > wallet.balance) throw new Error('Choose an even bet from 2 to 500 within your balance.');
+      if (!Number.isSafeInteger(stake) || stake < 1 || stake > wallet.balance) throw new Error('Choose a positive whole-number bet within your balance.');
       const round = create(stake);
       if (!Number.isSafeInteger(round.payout) || round.payout < 0) throw new Error('Invalid payout.');
       wallet.balance -= stake;

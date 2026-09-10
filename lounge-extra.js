@@ -16,11 +16,23 @@
     const text = round.done ? `${outcome}${tokens(round.payout)} tokens returned · ${tokens(round.stake)} bet.` : `${tokens(round.stake)} tokens in play. Your round is saved.`;
     $(`${game}-result`).textContent = text;
   }
-  const mineTiles = Array.from({length:16}, (_,i) => {
-    const button = document.createElement('button');
-    button.type = 'button'; button.textContent = '◇';
-    button.addEventListener('click', () => play('mines', i));
-    $('mines-board').appendChild(button); return button;
+  let mineTiles = [], minePreview = false, mineSettingsLoaded = false;
+  function buildMines(size) {
+    if (mineTiles.length === size * size) return;
+    $('mines-board').replaceChildren();
+    $('mines-board').style.gridTemplateColumns = `repeat(${size}, 1fr)`;
+    mineTiles = Array.from({length:size*size}, (_,i) => {
+      const button = document.createElement('button');
+      button.type = 'button'; button.textContent = '◇';
+      button.addEventListener('click', () => play('mines', i));
+      $('mines-board').appendChild(button); return button;
+    });
+  }
+  for (const control of ['mines-size','mines-count']) $(control).addEventListener('change', () => {
+    const max = Number($('mines-size').value) ** 2 - 1;
+    $('mines-count').max = String(max);
+    if (Number($('mines-count').value) > max) $('mines-count').value = max;
+    minePreview = true; render();
   });
   const scratchTiles = Array.from({length:9}, (_,i) => {
     const button = document.createElement('button');
@@ -71,7 +83,7 @@
   function showPlinko(round) {
     if (!round) return;
     pockets.forEach((p,i)=>p.setAttribute('fill',i===round.bucket?'#617d43':'#322544'));
-    ball.style.transform = `translate(${(round.bucket-4)*30}px, 187px)`;
+    ball.style.transform = `translate(${(round.bucket-4)*30}px, 191px)`;
   }
   function showWheel(round) {
     if (round) $('fortune-wheel').style.transform = `rotate(${-round.sector*30-15}deg)`;
@@ -79,12 +91,23 @@
   function renderCrash() {
     const round=rounds.crash;
     if (!round) return;
-    const multiplier=round.done ? (round.cashedAt || round.crashAt) : Math.min(round.crashAt,rules.crashMultiplier(round,Date.now()));
+    const now = Date.now(), ended = now >= rules.crashDeadline(round);
+    const ceiling = Math.min(20, round.crashAt);
+    const multiplier = ended ? ceiling : Math.min(ceiling, rules.crashMultiplier(round, now));
     $('crash-multiplier').textContent = `${multiplier.toFixed(2)}×`;
-    $('crash-status').textContent = round.done ? round.cashedAt ? 'Collected safely' : 'Crashed' : 'In flight';
-    $('crash-panel').classList.toggle('crashed',round.done && !round.cashedAt);
+    $('crash-status').textContent = ended ? round.crashAt > 20 ? 'Flight reached the 20× limit' : 'Crashed' : round.cashedAt ? 'Cashed out · watching the flight' : 'In flight';
+    $('crash-panel').classList.toggle('crashed', ended && round.crashAt <= 20);
     $('crash-curve').style.strokeDashoffset = String(330*(1-Math.min(1,Math.log(Math.max(1,multiplier))/Math.log(20))));
     $('crash-cash').textContent = `Cash out · ${tokens(rules.prize(round.stake,multiplier))}`;
+    const followup = round.cashedAt ? ended
+      ? `You collected at ${round.cashedAt.toFixed(2)}× (${tokens(round.payout)} tokens). The flight ${round.crashAt > 20 ? 'reached the limit of' : 'crashed at'} ${ceiling.toFixed(2)}×. Your payout stays unchanged.`
+      : `You collected at ${round.cashedAt.toFixed(2)}× (${tokens(round.payout)} tokens). Watch to see where this flight ends.`
+      : '';
+    if ($('crash-followup').textContent !== followup) $('crash-followup').textContent = followup;
+    const start = document.querySelector('[data-start="crash"]');
+    // Keep the settled flight on screen through its endpoint, including after reload.
+    start.hidden = !round.done || !ended;
+    start.disabled = pending.has('crash');
   }
   function render() {
     try {
@@ -95,7 +118,21 @@
         start.hidden=!!active; start.disabled=pending.has(game);
         if (round && !pending.has(game)) report(game,round);
       }
-      const mines=rounds.mines, mining=mines && !mines.done;
+      const savedMines = rounds.mines, mining = savedMines && !savedMines.done;
+      if (mining || (savedMines && !mineSettingsLoaded)) {
+        mineSettingsLoaded = true;
+        minePreview = false;
+        $('mines-size').value = savedMines.size || 4;
+        $('mines-count').value = savedMines.mines.length;
+      }
+      const mines = minePreview ? null : savedMines;
+      const size = mines?.size || (mines ? 4 : Number($('mines-size').value));
+      $('mines-size').disabled = !!mining || pending.has('mines');
+      $('mines-count').disabled = !!mining || pending.has('mines');
+      $('mines-count').max = String(Number($('mines-size').value) ** 2 - 1);
+      buildMines(size);
+      $('mines-badge').textContent = `${size}×${size} · ${mines ? mines.mines.length : $('mines-count').value} MINES`;
+      if (!mines) $('mines-info').textContent = 'Choose your settings, then start a new board.';
       mineTiles.forEach((tile,i)=>{
         const revealed=mines?.revealed.includes(i), bomb=mines?.mines.includes(i);
         tile.disabled=!mining || revealed || pending.has('mines');
@@ -107,9 +144,9 @@
       $('mines-cash').hidden=!mining;
       $('mines-cash').disabled=pending.has('mines') || !mines?.revealed.length;
       if (mines) {
-        const multiplier=rules.minesMultiplier(mines.revealed.length);
+        const multiplier=rules.minesMultiplier(mines.revealed.length, size, mines.mines.length);
         $('mines-info').textContent = mines.done ? mines.exploded !== undefined ? 'Mine hit. This round is over.' : 'Tokens collected.' : `${mines.revealed.length} ${mines.revealed.length === 1 ? "gem" : "gems"} · ${multiplier.toFixed(2)}× · ${mines.stake} tokens bet`;
-        $('mines-cash').textContent=`Cash out · ${tokens(rules.prize(mines.stake,multiplier))}`;
+        $('mines-cash').textContent=`Cash out · ${tokens(rules.minesPayout(mines.stake,mines.revealed.length,size,mines.mines.length))}`;
       }
       const scratch=rounds.scratch, scratching=scratch && !scratch.done;
       scratchTiles.forEach((tile,i)=>{
@@ -137,11 +174,8 @@
     if (reduced()) return;
     if (game === 'plinko') {
       pockets.forEach(p=>p.setAttribute('fill','#322544'));
-      let x=0;
-      const frames=[{transform:'translate(0px, 0px)'}];
-      round.path.forEach((step,i)=>{x+=step?15:-15;frames.push({transform:`translate(${x}px, ${19+i*22}px)`});});
-      frames.push({transform:`translate(${x}px, 187px)`});
-      await ball.animate(frames,{duration:1500,easing:'linear'}).finished;
+      const trajectory = rules.plinkoFrames(round.path);
+      await ball.animate(trajectory.frames,{duration:trajectory.duration,easing:'linear'}).finished;
     } else if (game === 'wheel') {
       const end=1440-round.sector*30-15;
       await $('fortune-wheel').animate([{transform:'rotate(0deg)'},{transform:`rotate(${end}deg)`}],{duration:2400,easing:'cubic-bezier(.15,.7,.12,1)'}).finished;
@@ -149,7 +183,7 @@
   }
   document.querySelectorAll('[data-start]').forEach(button=>button.addEventListener('click',()=>run(button.dataset.start,async()=>{
     const game=button.dataset.start;
-    const round=await wallet.startGame(game,Number($('stake').value),stake=>rules.create(game,stake,random,Date.now(),crypto.randomUUID()));
+    const round=await wallet.startGame(game,Number($('stake').value),stake=>rules.create(game,stake,random,Date.now(),crypto.randomUUID(), {size:Number($('mines-size').value), mineCount:Number($('mines-count').value)}));
     if (game === 'crash') crashFailure=null;
     $(`${game}-result`).textContent = game === 'plinko' ? 'Ball dropping…' : game === 'wheel' ? 'Wheel spinning…' : `${round.stake} tokens in play.`;
     await animate(game,round);

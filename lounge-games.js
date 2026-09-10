@@ -8,6 +8,24 @@
     return { payout: win ? stake * (choice === 'number' ? 36 : 2) : 0, display: String(number), color,
       message: `The ball landed on ${number} ${color}.` };
   }
+  function instant(game, stake, random, choice) {
+    if (game === 'coin') {
+      const side = ['Heads', 'Tails'][random(2)];
+      return { payout: side === choice ? Number(BigInt(stake) * 14n / 10n) : 0, display: side, message: `The coin landed on ${side.toLowerCase()}.` };
+    }
+    if (game === 'dice') {
+      const roll = random(6) + 1;
+      return { payout: roll === 6 ? stake * 4 : 0, display: ['⚀','⚁','⚂','⚃','⚄','⚅'][roll - 1], message: `You rolled a ${roll}.` };
+    }
+    if (game === 'slots') {
+      const symbols = ['★','◆','●','✦','♥','☾'];
+      const reels = Array.from({length:3}, () => symbols[random(symbols.length)]);
+      const unique = new Set(reels).size;
+      const multiplier = unique === 1 ? 12 : unique === 2 ? 0.5 : 0;
+      return { payout: Math.floor(stake * multiplier), display: reels, message: unique === 1 ? 'Three of a kind! 12× return.' : unique === 2 ? 'A pair returns half your bet.' : 'No matches this time.' };
+    }
+    throw new Error('Unknown game.');
+  }
   function total(cards) {
     let value = cards.reduce((sum, card) => sum + Math.min(card % 13 + 1, 10), 0);
     if (cards.some(card => card % 13 === 0) && value + 10 <= 21) value += 10;
@@ -20,14 +38,13 @@
     round.done = true;
     if (player > 21) { round.payout = 0; round.message = 'You busted.'; }
     else if (dealerNatural && !natural) { round.payout = 0; round.message = 'Dealer blackjack.'; }
-    else if (natural && !dealerNatural) { round.payout = round.stake * 2.5; round.message = 'Blackjack!'; }
+    else if (natural && !dealerNatural) { round.payout = Math.floor(round.stake * 2.5); round.message = 'Blackjack!'; }
     else if (dealer > 21 || player > dealer) { round.payout = round.stake * 2; round.message = dealer > 21 ? 'Dealer busted. You win!' : 'You win!'; }
     else if (player === dealer) { round.payout = round.stake; round.message = 'Push. Your bet is returned.'; }
     else { round.payout = 0; round.message = 'Dealer wins.'; }
     return round;
   }
   function start(stake, randomInt) {
-    if (stake % 2 !== 0) throw new Error('Blackjack needs an even bet so its 3:2 bonus pays whole tokens.');
     const deck = Array.from({length:52}, (_,i) => i);
     for (let i=51;i>0;i--) { const j=randomInt(i+1); [deck[i],deck[j]]=[deck[j],deck[i]]; }
     const round = { stake, deck, player: [deck.pop()], dealer: [deck.pop()], done:false, payout:0 };
@@ -46,5 +63,5 @@
     return settle(round);
   }
   const cardLabel = card => `${['A','2','3','4','5','6','7','8','9','10','J','Q','K'][card % 13]}${['♠','♥','♦','♣'][Math.floor(card/13)]}`;
-  window.LoungeGames = Object.freeze({roulette, total, start, act, cardLabel});
+  window.LoungeGames = Object.freeze({roulette, instant, total, start, act, cardLabel});
 })();

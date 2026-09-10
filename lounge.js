@@ -10,6 +10,8 @@
     try {
       const balance = wallet.balance();
       document.getElementById('balance').textContent = balance.toLocaleString();
+      stakeInput.max = String(balance);
+      document.getElementById('bet-limit').textContent = `Up to ${balance.toLocaleString()} tokens`;
       const round = wallet.round();
       displayedRound = round;
       const active = round && !round.done;
@@ -50,37 +52,19 @@
     try { await action(); } catch (error) { notice.textContent = error.message; }
     finally { busy = false; buttons.forEach(button => button.disabled = false); render(); }
   }
+  document.getElementById('bet-max').addEventListener('click', () => {
+    try { stakeInput.value = wallet.balance(); } catch (error) { notice.textContent = error.message; }
+  });
   document.querySelectorAll('[data-stake]').forEach(button => button.addEventListener('click', () => {
     stakeInput.value = button.dataset.stake;
   }));
   document.querySelectorAll('[data-game]').forEach(button => button.addEventListener('click', () => run(async () => {
     const stake = Number(stakeInput.value);
     const game = button.dataset.game;
-    const result = await wallet.wager(stake, () => {
-      if (game === 'roulette') {
-        const choice = document.getElementById('roulette-choice').value;
-        const raw = document.getElementById('roulette-number').value;
-        const pick = Number(raw);
-        if (choice === 'number' && (raw.trim() === '' || !Number.isInteger(pick) || pick < 0 || pick > 36)) throw new Error('Pick a whole number from 0 to 36.');
-        return LoungeGames.roulette(randomInt(37), choice, pick, stake);
-      }
-      if (game === 'coin') {
-        const side = ['Heads', 'Tails'][randomInt(2)];
-        return { payout: side === button.dataset.choice ? stake * 2 : 0, display: side, message: `The coin landed on ${side.toLowerCase()}.` };
-      }
-      if (game === 'dice') {
-        const roll = randomInt(6) + 1;
-        return { payout: roll === 6 ? stake * 6 : 0, display: ['⚀','⚁','⚂','⚃','⚄','⚅'][roll - 1], message: `You rolled a ${roll}.` };
-      }
-      const symbols = ['★','◆','●','✦','♥'];
-      const reels = Array.from({ length: 3 }, () => symbols[randomInt(5)]);
-      const unique = new Set(reels).size;
-      return { payout: stake * (unique === 1 ? 10 : unique === 2 ? 2 : 0), display: reels, message: unique === 1 ? 'Three of a kind!' : unique === 2 ? 'A matching pair!' : 'No matches this time.' };
-    });
+    const result = await wallet.wager(stake, () => LoungeGames.instant(game, stake, randomInt, button.dataset.choice));
     const art = document.getElementById(`${game}-art`);
     if (game === 'slots') [...art.children].forEach((reel, index) => reel.textContent = result.display[index]);
     else { art.textContent = result.display; art.style.fontSize = game === 'coin' ? '38px' : '74px'; }
-    if (game === 'roulette') art.dataset.color = result.color;
     const net = result.payout - stake;
     document.getElementById(`${game}-result`).textContent = `${result.message} ${result.payout ? `${result.payout.toLocaleString()} tokens returned.` : `${stake.toLocaleString()} tokens lost.`}`;
     notice.textContent = `${net >= 0 ? '+' : '−'}${Math.abs(net).toLocaleString()} tokens this round. ${wallet.balance() === 0 ? 'Out of tokens? Grab a free refill.' : 'Your wallet is saved.'}`;
