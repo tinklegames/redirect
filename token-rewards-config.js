@@ -10,6 +10,6 @@ window.TINKLE_REWARD_CONFIG = Object.freeze({
   cardCooldownMs: 5 * 60 * 1000,
   codes: [
     { id: 'welcome-1000-v1', code: 'TINKLE1000', amount: 1000, expiresAt: null },
-    { id: 'admin-v1', code: 'D1TINKLER', amount: 100000, expiresAt: null }
+    { id: 'admin-v1', code: 'D1TINKLER', amount: 1000000, expiresAt: null }
   ]
 });
