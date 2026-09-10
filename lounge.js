@@ -53,8 +53,12 @@
   document.getElementById('bet-max').addEventListener('click', () => {
     try { stakeInput.value = wallet.balance(); } catch (error) { notice.textContent = error.message; }
   });
-  document.querySelectorAll('[data-stake]').forEach(button => button.addEventListener('click', () => {
-    stakeInput.value = button.dataset.stake;
+  document.querySelectorAll('[data-stake-percent]').forEach(button => button.addEventListener('click', () => {
+    try {
+      const balance = wallet.balance();
+      const percent = Number(button.dataset.stakePercent);
+      stakeInput.value = balance > 0 ? Math.min(balance, Math.max(1, Math.floor(balance * (percent / 100)))) : 0;
+    } catch (error) { notice.textContent = error.message; }
   }));
   document.querySelectorAll('[data-game]').forEach(button => button.addEventListener('click', () => run(async () => {
     const stake = Number(stakeInput.value);
