@@ -38,3 +38,10 @@ test('Enter Code navigation stays on the current origin and directory',()=>{
  assert.equal((source.match(/const codeSiteURL = new URL\("index.html", window.location.href\).href;/g)||[]).length,2);
  assert.equal(new URL('index.html','https://example.com/site/codes.html').href,'https://example.com/site/index.html');
 });
+
+test('Deleted accounts see the explanation and fresh username form',async()=>{
+ const p=await page({wallet:null,deleted:true,ban:null});await p.restore();
+ assert.equal(p.gate.open,true);assert.equal(p.account.profile,null);
+ assert.equal(p.element('player-form').hidden,false);
+ assert.match(p.element('player-status').textContent,/account was deleted/);
+});

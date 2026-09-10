@@ -74,5 +74,24 @@ test('Spark signup, recovery, purchases, cooldown rules and leaderboard work wit
   const recovered=await two.backend.call('recover',{code:recovery});assert.equal(two.auth.currentUser.uid,uid);assert.equal(recovered.wallet.username,name);assert.ok(recovered.wallet.owned.includes('badge-star'));
   const next=randomBytes(32).toString('hex');r=await two.backend.call('rotateRecovery',{currentCode:recovery,recovery:next});assert.ok(r.result.recoveryCode.endsWith(next));await assert.rejects(one.backend.call('recover',{code:recovery}));
   const scores=await two.backend.call('leaderboard');assert.ok(scores.players.some(p=>p.username===name));assert.ok(scores.players.length<=50);
+
+  await env.withSecurityRulesDisabled(async context=>{await context.firestore().doc('tinklePlayers/'+uid).update({balance:500});await context.firestore().doc('tinkleLeaderboard/'+uid).update({balance:500});});
+  await assert.rejects(two.backend.call('rename',{username:'TooPoor'}),/1,000/);
+  await env.withSecurityRulesDisabled(async context=>{await context.firestore().doc('tinklePlayers/'+uid).update({balance:3000});await context.firestore().doc('tinkleLeaderboard/'+uid).update({balance:3000});});
+  const newName='New_'+Date.now().toString(36),renameId=randomUUID();
+  r=await two.backend.call('rename',{username:newName},renameId);assert.equal(r.wallet.balance,2000);
+  r=await two.backend.call('rename',{username:newName},renameId);assert.equal(r.wallet.balance,2000);
+  assert.equal((await store.find(newName)).uid,uid);await assert.rejects(store.find(name),/not found/);
+  await env.withSecurityRulesDisabled(context=>context.firestore().doc('tinkleUsernames/taken_test').set({uid:'someone-else'}));
+  await assert.rejects(two.backend.call('rename',{username:'taken_test'}),/taken/);
+  assert.equal((await two.backend.call('load')).wallet.balance,2000);
+  await assertFails(f.deleteDoc(f.doc(two.db,'tinklePlayers',uid)));
+  await store.deleteAccount(uid);
+  r=await two.backend.call('load');assert.equal(r.deleted,true);assert.equal(r.wallet,null);
+  assert.equal((await f.getDoc(f.doc(two.db,'tinkleLeaderboard',uid))).exists(),false);
+  assert.equal((await adminDb.collection('tinklePlayers').doc(uid).collection('requests').get()).size,0);
+  await assertFails(f.deleteDoc(f.doc(two.db,'tinkleDeleted',uid)));
+  r=await two.backend.call('register',{username:newName,recovery:randomBytes(32).toString('hex')});
+  assert.notEqual(two.auth.currentUser.uid,uid);assert.equal(r.wallet.balance,1000);assert.deepEqual(r.wallet.owned,[]);
  }finally{await appSdk.deleteApp(one.app);await appSdk.deleteApp(two.app);await env.cleanup();}
 });

@@ -47,7 +47,7 @@ The second command requires the local Auth and Firestore emulators. Tests create
 
 ## Accounts and tokens
 
-- Usernames are permanent and case-insensitive. The claim and initial wallet are created in one transaction, so two players cannot claim the same username.
+- Usernames are case-insensitive. Players can change to an available username from Account for 1,000 tokens; the previous name becomes available. The claim and initial wallet are created in one transaction, so two players cannot claim the same username.
 - The browser stays signed in. Recovery codes use Firebase's password authentication instead of a paid custom-token function. A code restores the same account on another browser.
 - Code replacement requires the current code, as Firebase requires recent authentication to change a password. No recovery secret is stored in Firestore. The old 64-character codes from the undeployed Functions prototype do not work with this version.
 - New accounts start with 1,000 tokens. Old editable browser-local saves are left untouched and are not imported.
@@ -64,3 +64,11 @@ If changing reward amounts/codes, game categories, or shop prices, update the ma
 Deploy the updated Firestore rules with the command above, then open **Players** on the admin page. Sign in with your usual admin account. For the one-time permission setup, copy the UID shown there and, in the Firebase Firestore console, create `tinkleAdmins` → a document with that exact UID → field `enabled` of type **boolean**, set to **true**. Reload the admin page. Client accounts cannot grant themselves this role.
 
 Search by username to remove a whole-token amount, ban for seconds/minutes/hours/days or forever, or unban. Token removal updates the wallet and leaderboard together and cannot make a balance negative. Actions are recorded in `tinkleModerationLogs`. Bans block account writes in Firestore and show a live ban screen; timed bans expire automatically. These are account bans, not hardware/IP bans, so they do not prevent someone creating another account.
+
+### Username changes and deletion
+
+Publish the updated frontend and deploy `firestore.accounts.rules` using the command above to enable these controls. The rules enforce the 1,000-token rename fee and update the username claim, wallet, and leaderboard atomically.
+
+Admin → Players → Delete account removes the profile (tokens, purchases, equipment, rewards and game progress), username claim, leaderboard entry, ban, and request receipts. The player sees a deletion message and can create a fresh account with the normal starting balance and a new recovery code. Old credentials cannot restore the deleted progress.
+
+On Spark, this browser admin control deletes the site's account data; it cannot delete another user's Firebase Authentication record. That unused Auth record remains, along with an admin audit entry and deletion marker that prevents restoring the old account. You can remove the unused Auth record manually in Firebase Authentication if desired.
