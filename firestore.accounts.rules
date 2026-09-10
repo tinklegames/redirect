@@ -1,0 +1,148 @@
+rules_version = '2';
+service cloud.firestore {
+ match /databases/{database}/documents {
+  function owner(uid) { return request.auth != null && request.auth.uid == uid; }
+  function prices() { return {"badge-star": 250, "badge-arcade": 500, "badge-crown": 1000, "theme-sunset": 750, "theme-ocean": 750, "theme-cherry": 1000, "name-glow": 600, "name-shimmer": 900, "name-rainbow": 1500, "card-neon": 700, "card-holo": 1200, "card-gold": 1500, "background-stars": 800, "background-rain": 1000, "background-orbs": 1400}; }
+  function categories() { return {"badge-star": "badge", "badge-arcade": "badge", "badge-crown": "badge", "theme-sunset": "theme", "theme-ocean": "theme", "theme-cherry": "theme", "name-glow": "name", "name-shimmer": "name", "name-rainbow": "name", "card-neon": "card", "card-holo": "card", "card-gold": "card", "background-stars": "background", "background-rain": "background", "background-orbs": "background"}; }
+  function scoreMatches(uid, p) {
+   return getAfter(/databases/$(database)/documents/tinkleLeaderboard/$(uid)).data == {'username':p.username,'balance':p.balance,'equipped':p.equipped};
+  }
+  function valid(p) {
+   return p.keys().hasOnly(['username','usernameKey','rewardDay','balance','createdAt','revision','owned','equipped','games','rewards','updatedAt','cardAt','loginAt','operation'])
+    && p.username is string && p.username.matches('^[A-Za-z0-9_]{3,20}$') && p.usernameKey == p.username.lower()
+    && !(p.usernameKey in ['admin','administrator','moderator','tinkle','support'])
+    && p.balance is int && p.balance >= 0 && p.balance <= 9007199254740991
+    && p.revision is int && p.owned is list && p.owned.size() <= 15 && p.owned.toSet().size() == p.owned.size()
+    && p.equipped is map && p.equipped.keys().hasOnly(['badge','theme','name','card','background'])
+    && p.games is map && p.games.keys().hasOnly(['blackjack','mines','crash','scratch','plinko','wheel','roulette'])
+    && p.rewards is map && p.updatedAt == request.time && p.operation.id is string;
+  }
+  function buy(n,o) {
+   let id=n.operation.payload.id;
+   return n.diff(o).affectedKeys().hasOnly(['balance','owned','revision','updatedAt','operation'])
+    && id in prices() && !(id in o.owned) && n.owned.hasAll(o.owned) && id in n.owned && n.owned.size() == o.owned.size()+1
+    && n.balance == o.balance-prices()[id];
+  }
+  function equip(n,o) {
+   let category=n.operation.payload.category;
+   let id=n.equipped.get(category,'');
+   return n.diff(o).affectedKeys().hasOnly(['equipped','revision','updatedAt','operation'])
+    && category in ['badge','theme','name','card','background']
+    && n.equipped.diff(o.equipped).affectedKeys().hasOnly([category])
+    && (id == '' || (id in o.owned && categories()[id] == category));
+  }
+  function cardCategories(code) { return code.matches('^1.*')?{"1V1LOL":["action","multiplayer"]}.get(code,null):code.matches('^3.*')?{"3DASH":["arcade"]}.get(code,null):code.matches('^F.*')?{"FUN":["adventure","puzzle","horror"],"FRUIT":["arcade"],"FNAF1":["horror"],"FNAF2":["horror"],"FNAF3":["horror"],"FNAF4":["horror"],"FNAF4H":["horror"],"FNAFPS":["horror"],"FNAFSL":["horror"],"FNF":["arcade"],"FNAFWORLD":["adventure","horror"],"FTF1":["adventure","horror"],"FORT":["action","adventure","multiplayer"],"FBAWG1":["puzzle","multiplayer"],"FBAWG2":["puzzle","multiplayer"],"FBAWG3":["puzzle","multiplayer"],"FBAWG4":["puzzle","multiplayer"],"FBAWG5":["puzzle","multiplayer"],"FBAWG6":["puzzle","multiplayer"],"FBB":["action","arcade","multiplayer"],"FLAPDUNK":["arcade"],"FNAC1":["horror"],"FNAC2":["horror"],"FNAE":["horror","simulator"]}.get(code,null):code.matches('^R.*')?{"RACCOON":["arcade"],"RETROBOWL":["arcade"],"RUN3":["arcade"],"RS1":["adventure","puzzle"],"RS2":["adventure","puzzle"],"RS3":["adventure","puzzle"],"RS4":["adventure","puzzle"],"RS5":["adventure","puzzle"],"RS6":["adventure","puzzle"],"RS7":["adventure","puzzle"],"RB4":["adventure","puzzle"],"RB4V2":["adventure","puzzle"],"RB4V3":["adventure","puzzle"],"RW1":["action"],"RW2":["action"],"RIDER":["arcade"],"RAFT":["adventure","simulator"],"RCD":["adventure","simulator"],"ROCIM":["adventure","simulator"],"RHYTHMH":["arcade"],"RTS":["action","arcade","multiplayer"],"RTS2":["action","arcade","multiplayer"],"ROLLSKY":["arcade","puzzle"],"ROCKETP":["arcade"],"RBC":["arcade"],"ROF":["action"],"RISEHIGHER":["arcade"]}.get(code,null):code.matches('^P.*')?{"POLY":["adventure","arcade"],"PACMAN":["arcade"],"PAPERIO2":["arcade","multiplayer"],"PLINKO":["arcade"],"PORTABOY":["arcade","puzzle"],"PAPA1":["simulator"],"PAPA2":["simulator"],"PAPA3":["simulator"],"PAPA4":["simulator"],"PAPA5":["simulator"],"PAPA6":["simulator"],"PAPA7":["simulator"],"PAPA8":["simulator"],"PAPA9":["simulator"],"PAPA10":["simulator"],"PAPA11":["simulator"],"PAPA12":["simulator"],"PAPA13":["simulator"],"PAPA14":["simulator"],"PAPAL2":["simulator"],"PAPAL3":["simulator"],"PONG":["arcade","multiplayer"]}.get(code,null):code.matches('^V.*')?{"VAMP":["action","arcade"],"VEX4":["arcade"],"VEX5":["arcade"],"VEX6":["arcade"],"VEX7":["arcade"],"VEX8":["arcade"],"VOLLEYRAN":["multiplayer","arcade"]}.get(code,null):code.matches('^S.*')?{"SCARY":["adventure","horror"],"SLOPE":["arcade"],"SUBWAY":["arcade"],"SUPERHOT":["action","puzzle","arcade"],"STICKHOOK":["arcade"],"SL2":["adventure","action"],"STUNT":["action","arcade"],"SCHOOLBOY":["puzzle"],"SLIMERANCHER":["action","adventure","simulator"],"SNOW":["adventure","arcade"],"SIDEEFX":["horror","puzzle"],"SONEXE":["horror","adventure"],"SOCRANDOM":["arcade","multiplayer"],"SWINGO":["arcade"],"SAM":["horror","adventure"]}.get(code,null):code.matches('^K.*')?{"KING":["puzzle"],"KD1":["adventure"],"KD2":["adventure"],"KD3":["adventure"],"KARLSON":["action","adventure"],"KNIFEHIT":["arcade"]}.get(code,null):code.matches('^B.*')?{"BOW":["arcade"],"BALDI":["adventure","horror"],"BITLIFE":["arcade","simulator"],"BOBLOX":["multiplayer","arcade","adventure"],"BLOCK":["arcade","puzzle"],"BUCKSHOT":["simulator","horror"],"BENDY":["adventure","horror"],"BBROS":["arcade"],"BADPIGS":["arcade","puzzle"],"BIKEOBBY":["adventure","puzzle"],"BASKET":["arcade","multiplayer"],"BSTARS":["arcade","multiplayer"],"BNGG":["action","multiplayer"],"BLOXORZ":["puzzle"],"BOXRAN":["arcade","multiplayer"],"BASKRANDOM":["arcade","multiplayer"],"BLUMGIPAINT":["arcade","action","multiplayer"],"BLUMGIRACERS":["arcade"],"BLUMGISLIME":["arcade","multiplayer"],"BLUMGIROCKET":["arcade"],"BM!":["action","horror"],"BALATRO":["puzzle"]}.get(code,null):code.matches('^C.*')?{"CROSSY":["arcade"],"COOKIE":["arcade","simulator"],"CC3D":["arcade","simulator"],"CRAFT":["simulator"],"CRANK":["horror"],"CTR1":["arcade","puzzle"],"CTRTT":["arcade","puzzle"],"CUPHEAD":["action","adventure"],"CANDYCRUSH":["arcade","puzzle"],"CLOVERPIT":["horror"],"COLORSWITCH":["arcade"],"CATNINJA":["action","adventure"]}.get(code,null):code.matches('^D.*')?{"DRAW":["arcade"],"DR3D":["arcade"],"DRIVE":["arcade"],"DRIFT":["arcade"],"DEADSEAT":["adventure","horror"],"DELTARUNE":["action","adventure"],"DRIFTH":["adventure","simulator"],"DELTATRAV":["adventure","action"],"DEADLYD":["arcade","simulator"]}.get(code,null):code.matches('^T.*')?{"TOMB":["puzzle","arcade"],"TEMPLE":["arcade"],"TING":["puzzle"],"TINYFISH":["simulator","arcade"],"TILES":["arcade"],"TAG":["arcade","multiplayer"],"TLD":["adventure","simulator"],"TERRARIA":["action","adventure","multiplayer","simulator"],"TS3":["action"],"TS1":["action"],"TS2":["action"],"TERRITORIALIO":["puzzle","simulator"],"TRAFFICRACER":["arcade","simulator"],"TWHG1":["puzzle","arcade"],"TWHG2":["puzzle","arcade"],"TWHG3":["puzzle","arcade"],"TWHG4":["puzzle","arcade"],"TABLETENNIS":["arcade","simulator"],"TF1":["puzzle"],"TF2":["puzzle"],"TF3":["puzzle"],"TF4":["puzzle"],"TF5":["puzzle"],"TF6":["puzzle"],"TF7":["puzzle"],"TF9":["puzzle"],"TF10":["puzzle"],"TF11":["puzzle"],"TF12":["puzzle"],"TF13":["puzzle"],"TAPTAP":["arcade"]}.get(code,null):code.matches('^J.*')?{"JET":["adventure","arcade"]}.get(code,null):code.matches('^M.*')?{"MART":["simulator","arcade"],"MARIO":["arcade"],"MINECRAFT":["action","adventure"],"MURDER":["arcade","puzzle"],"MOTO1":["adventure","arcade"],"MOTO2":["adventure","arcade"],"MOTO3":["adventure","arcade"],"MOTO4":["adventure","arcade"],"MOTO5":["adventure","arcade"],"MOTO6":["adventure","arcade"],"MRB":["arcade","puzzle"],"MERGERR":["simulator"]}.get(code,null):code.matches('^G.*')?{"GRANNY":["adventure","puzzle","horror"],"GRANNY2":["adventure","horror","puzzle"],"GUNSPIN":["arcade"],"GLADI":["arcade"],"GD":["puzzle","arcade"],"GOI":["adventure","puzzle"],"GROW":["simulator"],"GS":["action","arcade","multiplayer"],"GOLFORBIT":["arcade"]}.get(code,null):code.matches('^H.*')?{"HELIX":["arcade"],"HOH":["puzzle","multiplayer"],"HS1":["puzzle"],"HS2":["puzzle"],"HS3":["puzzle"],"HS4":["puzzle"],"HS5":["puzzle"],"HILLCLIMB":["arcade","adventure"],"HOLEIO":["arcade"],"HTALE":["adventure","horror","puzzle"],"HK":["action","adventure"],"HAPPYW":["action","adventure","puzzle"]}.get(code,null):code.matches('^U.*')?{"UCN":["action","horror"],"UKILL":["action"],"UY":["action","adventure"],"UCD":["adventure","simulator"]}.get(code,null):code.matches('^A.*')?{"AG":["arcade","puzzle"],"AGS":["arcade","puzzle","multiplayer"],"ADGAC":["adventure","puzzle","simulator"],"ADCAP":["simulator"],"AMAZE":["arcade","puzzle"]}.get(code,null):code.matches('^I.*')?{"INCREDIBOX":["arcade"],"IMPOSSIBLEQ":["puzzle"],"IDLEMINING":["simulator"],"IDLEBREAK":["arcade"]}.get(code,null):code.matches('^N.*')?{"NSMB":["arcade"],"NARROW":["action","multiplayer"],"N-GON":["action","adventure","simulator"]}.get(code,null):code.matches('^E.*')?{"EVO":["action","arcade","multiplayer"],"ER1":["action","arcade"],"ER2":["action","arcade"],"ER3":["action","arcade"],"ER4":["action","arcade"],"ER5":["action","arcade"]}.get(code,null):code.matches('^L.*')?{"LEVELDEVIL":["puzzle","adventure"]}.get(code,null):code.matches('^O.*')?{"OVO":["action"],"OVO2":["action"],"OVOD":["action"]}.get(code,null):code.matches('^W.*')?{"WHACKBOSS":["action","puzzle"]}.get(code,null):null; }
+  function rewardStats(n,o) {
+   let a=n.rewards;
+   let b=o.rewards;
+   let kind=n.operation.payload.kind;
+   let p=n.operation.payload.payload;
+   let amount=n.balance-o.balance;
+   let cats=kind=='card'?cardCategories(p.code):[];
+   let daily=n.rewardDay>o.rewardDay?{'games':[],'categories':[],'rewardedClicks':0,'claimed':[]}:b.daily;
+   return n.rewardDay==int(request.time.toMillis() / 86400000)
+    && (n.rewardDay>o.rewardDay || a.day==b.day)
+    && a.version==b.version && a.keys()==b.keys()
+    && a.daily.keys()==daily.keys()
+    && (kind=='card'?
+       cats!=null
+       && a.games.toSet()==b.games.toSet().union([p.code].toSet())
+       && a.games.size()==a.games.toSet().size()
+       && a.rewardedClicks==b.rewardedClicks+(amount==50?1:0)
+       && a.loginDays==b.loginDays && a.loginDay==b.loginDay
+       && a.claimedAchievements==b.claimedAchievements && a.redeemedCodes==b.redeemedCodes
+       && a.daily.claimed==daily.claimed
+       && a.daily.rewardedClicks==daily.rewardedClicks+(amount==50?1:0)
+       && a.daily.games.toSet()==daily.games.toSet().union(amount==50?[p.code].toSet():[].toSet())
+       && a.daily.games.size()==a.daily.games.toSet().size()
+       && a.daily.categories.toSet()==daily.categories.toSet().union(amount==50?cats.toSet():[].toSet())
+       && a.daily.categories.size()==a.daily.categories.toSet().size()
+     : a.games==b.games && a.rewardedClicks==b.rewardedClicks && a.nextCardAt==b.nextCardAt
+       && a.loginDays==b.loginDays+(kind=='visit' && amount==25?1:0)
+       && (kind=='visit'?a.loginDay==a.day:a.loginDay==b.loginDay)
+       && (kind=='achievement'?true:a.claimedAchievements==b.claimedAchievements)
+       && (kind=='code'?true:a.redeemedCodes==b.redeemedCodes)
+       && a.daily.games==daily.games && a.daily.categories==daily.categories && a.daily.rewardedClicks==daily.rewardedClicks
+       && (kind=='daily'?true:a.daily.claimed==daily.claimed));
+  }
+  function claim(n,o,kind,id,amount,complete) {
+   let before=kind=='daily'?o.rewards.daily.claimed:o.rewards.claimedAchievements;
+   let after=kind=='daily'?n.rewards.daily.claimed:n.rewards.claimedAchievements;
+   return complete && !(id in before) && id in after && after.hasAll(before) && after.size()==before.size()+1 && n.balance==o.balance+amount;
+  }
+  function reward(n,o) {
+   let kind=n.operation.payload.kind;
+   let payload=n.operation.payload.payload;
+   let delta=n.balance-o.balance;
+   return n.diff(o).affectedKeys().hasOnly(['balance','rewards','rewardDay','cardAt','loginAt','revision','updatedAt','operation'])
+    && rewardStats(n,o)
+    && (kind=='card'?
+       ((delta==0 && n.cardAt==o.cardAt && (n.rewards.daily==o.rewards.daily || (n.rewards.day>o.rewards.day && n.rewards.daily.games.size()==0 && n.rewards.daily.rewardedClicks==0)))
+        || (delta==50 && n.cardAt==request.time && (o.cardAt==null || request.time>=o.cardAt+duration.value(5,'m')))) && n.loginAt==o.loginAt
+     : kind=='visit'?
+       ((delta==0 && n.loginAt==o.loginAt) || (delta==25 && n.loginAt==request.time && (o.loginAt==null || int(request.time.toMillis() / 86400000)>int(o.loginAt.toMillis() / 86400000)))) && n.cardAt==o.cardAt
+     : n.cardAt==o.cardAt && n.loginAt==o.loginAt && (
+       kind=='daily'? (
+        payload.day==o.rewards.day && n.rewards.day==o.rewards.day && (
+         (payload.id=='daily-explorer' && claim(n,o,kind,payload.id,100,o.rewards.daily.games.size()>=3)) ||
+         (payload.id=='daily-variety' && claim(n,o,kind,payload.id,75,o.rewards.daily.categories.size()>=3)) ||
+         (payload.id=='daily-return' && claim(n,o,kind,payload.id,100,o.rewards.daily.rewardedClicks>=3))))
+       : kind=='achievement'? (
+         (payload.id=='first-pick' && claim(n,o,kind,payload.id,50,o.rewards.games.size()>=1)) ||
+         (payload.id=='explorer-10' && claim(n,o,kind,payload.id,150,o.rewards.games.size()>=10)) ||
+         (payload.id=='regular-3' && claim(n,o,kind,payload.id,100,o.rewards.loginDays>=3)) ||
+         (payload.id=='rewards-10' && claim(n,o,kind,payload.id,200,o.rewards.rewardedClicks>=10)))
+       : kind=='code' && payload.code.upper().matches('^ *TINKLE100 *$') && delta==100
+         && !('welcome-100-v1' in o.rewards.redeemedCodes) && n.rewards.redeemedCodes==o.rewards.redeemedCodes.concat(['welcome-100-v1'])));
+  }
+  // Game outcomes are intentionally client-side on Spark, not independently verified randomness.
+  function game(n,o) {
+   let p=n.operation.payload;
+   return n.diff(o).affectedKeys().hasOnly(['balance','games','revision','updatedAt','operation'])
+    && p.game in ['coin','dice','slots','blackjack','mines','crash','scratch','plinko','wheel','roulette']
+    && (n.operation.type=='move' || (p.stake is int && p.stake>0 && p.stake<=o.balance))
+    && (n.operation.type=='instant'?n.games==o.games:n.games.diff(o.games).affectedKeys().hasOnly([p.game]));
+  }
+  match /tinklePlayers/{uid} {
+   allow read: if owner(uid);
+   allow create: if owner(uid) && valid(request.resource.data)
+    && request.resource.data.balance==1000 && request.resource.data.revision==0
+    && request.resource.data.owned==[] && request.resource.data.equipped=={} && request.resource.data.games=={}
+    && request.resource.data.cardAt==null && request.resource.data.loginAt==null
+    && request.resource.data.rewardDay==int(request.time.toMillis() / 86400000)
+    && request.resource.data.rewards.games==[] && request.resource.data.rewards.loginDays==0 && request.resource.data.rewards.loginDay==null
+    && request.resource.data.rewards.rewardedClicks==0 && request.resource.data.rewards.nextCardAt==0
+    && request.resource.data.rewards.claimedAchievements==[] && request.resource.data.rewards.redeemedCodes==[]
+    && request.resource.data.rewards.daily=={'games':[],'categories':[],'rewardedClicks':0,'claimed':[]} 
+    && getAfter(/databases/$(database)/documents/tinkleUsernames/$(request.resource.data.usernameKey)).data.uid==uid
+    && scoreMatches(uid,request.resource.data);
+   allow update: if owner(uid) && valid(request.resource.data)
+    && request.resource.data.username==resource.data.username && request.resource.data.usernameKey==resource.data.usernameKey
+    && request.resource.data.createdAt==resource.data.createdAt && request.resource.data.revision==resource.data.revision+1
+    && scoreMatches(uid,request.resource.data)
+    && (request.resource.data.operation.type=='buy'?buy(request.resource.data,resource.data)
+      :request.resource.data.operation.type=='equip'?equip(request.resource.data,resource.data)
+      :request.resource.data.operation.type=='reward'?reward(request.resource.data,resource.data)
+      :request.resource.data.operation.type in ['instant','start','move'] && game(request.resource.data,resource.data));
+   match /requests/{id} {
+    allow read: if owner(uid);
+    allow create: if owner(uid) && request.resource.data.keys().hasOnly(['result','revision'])
+     && getAfter(/databases/$(database)/documents/tinklePlayers/$(uid)).data.operation.id==id
+     && getAfter(/databases/$(database)/documents/tinklePlayers/$(uid)).data.revision==request.resource.data.revision;
+   }
+  }
+  match /tinkleUsernames/{name} {
+   allow get: if request.auth != null;
+   allow create: if request.auth != null && request.resource.data=={'uid':request.auth.uid}
+    && getAfter(/databases/$(database)/documents/tinklePlayers/$(request.auth.uid)).data.usernameKey==name;
+  }
+  match /tinkleLeaderboard/{uid} {
+   allow get: if request.auth != null;
+   allow list: if request.auth != null && request.query.limit<=50;
+   allow create,update: if owner(uid)
+    && request.resource.data=={'username':getAfter(/databases/$(database)/documents/tinklePlayers/$(uid)).data.username,
+       'balance':getAfter(/databases/$(database)/documents/tinklePlayers/$(uid)).data.balance,
+       'equipped':getAfter(/databases/$(database)/documents/tinklePlayers/$(uid)).data.equipped};
+  }
+ }
+}

@@ -1,8 +1,8 @@
 (() => {
   const dayOf = now => new Date(now).toISOString().slice(0,10);
   const daily = [
-    {id:'daily-explorer',title:'Try something different',description:'Select 3 different game cards today.',amount:100,target:3,metric:s=>s.daily.games.length},
-    {id:'daily-variety',title:'Mix it up',description:'Select cards covering 3 different categories today.',amount:75,target:3,metric:s=>s.daily.categories.length},
+    {id:'daily-explorer',title:'Try something different',description:'Earn the card reward on 3 different games today.',amount:100,target:3,metric:s=>s.daily.games.length},
+    {id:'daily-variety',title:'Mix it up',description:'Earn card rewards covering 3 different categories today.',amount:75,target:3,metric:s=>s.daily.categories.length},
     {id:'daily-return',title:'Back for more',description:'Earn the 50-token card reward 3 times today.',amount:100,target:3,metric:s=>s.daily.rewardedClicks}
   ];
   const achievements = [
@@ -45,9 +45,9 @@
     if(action==='card') {
       if(!payload || typeof payload.code!=='string' || !payload.code.trim()) throw new Error('This card has no game code.');
       addUnique(s.games,payload.code);
+      if(now<s.nextCardAt) return {amount:0,nextCardAt:s.nextCardAt};
       addUnique(s.daily.games,payload.code);
       for(const category of payload.categories || []) if(typeof category==='string') addUnique(s.daily.categories,category);
-      if(now<s.nextCardAt) return {amount:0,nextCardAt:s.nextCardAt};
       credit(wallet,config.cardAmount);
       // Use the real timestamp for eligibility; a backwards clock cannot bypass it.
       s.nextCardAt=Math.max(now,s.lastSeenAt)+config.cardCooldownMs;

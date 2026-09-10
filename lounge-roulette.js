@@ -78,10 +78,7 @@
       const choice=$('roulette-choice').value,raw=$('roulette-number').value,pick=Number(raw);
       if(choice==='number' && (!raw.trim() || !Number.isInteger(pick) || pick<0 || pick>36)) throw new Error('Pick a whole number from 0 to 36.');
       const stake=Number($('stake').value);
-      await wallet.startGame('roulette',stake,bet=>{
-        const startedAt=Date.now();
-        return {id:crypto.randomUUID(),stake:bet,payout:0,done:false,choice,pick,startedAt,readyAt:startedAt+duration,result:LoungeGames.roulette(random(37),choice,pick,bet)};
-      });
+      await wallet.startGame('roulette',stake,{choice,pick});
       failedId=null;
     }catch(error){$('notice').textContent=error.message;}
     finally{busy=false;render();}

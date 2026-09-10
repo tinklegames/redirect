@@ -1,4 +1,5 @@
 (() => {
+  let crashPolling=false,lastCrashPoll=0;
   const wallet = window.TinkleWallet, rules = window.LoungeExtraRules;
   const $ = id => document.getElementById(id);
   const names = ['mines','crash','plinko','wheel','scratch'];
@@ -91,8 +92,8 @@
   function renderCrash() {
     const round=rounds.crash;
     if (!round) return;
-    const now = Date.now(), ended = now >= rules.crashDeadline(round);
-    const ceiling = Math.min(20, round.crashAt);
+    const now = window.TinkleAccount.now(), ended = !round.pending && now >= rules.crashDeadline(round);
+    const ceiling = Math.min(20, round.crashAt ?? 20);
     const multiplier = ended ? ceiling : Math.min(ceiling, rules.crashMultiplier(round, now));
     $('crash-multiplier').textContent = `${multiplier.toFixed(2)}×`;
     $('crash-status').textContent = ended ? round.crashAt > 20 ? 'Flight reached the 20× limit' : 'Crashed' : round.cashedAt ? 'Cashed out · watching the flight' : 'In flight';
@@ -183,7 +184,7 @@
   }
   document.querySelectorAll('[data-start]').forEach(button=>button.addEventListener('click',()=>run(button.dataset.start,async()=>{
     const game=button.dataset.start;
-    const round=await wallet.startGame(game,Number($('stake').value),stake=>rules.create(game,stake,random,Date.now(),crypto.randomUUID(), {size:Number($('mines-size').value), mineCount:Number($('mines-count').value)}));
+    const round=await wallet.startGame(game,Number($('stake').value),{options:{size:Number($('mines-size').value),mineCount:Number($('mines-count').value)}});
     if (game === 'crash') crashFailure=null;
     $(`${game}-result`).textContent = game === 'plinko' ? 'Ball dropping…' : game === 'wheel' ? 'Wheel spinning…' : `${round.stake} tokens in play.`;
     await animate(game,round);
@@ -193,7 +194,7 @@
     const round=rounds[game];
     if(!round || round.done) return;
     return run(game,async()=>{
-      const next=await wallet.playGame(game,round.id,round.revision,current=>rules.move(game,current,action,Date.now()));
+      const next=await wallet.playGame(game,round.id,round.revision,action);
       if(next.done) $('notice').textContent=`${game[0].toUpperCase()+game.slice(1)} finished · ${tokens(next.payout)} tokens returned. Your wallet is saved.`;
     });
   }
@@ -203,7 +204,7 @@
   function tick() {
     renderCrash();
     const round=rounds.crash;
-    if(round && !round.done && round.id!==crashFailure && Date.now()>=rules.crashDeadline(round)) play('crash','tick');
+    if(!document.hidden && round && !round.done && !crashPolling && Date.now()-lastCrashPoll>=1000){crashPolling=true;lastCrashPoll=Date.now();wallet.pollCrash().catch(error=>{$('notice').textContent=error.message;}).finally(()=>crashPolling=false);}
   }
   window.addEventListener('tinkle-wallet-change',render);
   window.addEventListener('storage',()=>{crashFailure=null;render();tick();});

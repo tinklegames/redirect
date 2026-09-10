@@ -8,9 +8,9 @@
      <script src="secret-shortcut.js" defer></script>
      <link rel="stylesheet" href="token-rewards.css?v=20260910-ui">
      <script src="token-rewards-config.js" defer></script>
-     <script src="token-rewards-rules.js" defer></script>
-     <script src="tinkle-wallet.js" defer></script>
-     <script src="token-rewards.js?v=20260910-ui" defer></script>
+     <script src="token-rewards-rules.js?v=20260910-accounts" defer></script>
+     <script src="player-config.js" defer></script><script src="shop-catalog.js" defer></script><script src="player-account.js?v=20260910-spark" defer></script><script src="player-cosmetics.js?v=20260910-accounts" defer></script><script src="tinkle-wallet.js?v=20260910-accounts" defer></script>
+     <script src="token-rewards.js?v=20260910-accounts" defer></script>
      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
@@ -2096,7 +2096,7 @@
              flex: 0 0 auto;
          }
      </style>
- </head>
+ <link rel="stylesheet" href="site-theme.css"><link rel="stylesheet" href="player-ui.css?v=20260910-simple"></head>
 
  <body>
      <!-- LOADER SCREEN -->
@@ -3618,6 +3618,9 @@
              themeSelect.addEventListener("change", () => {
                  const value = themeSelect.value;
                  applyTheme(value);
+                 if (window.TinkleAccount?.profile?.equipped?.theme) {
+                     window.TinkleWallet.equip('theme', null).catch(error => showToast('THEME', error.message));
+                 }
                  try {
                      localStorage.setItem("tinkleTheme", value);
                  } catch {}

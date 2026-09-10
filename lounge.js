@@ -59,7 +59,7 @@
   document.querySelectorAll('[data-game]').forEach(button => button.addEventListener('click', () => run(async () => {
     const stake = Number(stakeInput.value);
     const game = button.dataset.game;
-    const result = await wallet.wager(stake, () => LoungeGames.instant(game, stake, randomInt, button.dataset.choice));
+    const result = await wallet.wager(stake, game, button.dataset.choice);
     const art = document.getElementById(`${game}-art`);
     if (game === 'slots') [...art.children].forEach((reel, index) => reel.textContent = result.display[index]);
     else { art.textContent = result.display; art.style.fontSize = game === 'coin' ? '38px' : '74px'; }
@@ -73,14 +73,14 @@
     document.getElementById('roulette-number-label').hidden = hidden;
   });
   document.getElementById('blackjack-deal').addEventListener('click', () => run(async () => {
-    await wallet.startBlackjack(Number(stakeInput.value), stake => ({ ...LoungeGames.start(stake, randomInt), id: crypto.randomUUID() }));
+    await wallet.startBlackjack(Number(stakeInput.value));
     notice.textContent = 'Blackjack hand saved. Your bet is locked for this hand.';
   }));
   for (const action of ['hit', 'stand']) {
     document.getElementById(`blackjack-${action}`).addEventListener('click', () => run(async () => {
       const round = displayedRound;
       if (!round || round.done) return;
-      const next = await wallet.playBlackjack(round.id, round.player.length, current => LoungeGames.act(current, action));
+      const next = await wallet.playBlackjack(round.id, round.revision, action);
       notice.textContent = next.done ? `${next.message} ${next.payout} tokens returned. Your wallet is saved.` : 'Card drawn. Your hand is saved.';
     }));
   }

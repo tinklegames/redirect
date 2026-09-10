@@ -1,5 +1,6 @@
 (() => {
   const wallet=window.TinkleWallet;
+  const now=()=>window.TinkleAccount?.now() ?? Date.now();
   const $=id=>document.getElementById(id);
   const rows=new Map(),busy=new Set();
   let toastTimer,visitDay=null;
@@ -12,7 +13,7 @@
     toast.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.hidden=true,5000);
   }
   function remaining(next) {
-    const seconds=Math.max(0,Math.ceil((next-Date.now())/1000));
+    const seconds=Math.max(0,Math.ceil((next-now())/1000));
     return `${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,'0')}`;
   }
   function text(node,value) {if(node && node.textContent!==value)node.textContent=value;}
@@ -44,7 +45,7 @@
     try {
       const state=wallet.rewards();
       document.querySelectorAll('[data-token-balance]').forEach(node=>text(node,state.balance.toLocaleString()));
-      document.querySelectorAll('[data-card-cooldown]').forEach(node=>text(node,state.nextCardAt>Date.now()?`Next +50 token reward in ${remaining(state.nextCardAt)}`:'Ready! Select any game card for +50 tokens.'));
+      document.querySelectorAll('[data-card-cooldown]').forEach(node=>text(node,state.nextCardAt>now()?`Next +50 token reward in ${remaining(state.nextCardAt)}`:'Ready! Select any game card for +50 tokens.'));
       text($('rewards-login'),state.loginClaimed?`${state.loginAmount} tokens added for today. Come back tomorrow!`:'Your daily bonus will be added on this visit.');
       drawRewards('daily',state.daily,state.day);drawRewards('achievement',state.achievements,state.day);
     }catch(error){text($('rewards-message'),error.message);}
@@ -65,7 +66,7 @@
     }finally{busy.delete(key);render();}
   }
   async function visit() {
-    visitDay=window.TinkleRewardsRules.dayOf(Date.now());
+    visitDay=window.TinkleRewardsRules.dayOf(now());
     await act('visit',null);
   }
   window.TinkleRewards=Object.freeze({
@@ -90,13 +91,13 @@
   window.addEventListener('tinkle-wallet-change',render);
   window.addEventListener('storage',render);
   document.addEventListener('visibilitychange',()=>{
-    if(!document.hidden && visitDay!==window.TinkleRewardsRules.dayOf(Date.now()))visit();
+    if(!document.hidden && window.TinkleAccount.profile && visitDay!==window.TinkleRewardsRules.dayOf(now()))visit();
     render();
   });
-  render();visit();
+  render();window.TinkleAccount.ready.then(visit);
   setInterval(()=>{
-    if(document.hidden)return;
-    if(visitDay!==window.TinkleRewardsRules.dayOf(Date.now()))visit();
+    if(document.hidden || !window.TinkleAccount.profile)return;
+    if(visitDay!==window.TinkleRewardsRules.dayOf(now()))visit();
     render();
   },1000);
 })();
