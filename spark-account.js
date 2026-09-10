@@ -6,24 +6,30 @@ export function recoveryParts(code){
  if(!match)throw Error('Enter your complete recovery code.');
  return {alias:match[1],password:match[2],email:emailFor(match[1])};
 }
-export function createBackend(app,a,auth,useEmulators,onWallet,onBan=()=>{}){
+export function createBackend(app,a,auth,useEmulators,onWallet,onBan=()=>{},onDeleted=()=>{}){
  const db=f.getFirestore(app);if(useEmulators)f.connectFirestoreEmulator(db,'127.0.0.1',8080);
- let stop=null,stopBan=null;
+ let stop=null,stopBan=null,stopDeleted=null;
  const ref=()=>{if(!auth.currentUser)throw Error('Connect your account first.');return f.doc(db,'tinklePlayers',auth.currentUser.uid);};
  const readWallet=data=>{if(!data)return null;const copy={...data};delete copy.updatedAt;delete copy.operation;delete copy.cardAt;delete copy.loginAt;return copy;};
  function watch(){
-  stop?.();stopBan?.();const uid=auth.currentUser?.uid;if(!uid)return;
+  stop?.();stopBan?.();stopDeleted?.();const uid=auth.currentUser?.uid;if(!uid)return;
+  stopDeleted=f.onSnapshot(f.doc(db,'tinkleDeleted',uid),snapshot=>{if(!snapshot.metadata.fromCache&&!snapshot.metadata.hasPendingWrites&&auth.currentUser?.uid===uid&&snapshot.exists())onDeleted();},()=>{});
   stopBan=f.onSnapshot(f.doc(db,'tinkleBans',uid),snapshot=>{if(!snapshot.metadata.hasPendingWrites&&!snapshot.metadata.fromCache&&auth.currentUser?.uid===uid)onBan(snapshot.exists()?snapshot.data():null);},()=>{});
   stop=f.onSnapshot(ref(),snapshot=>{if(!snapshot.metadata.hasPendingWrites&&auth.currentUser?.uid===uid&&snapshot.exists())onWallet(engine.view(readWallet(snapshot.data())));},()=>{});
  }
  const publicData=wallet=>JSON.parse(JSON.stringify(engine.publicProfile(wallet)));
- async function load(){const [snapshot,ban]=await Promise.all([f.getDocFromServer(ref()),f.getDocFromServer(f.doc(db,'tinkleBans',auth.currentUser.uid))]);return {wallet:snapshot.exists()?engine.view(readWallet(snapshot.data())):null,ban:ban.exists()?ban.data():null};}
+ async function load(){const [snapshot,ban,deleted]=await Promise.all([f.getDocFromServer(ref()),f.getDocFromServer(f.doc(db,'tinkleBans',auth.currentUser.uid)),f.getDocFromServer(f.doc(db,'tinkleDeleted',auth.currentUser.uid))]);return {deleted:deleted.exists(),wallet:snapshot.exists()?engine.view(readWallet(snapshot.data())):null,ban:ban.exists()?ban.data():null};}
  async function register(payload,requestId){
-  const name=engine.username(payload.username),user=auth.currentUser;
+  const name=engine.username(payload.username);
+  const previous=await load();
+  if(previous.wallet)throw Error('This account already has a username.');
+  if((await f.getDocFromServer(f.doc(db,'tinkleUsernames',name.toLowerCase()))).exists())throw Error('That username is taken.');
+  // A linked identity without a profile is abandoned; never change its password to restart signup.
+  if(!auth.currentUser.isAnonymous||previous.deleted){await a.signOut(auth);await a.signInAnonymously(auth);}
+  const user=auth.currentUser;
   // Link a random, private credential to the existing browser identity. No real email is requested or sent.
   let code=payload.recovery;
   if(user.isAnonymous){const alias=Array.from(crypto.getRandomValues(new Uint8Array(16)),v=>v.toString(16).padStart(2,'0')).join('');code=alias+'.'+payload.recovery;const parts=recoveryParts(code);await a.linkWithCredential(user,a.EmailAuthProvider.credential(parts.email,parts.password));}
-  else{await a.updatePassword(user,payload.recovery);code=user.email.split('@')[0]+'.'+payload.recovery;}
   await user.getIdToken(true);
   const player=ref(),claim=f.doc(db,'tinkleUsernames',name.toLowerCase()),score=f.doc(db,'tinkleLeaderboard',user.uid);
   const wallet=engine.fresh(name,Date.now());
@@ -33,7 +39,7 @@ export function createBackend(app,a,auth,useEmulators,onWallet,onBan=()=>{}){
    if(reserved.exists())throw Error('That username is taken.');
    tx.set(claim,{uid:user.uid});tx.set(player,{...wallet,updatedAt:f.serverTimestamp(),cardAt:null,loginAt:null,operation:{id:requestId,type:'register'}});tx.set(score,publicData(wallet));
   });
-  return {wallet:engine.view(wallet),recoveryCode:code};
+  watch();return {wallet:engine.view(wallet),recoveryCode:code};
  }
  async function recover(code){const parts=recoveryParts(code);await a.signInWithEmailAndPassword(auth,parts.email,parts.password);watch();return load();}
  async function rotate(payload){
@@ -57,7 +63,17 @@ export function createBackend(app,a,auth,useEmulators,onWallet,onBan=()=>{}){
     if(!round||round.done||now<round.startedAt+Math.log(Math.min(20,round.crashAt))*6000)return {wallet:engine.view(wallet)};
     kind='move';args={game:'crash',id:round.id,revision:round.revision,move:'tick'};
    }
-   const result=engine.apply(wallet,kind,args,now);
+   let result;
+   if(action==='rename'){
+    const name=engine.username(payload.username),key=name.toLowerCase();
+    if(key===wallet.usernameKey)throw Error('Choose a different username.');
+    if(wallet.balance<1000)throw Error('You need 1,000 tokens to change your username.');
+    const claim=f.doc(db,'tinkleUsernames',key);
+    if((await tx.get(claim)).exists())throw Error('That username is taken.');
+    tx.delete(f.doc(db,'tinkleUsernames',wallet.usernameKey));tx.set(claim,{uid});
+    wallet.username=name;wallet.usernameKey=key;wallet.balance-=1000;wallet.revision++;
+    result={message:'Username changed.'};
+   }else result=engine.apply(wallet,kind,args,now);
    const cleanResult=JSON.parse(JSON.stringify(args.game?engine.publicRound(args.game,result):result));
    const operation={id:requestId,type:kind,payload:JSON.parse(JSON.stringify(args)),delta:wallet.balance-previous.balance};
    const cardReward=kind==='reward'&&args.kind==='card'&&result.amount>0;

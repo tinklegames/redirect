@@ -101,7 +101,7 @@
       <form id="player-search-form" class="panel"><label for="player-search-name">Username</label><div class="file-actions"><input id="player-search-name" maxlength="20" autocomplete="off" required><button id="player-search-button" type="submit" disabled>Find player</button></div></form>
       <p id="players-status" role="status"></p>
       <div id="moderation-setup" class="panel" hidden><p>In Firebase Firestore, create <code>tinkleAdmins</code> → <code id="moderation-admin-uid"></code> and add <code>enabled</code> as boolean <code>true</code>. Then reload this page.</p></div>
-      <div id="player-controls" hidden><section class="panel"><h2 id="moderation-name"></h2><p><strong id="moderation-balance"></strong> tokens</p><p id="moderation-ban-status"></p></section>
+      <div id="player-controls" hidden><section class="panel"><h2 id="moderation-name"></h2><p><strong id="moderation-balance"></strong> tokens</p><p id="moderation-ban-status"></p><button id="delete-player-button" type="button" class="danger">Delete account</button></section>
       <div class="live-grid"><form id="remove-token-form" class="panel"><h2>Remove tokens</h2><label for="remove-token-amount">Amount</label><input id="remove-token-amount" type="number" min="1" step="1" required><button id="remove-token-button" type="submit" class="danger">Remove tokens</button></form>
       <form id="ban-player-form" class="panel"><h2>Ban player</h2><label for="ban-duration">Duration</label><div class="file-actions"><input id="ban-duration" type="number" min="1" step="1" value="1" required><select id="ban-unit" aria-label="Ban duration unit"><option value="s">Seconds (s)</option><option value="m">Minutes (m)</option><option value="h">Hours (h)</option><option value="d" selected>Days (d)</option><option value="forever">Forever</option></select></div><label for="ban-reason">Reason (optional)</label><input id="ban-reason" maxlength="200"><div class="file-actions"><button id="ban-player-button" type="submit" class="danger">Ban player</button><button id="unban-player-button" type="button">Unban</button></div></form></div></div>
     </section>
@@ -114,7 +114,7 @@
 <script src="admin-image-checker.js"></script>
 <script src="admin-data.js"></script>
 <script src="admin.js?v=20260910-moderation"></script>
-<script src="moderation-core.js"></script><script src="admin-players.js"></script>
+<script src="moderation-core.js?v=20260910-identity"></script><script src="admin-players.js?v=20260910-identity"></script>
 <script src="admin-tools.js?v=20260910-manual-updates"></script>
 <script src="event-core.js"></script>
 <script src="admin-events.js"></script>

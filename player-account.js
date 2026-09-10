@@ -1,8 +1,13 @@
 /* Device-persistent Firebase identity, with a high-entropy recovery secret. */
 (() => {
- let currentBan=null,wasBanned=false;
+ let currentBan=null,wasBanned=false,deleted=false;
  let state=null,backend,auth,authTools,resolveReady,busy=false,recovering=false,recoveryPending=false,switching=false;
  const ready=new Promise(resolve=>resolveReady=resolve),$=id=>document.getElementById(id);
+ function accountDeleted(){
+  deleted=true;state=null;currentBan=null;wasBanned=false;recoveryPending=false;recovering=false;switching=false;
+  $('player-save-code').hidden=true;$('player-form').hidden=false;$('player-mode').hidden=true;$('player-cancel-restore').hidden=true;
+  setMode();status('Your account was deleted. Enter a username to start again.');showGate();changed();
+ }
  function isBanned(){return !!currentBan&&(currentBan.permanent||currentBan.startedAt.toMillis()+currentBan.durationSeconds*1000>Date.now());}
  function applyBan(ban){
   currentBan=ban;
@@ -38,7 +43,7 @@
   const callerUid=auth?.currentUser?.uid;
   let response;
   try{response=await backend.call(action,payload,requestId);}catch(error){throw Error(errorMessage(error));}
-  if(action!=='recover'&&auth.currentUser?.uid!==callerUid)throw Error('Your account changed. Please try again.');
+  if(!['recover','register'].includes(action)&&auth.currentUser?.uid!==callerUid)throw Error('Your account changed. Please try again.');
   return response;
  }
  async function mutate(action,payload){await ready;return accept(await call(action,payload));}
@@ -46,6 +51,7 @@
  function finish(){if(isBanned()){applyBan(currentBan);return;}switching=false;recoveryPending=false;$('player-gate').close();resolveReady();changed();}
  async function load(){
   const response=await call('load');
+  if(response.deleted){accountDeleted();return;}
   if(!response.wallet||!state||response.wallet.username!==state.username||response.wallet.revision>=state.revision)state=response.wallet;
   applyBan(response.ban);
   if(isBanned())return;
@@ -80,7 +86,7 @@
     else{
      const recovery=Array.from(crypto.getRandomValues(new Uint8Array(32)),v=>v.toString(16).padStart(2,'0')).join('');
      const response=await call('register',{username:$('player-username').value.trim(),recovery});
-     recoveryPending=true;accept(response);$('player-form').hidden=true;$('player-mode').hidden=true;$('player-save-code').hidden=false;
+     deleted=false;recoveryPending=true;accept(response);$('player-form').hidden=true;$('player-mode').hidden=true;$('player-save-code').hidden=false;
      $('player-title').textContent='Recovery code';$('player-new-code').textContent=response.recoveryCode;status('');
     }
    }catch(error){status(errorMessage(error));}
@@ -90,11 +96,11 @@
  async function init(){
   mount();
   try{
-   const [appTools,a,spark]=await Promise.all([import('https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js'),import('https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js'),import('./spark-account.js?v=20260910-moderation')]);
+   const [appTools,a,spark]=await Promise.all([import('https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js'),import('https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js'),import('./spark-account.js?v=20260910-identity')]);
    const useEmulators=['localhost','127.0.0.1'].includes(location.hostname)&&(new URLSearchParams(location.search).get('emulator')==='1'||sessionStorage.getItem('tinkle.emulator')==='1');
    if(useEmulators)sessionStorage.setItem('tinkle.emulator','1');
    const config=useEmulators?{...window.TINKLE_PLAYER_CONFIG.firebase,projectId:'demo-tinkle',apiKey:'demo-api-key',authDomain:'demo-tinkle.firebaseapp.com'}:window.TINKLE_PLAYER_CONFIG.firebase;
-   authTools=a;const app=appTools.initializeApp(config,'tinkle-player');auth=a.getAuth(app);backend=spark.createBackend(app,a,auth,useEmulators,wallet=>{if(state&&wallet.revision>=state.revision){state=wallet;changed();}},applyBan);
+   authTools=a;const app=appTools.initializeApp(config,'tinkle-player');auth=a.getAuth(app);backend=spark.createBackend(app,a,auth,useEmulators,wallet=>{if(state&&wallet.revision>=state.revision){state=wallet;changed();}},ban=>{if(!deleted)applyBan(ban);},accountDeleted);
    if(useEmulators){a.connectAuthEmulator(auth,'http://127.0.0.1:9099');}
    await a.setPersistence(auth,a.browserLocalPersistence);
    a.onAuthStateChanged(auth,async user=>{

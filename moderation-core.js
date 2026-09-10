@@ -8,6 +8,19 @@
   const admin=()=>{const user=getUser();if(!user)throw Error('Sign in first.');return user.uid;};
   const audit=id=>db.collection('tinkleModerationLogs').doc(id);
   return {
+   async deleteAccount(uid,id=crypto.randomUUID()){
+    const by=admin(),player=db.collection('tinklePlayers').doc(uid),log=audit(id);
+    await db.runTransaction(async tx=>{
+     const [done,snapshot]=await Promise.all([tx.get(log),tx.get(player)]);if(done.exists)return;
+     if(!snapshot.exists)throw Error('Player not found.');
+     tx.set(db.collection('tinkleDeleted').doc(uid),{by,at:serverTimestamp()});
+     tx.delete(player);tx.delete(db.collection('tinkleLeaderboard').doc(uid));
+     tx.delete(db.collection('tinkleUsernames').doc(snapshot.data().usernameKey));tx.delete(db.collection('tinkleBans').doc(uid));
+     tx.set(log,{action:'delete',target:uid,by,at:serverTimestamp()});
+    });
+    // Subcollections are not automatically deleted with a Firestore document.
+    while(true){const receipts=await player.collection('requests').limit(400).get();if(receipts.empty)break;const batch=db.batch();receipts.docs.forEach(doc=>batch.delete(doc.ref));await batch.commit();}
+   },
    async permitted(){return (await db.collection('tinkleAdmins').doc(admin()).get()).data()?.enabled===true;},
    async find(username){const key=String(username).trim().toLowerCase();if(!/^[a-z0-9_]{3,20}$/.test(key))throw Error('Enter a username.');const claim=await db.collection('tinkleUsernames').doc(key).get();if(!claim.exists)throw Error('Player not found.');const uid=claim.data().uid;const player=await db.collection('tinklePlayers').doc(uid).get();if(!player.exists)throw Error('Player not found.');return {uid,...player.data()};},
    removeTokens(uid,amount,id=crypto.randomUUID()){
