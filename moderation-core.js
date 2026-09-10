@@ -31,6 +31,15 @@
      const result={action:'remove-tokens',target:uid,by,amount,balance,at:serverTimestamp()};tx.set(log,result);return result;
     });
    },
+   giveTokens(uid,amount,id=crypto.randomUUID()){
+    const by=admin(),player=db.collection('tinklePlayers').doc(uid),score=db.collection('tinkleLeaderboard').doc(uid),log=audit(id);
+    if(!Number.isSafeInteger(amount)||amount<1)throw Error('Enter a positive whole-token amount.');
+    return db.runTransaction(async tx=>{const [done,snapshot]=await Promise.all([tx.get(log),tx.get(player)]);if(done.exists)return done.data();if(!snapshot.exists)throw Error('Player not found.');const current=snapshot.data();const balance=current.balance+amount;if(!Number.isSafeInteger(balance))throw Error('This amount exceeds the token balance limit.');
+     tx.update(player,{balance,revision:current.revision+1,updatedAt:serverTimestamp(),operation:{id,type:'admin-give',by,amount}});
+     tx.set(score,{username:current.username,balance,equipped:current.equipped});
+     const result={action:'give-tokens',target:uid,by,amount,balance,at:serverTimestamp()};tx.set(log,result);return result;
+    });
+   },
    ban(uid,value,unit,reason='',id=crypto.randomUUID()){
     const by=admin(),seconds=duration(value,unit),target=db.collection('tinkleBans').doc(uid),player=db.collection('tinklePlayers').doc(uid),log=audit(id);
     return db.runTransaction(async tx=>{const [done,snapshot]=await Promise.all([tx.get(log),tx.get(player)]);if(done.exists)return;if(!snapshot.exists)throw Error('Player not found.');tx.set(target,{permanent:unit==='forever',durationSeconds:seconds,startedAt:serverTimestamp(),reason:String(reason).trim().slice(0,200),by});tx.set(log,{action:'ban',target:uid,by,at:serverTimestamp()});});

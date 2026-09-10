@@ -40,7 +40,9 @@ test('Spark signup, recovery, purchases, cooldown rules and leaderboard work wit
   await env.withSecurityRulesDisabled(async context=>{await context.firestore().doc('tinklePlayers/'+uid).update({cardAt:new Date(Date.now()-301000),'rewards.nextCardAt':0});});
   r=await one.backend.call('reward',{kind:'card',payload:{code:cards[1].code}});assert.equal(r.wallet.rewards.daily.games.length,2);
   r=await one.backend.call('reward',{kind:'achievement',payload:{id:'first-pick'}});assert.equal(r.result.amount,50);
-  r=await one.backend.call('reward',{kind:'code',payload:{code:'TINKLE100'}});assert.equal(r.result.amount,100);
+  // Use a rule-matching fixture independently of the owner's editable public codes.
+  const rewardCodes=globalThis.TINKLE_REWARD_CONFIG.codes,originalCodes=rewardCodes.slice();
+  try{rewardCodes.splice(0,rewardCodes.length,{id:'welcome-100-v1',code:'TINKLE100',amount:100,expiresAt:null});r=await one.backend.call('reward',{kind:'code',payload:{code:'TINKLE100'}});assert.equal(r.result.amount,100);}finally{rewardCodes.splice(0,rewardCodes.length,...originalCodes);}
   for(const game of ['coin','dice','slots']){r=await one.backend.call('instant',{game,stake:1,choice:'Heads'});assert.ok(Number.isSafeInteger(r.wallet.balance));}
   for(const game of ['blackjack','mines','crash','scratch','plinko','wheel','roulette']){
    r=await one.backend.call('start',{game,stake:1,choice:'red',pick:0,options:{size:4,mineCount:3}});const round=r.wallet.games[game];
@@ -61,6 +63,14 @@ test('Spark signup, recovery, purchases, cooldown rules and leaderboard work wit
   assert.equal((await one.backend.call('load')).wallet.balance,before-10);
   assert.equal((await f.getDoc(f.doc(one.db,'tinkleLeaderboard',uid))).data().balance,before-10);
   await assert.rejects(store.removeTokens(uid,before+100),/only has/);
+  const grant=randomUUID();await store.giveTokens(uid,250,grant);await store.giveTokens(uid,250,grant);
+  assert.equal((await one.backend.call('load')).wallet.balance,before+240);
+  assert.equal((await f.getDoc(f.doc(one.db,'tinkleLeaderboard',uid))).data().balance,before+240);
+  assert.throws(()=>store.giveTokens(uid,-1),/positive/);
+  assert.throws(()=>store.giveTokens(uid,1.5),/positive/);
+  await assert.rejects(store.giveTokens(uid,Number.MAX_SAFE_INTEGER),/limit/);
+  const unauthorized=TinkleModeration.createStore(env.authenticatedContext(uid).firestore(),()=>f.serverTimestamp(),()=>({uid}));
+  await assertFails(unauthorized.giveTokens(uid,250));
   await store.ban(uid,1,'h','Test');
   assert.equal((await one.backend.call('load')).ban.durationSeconds,3600);
   await assertFails(one.backend.call('instant',{game:'coin',stake:1,choice:'Heads'}));

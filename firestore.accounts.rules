@@ -24,8 +24,8 @@ service cloud.firestore {
    allow create: if isAdmin() && request.resource.data.by==request.auth.uid && request.resource.data.at==request.time;
   }
   function removeTokens(n,o) {
-   return isAdmin() && n.operation.type=='admin-remove' && n.operation.by==request.auth.uid
-    && n.operation.amount is int && n.operation.amount>0 && n.balance==o.balance-n.operation.amount
+   return isAdmin() && n.operation.type in ['admin-remove','admin-give'] && n.operation.by==request.auth.uid
+    && n.operation.amount is int && n.operation.amount>0 && n.balance==(n.operation.type=='admin-give'?o.balance+n.operation.amount:o.balance-n.operation.amount)
     && n.diff(o).affectedKeys().hasOnly(['balance','revision','updatedAt','operation']);
   }
 
@@ -163,7 +163,7 @@ service cloud.firestore {
   match /tinkleModerationLogs/{id} {
    allow read: if isAdmin();
    allow create: if isAdmin() && request.resource.data.by==request.auth.uid && request.resource.data.at==request.time
-    && request.resource.data.target is string && request.resource.data.action in ['remove-tokens','ban','unban','delete'];
+    && request.resource.data.target is string && request.resource.data.action in ['remove-tokens','give-tokens','ban','unban','delete'];
   }
   match /tinklePlayers/{uid} {
    allow read: if owner(uid) || isAdmin();
