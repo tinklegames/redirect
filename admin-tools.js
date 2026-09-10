@@ -124,12 +124,12 @@ function liveWrite(button,path,value,message){return action(button,async()=>{req
 $('send-live').onclick=()=>action($('send-live'),async()=>{
     requireAdmin();const text=$('live-message').value.trim();if(!text)throw new Error('Enter an announcement.');const duration=Number($('live-duration').value);
     await db.ref('siteSettings/liveAnnouncement').set({id:crypto.randomUUID(),text,style:$('live-style').value,timestamp:firebase.database.ServerValue.TIMESTAMP,expiresAt:duration?Date.now()+serverClockOffset+duration*1000:0});
-    $('live-status').textContent='Announcement sent.';notify('Announcement sent.');
+    $('live-status').textContent='Announcement sent.';
 });
 $('clear-live').onclick=()=>liveWrite($('clear-live'),'siteSettings/liveAnnouncement',null,'Announcement cleared.');
 $('publish-update').onclick=()=>action($('publish-update'),async()=>{
     requireAdmin();const text=$('update-message').value.trim();if(!text)throw new Error('Enter an update message.');
-    await db.ref('siteSettings/updateNotice').set({id:crypto.randomUUID(),text,timestamp:firebase.database.ServerValue.TIMESTAMP});$('update-status').textContent='Update banner is live.';notify('Update banner published.');
+    await db.ref('siteSettings/updateNotice').set({id:crypto.randomUUID(),text,source:'admin-button',timestamp:firebase.database.ServerValue.TIMESTAMP});$('update-status').textContent='Update banner is live.';
 });
 $('clear-update').onclick=()=>liveWrite($('clear-update'),'siteSettings/updateNotice',null,'Update banner cleared.');
 syncUndoButton();

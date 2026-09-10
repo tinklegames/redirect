@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rewards · Tinkle</title><link rel="icon" href="favicon.ico"><link rel="stylesheet" href="token-rewards.css?v=20260910-ui">
+<script src="token-rewards-config.js" defer></script><script src="token-rewards-rules.js" defer></script><script src="tinkle-wallet.js" defer></script><script src="token-rewards.js?v=20260910-ui" defer></script>
+</head>
+<body class="rewards-page">
+<main class="rewards-shell">
+<header class="rewards-header"><a href="codes.html">← Back to games</a><span>TINKLE / REWARDS</span></header>
+<section class="rewards-hero"><div><p class="rewards-eyebrow">GOOD THINGS COME FROM PLAY</p><h1>A little exploring.<br><span>A little extra.</span></h1><p>Pick your next game, check off a challenge, and collect Tinkle Tokens.</p></div><aside class="rewards-wallet"><span aria-hidden="true">✦</span><p>YOUR WALLET</p><strong data-token-balance>—</strong><p>Tinkle Tokens</p></aside></section>
+<div class="rewards-summary">
+<section><span class="rewards-eyebrow">DAILY LOGIN</span><h2>25 tokens, every day</h2><p id="rewards-login">Checking today’s bonus…</p><p class="rewards-fine">Automatically added on your first visit of the day.</p></section>
+<section><span class="rewards-eyebrow">YOUR NEXT GAME</span><h2>One click. 50 tokens.</h2><p data-card-cooldown>Checking your next reward…</p><p class="rewards-fine">One reward every 5 minutes across all cards. Keep playing during the cooldown—your game access never waits.</p><a class="rewards-action" href="codes.html">Find a game ↗</a></section>
+</div>
+<p class="rewards-message" id="rewards-message" role="status" aria-live="polite">Your progress is saved in this browser.</p>
+<section class="rewards-section"><div class="rewards-section-heading"><h2>Daily challenges</h2><span id="rewards-reset">Resets at midnight UTC</span></div><p>Selections count even during the token cooldown. A game with multiple categories counts toward each category.</p><div class="reward-grid" id="daily-reward-list"></div></section>
+<section class="rewards-section"><div class="rewards-section-heading"><h2>Achievements</h2><span>One-time rewards</span></div><p>Build up your collection over time. Each milestone can be claimed once.</p><div class="reward-grid achievements-grid" id="achievement-list"></div></section>
+<section class="rewards-redeem"><div><p class="rewards-eyebrow">A LITTLE SOMETHING EXTRA</p><h2>Got a token code?</h2><p>Enter a reward code to add free tokens to your wallet.</p></div><form id="token-code-form"><label for="token-code">Token code</label><div><input id="token-code" name="code" type="text" maxlength="80" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Enter your code" required><button type="submit">Redeem</button></div><p id="code-message" role="status" aria-live="polite">Each code can be redeemed once per saved wallet.</p></form></section>
+<footer class="rewards-footer">Tokens have no cash value. Wallets, codes and progress are saved in this browser on this site; clearing site data resets them. Daily bonuses and challenges reset at midnight UTC. Progress starts with this update.</footer>
+</main>
+</body></html>

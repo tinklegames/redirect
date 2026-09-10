@@ -6,17 +6,19 @@
         if(mounted)return mounted;
         const host=document.createElement('div');host.id='live-notices';document.body.append(host);const shadow=host.attachShadow({mode:'open'});
         const style=document.createElement('style');style.textContent=`
-        *{box-sizing:border-box} .notice,dialog{font:16px/1.5 system-ui,sans-serif;color:#f5f7fc;background:#17202c;border:1px solid #586575;border-radius:14px;box-shadow:0 12px 45px #0007;padding:20px;overflow-wrap:anywhere} .notice{position:fixed;z-index:2147483000;max-width:480px;width:calc(100% - 32px)} .banner{left:16px;top:16px}.toast{left:16px;bottom:16px}.update{right:16px;bottom:16px}h2{font-size:18px;margin:0 0 8px}p{white-space:pre-wrap;margin:0 0 15px}button{cursor:pointer;font:600 14px system-ui;background:#c2f277;color:#142008;border:0;border-radius:7px;padding:10px 14px;margin:0 8px 0 0}button.secondary{background:#303f50;color:white}button:focus-visible{outline:3px solid white;outline-offset:3px}dialog{max-width:550px;width:calc(100% - 32px);margin:auto}dialog::backdrop{background:#030712b8} [hidden]{display:none!important}@media(max-width:650px){.update{bottom:16px;right:16px}.toast{bottom:auto;top:16px}.banner{top:16px}}`;
+        :host{--notice-bg:var(--panel,rgba(15,23,42,.97));--notice-soft:var(--panel-soft,rgba(15,23,42,.94));--notice-text:var(--text,#f9fafb);--notice-muted:var(--text-soft,#cbd5f5);--notice-line:var(--border-soft,rgba(148,163,184,.35));--notice-accent:var(--accent,#4f46e5);--notice-accent-2:var(--accent-2,#a855f7)}
+        *{box-sizing:border-box}.notice,dialog{font:13px/1.65 Inter,system-ui,sans-serif;color:var(--notice-text);background:linear-gradient(135deg,var(--notice-soft),var(--notice-bg));border:1px solid var(--notice-line);border-radius:20px;box-shadow:0 24px 70px #0008;padding:22px;overflow-wrap:anywhere;backdrop-filter:blur(18px)}.notice{position:fixed;z-index:2147483000;max-width:420px;width:calc(100% - 32px);max-height:calc(50dvh - 32px);overflow:auto}.banner{left:16px;top:16px}.toast{left:16px;bottom:16px}.update{right:16px;bottom:80px}h2{font-size:11px;letter-spacing:.16em;text-transform:uppercase;margin:0 0 10px;color:var(--notice-text)}p{white-space:pre-wrap;margin:0 0 18px;color:var(--notice-muted)}button{cursor:pointer;font:600 12px Inter,system-ui,sans-serif;background:linear-gradient(120deg,var(--notice-accent),var(--notice-accent-2));color:#fff;border:1px solid transparent;border-radius:999px;padding:10px 16px;margin:0 8px 4px 0}button:hover{filter:brightness(1.15)}button.secondary{background:transparent;color:var(--notice-muted);border-color:var(--notice-line)}button:focus-visible{outline:2px solid var(--accent-3,#22d3ee);outline-offset:3px}dialog{max-width:520px;width:calc(100% - 32px);max-height:calc(100dvh - 32px);overflow:auto;margin:auto}dialog::backdrop{background:#020617b8;backdrop-filter:blur(6px)}[hidden]{display:none!important}@media(max-width:650px){.update{bottom:80px;right:16px}.toast{bottom:auto;top:16px}.banner{top:16px}}
+        `;
         shadow.append(style);
         const announcement=document.createElement('section');announcement.className='notice banner';announcement.hidden=true;announcement.setAttribute('aria-live','polite');
         const dialog=document.createElement('dialog');dialog.setAttribute('aria-label','Live announcement');
         const update=document.createElement('section');update.className='notice update';update.hidden=true;update.setAttribute('aria-live','polite');shadow.append(announcement,dialog,update);
         let annId=null,updateId=null,timer,clockOffset=0;const dismissed=new Set();
-        function seen(id){try{return dismissed.has(id)||sessionStorage.getItem('notice:'+id)==='dismissed';}catch{return dismissed.has(id);}}
-        function dismiss(id){dismissed.add(id);try{sessionStorage.setItem('notice:'+id,'dismissed');}catch{}}
+        function seen(id){try{return dismissed.has(id)||localStorage.getItem('notice:'+id)==='dismissed';}catch{return dismissed.has(id);}}
+        function dismiss(id){dismissed.add(id);try{localStorage.setItem('notice:'+id,'dismissed');}catch{}}
         function closeAnnouncement(){announcement.hidden=true;if(dialog.open)dialog.close();clearTimeout(timer);}
         dialog.addEventListener('cancel',()=>{if(annId)dismiss(annId);});
-        function content(node,title,text,close){node.replaceChildren();const heading=document.createElement('h2');heading.textContent=title;const body=document.createElement('p');body.textContent=text;node.append(heading,body);const button=document.createElement('button');button.textContent='Dismiss';button.onclick=close;node.append(button);}
+        function content(node,title,text,close){node.replaceChildren();const heading=document.createElement('h2');heading.textContent=title;const body=document.createElement('p');body.textContent=text;node.append(heading,body);const button=document.createElement('button');button.textContent='Dismiss';button.className='secondary';button.onclick=close;node.append(button);}
         function render(settings){
             const ann=settings?.liveAnnouncement;
             if(!isActive(ann,Date.now()+clockOffset)){closeAnnouncement();annId=null;}
@@ -24,15 +26,18 @@
                 closeAnnouncement();annId=ann.id;
                 if(!seen(ann.id)){
                     const target=ann.style==='modal'?dialog:announcement;
+                    if(ann.style==='toast')dismiss(ann.id);
                     content(target,'Announcement',ann.text,()=>{dismiss(ann.id);closeAnnouncement();});
                     if(target===dialog)dialog.showModal();else{announcement.className='notice '+(ann.style==='toast'?'toast':'banner');announcement.hidden=false;}
                     if(ann.expiresAt)timer=setTimeout(closeAnnouncement,Math.min(2147483647,Math.max(0,ann.expiresAt-Date.now()-clockOffset)));
                 }
             }
             const notice=settings?.updateNotice;
-            if(!isActive(notice,Date.now()+clockOffset)){update.hidden=true;updateId=null;}
+            if(notice?.source!=='admin-button'||!isActive(notice,Date.now()+clockOffset)){update.hidden=true;updateId=null;}
             else if(notice.id!==updateId){
                 updateId=notice.id;update.hidden=seen(notice.id);update.replaceChildren();
+                // Each explicit admin publish has a fresh ID; reloads must not repeat it.
+                if(!update.hidden)dismiss(notice.id);
                 const heading=document.createElement('h2');heading.textContent='Update available';const text=document.createElement('p');text.textContent=notice.text;
                 const refresh=document.createElement('button');refresh.textContent='Refresh now';
                 refresh.onclick=async()=>{

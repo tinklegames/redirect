@@ -172,7 +172,7 @@ async function loadFile(file, handle = null) {
     cards = imported; fileHandle = handle; loadedFileText = text; clearForm(); renderCatalog();
     $('file-name').textContent = file.name;
     $('file-status').textContent = handle ? 'Local file connected. Save card writes back to this file.' : 'Local file loaded. Saving will download an updated game-cards.js.';
-    notify('Opened ' + cards.length + ' game cards.');
+
 }
 $('open-cards').addEventListener('click', () => action($('open-cards'), async () => {
     if (formDirty && !confirm('Discard unsaved edits and open another file?')) return;
@@ -270,7 +270,7 @@ $('image-search-form').addEventListener('submit', async event => {
             button.addEventListener('click', () => {
                 $('game-image').value = item.url; formDirty = true; updatePreview();
                 document.querySelectorAll('.image-choice button').forEach(b => b.classList.remove('selected'));
-                button.classList.add('selected'); notify('Cover selected. Save the card when ready.');
+                button.classList.add('selected');
             });
             tile.append(button);
             if (CardEditor.validImage(item.source)) { const link = document.createElement('a'); link.href = item.source; link.textContent = 'Source & usage details ↗'; link.target = '_blank'; link.rel = 'noopener'; tile.append(link); }

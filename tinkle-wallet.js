@@ -22,6 +22,15 @@
   }
   window.TinkleWallet = Object.freeze({
     balance: () => read().balance,
+    rewards: () => window.TinkleRewardsRules.snapshot(read(), Date.now(), window.TINKLE_REWARD_CONFIG),
+    reward: (action, payload) => transact(wallet => {
+      if(action === 'card') {
+        const game = (window.GAME_CARDS || []).find(game => game.code === payload?.code);
+        if(!game) throw new Error('This game card could not be found.');
+        payload = {code:game.code,categories:game.categories || []};
+      }
+      return window.TinkleRewardsRules.apply(wallet, action, payload, Date.now(), window.TINKLE_REWARD_CONFIG);
+    }),
     // resolve returns { payout, ... }; payout includes the original stake.
     wager: (stake, resolve) => transact(wallet => {
       if (!Number.isSafeInteger(stake) || stake < 1) throw new Error('Choose a positive whole-number bet.');
@@ -96,12 +105,6 @@
       if (!Number.isSafeInteger(amount) || amount < 1 || amount > wallet.balance) throw new Error('Invalid purchase or insufficient tokens.');
       wallet.balance -= amount;
       return wallet.balance;
-    }),
-    refill: () => transact(wallet => {
-      if (wallet.blackjack && !wallet.blackjack.done) throw new Error('Finish your blackjack hand before refilling.');
-      if (Object.values(wallet.games || {}).some(round => !round.done)) throw new Error('Finish your active games before refilling.');
-      if (wallet.balance !== 0) throw new Error('Free refills are available when your balance reaches zero.');
-      wallet.balance = 1000;
     })
   });
 })();

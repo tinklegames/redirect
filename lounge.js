@@ -2,8 +2,7 @@
   const wallet = window.TinkleWallet;
   const notice = document.getElementById('notice');
   const stakeInput = document.getElementById('stake');
-  const refill = document.getElementById('refill');
-  const buttons = [...document.querySelectorAll('[data-game], #refill, #blackjack-deal, #blackjack-hit, #blackjack-stand')];
+  const buttons = [...document.querySelectorAll('[data-game], #blackjack-deal, #blackjack-hit, #blackjack-stand')];
   let displayedRound = null;
   let busy = false;
   function render() {
@@ -15,7 +14,6 @@
       const round = wallet.round();
       displayedRound = round;
       const active = round && !round.done;
-      refill.hidden = balance !== 0 || active || wallet.hasActiveGames();
       document.getElementById('blackjack-deal').hidden = !!active;
       document.getElementById('blackjack-hit').hidden = !active;
       document.getElementById('blackjack-stand').hidden = !active;
@@ -67,7 +65,7 @@
     else { art.textContent = result.display; art.style.fontSize = game === 'coin' ? '38px' : '74px'; }
     const net = result.payout - stake;
     document.getElementById(`${game}-result`).textContent = `${result.message} ${result.payout ? `${result.payout.toLocaleString()} tokens returned.` : `${stake.toLocaleString()} tokens lost.`}`;
-    notice.textContent = `${net >= 0 ? '+' : '−'}${Math.abs(net).toLocaleString()} tokens this round. ${wallet.balance() === 0 ? 'Out of tokens? Grab a free refill.' : 'Your wallet is saved.'}`;
+    notice.textContent = `${net >= 0 ? '+' : '−'}${Math.abs(net).toLocaleString()} tokens this round. ${wallet.balance() === 0 ? 'Out of tokens? Visit Rewards to earn more.' : 'Your wallet is saved.'}`;
   })));
   document.getElementById('roulette-choice').addEventListener('change', event => {
     const hidden = event.target.value !== 'number';
@@ -86,10 +84,6 @@
       notice.textContent = next.done ? `${next.message} ${next.payout} tokens returned. Your wallet is saved.` : 'Card drawn. Your hand is saved.';
     }));
   }
-  refill.addEventListener('click', () => run(async () => {
-    await wallet.refill();
-    notice.textContent = 'Added 1,000 free tokens. You’re ready to play again.';
-  }));
   window.addEventListener('tinkle-wallet-change', render);
   window.addEventListener('storage', render);
   render();

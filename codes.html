@@ -6,6 +6,11 @@
      <title>Tinkle Codes</title>
      <link rel="stylesheet" href="homepage-ui.css">
      <script src="secret-shortcut.js" defer></script>
+     <link rel="stylesheet" href="token-rewards.css?v=20260910-ui">
+     <script src="token-rewards-config.js" defer></script>
+     <script src="token-rewards-rules.js" defer></script>
+     <script src="tinkle-wallet.js" defer></script>
+     <script src="token-rewards.js?v=20260910-ui" defer></script>
      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
@@ -2134,6 +2139,7 @@
                      </div>
                  </div>
                  <div class="top-right">
+                     <a class="token-rewards-link" href="rewards.html" aria-label="Tinkle Tokens and rewards">✦ <span data-token-balance>—</span> · Rewards</a>
                      <div class="top-nav" id="topNav">
                          <button class="top-nav-tab active" data-page="codes">Codes</button>
                          <button class="top-nav-tab" data-page="music">Music</button>
@@ -2394,7 +2400,7 @@
 
      <!-- UPDATE LOG OVERLAY -->
      <div id="updateLog" style="position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 99999; opacity: 0; transition: opacity 0.3s ease;">
-         <div class="log-content" style="background: rgba(10,20,40,0.95); backdrop-filter: blur(20px); border-radius: 28px; padding: 32px 40px; max-width: 450px; width: 90%; color: white; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 20px 60px rgba(0,0,0,0.5);">
+         <div class="log-content" style="background: var(--panel); backdrop-filter: blur(20px); border-radius: 28px; padding: 32px 40px; max-width: 450px; width: 90%; max-height: 85vh; overflow-y: auto; color: var(--text); border: 1px solid var(--border-soft); box-shadow: 0 20px 60px rgba(0,0,0,0.5);">
              <button class="close-btn" style="position: absolute; top: 12px; right: 18px; font-size: 28px; background: none; border: none; color: white; cursor: pointer;">&times;</button>
              <h2>Update Log</h2>
             <h3>WE BACK</h3>
@@ -2424,9 +2430,9 @@
 
      <div id="snow-container"></div>
 
-     <script src="live-notices.js"></script>
+     <script src="live-notices.js?v=20260910-manual-updates"></script>
      <script src="event-core.js"></script>
-     <script src="live-events.js"></script>
+     <script src="live-events.js?v=20260910-ui"></script>
      <!-- Firebase / Troll / Presence logic -->
      <script type="module">
          import {
@@ -3153,10 +3159,29 @@
          const updateLog = document.getElementById("updateLog");
          const updateLogBtn = document.getElementById("updateLogBtn");
 
+         // Only the visible log content defines a revision, never a deployment or commit.
+         function updateLogRevision() {
+             const content = document.querySelector('#updateLog .log-content');
+             if (!content) return '';
+             return Array.from(content.children)
+                 .filter(node => !node.classList.contains('close-btn'))
+                 .map(node => node.textContent.replace(/\s+/g, ' ').trim()).join('\n');
+         }
+
+         function showUnseenUpdateLog() {
+             const revision = updateLogRevision();
+             if (!revision) return;
+             try {
+                 if (localStorage.getItem('tinkle.updateLog.seenContent') === revision) return;
+             } catch {}
+             showUpdateLog();
+         }
+
          function showUpdateLog() {
              const updateLog = document.getElementById("updateLog");
              if (!updateLog) return;
              updateLog.style.display = "flex";
+             try { localStorage.setItem('tinkle.updateLog.seenContent', updateLogRevision()); } catch {}
              setTimeout(() => {
                  updateLog.style.opacity = "1";
              }, 10);
@@ -3173,7 +3198,7 @@
 
          if (updateLog) {
              // clicking dark backdrop closes
-             updateLog.addEventListener("click", hideUpdateLog);
+             updateLog.addEventListener("click", event => { if (event.target === updateLog) hideUpdateLog(); });
              // close button inside
              const closeBtn = updateLog.querySelector(".close-btn");
              if (closeBtn) {
@@ -3191,13 +3216,14 @@
              });
          }
 
-         // Toast logic (always show, regardless of copy success)
+         // Toasts are reserved for feedback that is not already visible in the controls.
          const toast = document.getElementById("toast");
          const toastText = document.getElementById("toastText");
          const toastLabel = document.getElementById("toastLabel");
          let toastTimeout;
 
          function showToast(label, msg) {
+             if (["NAVIGATION", "SETTINGS", "FAVORITES", "FILTER", "SORT", "🎲 RANDOM GAME"].includes(label)) return;
              if (!toast) return;
              if (label) toastLabel.textContent = label;
              if (msg) toastText.textContent = msg;
@@ -3850,20 +3876,15 @@
                      app.style.transform = 'none';
                  }
 
+                 showUnseenUpdateLog();
+
                  // Initialize features immediately
-                 startSnow();
+                 if (typeof startSnow === 'function') startSnow();
                  initAIChatbot();
 
                  // Show AI button and update log button
                  if (aiButton) aiButton.style.display = 'flex';
                  if (updateLogBtn) updateLogBtn.style.display = 'flex';
-
-                 // Show update log if it's their first visit today
-                 setTimeout(() => {
-                     if (typeof showUpdateLog === 'function') {
-                         showUpdateLog();
-                     }
-                 }, 800);
 
                  // Clear skip flags after using them
                  setTimeout(() => {
@@ -3880,20 +3901,16 @@
                      }
                      if (app) app.classList.add('visible');
 
+                     showUnseenUpdateLog();
+
                      // Initialize features after loader
-                     startSnow();
+                     if (typeof startSnow === 'function') startSnow();
                      initAIChatbot();
 
                      // Show AI button and update log button
                      if (aiButton) aiButton.style.display = 'flex';
                      if (updateLogBtn) updateLogBtn.style.display = 'flex';
 
-                     // Show update log only on first visit of the day
-                     if (shouldShowUpdateLog && typeof showUpdateLog === 'function') {
-                         setTimeout(() => {
-                             showUpdateLog();
-                         }, 500);
-                     }
                  }, 1200);
              }
          });
@@ -4145,7 +4162,7 @@
              const randomGame = allGames[randomIndex];
 
              // Copy the code to clipboard
-             tryCopyToClipboard(randomGame.code);
+             tryCopyToClipboard(randomGame.code, `🎲 ${randomGame.name}: ${randomGame.code} copied!`);
 
              // Show sparkle effect on the button
              const btn = document.getElementById("randomGameBtn");
@@ -4157,7 +4174,7 @@
              showToast("🎲 RANDOM GAME", `${randomGame.name}: ${randomGame.code}`);
 
              // Also show the bottom toast
-             showCopyToast(`🎲 ${randomGame.name}: ${randomGame.code} copied!`);
+
 
              // Highlight the selected game in the grid
              setTimeout(() => {
@@ -4220,26 +4237,26 @@
          }
 
 
-         function tryCopyToClipboard(text) {
+         async function tryCopyToClipboard(text, message = "Code copied!") {
+             let copied = false;
              try {
                  if (navigator.clipboard && navigator.clipboard.writeText) {
-                     navigator.clipboard.writeText(text);
-                     return;
+                     await navigator.clipboard.writeText(text);
+                     copied = true;
                  }
              } catch (e) {}
-             try {
+             if (!copied) {
+                 const previous = document.activeElement;
                  const temp = document.createElement("textarea");
                  temp.value = text;
-                 temp.style.position = "fixed";
-                 temp.style.opacity = "0";
+                 temp.style.cssText = "position:fixed;opacity:0";
                  document.body.appendChild(temp);
-                 temp.focus();
-                 temp.select();
-                 document.execCommand("copy");
-                 document.body.removeChild(temp);
-             } catch (e) {
-                 // ignore – still show toast
+                 try { temp.select(); copied = document.execCommand("copy"); }
+                 catch (e) {}
+                 finally { temp.remove(); previous?.focus({ preventScroll: true }); }
              }
+             if (copied) showCopyToast(message);
+             else showToast("CLIPBOARD", "Copy failed. Select this code manually: " + text);
          }
 
          function createGameCard(game) {
@@ -4380,6 +4397,11 @@
                      return;
                  }
 
+                 // Always copy immediately; rewards and counters run independently.
+                 tryCopyToClipboard(game.code);
+                 addRecentGame(game);
+                 window.TinkleRewards?.onCard(game.code);
+
                  // Increment counts (with cooldown)
                  if (window.incrementGameClick) {
                      try {
@@ -4394,22 +4416,12 @@
                              playCounter.classList.remove('updating');
                          }, 300);
 
-                         // Show different messages based on click status
-                         if (result) {
-                             if (result.onCooldown) {
-                                 showCopyToast(`📋 Code copied!`);
-                             } else {
-                                 showCopyToast(`📋 Code copied!`);
-                             }
-                         }
                      } catch (e) {
                          console.error("incrementGameClick error:", e);
                      }
                  }
 
-                 // Copy code to clipboard (ALWAYS copies, even on cooldown)
-                 tryCopyToClipboard(game.code);
-                 addRecentGame(game);
+
              }
 
              card.addEventListener("click", handleCopy);
@@ -4588,28 +4600,19 @@
 
 
          // ---- Bottom-right toast ----
+         let copyToastTimer;
          function showCopyToast(text = "Code Copied!") {
              const toast = document.getElementById("copyToast");
              toast.textContent = text;
              toast.classList.add("show");
 
-             setTimeout(() => {
+             clearTimeout(copyToastTimer);
+             copyToastTimer = setTimeout(() => {
                  toast.classList.remove("show");
              }, 2000);
          }
 
-         // Force show update log when page is fully loaded
-         window.addEventListener('load', function() {
-             setTimeout(function() {
-                 var log = document.getElementById("updateLog");
-                 if (log && log.style.display !== "flex") {
-                     log.style.display = "flex";
-                     setTimeout(function() {
-                         log.style.opacity = "1";
-                     }, 10);
-                 }
-             }, 1000);
-         });
+         // The update log opens only when the visitor selects Updates.
      </script>
      <script>
          const codeSiteBtn = document.getElementById("openCodeSiteBtn");
