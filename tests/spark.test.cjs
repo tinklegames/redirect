@@ -5,7 +5,7 @@ globalThis.window=globalThis;globalThis.__sparkFirestore=f;
 const code=randomBytes(32).toString('hex');
 async function setup(){
  const engineUrl=pathToFileURL(path.resolve('player-engine.js')).href;
- const source=fs.readFileSync('spark-account.js','utf8').replace(/import \* as f from '[^']+';/,"const f=globalThis.__sparkFirestore;").replace("'./player-engine.js'",JSON.stringify(engineUrl));
+ const source=fs.readFileSync('spark-account.js','utf8').replace(/import \* as f from '[^']+';/,"const f=globalThis.__sparkFirestore;").replace(/'\.\/player-engine\.js(?:\?[^']*)?'/,JSON.stringify(engineUrl));
  const {createBackend}=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));
  const app=appSdk.initializeApp({apiKey:'demo-api-key',projectId:'demo-tinkle',authDomain:'demo-tinkle.firebaseapp.com'},randomUUID());const auth=a.getAuth(app);a.connectAuthEmulator(auth,'http://127.0.0.1:9099',{disableWarnings:true});await a.signInAnonymously(auth);
  const backend=createBackend(app,a,auth,true,()=>{});const call=backend.call;backend.call=async(...args)=>{try{return await call(...args);}catch(error){error.message=args[0]+' '+(args[1]?.kind||'')+': '+error.message;throw error;}};return {app,auth,backend,db:f.getFirestore(app)};

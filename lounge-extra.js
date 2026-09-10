@@ -74,10 +74,12 @@
     return rect;
   });
   const ball = svg('circle',{cx:150,cy:8,r:5,fill:'#c6f0b9'},$('plinko-board'));
+  const sectorAngle=360/rules.wheelPays.length;
+  const wheelRotation=round=>{const sector=round.wheelSize===rules.wheelPays.length?round.sector:Math.max(0,rules.wheelPays.indexOf(round.multiplier));return -sector*sectorAngle-sectorAngle/2;};
   rules.wheelPays.forEach((pay,i) => {
-    const a=(i*30-90)*Math.PI/180, b=((i+1)*30-90)*Math.PI/180, mid=(a+b)/2;
-    svg('path',{d:`M120 120 L${120+112*Math.cos(a)} ${120+112*Math.sin(a)} A112 112 0 0 1 ${120+112*Math.cos(b)} ${120+112*Math.sin(b)} Z`,fill:['#503465','#263c3b','#3c2b50'][i%3],stroke:'#92809f','stroke-width':1},$('fortune-wheel'));
-    svg('text',{x:120+80*Math.cos(mid),y:124+80*Math.sin(mid),'text-anchor':'middle',fill:'#fff2d2','font-size':13,'font-weight':700},$('fortune-wheel'),`${pay}×`);
+    const a=(i*sectorAngle-90)*Math.PI/180, b=((i+1)*sectorAngle-90)*Math.PI/180, mid=(a+b)/2;
+    svg('path',{d:`M120 120 L${120+112*Math.cos(a)} ${120+112*Math.sin(a)} A112 112 0 0 1 ${120+112*Math.cos(b)} ${120+112*Math.sin(b)} Z`,fill:pay>=5?'#775521':pay>=1?'#51407d':pay>0?'#263c3b':'#241e30',stroke:'#92809f','stroke-width':1},$('fortune-wheel'));
+    svg('text',{x:120+80*Math.cos(mid),y:124+80*Math.sin(mid),'text-anchor':'middle',fill:'#fff2d2','font-size':9,'font-weight':700},$('fortune-wheel'),`${pay}×`);
   });
   svg('circle',{cx:120,cy:120,r:22,fill:'#dec389'},$('fortune-wheel'));
   svg('text',{x:120,y:127,'text-anchor':'middle',fill:'#463321','font-size':24},$('fortune-wheel'),'✦');
@@ -87,7 +89,7 @@
     ball.style.transform = `translate(${(round.bucket-4)*30}px, 191px)`;
   }
   function showWheel(round) {
-    if (round) $('fortune-wheel').style.transform = `rotate(${-round.sector*30-15}deg)`;
+    if (round) $('fortune-wheel').style.transform = `rotate(${wheelRotation(round)}deg)`;
   }
   function renderCrash() {
     const round=rounds.crash;
@@ -178,7 +180,7 @@
       const trajectory = rules.plinkoFrames(round.path);
       await ball.animate(trajectory.frames,{duration:trajectory.duration,easing:'linear'}).finished;
     } else if (game === 'wheel') {
-      const end=1440-round.sector*30-15;
+      const end=1440+wheelRotation(round);
       await $('fortune-wheel').animate([{transform:'rotate(0deg)'},{transform:`rotate(${end}deg)`}],{duration:2400,easing:'cubic-bezier(.15,.7,.12,1)'}).finished;
     }
   }

@@ -97,7 +97,7 @@
  async function init(){
   mount();
   try{
-   const [appTools,a,spark]=await Promise.all([import('https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js'),import('https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js'),import('./spark-account.js?v=20260910-identity')]);
+   const [appTools,a,spark]=await Promise.all([import('https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js'),import('https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js'),import('./spark-account.js?v=20260910-wheel24')]);
    const useEmulators=['localhost','127.0.0.1'].includes(location.hostname)&&(new URLSearchParams(location.search).get('emulator')==='1'||sessionStorage.getItem('tinkle.emulator')==='1');
    if(useEmulators)sessionStorage.setItem('tinkle.emulator','1');
    const config=useEmulators?{...window.TINKLE_PLAYER_CONFIG.firebase,projectId:'demo-tinkle',apiKey:'demo-api-key',authDomain:'demo-tinkle.firebaseapp.com'}:window.TINKLE_PLAYER_CONFIG.firebase;

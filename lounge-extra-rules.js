@@ -1,7 +1,7 @@
 /* Pure rules: every round stores its outcome before any reveal or animation. */
 (() => {
   const plinkoPays = [12, 3, 1.5, 0.5, 0.25, 0.5, 1.5, 3, 12];
-  const wheelPays = [0, 1, 0.5, 2, 0, 1, 0.5, 5, 0, 1, 0.5, 0];
+  const wheelPays = [0, 0.5, 0, 2, 0, 0.25, 0, 10, 0, 0.1, 0, 1, 0, 0.75, 0, 5, 0, 0.5, 0, 1.5, 0, 0.25, 0, 0.1];
   const prize = (stake, multiplier) => Math.floor(stake * multiplier);
   function shuffle(items, random) {
     for (let i = items.length - 1; i > 0; i--) {
@@ -40,7 +40,7 @@
     }
     if (game === 'wheel') {
       const sector = random(wheelPays.length), multiplier = wheelPays[sector];
-      return {...round, done:true, sector, multiplier, payout:prize(stake, multiplier)};
+      return {...round, done:true, sector, wheelSize:wheelPays.length, multiplier, payout:prize(stake, multiplier)};
     }
     if (game === 'scratch') {
       // Fixed prize odds; losing tickets contain no three matching symbols.

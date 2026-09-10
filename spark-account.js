@@ -1,5 +1,5 @@
 import * as f from 'https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js';
-import * as engine from './player-engine.js';
+import * as engine from './player-engine.js?v=20260910-wheel24';
 const emailFor=alias=>`${alias}@recovery.tinkle.invalid`;
 export function recoveryParts(code){
  const match=String(code).trim().toLowerCase().match(/^([a-f0-9]{32})\.([a-f0-9]{64})$/);

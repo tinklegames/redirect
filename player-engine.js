@@ -3,7 +3,7 @@ import './shop-catalog.js';
 import './token-rewards-config.js';
 import './token-rewards-rules.js';
 import './lounge-games.js';
-import './lounge-extra-rules.js';
+import './lounge-extra-rules.js?v=20260910-wheel24';
 import './game-cards.js';
 const {TinkleShop:shop,TinkleRewardsRules:rewards,TINKLE_REWARD_CONFIG:config,LoungeGames:games,LoungeExtraRules:extra,GAME_CARDS:cards}=window;
 function randomInt(n){const values=new Uint32Array(1),limit=Math.floor(4294967296/n)*n;do{crypto.getRandomValues(values);}while(values[0]>=limit);return values[0]%n;}
