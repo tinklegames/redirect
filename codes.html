@@ -9,7 +9,7 @@
      <link rel="stylesheet" href="token-rewards.css?v=20260910-ui">
      <script src="token-rewards-config.js" defer></script>
      <script src="token-rewards-rules.js?v=20260910-accounts" defer></script>
-     <script src="player-config.js" defer></script><script src="shop-catalog.js" defer></script><script src="player-account.js?v=20260910-moderation" defer></script><script src="player-cosmetics.js?v=20260910-accounts" defer></script><script src="tinkle-wallet.js?v=20260910-accounts" defer></script>
+     <script src="player-config.js" defer></script><script src="shop-catalog.js" defer></script><script src="player-account.js?v=20260910-navigation" defer></script><script src="player-cosmetics.js?v=20260910-accounts" defer></script><script src="tinkle-wallet.js?v=20260910-accounts" defer></script>
      <script src="token-rewards.js?v=20260910-accounts" defer></script>
      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -3237,7 +3237,7 @@
 
          // Code site navigation
          function openCodeSite() {
-             const codeSiteURL = "https://tinklegames.github.io/redirect/";
+             const codeSiteURL = new URL("index.html", window.location.href).href;
              window.open(codeSiteURL, "_blank");
              showToast("NAVIGATION", "Opened code site");
          }
@@ -4619,7 +4619,7 @@
      </script>
      <script>
          const codeSiteBtn = document.getElementById("openCodeSiteBtn");
-         const codeSiteURL = "https://tinklegames.github.io/redirect/";
+         const codeSiteURL = new URL("index.html", window.location.href).href;
          const returnURL = window.location.href;
 
          // Remove any existing listeners

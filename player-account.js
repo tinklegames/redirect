@@ -14,6 +14,11 @@
  }
  function changed(){window.dispatchEvent(new Event('tinkle-wallet-change'));window.dispatchEvent(new Event('tinkle-player-change'));}
  function status(message){$('player-status').textContent=message;}
+ function connectionError(error){
+  showGate();$('player-title').textContent='Could not connect';
+  $('player-form').hidden=true;$('player-mode').hidden=true;
+  status(errorMessage(error));$('player-reconnect').hidden=false;
+ }
  function errorMessage(error){
   const code=error.code||'';
   if(/permission-denied/.test(code))return 'Could not save. Check your connection and device clock, then try again.';
@@ -45,7 +50,7 @@
   applyBan(response.ban);
   if(isBanned())return;
   if(state&&!recoveryPending)finish();
-  else if(!state){showGate();status('');}
+  else if(!state){$('player-form').hidden=false;$('player-mode').hidden=false;$('player-reconnect').hidden=true;setMode();showGate();}
  }
  window.TinkleAccount=Object.freeze({ready,get profile(){return state?{username:state.username,balance:state.balance,owned:state.owned,equipped:state.equipped}:null;},get wallet(){return state;},now:()=>Date.now(),mutate,
   leaderboard:async()=>{await ready;return (await call('leaderboard')).players;},
@@ -62,7 +67,7 @@
  function mount(){
   const dialog=document.createElement('dialog');dialog.id='player-gate';dialog.className='player-dialog player-login';dialog.setAttribute('aria-labelledby','player-title');
   dialog.innerHTML=`<h1 id="player-title">Enter username</h1><form id="player-form"><div id="player-username-field"><input id="player-username" aria-label="Username" placeholder="Username" minlength="3" maxlength="20" pattern="[A-Za-z0-9_]{3,20}" title="3–20 letters, numbers or underscores" autocomplete="nickname" required></div><div id="player-recovery-field" hidden><textarea id="player-recovery" aria-label="Recovery code" placeholder="Recovery code" autocomplete="off" spellcheck="false" rows="3" maxlength="120"></textarea></div><button id="player-submit" type="submit" disabled>Continue</button></form><section id="player-save-code" hidden><p>Save this private code to recover your account.</p><code id="player-new-code"></code><div class="player-actions"><button id="player-download-code" type="button">Save code</button><button id="player-finish" type="button">Continue</button></div></section><p id="player-status" role="status">Connecting…</p><button id="player-mode" class="player-quiet" type="button">Use recovery code</button><button id="player-cancel-restore" class="player-quiet" type="button" hidden>Back</button><button id="player-reconnect" class="player-quiet" type="button" hidden>Try again</button>`;
-  document.body.append(dialog);dialog.addEventListener('cancel',event=>event.preventDefault());showGate();
+  document.body.append(dialog);dialog.addEventListener('cancel',event=>event.preventDefault());
   $('player-mode').onclick=()=>{recovering=!recovering;setMode();};
   $('player-reconnect').onclick=()=>location.reload();
   $('player-cancel-restore').onclick=()=>{if(state){$('player-cancel-restore').hidden=true;finish();}};
@@ -94,11 +99,11 @@
    await a.setPersistence(auth,a.browserLocalPersistence);
    a.onAuthStateChanged(auth,async user=>{
     if(busy)return;
-    if(!user){try{await a.signInAnonymously(auth);}catch(error){status(errorMessage(error));$('player-reconnect').hidden=false;}return;}
-    try{await load();backend.watch();}catch(error){showGate();status(errorMessage(error));$('player-reconnect').hidden=false;}
+    if(!user){try{await a.signInAnonymously(auth);}catch(error){connectionError(error);}return;}
+    try{await load();backend.watch();}catch(error){connectionError(error);}
     $('player-submit').disabled=false;
    });
-  }catch(error){status(errorMessage(error));$('player-reconnect').hidden=false;}
+  }catch(error){connectionError(error);}
  }
  setInterval(()=>{if(wasBanned&&!isBanned())load().catch(()=>{});},1000);
  init();
