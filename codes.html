@@ -3,6 +3,7 @@
 
  <head>
      <meta charset="UTF-8" />
+     <script src="online-players.js?v=20260911"></script>
      <title>Tinkle Codes</title>
      <link rel="stylesheet" href="homepage-ui.css">
      <script src="secret-shortcut.js" defer></script>
@@ -3156,12 +3157,8 @@
          });
 
          // === 👥 Live User Presence Tracking ===
-         const usersRef = ref(db, "connectedUsers");
-         const myRef = push(usersRef);
-         // onDisconnect equivalent:
-         const disconnectTask = onDisconnect(myRef);
-         disconnectTask.remove();
-         set(myRef, true);
+         TinkleOnlinePlayers.track({ db, ref, push, onValue, onDisconnect, set,
+             getProfile: () => window.TinkleAccount?.profile, events: window });
      </script>
 
 
