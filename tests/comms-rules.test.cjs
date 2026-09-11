@@ -17,6 +17,20 @@ test('poll and inbox rules enforce admin sending, recipient privacy, one vote an
   await assertFails(f.getDocs(f.collection(alice,'tinklePolls','one','votes')));
   assert.equal((await f.getDocs(f.collection(admin,'tinklePolls','one','votes'))).size,1);
   await f.updateDoc(f.doc(admin,'tinklePolls','one'),{closed:true});await assertFails(f.setDoc(f.doc(bob,'tinklePolls','one','votes','bob'),vote()));
+  const live={...poll,id:'live',liveResults:true};
+  await f.setDoc(f.doc(admin,'tinkleLive','poll'),live);await f.setDoc(f.doc(admin,'tinklePolls','live'),live);
+  for(const i of [0,1])await f.setDoc(f.doc(admin,'tinklePolls','live','results',String(i)),{count:0});
+  await assertFails(f.getDocs(f.collection(alice,'tinklePolls','live','results')));
+  await assertFails(f.setDoc(f.doc(alice,'tinklePolls','live','votes','alice'),vote()));
+  await assertFails(f.updateDoc(f.doc(alice,'tinklePolls','live','results','0'),{count:f.increment(1)}));
+  async function cast(db,uid,count=1){const batch=f.writeBatch(db);batch.set(f.doc(db,'tinklePolls','live','votes',uid),vote());batch.update(f.doc(db,'tinklePolls','live','results','0'),{count:f.increment(count)});return batch.commit();}
+  await assertFails(cast(alice,'alice',5));
+  await assertSucceeds(cast(alice,'alice'));
+  await assertFails(cast(alice,'alice'));
+  await assertSucceeds(cast(bob,'bob'));
+  assert.equal((await f.getDoc(f.doc(alice,'tinklePolls','live','results','0'))).data().count,2);
+  await assertSucceeds(f.getDocs(f.collection(alice,'tinklePolls','live','results')));
+  await assertFails(f.getDocs(f.collection(alice,'tinklePolls','live','votes')));
   const message=()=>({text:'Hello Alice',by:'admin',createdAt:f.serverTimestamp(),read:false});
   await assertFails(f.setDoc(f.doc(bob,'tinkleInboxes','alice','messages','one'),message()));
   await assertSucceeds(f.setDoc(f.doc(admin,'tinkleInboxes','alice','messages','one'),message()));

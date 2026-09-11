@@ -90,7 +90,7 @@
         </div>
       </section>
       <div class="live-grid"><section class="panel"><h2>Live announcement</h2><label for="live-message">Message</label><textarea id="live-message" rows="3" maxlength="1500" placeholder="What's happening?"></textarea><label for="live-style">Show as</label><select id="live-style"><option value="modal">Fullscreen · fade in / out</option></select><label for="live-duration">Duration</label><select id="live-duration"><option value="8">8 seconds</option><option value="15" selected>15 seconds</option><option value="60">1 minute</option><option value="300">5 minutes</option><option value="0">Until cleared</option></select><div class="file-actions"><button id="send-live">Send announcement</button><button id="clear-live">Clear announcement</button></div><p id="live-status" class="muted small" role="status"></p></section>
-      <section class="panel"><h2>Update available</h2><label for="update-message">Message</label><input id="update-message" maxlength="300" value="A new version is available. Refresh when you're ready."><p class="muted small">Visitors choose Refresh now or Later. Publishing this notice does not upload your files or force a reload.</p><div class="file-actions"><button id="publish-update">Show update banner</button><button id="clear-update">Clear update banner</button></div><p id="update-status" role="status" class="muted small"></p></section>
+      <section class="panel"><h2>Refresh everyone's page</h2><p class="muted small">Immediately reload connected codes pages, without a popup. Upload your changed files first.</p><div class="file-actions"><button id="publish-update">Refresh everyone now</button><button id="clear-update">Clear refresh command</button></div><p id="update-status" role="status" class="muted small"></p></section>
       <section class="panel"><h2>Live poll</h2><form id="poll-form"><label for="poll-question">Question</label><input id="poll-question" maxlength="200" required><label for="poll-options">Options (one per line, 2–6)</label><textarea id="poll-options" rows="4" maxlength="600" required></textarea><label for="poll-minutes">Voting duration in minutes</label><input id="poll-minutes" type="number" min="1" max="1440" value="5" required><button id="poll-publish" type="submit">Publish poll</button><button id="poll-close" type="button">Close voting</button></form><p id="poll-status" role="status"></p><div id="poll-results" aria-live="polite"></div></section>
       <section class="panel"><h2>Saved announcement & jumpscare</h2><p class="muted">Uses the text or image entered in Site settings.</p><button id="trigger-announcement">Send saved announcement</button><button id="trigger-jumpscare">Trigger jumpscare</button></section>
       <section class="panel"><h2>Effects</h2><p class="muted">Send an effect to connected visitors.</p><div class="effect-grid"><button id="cursor-chaos">Cursor chaos</button><button id="flashbang">Flashbang</button><button id="reverse-controls">Reverse controls</button></div></section>
@@ -123,8 +123,8 @@
 <script src="admin.js?v=20260910-moderation"></script>
 <script src="online-players.js?v=20260911"></script>
 <script src="moderation-core.js?v=20260910-give-tokens"></script><script src="admin-players.js?v=20260911-messages"></script>
-<script src="admin-comms.js?v=20260911"></script>
-<script src="admin-tools.js?v=20260910-manual-updates"></script>
+<script src="admin-comms.js?v=20260911-live-v3"></script>
+<script src="admin-tools.js?v=20260911-live-v3"></script>
 <script src="event-core.js"></script>
 <script src="admin-events.js"></script>
 </body>

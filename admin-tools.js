@@ -128,8 +128,8 @@ $('send-live').onclick=()=>action($('send-live'),async()=>{
 });
 $('clear-live').onclick=()=>liveWrite($('clear-live'),'siteSettings/liveAnnouncement',null,'Announcement cleared.');
 $('publish-update').onclick=()=>action($('publish-update'),async()=>{
-    requireAdmin();const text=$('update-message').value.trim();if(!text)throw new Error('Enter an update message.');
-    await db.ref('siteSettings/updateNotice').set({id:crypto.randomUUID(),text,source:'admin-button',timestamp:firebase.database.ServerValue.TIMESTAMP});$('update-status').textContent='Update banner is live.';
+    requireAdmin();const text='Refresh';
+    await db.ref('siteSettings/updateNotice').set({id:crypto.randomUUID(),text,source:'admin-button',timestamp:firebase.database.ServerValue.TIMESTAMP});$('update-status').textContent='Refresh command sent to connected pages.';
 });
-$('clear-update').onclick=()=>liveWrite($('clear-update'),'siteSettings/updateNotice',null,'Update banner cleared.');
+$('clear-update').onclick=()=>liveWrite($('clear-update'),'siteSettings/updateNotice',null,'Refresh command cleared.');
 syncUndoButton();

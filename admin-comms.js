@@ -22,8 +22,8 @@
   requireAdmin();const question=$('poll-question').value.trim(),options=$('poll-options').value.split('\n').map(s=>s.trim()).filter(Boolean),minutes=Number($('poll-minutes').value);
   if(!question||options.length<2||options.length>6||options.some(s=>s.length>80)||new Set(options.map(s=>s.toLowerCase())).size!==options.length)throw Error('Enter a question and 2–6 different options, each up to 80 characters.');
   if(!Number.isInteger(minutes)||minutes<1||minutes>1440)throw Error('Choose 1–1440 minutes.');
-  const poll={id:crypto.randomUUID(),question,options,closed:false,createdAt:firebase.firestore.FieldValue.serverTimestamp(),closesAt:firebase.firestore.Timestamp.fromMillis(Date.now()+serverClockOffset+minutes*60000)};
-  const batch=db.batch();batch.set(db.doc('tinklePolls/'+poll.id),poll);batch.set(current,poll);await batch.commit();status('Poll published.');
+  const poll={id:crypto.randomUUID(),question,options,liveResults:true,closed:false,createdAt:firebase.firestore.FieldValue.serverTimestamp(),closesAt:firebase.firestore.Timestamp.fromMillis(Date.now()+serverClockOffset+minutes*60000)};
+  const batch=db.batch();batch.set(db.doc('tinklePolls/'+poll.id),poll);batch.set(current,poll);options.forEach((_,i)=>batch.set(db.doc('tinklePolls/'+poll.id+'/results/'+i),{count:0}));await batch.commit();status('Poll published.');
  });};
  $('poll-close').onclick=()=>action($('poll-close'),async()=>{
   requireAdmin();const id=active?.id;if(!id)return;

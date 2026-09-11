@@ -9,6 +9,15 @@ service cloud.firestore {
   match /tinklePolls/{pollId} {
    allow read: if request.auth != null;
    allow write: if isAdmin();
+   match /results/{choice} {
+    allow read: if isAdmin() || (request.auth != null && exists(/databases/$(database)/documents/tinklePolls/$(pollId)/votes/$(request.auth.uid)));
+    allow create: if isAdmin() && request.resource.data=={'count':0};
+    allow update: if request.auth != null
+     && !exists(/databases/$(database)/documents/tinklePolls/$(pollId)/votes/$(request.auth.uid))
+     && existsAfter(/databases/$(database)/documents/tinklePolls/$(pollId)/votes/$(request.auth.uid))
+     && string(getAfter(/databases/$(database)/documents/tinklePolls/$(pollId)/votes/$(request.auth.uid)).data.choice)==choice
+     && request.resource.data=={'count':resource.data.count+1};
+   }
    match /votes/{uid} {
     allow get: if owner(uid) || isAdmin();
     allow list: if isAdmin();
@@ -20,7 +29,10 @@ service cloud.firestore {
      && request.resource.data.keys().hasOnly(['choice','createdAt'])
      && request.resource.data.choice is int && request.resource.data.choice>=0
      && request.resource.data.choice < get(/databases/$(database)/documents/tinklePolls/$(pollId)).data.options.size()
-     && request.resource.data.createdAt==request.time;
+     && request.resource.data.createdAt==request.time
+     && (!get(/databases/$(database)/documents/tinklePolls/$(pollId)).data.get('liveResults',false)
+      || getAfter(/databases/$(database)/documents/tinklePolls/$(pollId)/results/$(string(request.resource.data.choice))).data.count
+       ==get(/databases/$(database)/documents/tinklePolls/$(pollId)/results/$(string(request.resource.data.choice))).data.count+1);
    }
   }
   match /tinkleInboxes/{uid}/messages/{id} {
