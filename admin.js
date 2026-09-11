@@ -294,7 +294,7 @@ $('revert-ann').onclick = () => { $('announcement').value = ''; };
 $('revert-jumpimg').onclick = () => { $('jumpscareImage').value = ''; };
 $('trigger-announcement').onclick = () => action($('trigger-announcement'), async () => {
     requireAdmin(); const text = $('announcement').value.trim(); if (!text) throw new Error('Enter an announcement in Site settings first.');
-    await db.ref('siteSettings/liveAnnouncement').set({ id: crypto.randomUUID(), text, style: 'toast', timestamp: firebase.database.ServerValue.TIMESTAMP, expiresAt: Date.now() + serverClockOffset + 15000 });
+    await db.ref('siteSettings/liveAnnouncement').set({ id: crypto.randomUUID(), text, style: 'modal', timestamp: firebase.database.ServerValue.TIMESTAMP, expiresAt: Date.now() + serverClockOffset + 15000 });
 }, 'Announcement sent.');
 $('trigger-jumpscare').onclick = () => action($('trigger-jumpscare'), async () => {
     requireAdmin(); const image = $('jumpscareImage').value.trim(); if (!CardEditor.validImage(image)) throw new Error('Enter a valid jumpscare URL in Site settings first.');

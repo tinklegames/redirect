@@ -104,6 +104,7 @@
    authTools=a;const app=appTools.initializeApp(config,'tinkle-player');auth=a.getAuth(app);backend=spark.createBackend(app,a,auth,useEmulators,wallet=>{if(!deleted&&state&&wallet.revision>=state.revision){state=wallet;changed();}},ban=>{if(!deleted)applyBan(ban);},accountDeleted);
    if(useEmulators){a.connectAuthEmulator(auth,'http://127.0.0.1:9099');}
    await a.setPersistence(auth,a.browserLocalPersistence);
+   import('./player-comms.js?v=20260911').then(module=>module.mount(app,auth,a)).catch(error=>console.warn('Messages and polls unavailable:',error));
    a.onAuthStateChanged(auth,async user=>{
     if(busy)return;
     if(!user){try{await a.signInAnonymously(auth);}catch(error){connectionError(error);}return;}
