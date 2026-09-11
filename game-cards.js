@@ -2047,5 +2047,15 @@ window.GAME_CARDS = [
       "simulator"
     ],
     "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwheeliegames.com%2Fthumb%2Fdeadly-descent.webp&f=1&nofb=1&ipt=04f55b545291a6258ad6fef5c0c4ccaaef88b3ba4ac4529200ab8ebc7b65eb8e"
+  },
+  {
+    "name": "Brotato",
+    "code": "BROTATO",
+    "categories": [
+      "action",
+      "adventure",
+      "arcade"
+    ],
+    "img": "https://upload.wikimedia.org/wikipedia/en/1/11/Brotato_cover.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original"
   }
 ];
