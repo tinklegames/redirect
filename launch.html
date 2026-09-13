@@ -10,7 +10,7 @@
   <p id="launch-status">Opening…</p>
   <a id="launch-link" href="codes.html">Open games</a>
   <script>
-    (() => {
+    window.addEventListener('load', () => {
       const launchURL = new URL('launch.html', location.href).href;
       const codesURL = new URL('codes.html', location.href).href;
       // This must start as a top-level page on the game site's origin.
@@ -23,22 +23,28 @@
         link.rel = 'noopener';
         return;
       }
-      try {
-        const blank = window.open('about:blank', '_self');
-        if (!blank) throw new Error('Could not open the page.');
-        blank.document.open();
+      const button = document.createElement('button');
+      button.textContent = 'Continue to games';
+      document.getElementById('launch-status').textContent = 'Continue to open games in a blank tab.';
+      document.body.prepend(button);
+      button.addEventListener('click', () => {
+        const blank = window.open('about:blank', '_blank');
+        if (!blank) {
+          document.getElementById('launch-status').textContent = 'Allow pop-ups for this site, then click Continue to games again.';
+          return;
+        }
         blank.document.write(`<!doctype html><html lang="en"><head>
           <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
           <title>History Study Guide</title>
           <link rel="icon" href="https://cdn-1.webcatalog.io/catalog/quizlet/quizlet-icon.png">
           <style>html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#000}iframe{display:block;width:100%;height:100%;border:0}</style>
           </head><body><iframe id="games" title="Games" allow="clipboard-write; fullscreen" allowfullscreen></iframe></body></html>`);
-        blank.document.getElementById('games').src = codesURL;
         blank.document.close();
-      } catch (error) {
-        location.replace(codesURL);
-      }
-    })();
+        blank.document.getElementById('games').src = codesURL;
+        blank.opener = null;
+        document.getElementById('launch-status').textContent = 'Games opened in a blank tab.';
+      });
+    }, {once: true});
   </script>
 </body>
 </html>
