@@ -13,10 +13,11 @@ function launch({embedded=false,blocked=false}={}){
  vm.runInNewContext(source,{window,document,location,URL});
  return {elements,calls,click};
 }
-test('A user click opens a blank window with a fixed same-origin game destination',()=>{
- const {elements,calls,click}=launch();assert.equal(calls.length,0);click();
+test('Launcher automatically opens a blank window with a fixed same-origin game destination',()=>{
+ const {elements,calls}=launch();
  assert.deepEqual(calls[0],['about:blank','_blank']);
- assert.equal(elements.games.src,'https://tinklegames.github.io/redirect/codes.html');
+ assert.match(calls[1][1],/src="https:\/\/tinklegames.github.io\/redirect\/codes.html"/);
+ assert.doesNotMatch(calls[1][1],/other.example/);
  assert.match(calls[1][1],/History Study Guide/);
 });
 test('Embedding the launcher offers a top-level launch',()=>{
@@ -25,6 +26,6 @@ test('Embedding the launcher offers a top-level launch',()=>{
  assert.equal(elements['launch-link'].target,'_blank');
 });
 test('Blocked popups explain how to retry without silently opening the ordinary site',()=>{
- const {elements,calls,click}=launch({blocked:true});click();assert.equal(calls.length,1);
+ const {elements,calls}=launch({blocked:true});assert.equal(calls.length,1);
  assert.match(elements['launch-status'].textContent,/Allow pop-ups/);
 });
