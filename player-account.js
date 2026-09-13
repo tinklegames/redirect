@@ -53,6 +53,7 @@
  async function load(){
   const response=await call('load');
   if(response.deleted){accountDeleted();return;}
+  if(!response.wallet&&state)throw Error('Your account could not be loaded. Please try again.');
   if(!response.wallet||!state||response.wallet.username!==state.username||response.wallet.revision>=state.revision)state=response.wallet;
   applyBan(response.ban);
   if(isBanned())return;
@@ -101,9 +102,9 @@
    const useEmulators=['localhost','127.0.0.1'].includes(location.hostname)&&(new URLSearchParams(location.search).get('emulator')==='1'||sessionStorage.getItem('tinkle.emulator')==='1');
    if(useEmulators)sessionStorage.setItem('tinkle.emulator','1');
    const config=useEmulators?{...window.TINKLE_PLAYER_CONFIG.firebase,projectId:'demo-tinkle',apiKey:'demo-api-key',authDomain:'demo-tinkle.firebaseapp.com'}:window.TINKLE_PLAYER_CONFIG.firebase;
-   authTools=a;const app=appTools.initializeApp(config,'tinkle-player');auth=a.getAuth(app);backend=spark.createBackend(app,a,auth,useEmulators,wallet=>{if(!deleted&&state&&wallet.revision>=state.revision){state=wallet;changed();}},ban=>{if(!deleted)applyBan(ban);},accountDeleted);
+   authTools=a;const app=appTools.initializeApp(config,'tinkle-player');auth=a.initializeAuth(app,{persistence:[a.browserLocalPersistence,a.indexedDBLocalPersistence]});backend=spark.createBackend(app,a,auth,useEmulators,wallet=>{if(!deleted&&state&&wallet.revision>=state.revision){state=wallet;changed();}},ban=>{if(!deleted)applyBan(ban);},accountDeleted);
    if(useEmulators){a.connectAuthEmulator(auth,'http://127.0.0.1:9099');}
-   await a.setPersistence(auth,a.browserLocalPersistence);
+   // Choose durable storage before restoration; do not move a live session between stores.
    import('./player-comms.js?v=20260911-live-v3').then(module=>module.mount(app,auth,a)).catch(error=>console.warn('Messages and polls unavailable:',error));
    a.onAuthStateChanged(auth,async user=>{
     if(busy)return;
@@ -115,5 +116,7 @@
  }
  setInterval(()=>{if(wasBanned&&!isBanned())load().catch(()=>{});},1000);
  init();
+ window.addEventListener('pageshow',()=>{window.TinkleAccount.refresh().catch(()=>{});});
+ window.addEventListener('online',()=>{window.TinkleAccount.refresh().catch(()=>{});});
  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&state)window.TinkleAccount.refresh().catch(()=>{});});
 })();

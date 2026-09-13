@@ -6,13 +6,13 @@ const tick=()=>new Promise(resolve=>setImmediate(resolve));
 async function page(response){
  const elements=new Map();
  const element=id=>{if(!elements.has(id))elements.set(id,{hidden:false,open:false,value:'',textContent:'',setAttribute(){},addEventListener(){},showModal(){this.open=true;this.opens=(this.opens||0)+1;},close(){this.open=false;}});return elements.get(id);};
- let restore;const user={uid:'saved-user'};
+ let restore,persistence;const user={uid:'saved-user'};
  const context={window:{TINKLE_PLAYER_CONFIG:{firebase:{}}},document:{getElementById:element,createElement:()=>element('player-gate'),body:{append(){}},addEventListener(){}},location:{hostname:'example.com',search:''},sessionStorage:{getItem:()=>null},crypto:{randomUUID:()=> 'test'},Event:class{},setInterval(){},setTimeout,URL,URLSearchParams,Blob,console};
- context.window.dispatchEvent=()=>{};
- context.modules=[{initializeApp:()=>({})},{getAuth:()=>({currentUser:user}),setPersistence:async()=>{},onAuthStateChanged:(_,callback)=>{restore=callback;}},{createBackend:()=>({call:async()=>{if(response instanceof Error)throw response;return response;},watch(){}})}];
+ context.window.dispatchEvent=()=>{};context.window.addEventListener=()=>{};
+ context.modules=[{initializeApp:()=>({})},{browserLocalPersistence:"local",indexedDBLocalPersistence:"indexedDB",initializeAuth:(_,options)=>{persistence=options.persistence;return {currentUser:user};},onAuthStateChanged:(_,callback)=>{restore=callback;}},{createBackend:()=>({call:async()=>{if(response instanceof Error)throw response;return typeof response==='function'?response():response;},watch(){}})}];
  const source=fs.readFileSync('player-account.js','utf8').replace(/const \[appTools,a,spark\]=await Promise\.all\(\[.*?\]\);/,'const [appTools,a,spark]=await Promise.resolve(modules);');
  vm.runInNewContext(source,context);await tick();
- return {gate:element('player-gate'),element,restore:()=>restore(user),account:context.window.TinkleAccount};
+ return {gate:element('player-gate'),element,restore:()=>restore(user),account:context.window.TinkleAccount,persistence};
 }
 test('Returning accounts never see the username dialog during restoration or navigation',async()=>{
  for(let i=0;i<3;i++){
@@ -44,4 +44,23 @@ test('Deleted accounts see the explanation and fresh username form',async()=>{
  assert.equal(p.gate.open,true);assert.equal(p.account.profile,null);
  assert.equal(p.element('player-form').hidden,false);
  assert.match(p.element('player-status').textContent,/account was deleted/);
+});
+
+test('Auth selects persistent storage before restoring existing local sessions',async()=>{
+ const p=await page({wallet:{username:'Player',revision:1},ban:null});
+ assert.deepEqual(Array.from(p.persistence),['local','indexedDB']);
+ await p.restore();assert.equal(p.account.profile.username,'Player');
+});
+test('Returning from a game cannot turn a missing wallet response into a new signup',async()=>{
+ let wallet={username:'Player',revision:1};
+ const p=await page(()=>({wallet,ban:null}));await p.restore();wallet=null;
+ await assert.rejects(p.account.refresh(),/could not be loaded/);
+ assert.equal(p.account.profile.username,'Player');assert.equal(p.gate.open,false);
+});
+test('Code entry and separate games retain their blank wrappers',()=>{
+ const codes=fs.readFileSync('codes.html','utf8');
+ const start=codes.indexOf('const freshBtn');const end=codes.indexOf('const moviesButton',start);
+ assert.match(codes.slice(start,end),/window.open\("about:blank", "_self"\)/);
+ const index=fs.readFileSync('index.html','utf8');
+ assert.match(index,/window.open\('about:blank', '_blank'\)/);
 });

@@ -11,7 +11,7 @@
      <link rel="stylesheet" href="token-rewards.css?v=20260910-ui">
      <script src="token-rewards-config.js" defer></script>
      <script src="token-rewards-rules.js?v=20260910-accounts" defer></script>
-     <script src="player-config.js" defer></script><script src="shop-catalog.js" defer></script><script src="player-account.js?v=20260911-live-v3" defer></script><script src="player-cosmetics.js?v=20260910-accounts" defer></script><script src="tinkle-wallet.js?v=20260910-accounts" defer></script>
+     <script src="player-config.js" defer></script><script src="shop-catalog.js" defer></script><script src="player-account.js?v=20260913-persistence" defer></script><script src="player-cosmetics.js?v=20260910-accounts" defer></script><script src="tinkle-wallet.js?v=20260910-accounts" defer></script>
      <script src="token-rewards.js?v=20260910-accounts" defer></script>
      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -4641,100 +4641,54 @@
              localStorage.setItem("loaderSkipTime", Date.now().toString());
 
              const newDoc = window.open("about:blank", "_self");
-
              if (newDoc) {
                  newDoc.document.write(`
 <html>
     <head>
         <title>Tinkle Party Codes</title>
         <style>
-            body {
-                margin: 0;
-                background-color: black;
-                overflow: hidden;
-                font-family: Arial, sans-serif;
-            }
-            iframe {
-                border: none;
-                width: 100vw;
-                height: 100vh;
-            }
+            body { margin: 0; background-color: black; overflow: hidden; font-family: Arial, sans-serif; }
+            iframe { border: none; width: 100vw; height: 100vh; }
             .back-button {
-                position: fixed;
-                top: 12px;
-                left: 12px;
-                background: rgba(255,255,255,0.08);
-                border: 1px solid rgba(255,255,255,0.3);
-                color: white;
-                font-size: 14px;
-                padding: 8px 16px;
-                border-radius: 8px;
-                cursor: pointer;
-                z-index: 1000;
-                backdrop-filter: blur(8px);
-                transition: all 0.4s ease;
-                opacity: 0;
-                transform: translateY(-8px);
-                animation: fadeIn 0.6s ease forwards;
-                animation-delay: 0.5s;
-                text-decoration: none;
-                display: inline-block;
+                position: fixed; top: 12px; left: 12px;
+                background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.3);
+                color: white; font-size: 14px; padding: 8px 16px; border-radius: 8px;
+                cursor: pointer; z-index: 1000; backdrop-filter: blur(8px);
+                transition: all 0.4s ease; opacity: 0; transform: translateY(-8px);
+                animation: fadeIn 0.6s ease forwards; animation-delay: 0.5s;
+                text-decoration: none; display: inline-block;
             }
-            .back-button:hover {
-                background: rgba(255,255,255,0.25);
-                transform: scale(1.05);
-            }
-            .back-button.hidden {
-                opacity: 0;
-                pointer-events: none;
-                transform: translateY(-8px);
-                animation: none;
-            }
-            @keyframes fadeIn {
-                from { opacity: 0; transform: translateY(-8px); }
-                to   { opacity: 1; transform: translateY(0); }
-            }
+            .back-button:hover { background: rgba(255,255,255,0.25); transform: scale(1.05); }
+            .back-button.hidden { opacity: 0; pointer-events: none; transform: translateY(-8px); animation: none; }
+            @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
         </style>
-     </head>
-
-     <body>
-         <button class="back-button" onclick="window.location.href='${returnURL}'">🔙 Go Back</button>
-         <iframe id="gameFrame" src="${codeSiteURL}" allowfullscreen></iframe>
-         <script>
+    </head>
+    <body>
+        <button class="back-button" onclick="window.location.href='${returnURL}'">🔙 Go Back</button>
+        <iframe id="gameFrame" src="${codeSiteURL}" allowfullscreen></iframe>
+        <script>
             const backButton = document.querySelector('.back-button');
             const gameFrame = document.getElementById('gameFrame');
-            
             document.addEventListener('keydown', function(e) {
                 if (e.key === '\\\\' || e.keyCode === 220) {
                     e.preventDefault();
                     e.stopPropagation();
                     backButton.classList.remove('hidden');
                     gameFrame.src = 'about:blank';
-                    setTimeout(() => {
-                        gameFrame.src = '${codeSiteURL}';
-                    }, 50);
+                    setTimeout(() => { gameFrame.src = '${codeSiteURL}'; }, 50);
                 }
             }, true);
-            
             window.addEventListener('message', function(event) {
-                if (event.data === 'game_started') {
-                    backButton.classList.add('hidden');
-                } else if (event.data === 'game_ended') {
-                    backButton.classList.remove('hidden');
-                }
+                if (event.data === 'game_started') backButton.classList.add('hidden');
+                else if (event.data === 'game_ended') backButton.classList.remove('hidden');
             });
-window.addEventListener("message", (event) => {
-    if (event.data === "hide_back_button") {
-        document.querySelector(".back-button")?.classList.add("hidden");
-    }
-});
-
-
-         <\/script>
-     </body>
-
- </html>
- `);
+            window.addEventListener('message', (event) => {
+                if (event.data === 'hide_back_button') document.querySelector('.back-button')?.classList.add('hidden');
+            });
+        <\/script>
+    </body>
+</html>
+`);
                  newDoc.document.close();
              } else {
                  alert("Redirect blocked — enable pop-ups for this site.");
