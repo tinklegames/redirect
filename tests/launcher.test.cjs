@@ -7,7 +7,7 @@ function launch({embedded=false,blocked=false}={}){
  const elements={games:{},'launch-link':{},'launch-status':{}};
  const calls=[];let click;
  const document={getElementById:id=>elements[id],createElement:()=>({addEventListener:(_,fn)=>click=fn}),body:{prepend(){}},write(html){calls.push(['write',html]);},close(){}};
- const window={document,addEventListener:(_,fn)=>fn(),open(...args){calls.push(args);return blocked?null:{document};}};
+ const window={document,close(){calls.push(['close-launcher']);},addEventListener:(_,fn)=>fn(),open(...args){calls.push(args);return blocked?null:{document};}};
  window.self=window;window.top=embedded?{}:window;
  const location={href:'https://tinklegames.github.io/redirect/launch.html?target=https://other.example'};
  vm.runInNewContext(source,{window,document,location,URL});
@@ -19,6 +19,7 @@ test('Launcher automatically opens a blank window with a fixed same-origin game 
  assert.match(calls[1][1],/src="https:\/\/tinklegames.github.io\/redirect\/codes.html"/);
  assert.doesNotMatch(calls[1][1],/other.example/);
  assert.match(calls[1][1],/History Study Guide/);
+ assert.deepEqual(calls.at(-1),['close-launcher']);
 });
 test('Embedding the launcher offers a top-level launch',()=>{
  const {elements,calls}=launch({embedded:true});assert.equal(calls.length,0);

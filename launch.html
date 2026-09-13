@@ -39,6 +39,9 @@
       blank.document.close();
       blank.opener = null;
       document.getElementById('launch-status').textContent = 'Games opened in a blank tab. You can close this launcher.';
+      // The Play button opens this tab, so it can close after handing off.
+      // Keep the message above for browsers that refuse to close a manually opened tab.
+      window.close();
     }, {once: true});
   </script>
 </body>
