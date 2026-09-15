@@ -2057,5 +2057,13 @@ window.GAME_CARDS = [
       "arcade"
     ],
     "img": "https://upload.wikimedia.org/wikipedia/en/1/11/Brotato_cover.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original"
+  },
+  {
+    "name": "Fear Assessment",
+    "code": "FEAR",
+    "categories": [
+      "horror"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimages.igdb.com%2Figdb%2Fimage%2Fupload%2Ft_cover_big_2x%2Fco6nop.jpg&f=1&nofb=1&ipt=2d0e6cc1f5e9a6173dc3a307ffcbae55d51fb27c7e61d4651ca4627244bd252b"
   }
 ];
