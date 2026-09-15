@@ -539,14 +539,6 @@ window.GAME_CARDS = [
     "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFxZAeqObxw3k1vtmdAeWJ9WDgcqjFhLbmiQ&s"
   },
   {
-    "name": "Gladihoppers",
-    "code": "GLADI",
-    "categories": [
-      "arcade"
-    ],
-    "img": "https://play-lh.googleusercontent.com/HUuFbIPERNbpW2Q72WIqiJ8bKDzIgT_C4PnYvMBuH0wC3B_KvpKmumm1FXhZj3jmRHw"
-  },
-  {
     "name": "Red Ball 4",
     "code": "RB4",
     "categories": [
