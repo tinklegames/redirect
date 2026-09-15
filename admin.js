@@ -121,7 +121,7 @@ function updatePreview() {
 function clearForm() {
     editingIndex = null; $('card-code-picker').value = ''; $('game-form').reset(); buildCategories(); formDirty = false;
     $('editor-title').textContent = 'New game'; $('save-game').textContent = 'Save card →';
-    $('image-query').value = ''; updatePreview();
+    $('image-query').value = ''; updatePreview();window.dispatchEvent(new Event('admin-card-selected'));
 }
 $('new-game').addEventListener('click', () => { if (!formDirty || confirm('Discard unsaved edits?')) clearForm(); });
 $('game-form').addEventListener('input', () => { formDirty = true; updatePreview(); });
@@ -133,7 +133,7 @@ function editCard(index) {
     $('card-code-picker').value = card.code;
     editingIndex = index; $('game-name').value = card.name; $('game-code').value = card.code; $('game-image').value = card.img;
     $('image-query').value = card.name; buildCategories(card.categories); formDirty = false;
-    $('editor-title').textContent = 'Edit game'; $('save-game').textContent = 'Save changes →'; updatePreview();
+    $('editor-title').textContent = 'Edit game'; $('save-game').textContent = 'Save changes →'; updatePreview();window.dispatchEvent(new Event('admin-card-selected'));
     $('game-form').scrollIntoView({ behavior: 'smooth', block: 'center' }); $('game-name').focus({ preventScroll: true });
 }
 function renderCatalog() {
@@ -317,3 +317,5 @@ $('reset-clickData').onclick = () => action($('reset-clickData'), async () => {
 });
 const imageChecker = AdminImageChecker.mount({ getCards: () => cards, editCard });
 buildCategories(); renderCatalog(); updatePreview(); switchTab('games');
+
+AdminGenres.mount({getName:()=>$('game-name').value,apply:categories=>{buildCategories(categories);updatePreview();},onDirty:()=>{formDirty=true;}});

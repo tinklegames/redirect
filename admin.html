@@ -53,7 +53,7 @@
           <form id="game-form">
             <div class="field-row"><div><label for="game-name">Game name</label><input id="game-name" placeholder="e.g. Minecraft" maxlength="120" required></div><div><label for="game-code">Code</label><input id="game-code" placeholder="MINECRAFT" maxlength="40" pattern="[A-Z0-9_!\-]+" required><small>Letters, numbers, !, _ or -</small></div></div>
             <button id="edit-destination" type="button" class="subtle">Edit this code’s destination ↗</button>
-            <fieldset><legend>Categories <span class="muted">· choose one or more</span></legend><div id="categories" class="category-options"></div></fieldset>
+            <fieldset><legend>Categories <span class="muted">· choose one or more</span></legend><div id="categories" class="category-options"></div><p id="genre-status" class="muted small" role="status">Categories are suggested after you enter a game name.</p><div class="file-actions"><button id="genre-retry" type="button" class="subtle">Look up genres</button><a id="genre-source" target="_blank" rel="noopener" hidden>View genre source ↗</a></div></fieldset>
             <label for="game-image">Cover image URL</label><input id="game-image" type="url" placeholder="Choose an image below or paste a URL" required>
             <div class="form-footer"><span id="save-hint" class="muted">Saves the complete game-cards.js file.</span><button class="primary" id="save-game">Save card →</button></div>
           </form>
@@ -123,7 +123,8 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 <script src="admin-image-checker.js"></script>
 <script src="admin-data.js"></script>
-<script src="admin.js?v=20260915-code-picker"></script>
+<script src="admin-genres.js?v=20260915"></script>
+<script src="admin.js?v=20260915-genres"></script>
 <script src="online-players.js?v=20260911"></script>
 <script src="moderation-core.js?v=20260910-give-tokens"></script><script src="admin-players.js?v=20260911-messages"></script>
 <script src="admin-comms.js?v=20260911-live-v3"></script>

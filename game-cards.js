@@ -2083,5 +2083,73 @@ window.GAME_CARDS = [
       "adventure"
     ],
     "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fnargames.com%2Fstorage%2Fuploads%2Fthumbs%2Fbacon-may-die.webp&f=1&nofb=1&ipt=9db331bbc7c2f379433d92ecc7ba9a7e4f41308edbc2b8d49ffe971a79a06be1"
+  },
+  {
+    "name": "Bounce Masters",
+    "code": "BOUNCEMASTERS",
+    "categories": [
+      "arcade"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fassets-prd.ignimgs.com%2F2025%2F09%2F08%2Fbouncemasters-1757365979501.jpg&f=1&nofb=1&ipt=c714b7ad15991aae0d78d870469783226a540c04d02da16481b6ecc1a079caaa"
+  },
+  {
+    "name": "Climb For Brainrots",
+    "code": "CFB",
+    "categories": [
+      "multiplayer",
+      "simulator"
+    ],
+    "img": "https://tse2.mm.bing.net/th/id/OIP.7WlsY8jf5bCuoFWAcCgjcAHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+  },
+  {
+    "name": "Dumb Ways to Die",
+    "code": "DWTD1",
+    "categories": [
+      "arcade",
+      "puzzle"
+    ],
+    "img": "https://upload.wikimedia.org/wikipedia/en/8/82/Dumb_Ways_to_Die.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original"
+  },
+  {
+    "name": "Jeffrey Epstein's Basics",
+    "code": "EPSTEN",
+    "categories": [
+      "horror",
+      "puzzle"
+    ],
+    "img": "https://i.ytimg.com/vi/j705OWaQkIU/hqdefault.jpg"
+  },
+  {
+    "name": "Get Yoked",
+    "code": "GETYOKED",
+    "categories": [
+      "simulator"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftopgames.gg%2Fdata%2Fimage%2Fgame%2Fget-yoked%2Fget-yoked.png&f=1&nofb=1&ipt=a81cb46c860a483d9218df84ade4085941f0f7c94ec2acd9006113279318bf97"
+  },
+  {
+    "name": "Gladihoppers",
+    "code": "GLADIHOPPERS",
+    "categories": [
+      "action"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.seeles.ai%2Fmedia%2Fprod%2Fgame%2Fcover%2F513_69aa0cce-689e-4f0c-a6a5-9c0a5322c7ad.jpg&f=1&nofb=1&ipt=71acc8f25d320b1ffd0b5d0b836f267b008a8f17b0ad6608a5abf7f7d2394286"
+  },
+  {
+    "name": "Granny 3",
+    "code": "GRANNY3",
+    "categories": [
+      "horror",
+      "puzzle"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fgranny-games.com%2Fdata%2Fimage%2Fgranny-3-return-the-school-1.jpg&f=1&nofb=1&ipt=9888a09d012ec22d63a9846aeb478a0ae8c28557ee51b633d52e5f9ef5bf9144"
+  },
+  {
+    "name": "Hooked",
+    "code": "HOOKED",
+    "categories": [
+      "simulator"
+    ],
+    "img": "https://i.ibb.co/ycJhNjT8/Screenshot-2026-09-15-at-13-04-59.png"
   }
 ];
