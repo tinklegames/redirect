@@ -2151,5 +2151,149 @@ window.GAME_CARDS = [
       "simulator"
     ],
     "img": "https://i.ibb.co/ycJhNjT8/Screenshot-2026-09-15-at-13-04-59.png"
+  },
+  {
+    "name": "Kart Bros",
+    "code": "KARTBROS",
+    "categories": [
+      "arcade"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%2Fid%2FOIP.psgQH-gb7gmrs2M8r8HU-AHaHa%3Fr%3D0%26pid%3DApi&f=1&ipt=c15b280c48363e4041e6894a694558e1fbc3eeeae79f7c604cf7ee7d13c1d547"
+  },
+  {
+    "name": "Kirby ~ Soft & Wet",
+    "code": "KSAW",
+    "categories": [
+      "adventure",
+      "simulator"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn2.steamgriddb.com%2Fgrid%2Fb03bb2f1b9b43d654da5069fc827dcce.png&f=1&nofb=1&ipt=3aed5ff23a056cb77e23c8c04511a544ca65b2e981463b55daee20eae48b7741"
+  },
+  {
+    "name": "Little Alchemy 2",
+    "code": "LA2",
+    "categories": [
+      "puzzle"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fassets-prd.ignimgs.com%2F2022%2F04%2F22%2Flittlealchemy2-1650647752995.jpg&f=1&nofb=1&ipt=32295265c134bf63be42e9f0e040975bd5fcefd8604472e3c70caf848c2312c9"
+  },
+  {
+    "name": "Minesweeper+",
+    "code": "MINE",
+    "categories": [
+      "puzzle"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fminesweeperplus.games%2Fminesweeper-icon.jpg&f=1&nofb=1&ipt=988478d7d19fda06086f81ad816802ae0817f925aa7b068425e324d9756e1038"
+  },
+  {
+    "name": "Ping Pong Chaos",
+    "code": "PINGPONG",
+    "categories": [
+      "arcade",
+      "multiplayer"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimages.rocketgames.io%2Fuploads%2Fgames%2Fp%2Fping-pong-chaos%2Fping-pong-chaos.d80679.jpg%3Fw%3D204%26dpr%3D2&f=1&nofb=1&ipt=2d1530b2c7bd97e48e1e19b11af7847e7042f323bbbe8aaa3c3aa69512aa854a"
+  },
+  {
+    "name": "Pou",
+    "code": "POU",
+    "categories": [
+      "simulator"
+    ],
+    "img": "https://tse2.mm.bing.net/th/id/OIP.9KbzfK90mcVS7d6SiftoagHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+  },
+  {
+    "name": "Steal A Brainrot",
+    "code": "SAB",
+    "categories": [
+      "action",
+      "multiplayer",
+      "simulator"
+    ],
+    "img": "https://upload.wikimedia.org/wikipedia/en/7/77/Steal_a_Brainrot_thumbnail.webp?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original"
+  },
+  {
+    "name": "Sausage Flip",
+    "code": "SAUSAGE",
+    "categories": [
+      "arcade",
+      "puzzle"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fnargames.com%2Fstorage%2Fuploads%2Fthumbs%2Fsausage-flip.webp&f=1&nofb=1&ipt=56af359c4f1a5a848309dfecc703751399d8c83f9d0e9640ce55996fc55420b3"
+  },
+  {
+    "name": "Tap Road",
+    "code": "TAPROAD",
+    "categories": [
+      "arcade"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP._djEfOd3EuVrNiegm6v6awHaHa%3Fr%3D0%26pid%3DApi&f=1&ipt=cad588a817d4f6b92abb82751337b87e1b69251ca87b9c07c90d94f04ba9ad33"
+  },
+  {
+    "name": "Telephone Trouble",
+    "code": "TELEPHONE",
+    "categories": [
+      "puzzle",
+      "simulator"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimg.itch.zone%2FaW1nLzYyNTYzNTkucG5n%2Foriginal%2F59ZlvH.png&f=1&nofb=1&ipt=fe3ec9933509c8ec5584da146c1f28ea85cc36110fbc125932864d9199c7f146"
+  },
+  {
+    "name": "The Impossible Quiz 2",
+    "code": "TIQ2",
+    "categories": [
+      "puzzle"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fonline-games.io%2Fwp-content%2Fuploads%2F2025%2F12%2Fthe-impossible-quiz-2.webp&f=1&nofb=1&ipt=720456e42e9bc14e447ecd6084a3903f0c1e9ace6db25e0c3cf79d9eebd04e28"
+  },
+  {
+    "name": "Tube Jumpers",
+    "code": "TUBE",
+    "categories": [
+      "arcade",
+      "multiplayer"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwackyflip2.org%2Fdata%2Fimage%2Fgame%2Ftube-jumpers%2Ftube-jumpers.png&f=1&nofb=1&ipt=093b500b5959d90beebd2a6f1724f642596fe6ec1ab760b57e19c6d619032a05"
+  },
+  {
+    "name": "Wacky Flip",
+    "code": "WACKYFLIP",
+    "categories": [
+      "arcade"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftopgames.gg%2Fdata%2Fimage%2Fgame%2Fwacky-flip.png&f=1&nofb=1&ipt=71b8c4ec9d153f5c4ef4f5b41d1bb461777609a77390f675a6ddcea6ad34b190"
+  },
+  {
+    "name": "Web Fishing",
+    "code": "WEBFISH",
+    "categories": [
+      "adventure",
+      "simulator"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwebfishing-game.io%2Fdata%2Fimage%2Fgame%2Fwebfishing.jpg&f=1&nofb=1&ipt=d3f05dfef0b712f530e40ae02120907759f704f6503b281ad0209b5b433ebe49"
+  },
+  {
+    "name": "Whack Your Computer",
+    "code": "WHACKCOMPUTER",
+    "categories": [
+      "simulator"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fgames.lol%2Fwp-content%2Fuploads%2F2023%2F09%2Fwhack-your-computer-on-pc.jpg&f=1&nofb=1&ipt=95014cdca33707b80db65d348b43d647178aa8da3c46ab48da7070ac358109dd"
+  },
+  {
+    "name": "Whack The Thief",
+    "code": "WHACKTHIEF",
+    "categories": [
+      "simulator"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ffiles.gamezhero.com%2Fgame%2Fe5e%2F5fb%2Fe5e5fb1ec626619a%2Fimages%2F240%2Fwhackthethief.jpg&f=1&nofb=1&ipt=1289713e3e433d1c21855ca1c2880e813d00e60652ef9aee0a8437ba1caf837e"
+  },
+  {
+    "name": "Wordle",
+    "code": "WORDLE",
+    "categories": [
+      "puzzle"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic0.gamerantimages.com%2Fwordpress%2Fwp-content%2Fuploads%2F2023%2F11%2Fconnections-how-to-play-wordle-new-york-times-solutions.jpg&f=1&nofb=1&ipt=e0514ba31f5f1ff3253391dea21b4a370c9b01f6f99c6d7b01587da9b1c3f975"
   }
 ];
