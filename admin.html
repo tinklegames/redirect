@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tinkle · Admin</title><link rel="stylesheet" href="site-theme.css"><link rel="stylesheet" href="admin.css?v=20260911-online"><script src="admin-theme.js" defer></script>
+<title>Tinkle · Admin</title><link rel="stylesheet" href="site-theme.css"><link rel="stylesheet" href="admin.css?v=20260915-code-cards"><script src="admin-theme.js" defer></script>
 </head>
 <body>
 <section id="login-box" class="login">
@@ -65,10 +65,10 @@
       <details class="panel"><summary>How saving works</summary><p>Open your local <strong>game-cards.js</strong> to edit it directly. If your browser cannot write local files, Save card downloads the updated file instead. Upload that file to your website when ready.</p><p>New cards go at the end so existing favorites keep working. Use Codes & links to edit the matching destination in <strong>codes.json</strong>.</p><p>Only card data is changed. Keep your existing game-cards.js filename.</p></details>
     </section>
     <section id="panel-codes" class="tab-panel" hidden>
-      <div class="page-heading"><div><p class="eyebrow">DESTINATIONS</p><h1>Codes & links</h1><p class="muted">Edit codes.json locally, then upload the saved file.</p></div></div>
+      <div class="page-heading"><div><p class="eyebrow">DESTINATIONS</p><h1>Codes & links</h1><p class="muted">Manage destinations and their matching game cards. Changes save to codes.json and game-cards.js.</p></div></div>
       <div class="panel file-toolbar"><div><strong>codes.json</strong><p id="codes-file-status" role="status">Loading website copy…</p></div><div class="file-actions"><button id="open-codes">Open local file</button><button id="download-codes" disabled>Download codes.json</button></div><input id="codes-upload" type="file" accept=".json" hidden></div>
-      <form id="code-form" class="panel"><div class="panel-heading"><h2>Game destination</h2><button id="new-code" type="button">New code</button></div><label for="destination-code">Code</label><input id="destination-code" required maxlength="40" pattern="[A-Z0-9_!\-]+"><label for="destination-url">Game URL</label><input id="destination-url" type="url" required placeholder="https://…"><label class="check-line"><input id="destination-iframe" type="checkbox">Allow opening in an iframe</label><p class="muted small">Use the same code as the game card. Renaming a code here does not rename its card.</p><button id="save-code" class="primary" disabled>Save code</button></form>
-      <section class="panel"><div class="panel-heading"><h2>Saved codes</h2><input id="codes-search" type="search" placeholder="Find code or URL…" aria-label="Find code"></div><div id="codes-list" class="catalog-list"></div></section>
+      <form id="code-form" class="panel"><div class="panel-heading"><h2>Game destination</h2><button id="new-code" type="button">New code</button></div><label for="destination-code">Code</label><input id="destination-code" required maxlength="40" pattern="[A-Z0-9_!\-]+"><label for="destination-url">Game URL</label><input id="destination-url" type="url" required placeholder="https://…"><label class="check-line"><input id="destination-iframe" type="checkbox">Allow opening in an iframe</label><p class="muted small">Use the same code as the game card. Renaming a code here does not rename its card.</p><div class="file-actions"><button id="save-code" class="primary" disabled>Save code</button><button id="code-card" type="button" disabled>Create game card</button></div><p class="muted small">Save the code first, then create its card with the code already filled in.</p></form>
+      <section class="panel"><div class="panel-heading"><h2>Game codes &amp; cards</h2><input id="codes-search" type="search" placeholder="Find game, code or URL…" aria-label="Find code"></div><div id="codes-list" class="catalog-list"></div></section>
       <details class="panel"><summary>Check game links</summary><p class="muted small">Checks saved destinations. A reachable URL is not a guarantee the game works. Hosts that block browser checks are marked unverified.</p><div class="file-actions"><button id="check-links" disabled>Check all links</button><button id="stop-links" disabled>Stop</button><button id="export-links" disabled>Download report</button></div><p id="links-status" role="status">Ready.</p><div id="links-results" class="catalog-list"></div></details>
     </section>
     <section id="panel-stats" class="tab-panel" hidden>
@@ -120,11 +120,11 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 <script src="admin-image-checker.js"></script>
 <script src="admin-data.js"></script>
-<script src="admin.js?v=20260910-moderation"></script>
+<script src="admin.js?v=20260915-code-cards"></script>
 <script src="online-players.js?v=20260911"></script>
 <script src="moderation-core.js?v=20260910-give-tokens"></script><script src="admin-players.js?v=20260911-messages"></script>
 <script src="admin-comms.js?v=20260911-live-v3"></script>
-<script src="admin-tools.js?v=20260911-live-v3"></script>
+<script src="admin-tools.js?v=20260915-code-cards"></script>
 <script src="event-core.js"></script>
 <script src="admin-events.js"></script>
 </body>

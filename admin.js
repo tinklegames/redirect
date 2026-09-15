@@ -153,6 +153,7 @@ function renderCatalog() {
         $('catalog-list').append(button);
     });
     if (!count) $('catalog-list').textContent = 'No games match your search.';
+    window.dispatchEvent(new Event('admin-cards-changed'));
 }
 $('catalog-search').addEventListener('input', renderCatalog);
 function download(cardsToSave) {

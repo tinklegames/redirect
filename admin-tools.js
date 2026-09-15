@@ -8,25 +8,50 @@ function syncUndoButton(){ $('undo-edit').disabled = !fileHistory.length || file
 function downloadText(name,text,type='application/json'){
     const url=URL.createObjectURL(new Blob([text],{type}));const link=document.createElement('a');link.href=url;link.download=name;link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
+function cardIndexForCode(code){return cards.findIndex(card=>card.code.toUpperCase()===code.toUpperCase());}
+function cardFromCode(code){
+    if(!codeMap || !Object.hasOwn(codeMap,code))return;
+    const index=cardIndexForCode(code);
+    if(index!==-1){editCard(index);return;}
+    if(formDirty&&!confirm('Discard unsaved card edits and create a card for this code?'))return;
+    clearForm();$('game-code').value=code;formDirty=true;updatePreview();
+    switchTab('games');$('game-form').scrollIntoView({behavior:'smooth',block:'center'});$('game-name').focus({preventScroll:true});
+    notify('Code filled in. Add a name, categories and cover, then save the card.');
+}
+function syncCodeCardButton(){
+    const valid=!!selectedCode&&!!codeMap&&Object.hasOwn(codeMap,selectedCode)&&!codeDirty;
+    $('code-card').disabled=!valid;
+    $('code-card').textContent=valid&&cardIndexForCode(selectedCode)!==-1?'Edit game card':'Create game card';
+}
 function updateCodeList(){
-    $('codes-list').replaceChildren();
+    $('codes-list').replaceChildren();syncCodeCardButton();
     if(!codeMap)return;
     const query=$('codes-search').value.toLowerCase();
     for(const [code,value] of Object.entries(codeMap).sort(([a],[b])=>a.localeCompare(b))){
-        if(!(code+' '+value).toLowerCase().includes(query))continue;
-        const button=document.createElement('button');button.type='button';button.className='catalog-item';
-        const name=document.createElement('strong');name.textContent=code;const detail=document.createElement('small');detail.textContent=AdminData.decode(value).url;
-        const span=document.createElement('span');span.append(name,detail);button.append(span);button.addEventListener('click',()=>editCode(code));$('codes-list').append(button);
+        const index=cardIndexForCode(code),card=index===-1?null:cards[index];
+        if(!(code+' '+value+' '+(card?.name||'')).toLowerCase().includes(query))continue;
+        const row=document.createElement('div');row.className='catalog-item code-card-row';
+        if(card){const img=document.createElement('img');img.src=card.img;img.alt='';img.loading='lazy';img.onerror=()=>{img.style.visibility='hidden';};row.append(img);}
+        const info=document.createElement('span');const name=document.createElement('strong');name.textContent=card?card.name+' · '+code:code;
+        const detail=document.createElement('small');detail.textContent=AdminData.decode(value).url;
+        const status=document.createElement('small');status.textContent=card?'Card ready':'No game card yet';info.append(name,detail,status);
+        const actions=document.createElement('div');actions.className='file-actions';
+        const destination=document.createElement('button');destination.type='button';destination.textContent='Edit code';destination.onclick=()=>editCode(code);
+        const edit=document.createElement('button');edit.type='button';edit.textContent=card?'Edit card':'Create card';edit.onclick=()=>cardFromCode(code);
+        actions.append(destination,edit);row.append(info,actions);$('codes-list').append(row);
     }
+    if(!$('codes-list').children.length)$('codes-list').textContent='No codes match your search.';
 }
+window.addEventListener('admin-cards-changed',updateCodeList);
+$('code-card').onclick=()=>{if(!codeDirty&&selectedCode)cardFromCode(selectedCode);};
 function editCode(code){
     if(codeDirty && !confirm('Discard unsaved destination edits?'))return;
     if(!codeMap || !Object.hasOwn(codeMap,code))return;
     const destination=AdminData.decode(codeMap[code]);selectedCode=code;
-    $('destination-code').value=code;$('destination-url').value=destination.url;$('destination-iframe').checked=destination.iframe;codeDirty=false;
+    $('destination-code').value=code;$('destination-url').value=destination.url;$('destination-iframe').checked=destination.iframe;codeDirty=false;syncCodeCardButton();
     switchTab('codes');$('code-form').scrollIntoView({behavior:'smooth',block:'center'});
 }
-function resetCodeForm(){selectedCode=null;$('code-form').reset();codeDirty=false;}
+function resetCodeForm(){selectedCode=null;$('code-form').reset();codeDirty=false;syncCodeCardButton();}
 function invalidateLinks(){ linkVersion++;linkController?.abort();linkController=null;linkResults=[];$('links-results').replaceChildren();$('links-status').textContent='Destinations changed. Run a new check.';$('check-links').disabled=!codeMap;$('stop-links').disabled=true;$('export-links').disabled=true; }
 async function openCodes(file,handle=null){
     const source=await file.text();const parsed=AdminData.parseCodes(source);
@@ -49,7 +74,7 @@ $('edit-destination').onclick=()=>{
     resetCodeForm();$('destination-code').value=code;switchTab('codes');$('destination-url').focus();
 };
 $('new-code').onclick=()=>{if(!codeDirty||confirm('Discard unsaved destination edits?'))resetCodeForm();};
-$('code-form').oninput=()=>{codeDirty=true;};
+$('code-form').oninput=()=>{codeDirty=true;syncCodeCardButton();};
 $('destination-code').oninput=()=>{$('destination-code').value=$('destination-code').value.toUpperCase();};
 async function writeCodes(next){
     const source=JSON.stringify(next,null,2)+'\n';let handle=codeHandle;let picked=false;

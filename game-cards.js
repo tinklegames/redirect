@@ -2065,5 +2065,14 @@ window.GAME_CARDS = [
       "horror"
     ],
     "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimages.igdb.com%2Figdb%2Fimage%2Fupload%2Ft_cover_big_2x%2Fco6nop.jpg&f=1&nofb=1&ipt=2d0e6cc1f5e9a6173dc3a307ffcbae55d51fb27c7e61d4651ca4627244bd252b"
+  },
+  {
+    "name": "A Dance of Fire and Ice",
+    "code": "ADOFAI",
+    "categories": [
+      "arcade",
+      "puzzle"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.nintendo.com%2Feu%2Fmedia%2Fimages%2Fassets%2Fnintendo_switch_games%2Fadanceoffireandice%2F1x1_ADanceOfFireAndIce_image500w.jpg&f=1&nofb=1&ipt=8962ca6168ee44b0e0a1bfbd2698c40fe3d05e36325b6eea9796e017be864532"
   }
 ];
