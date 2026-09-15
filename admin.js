@@ -119,7 +119,7 @@ function updatePreview() {
     }, 250);
 }
 function clearForm() {
-    editingIndex = null; $('game-form').reset(); buildCategories(); formDirty = false;
+    editingIndex = null; $('card-code-picker').value = ''; $('game-form').reset(); buildCategories(); formDirty = false;
     $('editor-title').textContent = 'New game'; $('save-game').textContent = 'Save card →';
     $('image-query').value = ''; updatePreview();
 }
@@ -130,6 +130,7 @@ function editCard(index) {
     const card = cards[index];
     if (!card || (formDirty && !confirm('Discard unsaved edits and open this card?'))) return;
     switchTab('games');
+    $('card-code-picker').value = card.code;
     editingIndex = index; $('game-name').value = card.name; $('game-code').value = card.code; $('game-image').value = card.img;
     $('image-query').value = card.name; buildCategories(card.categories); formDirty = false;
     $('editor-title').textContent = 'Edit game'; $('save-game').textContent = 'Save changes →'; updatePreview();

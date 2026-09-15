@@ -2074,5 +2074,14 @@ window.GAME_CARDS = [
       "puzzle"
     ],
     "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.nintendo.com%2Feu%2Fmedia%2Fimages%2Fassets%2Fnintendo_switch_games%2Fadanceoffireandice%2F1x1_ADanceOfFireAndIce_image500w.jpg&f=1&nofb=1&ipt=8962ca6168ee44b0e0a1bfbd2698c40fe3d05e36325b6eea9796e017be864532"
+  },
+  {
+    "name": "Bacon May Die",
+    "code": "BMD",
+    "categories": [
+      "action",
+      "adventure"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fnargames.com%2Fstorage%2Fuploads%2Fthumbs%2Fbacon-may-die.webp&f=1&nofb=1&ipt=9db331bbc7c2f379433d92ecc7ba9a7e4f41308edbc2b8d49ffe971a79a06be1"
   }
 ];

@@ -23,8 +23,29 @@ function syncCodeCardButton(){
     $('code-card').disabled=!valid;
     $('code-card').textContent=valid&&cardIndexForCode(selectedCode)!==-1?'Edit game card':'Create game card';
 }
+function populateCardCodePicker(){
+    const picker=$('card-code-picker'),current=$('game-code').value.trim().toUpperCase();
+    picker.replaceChildren();
+    const placeholder=document.createElement('option');placeholder.value='';
+    placeholder.textContent=codeMap?'Choose a saved game code…':'Open codes.json in Codes & links to choose a code';picker.append(placeholder);
+    picker.disabled=!codeMap;
+    if(!codeMap)return;
+    for(const code of Object.keys(codeMap).sort((a,b)=>a.localeCompare(b))){
+        const index=cardIndexForCode(code),option=document.createElement('option');option.value=code;
+        option.textContent=code+(index===-1?' — Create card':' — Edit '+cards[index].name);picker.append(option);
+        if(code.toUpperCase()===current)picker.value=code;
+    }
+}
+function chooseCardCode(code){
+    if(!codeMap||!Object.hasOwn(codeMap,code))return;
+    if(cardIndexForCode(code)!==-1){cardFromCode(code);populateCardCodePicker();return;}
+    if(editingIndex!==null){cardFromCode(code);populateCardCodePicker();return;}
+    // Choosing a code for a new card preserves its name, cover and categories.
+    $('game-code').value=code;formDirty=true;updatePreview();$('game-name').focus();
+}
+$('card-code-picker').onchange=()=>chooseCardCode($('card-code-picker').value);
 function updateCodeList(){
-    $('codes-list').replaceChildren();syncCodeCardButton();
+    $('codes-list').replaceChildren();syncCodeCardButton();populateCardCodePicker();
     if(!codeMap)return;
     const query=$('codes-search').value.toLowerCase();
     for(const [code,value] of Object.entries(codeMap).sort(([a],[b])=>a.localeCompare(b))){
@@ -105,7 +126,7 @@ window.addEventListener('beforeunload',event=>{if(codeDirty){event.preventDefaul
 (async()=>{
     const version=++codesLoadVersion;
     try{const response=await fetch('codes.json',{cache:'no-store',signal:AbortSignal.timeout(10000)});if(!response.ok)throw new Error('Open a local codes.json file to begin.');const source=await response.text();const parsed=AdminData.parseCodes(source);if(version!==codesLoadVersion)return;codeMap=parsed;updateCodeList();$('codes-file-status').textContent='Website copy loaded. Open a local file to save directly.';$('save-code').disabled=false;$('download-codes').disabled=false;$('check-links').disabled=false;}
-    catch(error){if(version===codesLoadVersion)$('codes-file-status').textContent='Could not load website copy. Open your local codes.json.';}
+    catch(error){if(version===codesLoadVersion){$('codes-file-status').textContent='Could not load website copy. Open your local codes.json.';populateCardCodePicker();}}
 })();
 
 // Honest browser link checks: unreadable cross-origin responses are not called broken or working.

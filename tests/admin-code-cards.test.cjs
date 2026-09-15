@@ -5,7 +5,7 @@ const fs=require('node:fs');
 const source=fs.readFileSync('admin-tools.js','utf8');
 function editor(cards=[],dirty=false,confirm=true){
  const nodes={};const calls=[];
- const context={cards,formDirty:dirty,selectedCode:'GAME',codeDirty:false,codeMap:{GAME:'https://example.com|true'},
+ const context={cards,editingIndex:null,formDirty:dirty,selectedCode:'GAME',codeDirty:false,codeMap:{GAME:'https://example.com|true'},
  $:id=>nodes[id]??=( {value:'',scrollIntoView(){},focus(){}}),confirm:()=>confirm,
  clearForm(){calls.push('clear');},updatePreview(){},switchTab(tab){calls.push(tab);},notify(){},editCard(index){calls.push(index);}};
  vm.createContext(context);vm.runInContext(source.slice(source.indexOf('function cardIndexForCode'),source.indexOf('function updateCodeList')),context);
@@ -27,4 +27,13 @@ test('Unsaved destination edits disable the card action until the code is saved'
 });
 test('Unknown codes cannot create cards',()=>{
  const {context,calls}=editor();context.cardFromCode('MISSING');assert.deepEqual(calls,[]);
+});
+
+test('Choosing a saved code for a new card preserves the existing name and cover',()=>{
+ const {context,nodes,calls}=editor();
+ context.$('game-name').value='My game';context.$('game-image').value='https://example.com/cover.png';
+ context.chooseCardCode('GAME');
+ assert.equal(nodes['game-code'].value,'GAME');assert.equal(nodes['game-name'].value,'My game');
+ assert.equal(nodes['game-image'].value,'https://example.com/cover.png');assert.equal(context.formDirty,true);
+ assert.deepEqual(calls,[]);
 });

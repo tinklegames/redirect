@@ -47,6 +47,9 @@
       <div class="editor-layout">
         <div class="panel">
           <div class="panel-heading"><h2 id="editor-title">New game</h2><button type="button" id="new-game" class="subtle">Clear form</button></div>
+          <label for="card-code-picker">Create a card from a saved code</label>
+          <select id="card-code-picker" disabled><option value="">Loading codes…</option></select>
+          <p class="muted small">Choose a code from codes.json, then add the name, categories and cover. Codes with a card open the existing card.</p>
           <form id="game-form">
             <div class="field-row"><div><label for="game-name">Game name</label><input id="game-name" placeholder="e.g. Minecraft" maxlength="120" required></div><div><label for="game-code">Code</label><input id="game-code" placeholder="MINECRAFT" maxlength="40" pattern="[A-Z0-9_!\-]+" required><small>Letters, numbers, !, _ or -</small></div></div>
             <button id="edit-destination" type="button" class="subtle">Edit this code’s destination ↗</button>
@@ -120,11 +123,11 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 <script src="admin-image-checker.js"></script>
 <script src="admin-data.js"></script>
-<script src="admin.js?v=20260915-code-cards"></script>
+<script src="admin.js?v=20260915-code-picker"></script>
 <script src="online-players.js?v=20260911"></script>
 <script src="moderation-core.js?v=20260910-give-tokens"></script><script src="admin-players.js?v=20260911-messages"></script>
 <script src="admin-comms.js?v=20260911-live-v3"></script>
-<script src="admin-tools.js?v=20260915-code-cards"></script>
+<script src="admin-tools.js?v=20260915-code-picker"></script>
 <script src="event-core.js"></script>
 <script src="admin-events.js"></script>
 </body>
