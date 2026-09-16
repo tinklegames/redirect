@@ -1344,7 +1344,7 @@ window.GAME_CARDS = [
       "arcade",
       "multiplayer"
     ],
-    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fretrobowl-26.io%2Fdata%2Fimage%2Fgame%2Ffootball-bros%2Ffootball-bros.png&f=1&nofb=1&ipt=f4d449aaa97575a9fbec8eaa9403ca4dbf3f61dbdecc515bb9da6aa1d2f4355d"
+    "img": "https://tse2.mm.bing.net/th/id/OIP.aqKE9Qx9G-UV7FuKCMFfWwHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
   },
   {
     "name": "BuildNow.GG",
