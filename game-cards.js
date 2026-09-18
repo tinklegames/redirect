@@ -2287,5 +2287,14 @@ window.GAME_CARDS = [
       "puzzle"
     ],
     "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic0.gamerantimages.com%2Fwordpress%2Fwp-content%2Fuploads%2F2023%2F11%2Fconnections-how-to-play-wordle-new-york-times-solutions.jpg&f=1&nofb=1&ipt=e0514ba31f5f1ff3253391dea21b4a370c9b01f6f99c6d7b01587da9b1c3f975"
+  },
+  {
+    "name": "Machine Party",
+    "code": "MPWEB",
+    "categories": [
+      "multiplayer",
+      "puzzle"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fassets-prd.ignimgs.com%2F2026%2F04%2F13%2Fmachine-party-button-1776097913463.jpg&f=1&nofb=1&ipt=3fe30da1bcb9830928f563bb3833de8717e9bbbf6bf3f6bdf3b5c30ae94a77f7"
   }
 ];
