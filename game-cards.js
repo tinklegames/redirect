@@ -2296,5 +2296,67 @@ window.GAME_CARDS = [
       "puzzle"
     ],
     "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fassets-prd.ignimgs.com%2F2026%2F04%2F13%2Fmachine-party-button-1776097913463.jpg&f=1&nofb=1&ipt=3fe30da1bcb9830928f563bb3833de8717e9bbbf6bf3f6bdf3b5c30ae94a77f7"
+  },
+  {
+    "name": "Among Us",
+    "code": "AMOGUS",
+    "categories": [
+      "multiplayer"
+    ],
+    "img": "https://upload.wikimedia.org/wikipedia/en/9/9a/Among_Us_cover_art.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original"
+  },
+  {
+    "name": "60 Seconds!",
+    "code": "60SEC",
+    "categories": [
+      "puzzle",
+      "simulator"
+    ],
+    "img": "https://upload.wikimedia.org/wikipedia/commons/6/6b/60_Seconds%21.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original"
+  },
+  {
+    "name": "Cluster Truck",
+    "code": "CLUSTER",
+    "categories": [
+      "adventure",
+      "arcade"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimage.api.playstation.com%2Fcdn%2FUP0097%2FCUSA06481_00%2F36sNa79pxV859fFg3CU7zFhQ34ThNx8z.png&f=1&nofb=1&ipt=02e0c17764336b14d32d225904644db2c029c2db7c69afe2627fc3b87d638237"
+  },
+  {
+    "name": "Human Expenditure Program",
+    "code": "HEP",
+    "categories": [
+      "horror",
+      "simulator"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2F2games.io%2Fdata%2Fimage%2Fgame%2Fhuman-expenditure-program%2Fhuman-expenditure-program-game.png&f=1&nofb=1&ipt=2807a60063a99bf3e6b3aee84e060737003023e90e6cf45a959b0f6870ae4427"
+  },
+  {
+    "name": "Just Shapes & Beats",
+    "code": "JSB",
+    "categories": [
+      "action",
+      "arcade"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimages.nintendolife.com%2Fee4f16bffa612%2Fjust-shapes-and-beats-cover.cover_large.jpg&f=1&nofb=1&ipt=179a98f622fc0813e55350a791c7791aefab7a083bd1aceb1f5e895c0b96be0e"
+  },
+  {
+    "name": "Totally Accurate Battle Simulator",
+    "code": "TABS",
+    "categories": [
+      "action",
+      "simulator"
+    ],
+    "img": "https://upload.wikimedia.org/wikipedia/en/9/99/Totally_Accurate_Battle_Simulator_logo.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original"
+  },
+  {
+    "name": "Ultrapool",
+    "code": "ULTRAPOOL",
+    "categories": [
+      "puzzle",
+      "simulator"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimg.itch.zone%2FaW1nLzI0Mzk5MzczLnBuZw%3D%3D%2Foriginal%2FJf03w8.png&f=1&nofb=1&ipt=6f747e1d9dc6446d631a7fa3e178f6529782a40013cf63cf6a1e434b273b05c8"
   }
 ];
