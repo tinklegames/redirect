@@ -276,5 +276,7 @@
   "JSB": "https://nawsif.github.io/html/jsb|true",
   "CLUSTER": "https://nawsif.github.io/html/clustertruck|true",
   "TABS": "https://nawsif.github.io/html/tabs|true",
-  "ULTRAPOOL": "https://nawsif.github.io/html/ultrapool|true"
+  "ULTRAPOOL": "https://nawsif.github.io/html/ultrapool|true",
+  "DICE": "https://nawsif.github.io/html/diceamillion|true",
+  "DOODLE": "https://nawsif.github.io/html/doodlejump|true"
 }
