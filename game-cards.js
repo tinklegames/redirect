@@ -2358,5 +2358,21 @@ window.GAME_CARDS = [
       "simulator"
     ],
     "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimg.itch.zone%2FaW1nLzI0Mzk5MzczLnBuZw%3D%3D%2Foriginal%2FJf03w8.png&f=1&nofb=1&ipt=6f747e1d9dc6446d631a7fa3e178f6529782a40013cf63cf6a1e434b273b05c8"
+  },
+  {
+    "name": "Dice A Million",
+    "code": "DICE",
+    "categories": [
+      "simulator"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimages.pcgamingwiki.com%2F2%2F25%2FDice_A_Million_cover.jpg&f=1&nofb=1&ipt=0f50729359d4aca671617a119dbd60fff9bfd8f0e98aea70f445b602cacc78e1"
+  },
+  {
+    "name": "Doodle Jump",
+    "code": "DOODLE",
+    "categories": [
+      "arcade"
+    ],
+    "img": "https://upload.wikimedia.org/wikipedia/commons/e/e7/Doodle_Jump.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original"
   }
 ];
