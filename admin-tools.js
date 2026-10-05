@@ -30,9 +30,11 @@ function populateCardCodePicker(){
     placeholder.textContent=codeMap?'Choose a saved game code…':'Open codes.json in Codes & links to choose a code';picker.append(placeholder);
     picker.disabled=!codeMap;
     if(!codeMap)return;
+    const missing=document.createElement('optgroup'),existing=document.createElement('optgroup');
+    missing.label='Need a card';existing.label='Already have a card';picker.append(missing,existing);
     for(const code of Object.keys(codeMap).sort((a,b)=>a.localeCompare(b))){
         const index=cardIndexForCode(code),option=document.createElement('option');option.value=code;
-        option.textContent=code+(index===-1?' — Create card':' — Edit '+cards[index].name);picker.append(option);
+        option.textContent=code+(index===-1?' — Create card':' — Edit '+cards[index].name);(index===-1?missing:existing).append(option);
         if(code.toUpperCase()===current)picker.value=code;
     }
 }
@@ -47,6 +49,8 @@ $('card-code-picker').onchange=()=>chooseCardCode($('card-code-picker').value);
 function updateCodeList(){
     $('codes-list').replaceChildren();syncCodeCardButton();populateCardCodePicker();
     if(!codeMap)return;
+    const groups={};
+    for(const [key,title] of [['missing','Need a card'],['existing','Already have a card']]){const section=document.createElement('section'),heading=document.createElement('h3'),list=document.createElement('div');heading.textContent=title;list.className='catalog-list';section.append(heading,list);$('codes-list').append(section);groups[key]={heading,list,title};}
     const query=$('codes-search').value.toLowerCase();
     for(const [code,value] of Object.entries(codeMap).sort(([a],[b])=>a.localeCompare(b))){
         const index=cardIndexForCode(code),card=index===-1?null:cards[index];
@@ -59,9 +63,9 @@ function updateCodeList(){
         const actions=document.createElement('div');actions.className='file-actions';
         const destination=document.createElement('button');destination.type='button';destination.textContent='Edit code';destination.onclick=()=>editCode(code);
         const edit=document.createElement('button');edit.type='button';edit.textContent=card?'Edit card':'Create card';edit.onclick=()=>cardFromCode(code);
-        actions.append(destination,edit);row.append(info,actions);$('codes-list').append(row);
+        actions.append(destination,edit);row.append(info,actions);groups[card?'existing':'missing'].list.append(row);
     }
-    if(!$('codes-list').children.length)$('codes-list').textContent='No codes match your search.';
+    for(const {heading,list,title} of Object.values(groups)){heading.textContent=title+' ('+list.children.length+')';if(!list.children.length)list.textContent='No matching codes in this group.';}
 }
 window.addEventListener('admin-cards-changed',updateCodeList);
 $('code-card').onclick=()=>{if(!codeDirty&&selectedCode)cardFromCode(selectedCode);};

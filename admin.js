@@ -37,7 +37,7 @@ function notify(message, error = false) {
 }
 let fileActionRunning = false;
 async function action(button, work, success) {
-    const isFileAction = ['save-game', 'save-code', 'undo-edit', 'open-cards', 'open-codes'].includes(button.id);
+    const isFileAction = ['save-game', 'save-code', 'undo-edit', 'open-cards', 'open-codes', 'open-update-file', 'save-update-file'].includes(button.id);
     if (isFileAction && fileActionRunning) { notify('Wait for the current file operation to finish.', true); return; }
     if (isFileAction) fileActionRunning = true;
     button.disabled = true;
@@ -56,7 +56,7 @@ function switchTab(name) {
     });
     document.querySelectorAll('.tab-panel').forEach(panel => { panel.hidden = panel.id !== 'panel-' + name; });
     if (name === 'stats' && window.loadWeeklyStats) window.loadWeeklyStats();
-    $('section-label').textContent = 'Workspace / ' + ({ games: 'Games', codes: 'Codes & links', stats: 'Weekly stats', players: 'Players', settings: 'Site settings', live: 'Live controls' }[name]);
+    $('section-label').textContent = 'Workspace / ' + ({ updates: 'Update log', games: 'Games', codes: 'Codes & links', stats: 'Weekly stats', players: 'Players', settings: 'Site settings', live: 'Live controls' }[name]);
 }
 document.querySelectorAll('[data-tab]').forEach(button => button.addEventListener('click', () => switchTab(button.dataset.tab)));
 $('login-form').addEventListener('submit', async event => {
