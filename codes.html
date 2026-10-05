@@ -1780,215 +1780,6 @@
              }
          }
 
-         /* --- AI Chatbot Button & Window --- */
-         .ai-chat-button {
-             position: fixed;
-             bottom: 22px;
-             left: 22px;
-             width: 58px;
-             height: 58px;
-             border-radius: 50%;
-             background: radial-gradient(circle at top left, var(--accent), var(--accent-3));
-             color: white;
-             display: none;
-             align-items: center;
-             justify-content: center;
-             cursor: pointer;
-             z-index: 9999;
-             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.9);
-             border: 1px solid rgba(255, 255, 255, 0.15);
-             transition: all 0.3s ease;
-             animation: aiPulse 2.5s ease-in-out infinite;
-         }
-
-         .ai-chat-button:hover {
-             transform: scale(1.1);
-             box-shadow: 0 0 30px rgba(79, 70, 229, 0.7);
-         }
-
-         @keyframes aiPulse {
-
-             0%,
-             100% {
-                 transform: scale(1);
-             }
-
-             50% {
-                 transform: scale(1.05);
-             }
-         }
-
-         .ai-chat-button svg {
-             width: 26px;
-             height: 26px;
-         }
-
-         .ai-chat-window {
-             position: fixed;
-             bottom: 90px;
-             left: 22px;
-             width: 360px;
-             height: 500px;
-             background: var(--panel);
-             border-radius: 18px;
-             border: 1px solid rgba(148, 163, 184, 0.4);
-             box-shadow: var(--shadow-soft);
-             z-index: 9999;
-             display: none;
-             flex-direction: column;
-             overflow: hidden;
-         }
-
-         .ai-chat-header {
-             padding: 16px 20px;
-             background: rgba(15, 23, 42, 0.9);
-             border-bottom: 1px solid rgba(148, 163, 184, 0.3);
-             font-size: 0.9rem;
-             font-weight: 600;
-             letter-spacing: 0.05em;
-             text-transform: uppercase;
-             color: var(--text);
-             display: flex;
-             align-items: center;
-             gap: 10px;
-             cursor: move;
-             user-select: none;
-         }
-
-         .ai-chat-header::before {
-             content: "🤖";
-             font-size: 1.1rem;
-         }
-
-         .ai-chat-messages {
-             flex: 1;
-             padding: 20px;
-             overflow-y: auto;
-             display: flex;
-             flex-direction: column;
-             gap: 12px;
-             background: rgba(15, 23, 42, 0.7);
-         }
-
-         .ai-message {
-             padding: 10px 14px;
-             border-radius: 14px;
-             max-width: 85%;
-             font-size: 0.85rem;
-             line-height: 1.4;
-             word-wrap: break-word;
-         }
-
-         .ai-message.user {
-             align-self: flex-end;
-             background: linear-gradient(135deg, var(--accent), var(--accent-2));
-             color: white;
-             border-bottom-right-radius: 4px;
-         }
-
-         .ai-message.bot {
-             align-self: flex-start;
-             background: rgba(30, 41, 59, 0.8);
-             color: var(--text);
-             border: 1px solid rgba(148, 163, 184, 0.3);
-             border-bottom-left-radius: 4px;
-         }
-
-         .ai-chat-input-area {
-             padding: 16px 20px;
-             border-top: 1px solid rgba(148, 163, 184, 0.3);
-             background: rgba(15, 23, 42, 0.9);
-             display: flex;
-             gap: 10px;
-         }
-
-         .ai-chat-input {
-             flex: 1;
-             padding: 10px 14px;
-             border-radius: 12px;
-             border: 1px solid rgba(148, 163, 184, 0.4);
-             background: rgba(30, 41, 59, 0.8);
-             color: var(--text);
-             font-size: 0.85rem;
-             outline: none;
-             transition: border 0.2s ease;
-         }
-
-         .ai-chat-input:focus {
-             border-color: var(--accent);
-             box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
-         }
-
-         .ai-send-button {
-             padding: 10px 20px;
-             border-radius: 12px;
-             border: 1px solid var(--accent);
-             background: linear-gradient(135deg, var(--accent), var(--accent-2));
-             color: white;
-             font-size: 0.8rem;
-             font-weight: 600;
-             letter-spacing: 0.05em;
-             cursor: pointer;
-             transition: all 0.2s ease;
-         }
-
-         .ai-send-button:hover {
-             transform: translateY(-1px);
-             box-shadow: 0 5px 15px rgba(79, 70, 229, 0.4);
-         }
-
-         .ai-typing-indicator {
-             padding: 10px 14px;
-             border-radius: 14px;
-             background: rgba(30, 41, 59, 0.8);
-             border: 1px solid rgba(148, 163, 184, 0.3);
-             color: var(--text-soft);
-             font-size: 0.8rem;
-             align-self: flex-start;
-             display: none;
-         }
-
-         .ai-typing-indicator span {
-             animation: aiTyping 1.4s infinite;
-             display: inline-block;
-         }
-
-         .ai-typing-indicator span:nth-child(2) {
-             animation-delay: 0.2s;
-         }
-
-         .ai-typing-indicator span:nth-child(3) {
-             animation-delay: 0.4s;
-         }
-
-         @keyframes aiTyping {
-
-             0%,
-             100% {
-                 opacity: 0.4;
-                 transform: translateY(0);
-             }
-
-             50% {
-                 opacity: 1;
-                 transform: translateY(-2px);
-             }
-         }
-
-         @media (max-width: 640px) {
-             .ai-chat-window {
-                 width: calc(100vw - 40px);
-                 left: 20px;
-                 bottom: 80px;
-                 height: 450px;
-             }
-
-             .ai-chat-button {
-                 left: 20px;
-                 bottom: 20px;
-             }
-         }
-
          /* Make the play counter more prominent and match your theme */
          .card__play-counter {
              display: flex;
@@ -3850,7 +3641,6 @@
          window.addEventListener('DOMContentLoaded', () => {
              const loaderScreen = document.getElementById('loaderScreen');
              const app = document.getElementById('app');
-             const aiButton = document.getElementById('aiChatButton');
              const updateLogBtn = document.getElementById('updateLogBtn');
 
              // Check if we should skip the loader (returning from code site)
@@ -3882,10 +3672,8 @@
 
                  // Initialize features immediately
                  if (typeof startSnow === 'function') startSnow();
-                 initAIChatbot();
 
-                 // Show AI button and update log button
-                 if (aiButton) aiButton.style.display = 'flex';
+                 // Show update log button
                  if (updateLogBtn) updateLogBtn.style.display = 'flex';
 
                  // Clear skip flags after using them
@@ -3907,10 +3695,8 @@
 
                      // Initialize features after loader
                      if (typeof startSnow === 'function') startSnow();
-                     initAIChatbot();
 
-                     // Show AI button and update log button
-                     if (aiButton) aiButton.style.display = 'flex';
+                     // Show update log button
                      if (updateLogBtn) updateLogBtn.style.display = 'flex';
 
                  }, 1200);
@@ -4741,147 +4527,6 @@
          });
      </script>
      <script>
-         // AI Chatbot functionality
-         function initAIChatbot() {
-             const aiButton = document.getElementById('aiChatButton');
-             const aiWindow = document.getElementById('aiChatWindow');
-             const aiMessages = document.getElementById('aiChatMessages');
-             const aiInput = document.getElementById('aiChatInput');
-             const aiSendButton = document.getElementById('aiSendButton');
-             const aiTyping = document.getElementById('aiTypingIndicator');
-             const aiHeader = document.getElementById('aiChatHeader');
-
-             if (!aiButton || !aiWindow) return;
-
-             // Show the AI button (called after password unlock)
-             aiButton.style.display = 'flex';
-
-             // Toggle chat window
-             aiButton.addEventListener('click', () => {
-                 aiWindow.style.display = aiWindow.style.display === 'flex' ? 'none' : 'flex';
-                 if (aiWindow.style.display === 'flex') {
-                     aiInput.focus();
-                 }
-             });
-
-             // Send message function
-             async function sendMessage() {
-                 const message = aiInput.value.trim();
-                 if (!message) return;
-
-                 // Add user message
-                 const userMessage = document.createElement('div');
-                 userMessage.className = 'ai-message user';
-                 userMessage.textContent = message;
-                 aiMessages.appendChild(userMessage);
-
-                 // Clear input
-                 aiInput.value = '';
-
-                 // Scroll to bottom
-                 aiMessages.scrollTop = aiMessages.scrollHeight;
-
-                 // Show typing indicator
-                 aiTyping.style.display = 'flex';
-                 aiMessages.scrollTop = aiMessages.scrollHeight;
-
-                 try {
-                     // Use the charbot API
-                     const response = await fetch(`https://charbot.ape3d.com/?prompt=${encodeURIComponent(message)}`);
-                     const data = await response.text();
-
-                     // Hide typing indicator
-                     aiTyping.style.display = 'none';
-
-                     // Add bot response
-                     const botMessage = document.createElement('div');
-                     botMessage.className = 'ai-message bot';
-
-                     // Clean up the response (remove any HTML tags)
-                     const cleanResponse = data.replace(/<[^>]*>/g, '').trim();
-                     botMessage.textContent = cleanResponse || "I'm not sure how to answer that. Try asking about games or codes!";
-
-                     aiMessages.appendChild(botMessage);
-
-                 } catch (error) {
-                     console.error('AI Chat error:', error);
-                     aiTyping.style.display = 'none';
-
-                     const errorMessage = document.createElement('div');
-                     errorMessage.className = 'ai-message bot';
-                     errorMessage.textContent = "Sorry, I'm having trouble connecting. Please try again!";
-                     aiMessages.appendChild(errorMessage);
-                 }
-
-                 // Scroll to bottom
-                 aiMessages.scrollTop = aiMessages.scrollHeight;
-             }
-
-             // Send on button click
-             aiSendButton.addEventListener('click', sendMessage);
-
-             // Send on Enter key
-             aiInput.addEventListener('keydown', (e) => {
-                 if (e.key === 'Enter') {
-                     e.preventDefault();
-                     sendMessage();
-                 }
-             });
-
-             // Make chat window draggable
-             let isDragging = false;
-             let offsetX, offsetY;
-
-             aiHeader.addEventListener('mousedown', (e) => {
-                 isDragging = true;
-                 offsetX = e.clientX - aiWindow.offsetLeft;
-                 offsetY = e.clientY - aiWindow.offsetTop;
-
-                 document.addEventListener('mousemove', onMouseMove);
-                 document.addEventListener('mouseup', onMouseUp);
-             });
-
-             function onMouseMove(e) {
-                 if (!isDragging) return;
-
-                 const newX = e.clientX - offsetX;
-                 const newY = e.clientY - offsetY;
-
-                 // Keep within viewport bounds
-                 const maxX = window.innerWidth - aiWindow.offsetWidth;
-                 const maxY = window.innerHeight - aiWindow.offsetHeight;
-
-                 aiWindow.style.left = Math.max(20, Math.min(newX, maxX)) + 'px';
-                 aiWindow.style.top = Math.max(20, Math.min(newY, maxY)) + 'px';
-                 aiWindow.style.bottom = 'auto';
-             }
-
-             function onMouseUp() {
-                 isDragging = false;
-                 document.removeEventListener('mousemove', onMouseMove);
-                 document.removeEventListener('mouseup', onMouseUp);
-             }
-
-             // Close on escape key
-             document.addEventListener('keydown', (e) => {
-                 if (e.key === 'Escape' && aiWindow.style.display === 'flex') {
-                     aiWindow.style.display = 'none';
-                 }
-             });
-
-             // Add a welcome message after a delay
-             setTimeout(() => {
-                 if (aiMessages.children.length === 1) { // Only has the initial message
-                     const welcomeMsg = document.createElement('div');
-                     welcomeMsg.className = 'ai-message bot';
-                     welcomeMsg.textContent = "Thanks for using Tinkle! 🎮";
-                     aiMessages.appendChild(welcomeMsg);
-                     aiMessages.scrollTop = aiMessages.scrollHeight;
-                 }
-             }, 3000);
-         }
-     </script>
-     <script>
          // Check if Firebase functions are available
          setTimeout(() => {
              console.log("Checking Firebase functions:");
@@ -4899,33 +4544,6 @@
              }
          }, 2000);
      </script>
-     <!-- AI Chatbot -->
-     <div class="ai-chat-button" id="aiChatButton">
-         <svg viewBox="0 0 24 24" fill="none">
-             <path d="M12 2a6 6 0 00-6 6v1a4 4 0 00-2 3.5V17a3 3 0 003 3h10a3 3 0 003-3v-4.5A4 4 0 0018 9V8a6 6 0 00-6-6z" stroke="currentColor" stroke-width="1.5" fill="none" />
-             <circle cx="9" cy="13" r="1" fill="currentColor" />
-             <circle cx="15" cy="13" r="1" fill="currentColor" />
-         </svg>
-     </div>
-
-     <div class="ai-chat-window" id="aiChatWindow">
-         <div class="ai-chat-header" id="aiChatHeader">Tinkle AI Assistant</div>
-
-         <div class="ai-chat-messages" id="aiChatMessages">
-             <div class="ai-message bot">
-                 Hello! I'm Tinkle AI. Ask me anything about school, general questions, or information on games! 🤖
-             </div>
-         </div>
-
-         <div class="ai-typing-indicator" id="aiTypingIndicator">
-             <span>•</span><span>•</span><span>•</span>
-         </div>
-
-         <div class="ai-chat-input-area">
-             <input type="text" class="ai-chat-input" id="aiChatInput" placeholder="Ask me anything..." />
-             <button class="ai-send-button" id="aiSendButton">Send</button>
-         </div>
-     </div>
  </body>
 
  </html>
