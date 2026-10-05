@@ -2374,5 +2374,47 @@ window.GAME_CARDS = [
       "arcade"
     ],
     "img": "https://upload.wikimedia.org/wikipedia/commons/e/e7/Doodle_Jump.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original"
+  },
+  {
+    "name": "Angry Birds 2",
+    "code": "ANGRYBIRDS2",
+    "categories": [
+      "puzzle"
+    ],
+    "img": "https://upload.wikimedia.org/wikipedia/en/9/97/Angry_Birds_2.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original"
+  },
+  {
+    "name": "Ages Of Conflict",
+    "code": "AOC",
+    "categories": [
+      "puzzle",
+      "simulator"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimg.gamevalio.com%2Fages-of-conflict-world-war-simulator_portrait_500.webp&f=1&nofb=1&ipt=a87124a53f28e77e8268a49a807a9e18df4afcb886168f579d7915ba2d09eab9&ipo=images"
+  },
+  {
+    "name": "Five Night's In Anime 3D",
+    "code": "FNAA3D",
+    "categories": [
+      "horror"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%2Fid%2FOIP.824oLXxWjP50Q299uRSrjwAAAA%3Fr%3D0%26pid%3DApi&f=1&ipt=2cfd1046ce1d48fb7928b09dcd0f362d138d4a18b2f294b6b11483178120896e&ipo=images"
+  },
+  {
+    "name": "Mini Golf",
+    "code": "MINIGOLF",
+    "categories": [
+      "puzzle",
+      "simulator"
+    ],
+    "img": "https://tse3.mm.bing.net/th/id/OIP.Aoabe7EMjfke-Dq6K1YR-AHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+  },
+  {
+    "name": "Youtubers Life OMG",
+    "code": "YTLIFEOMG",
+    "categories": [
+      "simulator"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.kralgames.com%2Fimage%2Fcache%2Fcatalog%2Fproducts%2F2791-1000x1000.png&f=1&nofb=1&ipt=cd942b02caef59393c2416b9e57c68d897e0f8528a86c7c1e75421d260049720&ipo=images"
   }
 ];
