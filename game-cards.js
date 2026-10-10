@@ -2416,5 +2416,23 @@ window.GAME_CARDS = [
       "simulator"
     ],
     "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.kralgames.com%2Fimage%2Fcache%2Fcatalog%2Fproducts%2F2791-1000x1000.png&f=1&nofb=1&ipt=cd942b02caef59393c2416b9e57c68d897e0f8528a86c7c1e75421d260049720&ipo=images"
+  },
+  {
+    "name": "ROUNDS",
+    "code": "ROUNDS",
+    "categories": [
+      "action",
+      "multiplayer"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimages.stopgame.ru%2Fgames%2Flogos%2F25246%2Frounds-square.jpg&f=1&nofb=1&ipt=6e521b96c598ed9186536abec025b4768da150c9a10d3dbd21067b78353b34ac&ipo=images"
+  },
+  {
+    "name": "Muddy Heights",
+    "code": "MUDDYHEIGHTS",
+    "categories": [
+      "arcade",
+      "simulator"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimages.stopgame.ru%2Fgames%2Flogos%2F58157%2Fc560x560%2FYgSnPgslMEbMcqR7Su1Vog%2Fmuddy_heights-square.jpg&f=1&nofb=1&ipt=e22744b7a10239eb7a8da004a1e07d7e5972f86ea76f3159f0733bc77b132ffd&ipo=images"
   }
 ];
