@@ -296,5 +296,6 @@
   "MCSM": "https://nawsif.github.io/html/mcsm|true",
   "HSC": "https://nawsif.github.io/html/hsc|true",
   "MEOWDOKU": "https://nawsif.github.io/html/meowdoku|true",
-  "KRILLION": "https://www.krillion.org/play/|false"
+  "KRILLION": "https://www.krillion.org/play/|false",
+  "BEATBLOCK": "https://angel-i-love-u.dr8.ca/games/beatblock/index.html|true"
 }
