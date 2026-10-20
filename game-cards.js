@@ -2434,5 +2434,31 @@ window.GAME_CARDS = [
       "simulator"
     ],
     "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimages.stopgame.ru%2Fgames%2Flogos%2F58157%2Fc560x560%2FYgSnPgslMEbMcqR7Su1Vog%2Fmuddy_heights-square.jpg&f=1&nofb=1&ipt=e22744b7a10239eb7a8da004a1e07d7e5972f86ea76f3159f0733bc77b132ffd&ipo=images"
+  },
+  {
+    "name": "Henry Stickmin Collection",
+    "code": "HSC",
+    "categories": [
+      "action",
+      "puzzle"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimages.stopgame.ru%2Fgames%2Flogos%2F24284%2Fc1120x1120%2FZmrvge4BkTyaZFpx0wP36A%2Fthe_henry_stickmin_collection-square.jpg&f=1&nofb=1&ipt=b1303c3053fa8d040bda9d130a76f614f5e0e21d074fc1317a5cce55f5afd2b2&ipo=images"
+  },
+  {
+    "name": "Minecraft: Story Mode",
+    "code": "MCSM",
+    "categories": [
+      "action",
+      "adventure"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic01.galaxus.com%2Fproductimages%2F6%2F6%2F6%2F8%2F9%2F0%2F5%2F1%2F7%2F2%2F3%2F9%2F8%2F0%2F3%2F6%2F5%2F7%2F9%2F5b8d58a8-eac7-4c6a-bcca-5fcf896220de.jpg_sea.jpeg&f=1&nofb=1&ipt=9f7ec84f7816e92f73815488cb51e723f554fb08ae0b483926ba73474ad1e4e9&ipo=images"
+  },
+  {
+    "name": "Meowdoku",
+    "code": "MEOWDOKU",
+    "categories": [
+      "puzzle"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fis1-ssl.mzstatic.com%2Fimage%2Fthumb%2FPurple221%2Fv4%2F7e%2F44%2F2d%2F7e442de1-280a-6e0b-298e-7e2ceb964277%2FAppIcon-0-0-1x_U007epad-0-11-0-85-220.png%2F512x512bb.jpg&f=1&nofb=1&ipt=b7b540ae69c911d5ed04405594b15748470f65f17ed21fbeac6a9d8a478bbefe&ipo=images"
   }
 ];
