@@ -2460,5 +2460,13 @@ window.GAME_CARDS = [
       "puzzle"
     ],
     "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fis1-ssl.mzstatic.com%2Fimage%2Fthumb%2FPurple221%2Fv4%2F7e%2F44%2F2d%2F7e442de1-280a-6e0b-298e-7e2ceb964277%2FAppIcon-0-0-1x_U007epad-0-11-0-85-220.png%2F512x512bb.jpg&f=1&nofb=1&ipt=b7b540ae69c911d5ed04405594b15748470f65f17ed21fbeac6a9d8a478bbefe&ipo=images"
+  },
+  {
+    "name": "Krillion",
+    "code": "KRILLION",
+    "categories": [
+      "puzzle"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fkrillion.me%2Fopengraph-image.png&f=1&nofb=1&ipt=5ca9c54a9b4f4a53a8628d74643c5507244e9bfe4c09d598f68a67fc8ba5a5c0&ipo=images"
   }
 ];
