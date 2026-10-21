@@ -2468,5 +2468,64 @@ window.GAME_CARDS = [
       "puzzle"
     ],
     "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fkrillion.me%2Fopengraph-image.png&f=1&nofb=1&ipt=5ca9c54a9b4f4a53a8628d74643c5507244e9bfe4c09d598f68a67fc8ba5a5c0&ipo=images"
+  },
+  {
+    "name": "Little Big Planet",
+    "code": "LBP",
+    "categories": [
+      "adventure",
+      "puzzle"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fassets-prd.ignimgs.com%2F2022%2F01%2F07%2Flittlebigplanet-1-button-crop-1641596100455.jpg&f=1&nofb=1&ipt=4afc49c871ad8588d23d16efe2de151a53fdd9deeb1f2bbb9185d218425d5afe&ipo=images"
+  },
+  {
+    "name": "Crashout Crew",
+    "code": "CRASHOUTCREW",
+    "categories": [
+      "multiplayer",
+      "puzzle"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fassets-prd.ignimgs.com%2F2025%2F10%2F03%2Fcrashout-crew-button-1759496865846.jpg&f=1&nofb=1&ipt=9b483fbc352b1d08ba5801b566a54dabde428efda80ae976b7e1d1e69dfb56ca&ipo=images"
+  },
+  {
+    "name": "Dune!",
+    "code": "DUNE",
+    "categories": [
+      "arcade"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.topgames.com%2Fcdn-cgi%2Fimage%2Fquality%3D78%2Cformat%3Dauto%2Fthumb%2Fonlinegames%2FDune.jpg&f=1&nofb=1&ipt=308d417bb9adb67f8431dd119f5cd3720a99edc66c4ed11fd87a4afa5b0df1f1&ipo=images"
+  },
+  {
+    "name": "Beatblock",
+    "code": "BEATBLOCK",
+    "categories": [
+      "puzzle"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.dekudeals.com%2Fimages%2F5fccad97dc73e1d127226c424cf23cdfbbba25bb%2Fw500.jpg&f=1&nofb=1&ipt=20aa3682aded4201ed2499b205dce1535f73946ccff83fd1e588fd35fd36164b&ipo=images"
+  },
+  {
+    "name": "FEZ",
+    "code": "FEZ",
+    "categories": [
+      "adventure"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmediaproxy.tvtropes.org%2Fwidth%2F1200%2Fhttps%3A%2F%2Fstatic.tvtropes.org%2Fpmwiki%2Fpub%2Fimages%2Ffez_box.png&f=1&nofb=1&ipt=4a45b14d6e798e67c2eb55389f62415cfd23b4cf4b64b0d49bded10631b5691e&ipo=images"
+  },
+  {
+    "name": "Gang Beasts",
+    "code": "GANGBEASTS",
+    "categories": [
+      "action",
+      "multiplayer"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fgamepropaganda.com%2Fwp-content%2Fuploads%2F2024%2F04%2FDaMDXP75LV9pti5nA2IALzhO.jpg&f=1&nofb=1&ipt=951990cf02dd5edca96ad7bb969cc52f5d0f6b972b2f8de932753d69ff8702ff&ipo=images"
+  },
+  {
+    "name": "Kick The Buddy",
+    "code": "KICKTHEBUDDY",
+    "categories": [
+      "simulator"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fnargames.com%2Fstorage%2Fuploads%2Fthumbs%2Fkick-the-buddy.webp&f=1&nofb=1&ipt=15fdea6e2f183aa18c2de6302efe798379f65820c1b25fb187713ffc309e27cc&ipo=images"
   }
 ];
