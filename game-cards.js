@@ -2529,17 +2529,6 @@ window.GAME_CARDS = [
     "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fnargames.com%2Fstorage%2Fuploads%2Fthumbs%2Fkick-the-buddy.webp&f=1&nofb=1&ipt=15fdea6e2f183aa18c2de6302efe798379f65820c1b25fb187713ffc309e27cc&ipo=images"
   },
   {
-    "name": "Grand Theft Auto V",
-    "code": "GTA5",
-    "categories": [
-      "action",
-      "adventure",
-      "multiplayer",
-      "simulator"
-    ],
-    "img": "https://upload.wikimedia.org/wikipedia/en/a/a5/Grand_Theft_Auto_V.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original"
-  },
-  {
     "name": "Skate 3",
     "code": "SKATE3",
     "categories": [
