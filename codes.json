@@ -297,12 +297,12 @@
   "HSC": "https://nawsif.github.io/html/hsc|true",
   "MEOWDOKU": "https://nawsif.github.io/html/meowdoku|true",
   "KRILLION": "https://www.krillion.org/play/|false",
-  "BEATBLOCK": "https://angel-i-love-u.dr8.ca/games/beatblock/index.html|true",
-  "DUNE": "https://angel-i-love-u.dr8.ca/games/dune/index.html|true",
-  "CRASHOUTCREW": "https://angel-i-love-u.dr8.ca/games/crashout/index.html|true",
-  "FEZ": "https://angel-i-love-u.dr8.ca/games/FEZ/index.html|true",
-  "KICKTHEBUDDY": "https://angel-i-love-u.dr8.ca/games/kickthebuddy/index.html|true",
-  "FEZ": "https://angel-i-love-u.dr8.ca/games/FEZ/index.html|true",
-  "GANGBEASTS": "https://angel-i-love-u.dr8.ca/games/gangbeasts/index.html|true",
-  "LBP": "https://angel-i-love-u.dr8.ca/games/lbp/index.html|true"
+  "BEATBLOCK": "https://angel-i-love-u.dr8.ca/games/beatblock/index.html|false",
+  "DUNE": "https://angel-i-love-u.dr8.ca/games/dune/index.html|false",
+  "CRASHOUTCREW": "https://angel-i-love-u.dr8.ca/games/crashout/index.html|false",
+  "FEZ": "https://angel-i-love-u.dr8.ca/games/FEZ/index.html|false",
+  "KICKTHEBUDDY": "https://angel-i-love-u.dr8.ca/games/kickthebuddy/index.html|false",
+  "FEZ": "https://angel-i-love-u.dr8.ca/games/FEZ/index.html|false",
+  "GANGBEASTS": "https://angel-i-love-u.dr8.ca/games/gangbeasts/index.html|false",
+  "LBP": "https://angel-i-love-u.dr8.ca/games/lbp/index.html|false"
 }
