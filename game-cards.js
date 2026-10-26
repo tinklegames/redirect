@@ -2537,5 +2537,23 @@ window.GAME_CARDS = [
       "simulator"
     ],
     "img": "https://upload.wikimedia.org/wikipedia/en/8/84/Skate-3-Boxart.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original"
+  },
+  {
+    "name": "Gamble With Your Friends (Solo)",
+    "code": "GWYF",
+    "categories": [
+      "puzzle",
+      "simulator"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fshared.fastly.steamstatic.com%2Fstore_item_assets%2Fsteam%2Fapps%2F3892270%2Ffd303fec4fff7eda7284b2d6f4e7431fa3416322%2Flibrary_capsule_2x.jpg%3Ft%3D1776352806&f=1&nofb=1&ipt=3f474ce080aea527a2a12d0b0bfc420f96b66fd44cbc954c339eb5198aaff6e5&ipo=images"
+  },
+  {
+    "name": "Pet The Cat",
+    "code": "PETTHECAT",
+    "categories": [
+      "arcade",
+      "puzzle"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimg.gg.deals%2Fe7%2F3e%2F39656d4be61241a8ef9b03aa6a7bfd11849a_1232xr706_Q100.jpg&f=1&nofb=1&ipt=8892e823da3149dfc99dcf3d16595563c8da7a7c0a5e0c6a328a3212749f34b8&ipo=images"
   }
 ];
