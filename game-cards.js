@@ -2555,5 +2555,14 @@ window.GAME_CARDS = [
       "puzzle"
     ],
     "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimg.gg.deals%2Fe7%2F3e%2F39656d4be61241a8ef9b03aa6a7bfd11849a_1232xr706_Q100.jpg&f=1&nofb=1&ipt=8892e823da3149dfc99dcf3d16595563c8da7a7c0a5e0c6a328a3212749f34b8&ipo=images"
+  },
+  {
+    "name": "Angry Birds Epic",
+    "code": "ABEPIC",
+    "categories": [
+      "arcade",
+      "puzzle"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.mobygames.com%2Fpromos%2F1823290-angry-birds-epic-screenshot.jpg&f=1&nofb=1&ipt=c6035e422c3581f7e381eaa97cd0af6698bd253d045bb37f9e87ce48ab74e835&ipo=images"
   }
 ];
