@@ -1,9 +1,10 @@
 (() => {
  const $=id=>document.getElementById(id);let busy=false,lastRefresh=0;
  const refreshEvery=60*60*1000;
- async function refresh(){if(busy)return;busy=true;
+ const retry=document.createElement('button');retry.type='button';retry.className='player-button';retry.textContent='Retry';retry.hidden=true;$('leaderboard-status').after(retry);retry.onclick=()=>refresh();
+ async function refresh(){if(busy)return;busy=true;retry.hidden=true;$('leaderboard-status').textContent='Connecting and loading rankings…';let timer;
   try{
-   const players=await TinkleAccount.leaderboard();$('podium').replaceChildren();$('ranking-list').replaceChildren();
+   const players=await Promise.race([TinkleAccount.leaderboard(),new Promise((_,reject)=>{timer=setTimeout(()=>reject(Error('The connection timed out. Check your connection and try again.')),20000)})]);clearTimeout(timer);$('podium').replaceChildren();$('ranking-list').replaceChildren();
 
    players.forEach((p,i)=>{
     const rank=i+1;
@@ -13,9 +14,11 @@
    $('ranking-list').hidden=players.length<=3;
    $('leaderboard-status').textContent=players.length?'':'No players yet.';
    lastRefresh=Date.now();
-  }catch(error){$('leaderboard-status').textContent='Could not load rankings.';}finally{busy=false;}
+  }catch(error){console.error('Leaderboard load failed:',error);$('leaderboard-status').textContent='Could not load rankings. '+(error.message||'Please try again.');retry.hidden=false;}finally{clearTimeout(timer);busy=false;}
  }
- TinkleAccount.ready.then(refresh);
- setInterval(()=>{if(!document.hidden&&TinkleAccount.profile)refresh();},refreshEvery);
- document.addEventListener('visibilitychange',()=>{if(!document.hidden&&TinkleAccount.profile&&Date.now()-lastRefresh>=refreshEvery)refresh();});
+ refresh();
+ window.addEventListener('online',refresh);
+ window.addEventListener('tinkle-player-change',()=>{if(!busy&&(!lastRefresh||Date.now()-lastRefresh>=refreshEvery))refresh();});
+ setInterval(()=>{if(!document.hidden)refresh();},refreshEvery);
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden&&Date.now()-lastRefresh>=refreshEvery)refresh();});
 })();

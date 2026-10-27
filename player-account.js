@@ -5,6 +5,7 @@
  const protectedPage=['rewards.html','account.html'].includes(location.pathname.split('/').pop());
  if(protectedPage)document.documentElement.classList.add('account-locked');
  let state=null,backend,auth,authTools,resolveReady,busy=false,recovering=false,recoveryPending=false,switching=protectedPage;
+ let resolveConnection;const connectionReady=new Promise(resolve=>resolveConnection=resolve);
  const ready=new Promise(resolve=>resolveReady=resolve),$=id=>document.getElementById(id);
  function accountDeleted(){
   deleted=true;state=null;if(protectedPage)document.documentElement.classList.add('account-locked');currentBan=null;wasBanned=false;recoveryPending=false;recovering=false;switching=protectedPage;
@@ -23,6 +24,7 @@
  function changed(){window.dispatchEvent(new Event('tinkle-wallet-change'));window.dispatchEvent(new Event('tinkle-player-change'));}
  function status(message){$('player-status').textContent=message;}
  function connectionError(error){
+  resolveConnection({error});
   showGate();$('player-title').textContent='Could not connect';
   $('player-form').hidden=true;$('player-mode').hidden=true;
   status(errorMessage(error));$('player-reconnect').hidden=false;
@@ -64,7 +66,7 @@
   else if(!state){$('player-form').hidden=false;$('player-mode').hidden=false;$('player-reconnect').hidden=true;setMode();showGate();}
  }
  window.TinkleAccount=Object.freeze({ready,get profile(){return state?{username:state.username,balance:state.balance,owned:state.owned,equipped:state.equipped}:null;},get wallet(){return state;},now:()=>Date.now(),mutate,signIn:()=>{switching=true;setMode();showGate();},
-  leaderboard:async()=>{await ready;return (await call('leaderboard')).players;},
+  leaderboard:async()=>{const connection=await connectionReady;if(connection?.error)throw Error(errorMessage(connection.error));return (await call('leaderboard')).players;},
   showRecovery:()=>{if(isBanned())return;recovering=true;switching=true;$('player-cancel-restore').hidden=false;$('player-form').hidden=false;$('player-save-code').hidden=true;$('player-mode').hidden=true;showGate();setMode();},
   refresh:async()=>{if(auth?.currentUser&&state&&!busy&&!switching)await load();}
  });
@@ -121,6 +123,7 @@
    a.onAuthStateChanged(auth,async user=>{
     if(busy)return;
     if(!user){try{await a.signInAnonymously(auth);}catch(error){connectionError(error);}return;}
+    resolveConnection({connected:true});
     try{await load();backend.watch();}catch(error){connectionError(error);}
     $('player-submit').disabled=false;
    });
