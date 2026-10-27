@@ -4202,7 +4202,7 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
          document.getElementById('homeGames').before(discovery);
          const newSection=document.createElement('section'),popularSection=document.createElement('section');newSection.id='homeNew';popularSection.id='homePopular';
          function makeSection(section,label){section.className='library-section';const title=document.createElement('h2');title.textContent=label;const grid=document.createElement('div');grid.className='discovery-grid';section.append(title,grid);document.getElementById('homeSections').append(section);return grid;}
-         const newGrid=makeSection(newSection,'New games'),popularGrid=makeSection(popularSection,'Popular games');
+         const newGrid=makeSection(newSection,'New games'),popularGrid=makeSection(popularSection,'Trending games (weekly)');
          const popularStatus=document.createElement('p');popularStatus.className='section-status';popularStatus.setAttribute('role','status');popularSection.append(popularStatus);
          const newStatus=document.createElement('p');newStatus.className='section-status';newStatus.textContent='No new games match your filters.';newSection.append(newStatus);
          function renderDiscovery(){document.documentElement.dataset.season=window.tinkleDiscoverySettings?.seasonalTheme==='normal'?'normal':'halloween';}
