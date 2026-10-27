@@ -1,10 +1,13 @@
 /* Device-persistent Firebase identity, with a high-entropy recovery secret. */
 (() => {
  let currentBan=null,wasBanned=false,deleted=false;
- let state=null,backend,auth,authTools,resolveReady,busy=false,recovering=false,recoveryPending=false,switching=false;
+ let pendingDestination=null;
+ const protectedPage=['rewards.html','account.html'].includes(location.pathname.split('/').pop());
+ if(protectedPage)document.documentElement.classList.add('account-locked');
+ let state=null,backend,auth,authTools,resolveReady,busy=false,recovering=false,recoveryPending=false,switching=protectedPage;
  const ready=new Promise(resolve=>resolveReady=resolve),$=id=>document.getElementById(id);
  function accountDeleted(){
-  deleted=true;state=null;currentBan=null;wasBanned=false;recoveryPending=false;recovering=false;switching=false;
+  deleted=true;state=null;if(protectedPage)document.documentElement.classList.add('account-locked');currentBan=null;wasBanned=false;recoveryPending=false;recovering=false;switching=protectedPage;
   $('player-save-code').hidden=true;$('player-form').hidden=false;$('player-mode').hidden=true;$('player-cancel-restore').hidden=true;
   setMode();status('Your account was deleted. Enter a username to start again.');showGate();changed();
  }
@@ -48,8 +51,8 @@
   return response;
  }
  async function mutate(action,payload){await ready;return accept(await call(action,payload));}
- function showGate(){const dialog=$('player-gate');if(!dialog.open)dialog.showModal();}
- function finish(){if(isBanned()){applyBan(currentBan);return;}switching=false;recoveryPending=false;$('player-gate').close();resolveReady();changed();}
+ function showGate(){if(!state&&!switching&&!isBanned())return;const dialog=$('player-gate');if(!dialog.open)dialog.showModal();}
+ function finish(){if(!state)return;if(isBanned()){applyBan(currentBan);return;}switching=false;recoveryPending=false;document.documentElement.classList.remove('account-locked');$('player-gate').close();resolveReady();changed();if(pendingDestination){const destination=pendingDestination;pendingDestination=null;location.assign(destination);}}
  async function load(){
   const response=await call('load');
   if(response.deleted){accountDeleted();return;}
@@ -60,7 +63,7 @@
   if(state&&!recoveryPending)finish();
   else if(!state){$('player-form').hidden=false;$('player-mode').hidden=false;$('player-reconnect').hidden=true;setMode();showGate();}
  }
- window.TinkleAccount=Object.freeze({ready,get profile(){return state?{username:state.username,balance:state.balance,owned:state.owned,equipped:state.equipped}:null;},get wallet(){return state;},now:()=>Date.now(),mutate,
+ window.TinkleAccount=Object.freeze({ready,get profile(){return state?{username:state.username,balance:state.balance,owned:state.owned,equipped:state.equipped}:null;},get wallet(){return state;},now:()=>Date.now(),mutate,signIn:()=>{switching=true;setMode();showGate();},
   leaderboard:async()=>{await ready;return (await call('leaderboard')).players;},
   showRecovery:()=>{if(isBanned())return;recovering=true;switching=true;$('player-cancel-restore').hidden=false;$('player-form').hidden=false;$('player-save-code').hidden=true;$('player-mode').hidden=true;showGate();setMode();},
   refresh:async()=>{if(auth?.currentUser&&state&&!busy&&!switching)await load();}
@@ -75,7 +78,16 @@
  function mount(){
   const dialog=document.createElement('dialog');dialog.id='player-gate';dialog.className='player-dialog player-login';dialog.setAttribute('aria-labelledby','player-title');
   dialog.innerHTML=`<h1 id="player-title">Enter username</h1><form id="player-form"><div id="player-username-field"><input id="player-username" aria-label="Username" placeholder="Username" minlength="3" maxlength="20" pattern="[A-Za-z0-9_]{3,20}" title="3–20 letters, numbers or underscores" autocomplete="nickname" required></div><div id="player-recovery-field" hidden><textarea id="player-recovery" aria-label="Recovery code" placeholder="Recovery code" autocomplete="off" spellcheck="false" rows="3" maxlength="120"></textarea></div><button id="player-submit" type="submit" disabled>Continue</button></form><section id="player-save-code" hidden><p>Save this private code to recover your account.</p><code id="player-new-code"></code><div class="player-actions"><button id="player-download-code" type="button">Save code</button><button id="player-finish" type="button">Continue</button></div></section><p id="player-status" role="status">Connecting…</p><button id="player-mode" class="player-quiet" type="button">Use recovery code</button><button id="player-cancel-restore" class="player-quiet" type="button" hidden>Back</button><button id="player-reconnect" class="player-quiet" type="button" hidden>Try again</button>`;
-  document.body.append(dialog);dialog.addEventListener('cancel',event=>event.preventDefault());
+  document.body.append(dialog);
+  const back=document.createElement('button');back.type='button';back.className='player-quiet';back.textContent='Back to games';
+  function cancelSignIn(){pendingDestination=null;if(protectedPage){location.assign('codes.html');return;}switching=false;dialog.close();}
+  back.onclick=cancelSignIn;dialog.append(back);
+  dialog.addEventListener('cancel',event=>{event.preventDefault();if(!isBanned())cancelSignIn();});
+  document.addEventListener('click',event=>{
+   const link=event.target.closest?.('a[href]');if(!link||event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey||state)return;
+   const target=new URL(link.href,location.href);if(target.origin!==location.origin||!['rewards.html','account.html'].includes(target.pathname.split('/').pop()))return;
+   event.preventDefault();pendingDestination=target.href;switching=true;recovering=false;$('player-form').hidden=false;$('player-save-code').hidden=true;$('player-mode').hidden=false;setMode();showGate();
+  });
   $('player-mode').onclick=()=>{recovering=!recovering;setMode();};
   $('player-reconnect').onclick=()=>location.reload();
   $('player-cancel-restore').onclick=()=>{if(state){$('player-cancel-restore').hidden=true;finish();}};
@@ -96,7 +108,7 @@
   };
  }
  async function init(){
-  mount();
+  mount();if(protectedPage)showGate();else resolveReady();
   try{
    const [appTools,a,spark]=await Promise.all([import('https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js'),import('https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js'),import('./spark-account.js?v=20260910-wheel24')]);
    const useEmulators=['localhost','127.0.0.1'].includes(location.hostname)&&(new URLSearchParams(location.search).get('emulator')==='1'||sessionStorage.getItem('tinkle.emulator')==='1');

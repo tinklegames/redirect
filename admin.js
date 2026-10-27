@@ -77,6 +77,7 @@ auth.onAuthStateChanged(user => {
     $('account-email').textContent = user.email;
     db.ref('siteSettings').once('value').then(snap => {
         const settings = snap.val() || {};
+        $('seasonal-theme').value=settings.seasonalTheme||'halloween';
         $('bgColor').value = /^#[0-9a-f]{6}$/i.test(settings.backgroundColor) ? settings.backgroundColor : '#0a0a0a';
         $('announcement').value = settings.announcement || '';
         $('jumpscareImage').value = settings.jumpscareImage || '';
@@ -120,7 +121,7 @@ function updatePreview() {
 }
 function clearForm() {
     editingIndex = null; $('card-code-picker').value = ''; $('game-form').reset(); buildCategories(); formDirty = false;
-    $('editor-title').textContent = 'New game'; $('save-game').textContent = 'Save card →';
+    $('game-added-at').value='';$('game-is-new').checked=true; $('editor-title').textContent = 'New game'; $('save-game').textContent = 'Save card →';
     $('image-query').value = ''; updatePreview();window.dispatchEvent(new Event('admin-card-selected'));
 }
 $('new-game').addEventListener('click', () => { if (!formDirty || confirm('Discard unsaved edits?')) clearForm(); });
@@ -128,6 +129,7 @@ $('game-form').addEventListener('input', () => { formDirty = true; updatePreview
 $('game-code').addEventListener('input', () => { $('game-code').value = $('game-code').value.toUpperCase(); });
 function editCard(index) {
     const card = cards[index];
+    if(card){$('game-is-new').checked=card.isNew!==false;$('game-added-at').value=Number(card.addedAt)?new Date(card.addedAt-new Date(card.addedAt).getTimezoneOffset()*60000).toISOString().slice(0,16):'';}
     if (!card || (formDirty && !confirm('Discard unsaved edits and open this card?'))) return;
     switchTab('games');
     $('card-code-picker').value = card.code;
@@ -212,7 +214,8 @@ async function saveCardFile(next) {
 $('game-form').addEventListener('submit', event => {
     event.preventDefault();
     action($('save-game'), async () => {
-        const card = { name: $('game-name').value.trim(), code: $('game-code').value.trim(), categories: selectedCategories(), img: $('game-image').value.trim() };
+        const card = { isNew:$('game-is-new').checked, name: $('game-name').value.trim(), code: $('game-code').value.trim(), categories: selectedCategories(), img: $('game-image').value.trim() };
+        const enteredDate=$('game-added-at').value;if(enteredDate){card.addedAt=new Date(enteredDate).getTime();if(!Number.isFinite(card.addedAt)||card.addedAt>Date.now())throw Error('Choose a valid added date that is not in the future.');}
         const next = CardEditor.upsert(cards, card, editingIndex);
         await saveCardFile(next);
         fileHistory.push({ kind: 'cards', before: structuredClone(cards) });
@@ -288,7 +291,7 @@ $('image-search-form').addEventListener('submit', async event => {
 $('settings-form').addEventListener('submit', event => {
     event.preventDefault(); action($('save'), async () => {
         requireAdmin();
-        await db.ref('siteSettings').update({ backgroundColor: $('bgColor').value, announcement: $('announcement').value, jumpscareImage: $('jumpscareImage').value });
+        await db.ref('siteSettings').update({ seasonalTheme:$('seasonal-theme').value, backgroundColor: $('bgColor').value, announcement: $('announcement').value, jumpscareImage: $('jumpscareImage').value });
     }, 'Settings saved.');
 });
 $('revert-bg').onclick = () => { $('bgColor').value = '#0a0a0a'; };

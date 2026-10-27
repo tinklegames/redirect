@@ -28,7 +28,7 @@
         if (cards.some((g, i) => i !== index && g.code.toUpperCase() === code.toUpperCase())) throw new Error('That code already belongs to another card. Select it from All games to edit.');
         if (index !== null && (!Number.isInteger(index) || index < 0 || index >= cards.length)) throw new Error('Select the card again before saving.');
         const next = cards.map(g => ({ ...g, categories: [...g.categories] }));
-        const value = { ...(index === null ? {} : next[index]), ...card, name: card.name.trim(), code, categories: [...new Set(card.categories)], img: card.img.trim() };
+        const value = { ...(index === null ? {addedAt:Date.now(),isNew:true} : next[index]), ...card, name: card.name.trim(), code, categories: [...new Set(card.categories)], img: card.img.trim() };
         if (index === null) next.push(value); else next[index] = value;
         return next;
     }

@@ -1,0 +1,88 @@
+html[data-imported-theme]:not([data-imported-theme="default"]) .halloween-scene,html[data-imported-theme]:not([data-imported-theme="default"]) .halloween-web{display:none!important}
+html[data-imported-theme]:not([data-imported-theme="default"]) :is(.setting-card,.page-card,.grid-shell,.player-dialog,.podium-card){background:var(--panel)!important;border-color:var(--border-soft)!important;color:var(--text)!important}
+html[data-imported-theme]:not([data-imported-theme="default"]) :is(input,textarea,select){background:var(--panel-soft)!important;color:var(--text)!important;border-color:var(--border-soft)!important}
+html[data-imported-theme]:not([data-imported-theme="default"]) .btn-glow{background:linear-gradient(110deg,var(--accent),var(--accent-2))!important;color:var(--text)!important}
+html[data-imported-theme]:not([data-imported-theme="default"]) #page-codes :is(.library-section h2,.grid-title){color:var(--text)!important}
+html[data-imported-theme]:not([data-imported-theme="default"]) .setting-desc{color:var(--text-soft)!important}
+html[data-imported-theme]:not([data-imported-theme="default"]) .card{border-color:var(--border-soft)!important}
+html[data-imported-theme]:not([data-imported-theme="default"]) body{cursor:var(--imported-cursor,auto),auto}
+html[data-imported-theme]:not([data-imported-theme="default"]) :is(button,a,select){cursor:var(--imported-link-cursor,pointer),pointer}
+html[data-imported-theme]:not([data-imported-theme="default"]) :is(input,textarea){cursor:var(--imported-text-cursor,text),text}
+#tabCloakPreset,#tabCloakTitle,#tabCloakIcon{display:block;width:100%;box-sizing:border-box;margin:8px 0 18px}.setting-card label[for^="tabCloak"]{display:block;font-size:13px;color:var(--text-soft)}
+
+/* Three equal settings cards, like the supplied reference. */
+#page-settings>.page-card{padding:28px!important}
+#page-settings .settings-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:20px!important;align-items:stretch}
+#page-settings .setting-card{min-width:0;box-sizing:border-box;padding:26px!important;min-height:290px;border-radius:16px!important;transform:none!important;box-shadow:none!important;background:var(--panel)!important;display:flex;flex-direction:column}
+#page-settings .setting-card:has(#themeSelect){order:2}
+#page-settings .setting-card:has(#tabCloakPreset){order:1}
+#page-settings .setting-card:has(#panicUrl){order:3}
+#page-settings .setting-header h3{font-size:23px;margin:0;font-weight:700}
+#page-settings .setting-desc{font-size:14px;line-height:1.55;margin:12px 0 22px}
+#page-settings :is(#themeSelect,#tabCloakPreset){width:100%;min-width:0;height:48px;padding:10px 14px;border:1px solid var(--border-soft);border-radius:10px;box-sizing:border-box;font-size:14px;background:var(--panel-soft);color:var(--text);margin:8px 0 18px}
+#page-settings .setting-controls{width:100%;margin-top:8px}
+#page-settings .panic-section-spacious{padding:0!important;margin:0!important}
+#page-settings .panic-row-spacious{display:flex!important;flex-direction:column;gap:14px!important}
+#page-settings .panic-input-large{min-width:0;max-width:100%;box-sizing:border-box}
+#page-settings #tabCloakReset{align-self:flex-start;margin:0}
+#page-settings #tabCloakStatus{font-size:12px;margin:12px 0 0}
+html[data-imported-theme]:not([data-imported-theme="default"]) #halloween-banner strong{background:linear-gradient(110deg,var(--text),var(--accent))!important;background-clip:text!important;-webkit-background-clip:text!important;color:transparent!important}
+@media(max-width:950px){#page-settings .settings-grid{gap:12px!important}#page-settings .setting-card{padding:18px!important}#page-settings>.page-card{padding:20px!important}}
+@media(max-width:720px){#page-settings .settings-grid{grid-template-columns:1fr!important}#page-settings .setting-card{min-height:0}}
+
+/* Panic controls blend into their settings card. */
+#page-settings .panic-section-spacious,#page-settings .panic-preview-spacious{background:transparent!important;box-shadow:none!important}
+#page-settings .panic-preview-spacious{border-color:var(--border-soft)!important;color:var(--text)!important}
+#page-settings .key-badge,#page-settings #currentPanicKey{background:var(--panel-soft)!important;color:var(--text)!important;border:1px solid var(--border-soft)!important;box-shadow:none!important}
+/* All home sections share one layout system. */
+#homeSections>.discovery{display:none!important}
+#homeSections>.library-section{padding:0!important;background:none!important;border:0!important;box-shadow:none!important;border-radius:0!important;margin:0!important}
+#homeSections>.library-section h2{font-size:1.5rem!important;font-weight:700!important;line-height:1.3!important;margin:0 0 16px!important;letter-spacing:normal!important;color:var(--text)!important}
+#homeSections>.library-section>.grid-header{display:flex;align-items:center;justify-content:space-between;margin:0 0 16px!important;padding:0!important;background:none!important;border:0!important}
+#homeSections>.library-section>.grid-header h2{margin:0!important}
+#page-codes.favorites-view :is(#recentSection,#homeNew,#homePopular){display:none!important}
+#page-codes[data-density="compact"] #homeSections .discovery-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))!important;gap:14px!important}
+#page-codes[data-density="compact"] #homeSections .card{height:180px!important;min-height:180px!important}
+@media(max-width:600px){#page-codes[data-density="compact"] #homeSections .discovery-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+
+/* Compact horizontal history row with a visible scrollbar. */
+#page-codes #homeSections #recentSection #recentGrid{display:flex!important;flex-wrap:nowrap!important;gap:14px!important;overflow-x:auto!important;overflow-y:hidden!important;padding:9px 5px 14px!important;scroll-snap-type:x proximity;scrollbar-width:thin;scrollbar-color:#d88339 #ffffff0c;overscroll-behavior-x:contain}
+#page-codes #homeSections #recentSection #recentGrid>.card{flex:0 0 152px!important;width:152px!important;max-width:152px!important;height:142px!important;min-height:142px!important;scroll-snap-align:start}
+#recentGrid::-webkit-scrollbar{height:7px}#recentGrid::-webkit-scrollbar-thumb{background:#d88339;border-radius:8px}#recentGrid::-webkit-scrollbar-track{background:#ffffff0c;border-radius:8px}
+.recent-scroll-buttons{display:flex;gap:7px}.recent-scroll-buttons button{display:grid;place-items:center;width:30px;height:30px;padding:0;border:1px solid var(--border-soft);border-radius:50%;background:var(--panel-soft);color:var(--text);font-size:22px;cursor:pointer}.recent-scroll-buttons button:disabled{opacity:.3;cursor:default}
+#page-settings .panic-section-spacious,#page-settings .panic-preview-spacious{border:0!important;outline:0!important;box-shadow:none!important;background:transparent!important}
+html[data-imported-theme] #page-codes #homeSections>.library-section h2,html #page-codes #homeSections #homeGames h2{color:#ffad67!important}
+
+#page-codes #homeSections #recentSection #recentGrid{justify-content:flex-start!important}
+#page-codes #homeSections #recentSection #recentGrid>.card{margin:0!important}
+body.enter-code-page{display:block;min-height:100vh;height:auto;box-sizing:border-box;padding:36px 20px 80px;font-family:Inter,system-ui,sans-serif;color:var(--text)}
+.enter-code-page #container{position:relative;width:min(500px,100%);box-sizing:border-box;margin:8vh auto 0;padding:32px;border:1px solid var(--border-soft);border-radius:24px;background:var(--panel);box-shadow:0 18px 60px #0004;text-align:center}
+.enter-code-page #container h2{font-size:30px;margin:0 0 24px;color:var(--text)}
+.enter-code-page #codeInput{width:100%;box-sizing:border-box;height:52px;padding:12px 16px;margin-bottom:14px;border-radius:12px;background:var(--panel-soft);border:1px solid var(--border-soft);color:var(--text);font-size:16px}
+.enter-code-page #codeInput:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.enter-code-page #container button{background:var(--accent)!important;color:var(--text);border:1px solid var(--border-soft);padding:11px 18px;border-radius:12px;font-weight:650}
+.enter-code-page #container button:hover{background:var(--accent-2)!important}
+.enter-code-page #container .button-group{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.enter-code-page #result{color:var(--text-soft);font-size:14px;line-height:1.5}
+.enter-code-page .back-to-games{display:inline-block;color:var(--text-soft);text-decoration:none;margin-bottom:20px;font-size:13px}
+.enter-code-page .back-to-games:hover{color:var(--accent)}
+.enter-code-page #iframeHint{color:var(--text-soft)!important;font-size:13px;line-height:1.5}
+.enter-code-page #notification:not(.hidden){display:block}
+@media(max-width:600px){.enter-code-page #container{margin-top:30px;padding:24px}}
+
+/* Recently played has clean thumbnails with no labels or counters. */
+#page-codes #recentGrid .game-new-badge,#page-codes #recentGrid .game-popular-badge,#page-codes #recentGrid .card__play-counter{display:none!important}
+html #updateLogBtn.update-fab{background:var(--panel)!important;color:var(--text)!important;border:1px solid var(--border-soft)!important;box-shadow:0 5px 20px #0003!important}
+html #updateLogBtn.update-fab:hover{background:var(--panel-soft)!important;border-color:var(--accent)!important}
+html #updateLogBtn.update-fab span.dot{background:var(--accent)!important;box-shadow:0 0 8px var(--accent)!important}
+/* Floating translucent settings: three cards above a wide panic panel. */
+html[data-imported-theme] #page-settings>.page-card,html #page-settings>.page-card{background:transparent!important;border:0!important;outline:0!important;box-shadow:none!important;backdrop-filter:none!important}
+html[data-imported-theme] #page-settings .settings-grid>.setting-card,html #page-settings .settings-grid>.setting-card{background:color-mix(in srgb,var(--panel) 65%,transparent)!important;border:0!important;outline:0!important;box-shadow:none!important;backdrop-filter:blur(5px);min-height:240px}
+#page-settings .setting-card:has(#antiCloseToggle){order:3}
+#page-settings .setting-card:has(#panicUrl){order:4;grid-column:1/-1;min-height:0!important}
+html #page-settings .setting-card:has(#panicUrl) .panic-row-spacious{display:grid!important;grid-template-columns:1fr 1fr!important;align-items:end;gap:24px!important}
+#page-settings .panic-field-spacious{min-width:0}
+#page-settings .setting-card:has(#panicUrl) .setting-desc{margin-bottom:14px}
+.anti-close-control{display:flex;align-items:center;justify-content:space-between;gap:16px;font-size:14px;font-weight:600;margin:8px 0 0}
+#antiCloseToggle{width:20px;height:20px;accent-color:var(--accent);cursor:pointer}
+@media(max-width:720px){html #page-settings .setting-card:has(#panicUrl) .panic-row-spacious{grid-template-columns:1fr!important}}

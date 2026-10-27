@@ -9,7 +9,7 @@
   for(const [category,key] of [['theme','shopTheme'],['card','cardStyle']]){const selected=item(profile?.equipped?.[category]);if(selected)root.dataset[key]=selected.value;else delete root.dataset[key];}
   const kind=item(profile?.equipped?.background)?.value;
   if(kind!==lastBackground){lastBackground=kind;document.getElementById('cosmetic-background')?.remove();if(kind){const bg=document.createElement('div');bg.id='cosmetic-background';bg.dataset.kind=kind;bg.setAttribute('aria-hidden','true');for(let i=0;i<(kind==='orbs'?10:45);i++){const particle=document.createElement('span');particle.style.left=`${(i*37)%100}%`;particle.style.top=`${(i*23)%100}%`;particle.style.animationDelay=`-${i*.73}s`;bg.append(particle);}document.body.prepend(bg);}}
-  document.querySelectorAll('[data-player-name]').forEach(host=>{host.replaceChildren();if(profile)host.append(name(profile));});
+  document.querySelectorAll('[data-player-name]').forEach(host=>{host.replaceChildren();if(profile)host.append(name(profile));else {const b=document.createElement('button');b.textContent='Guest · Sign in';b.onclick=()=>window.TinkleAccount.signIn();host.append(b);}});
  }
  const bar=document.createElement('nav');bar.className='player-bar';bar.setAttribute('aria-label','Player navigation');
  const who=document.createElement('span');who.dataset.playerName='';who.className='player-profile';bar.append(who);

@@ -2,6 +2,94 @@
  <html lang="en">
 
  <head>
+<script src="anti-close.js?v=floating-v15" defer></script>
+<script src="settings-data.js?v=floating-v15" defer></script><script src="settings-import.js?v=floating-v15" defer></script><link rel="stylesheet" href="settings-import.css?v=floating-v15">
+<!-- Tinkle seasonal update v2 -->
+<style>/* Set Seasonal theme to Normal in Site settings to disable Halloween. */
+#homeIntro,#loaderScreen{display:none!important;visibility:hidden!important;pointer-events:none!important}
+.discovery{margin:20px 0 32px}.discovery h2{font-size:1.5rem;margin:0 0 16px}.discovery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}.discovery .card{min-height:220px}.spotlight{padding:26px;border:1px solid #a96be1;border-radius:22px;margin-bottom:28px;background:linear-gradient(120deg,#21152e,#11131c)}.spotlight .card{max-width:540px;min-height:270px}.spotlight p{color:#c5b8d6;margin-bottom:18px}.game-new-badge{position:absolute;top:12px;left:12px;z-index:5;background:#ff842b;color:#1b0920;font-weight:900;letter-spacing:.12em;padding:6px 12px;border-radius:5px;box-shadow:0 3px 15px #0008;pointer-events:none}.card{position:relative}
+:root:not([data-season="normal"]){--accent:#ff8b38;--primary:#ff8b38}
+html:not([data-season="normal"]) body{background:radial-gradient(ellipse at top right,#321345 0,transparent 55%),#100c17!important}
+html:not([data-season="normal"]) .card{border-color:#704182!important;box-shadow:0 5px 22px #160a24}
+html:not([data-season="normal"]) .card:hover{border-color:#ff923e!important;box-shadow:0 0 24px #ff7b2738}
+html:not([data-season="normal"]) .discovery h2{color:#ffad67}
+html:not([data-season="normal"]) .spotlight h2:before{content:'🎃 ';}
+html:not([data-season="normal"]) .btn-glow{background:linear-gradient(110deg,#9d4bc1,#d86829)!important;color:white}
+@media(max-width:600px){.discovery-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.spotlight{padding:16px}}
+
+#app{opacity:1!important;transform:none!important}
+/* Strong seasonal palette also overrides stored personal themes. */
+html:not([data-season="normal"]){--bg-base:#13091c!important;--panel:#24132f!important;--panel-soft:#321a3f!important;--accent:#ff8b32!important;--accent-2:#bc65ec!important;--accent-3:#ffb45b!important;--text:#fff4e8!important;--text-soft:#d7bddf!important;--border-soft:#834b91!important;--card-border-glow:#f481293d!important;--accent-soft:#ff8b3233!important;--bg-grad-1:#943d2f66!important;--bg-grad-2:#7728a366!important;--bg-grad-3:#4c175766!important}
+html:not([data-season="normal"]) body{background:radial-gradient(ellipse at 5% 5%,#5d281f99,transparent 45%),radial-gradient(ellipse at 95% 10%,#5d237caa,transparent 50%),#13091c!important;color:#fff4e8!important}
+#halloween-banner{display:flex;align-items:center;justify-content:center;gap:22px;position:relative;z-index:1;box-sizing:border-box;width:min(100%,1100px);margin:18px auto 28px;padding:22px 28px;border:2px solid #ff8c3d;border-radius:22px;background:linear-gradient(115deg,#35172d,#29123c 55%,#51231c);box-shadow:0 0 36px #ff7a2226,inset 0 0 32px #a33eea18;color:#fff2df;text-align:left}
+#halloween-banner strong{display:block;font-size:clamp(20px,3vw,34px);font-weight:900;letter-spacing:.12em;color:#ffac5f;text-shadow:0 0 22px #ff741b66}#halloween-banner div>span{display:block;margin-top:7px;font-size:14px;color:#e9c9f3;letter-spacing:.03em}.halloween-pumpkin,.halloween-ghost{font-size:clamp(34px,5vw,62px);line-height:1.2}
+.halloween-web{position:fixed;top:0;width:130px;height:130px;pointer-events:none;z-index:4;opacity:.32;background:repeating-radial-gradient(circle at top left,transparent 0 22px,#e6cbff 23px 24px,transparent 25px 29px);clip-path:polygon(0 0,100% 0,0 100%)}.halloween-web-left{left:0}.halloween-web-right{right:0;transform:scaleX(-1)}
+html[data-season="normal"] #halloween-banner,html[data-season="normal"] .halloween-web{display:none!important}
+.card>.game-new-badge{display:block!important;position:absolute!important;inset:12px auto auto 0!important;z-index:20!important;padding:8px 20px 8px 15px!important;border-radius:0 5px 5px 0!important;background:#ff8b32!important;color:#190b20!important;font-size:13px!important;font-weight:950!important;letter-spacing:.12em!important;box-shadow:0 3px 12px #0009!important;opacity:1!important;transform:none!important;visibility:visible!important}
+@media(max-width:600px){#halloween-banner{gap:12px;padding:17px 12px;margin-top:12px}#halloween-banner div>span{font-size:11px}.halloween-web{width:70px;height:70px}.halloween-ghost{display:none}}
+/* Unified library cards and quiet hover interaction. */
+#page-codes .cards-grid,#page-codes .discovery-grid,#page-codes .recent-row{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(210px,1fr))!important;gap:18px!important;overflow:visible!important}
+#page-codes .cards-grid,#page-codes .discovery-grid,#page-codes .recent-row{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))!important}
+#page-codes .card{width:100%!important;max-width:320px!important;min-width:0!important;height:220px!important;min-height:220px!important;perspective:none!important;transition:transform .18s ease,box-shadow .18s ease!important;isolation:isolate}
+#page-codes .card:hover,#page-codes .card:focus-within{transform:scale(1.035)!important;box-shadow:0 10px 30px #0005!important}
+#page-codes .card .card__front,#page-codes .card:hover .card__front,#page-codes .card:focus-within .card__front{opacity:1!important;transform:none!important;filter:none!important}
+#page-codes .card .card__content{position:absolute!important;inset:auto 0 0!important;display:flex!important;flex-direction:row!important;justify-content:space-between!important;align-items:center!important;gap:8px!important;padding:35px 14px 13px!important;opacity:1!important;transform:none!important;background:linear-gradient(transparent,#0c0713e8)!important;z-index:2;pointer-events:none}
+#page-codes .card__title{color:white!important;font-size:14px!important;line-height:1.3!important;margin:0!important;white-space:normal!important;text-shadow:0 1px 6px #000;max-width:75%}
+#page-codes .card__copy-btn{display:none!important}
+#page-codes .card>.card__play-counter{position:absolute!important;inset:10px 10px auto auto!important;z-index:6!important;font-size:11px!important;padding:5px 9px!important;border-radius:20px!important;background:#170e23cf!important;backdrop-filter:blur(6px);color:#fff!important;opacity:1!important;transform:none!important;display:flex!important;gap:4px!important;pointer-events:none}
+#page-codes .card>.card__favorite-btn{position:absolute!important;inset:auto 10px 10px auto!important;z-index:7!important;width:30px!important;height:30px!important;border-radius:50%!important;display:grid!important;place-items:center!important;background:#160d24b8!important;border:1px solid #ffffff40!important;font-size:21px!important;color:#fff!important;cursor:pointer}
+#page-codes .card>.card__favorite-btn.active{color:#ff9fbf!important}
+.card-copy-confirmation{position:absolute;inset:0;z-index:8;display:grid;place-items:center;background:#160b2d99;color:#fff;font-size:18px;font-weight:750;opacity:0;transition:opacity .15s;pointer-events:none;backdrop-filter:blur(2px)}.code-copied .card-copy-confirmation{opacity:1}
+.library-section{margin:0 0 30px}.section-status{font-size:14px;color:var(--text-soft);margin:12px 0 0}.favorites-filter{min-width:46px;font-size:24px;padding:7px 13px!important}.favorites-filter[aria-pressed="true"]{box-shadow:0 0 0 2px #ffacd1;color:#ffd4e4!important}
+html:not([data-season="normal"]) body{background:radial-gradient(ellipse at 15% 0,#57304655,transparent 65%),radial-gradient(ellipse at 95% 25%,#49306544,transparent 65%),linear-gradient(145deg,#1c1128,#20142d 55%,#25182e)!important;background-attachment:fixed!important}
+html:not([data-season="normal"]) #halloween-banner{background:linear-gradient(115deg,#48254155,#39204f55 55%,#4e2b3555);border-color:#bb795d55;box-shadow:none}
+.halloween-web{width:165px;height:165px;clip-path:none;background:none;opacity:.35;filter:drop-shadow(0 0 2px #f0d9ff22)}.halloween-web svg{display:block;width:100%;height:100%;overflow:visible}
+@media(max-width:600px){#page-codes .cards-grid,#page-codes .discovery-grid,#page-codes .recent-row{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}#page-codes .card{height:220px!important}.halloween-web{width:100px;height:100px}}
+@media(prefers-reduced-motion:reduce){#page-codes .card{transition:none!important}}
+
+/* Floating hover titles; identical section geometry and stable SVG hearts. */
+#page-codes .card .card__content{inset:auto 48px 14px 14px!important;display:block!important;width:auto!important;height:auto!important;min-height:0!important;padding:0!important;gap:0!important;background:none!important;border:0!important;box-shadow:none!important;opacity:0!important;visibility:hidden;transform:translateY(4px)!important;transition:opacity .16s ease,transform .16s ease!important}
+#page-codes .card:hover .card__content,#page-codes .card:focus-within .card__content{opacity:1!important;visibility:visible;transform:translateY(0)!important}
+#page-codes .card .card__title{display:inline!important;max-width:none!important;font-size:14px!important;font-weight:650!important;line-height:1.45!important;color:white!important;background:none!important;padding:0!important;border:0!important;box-shadow:none!important;text-shadow:0 1px 3px #000,0 0 9px #000,0 0 16px #000!important}
+#homeGames.library-section{padding:0!important;background:none!important;border:0!important;box-shadow:none!important;border-radius:0!important;margin:0 0 30px!important}
+#homeGames>.grid-header{display:flex;align-items:center;justify-content:space-between;margin:0 0 16px!important;padding:0!important;border:0!important;background:none!important}
+#homeGames h2,.discovery .library-section h2{font-size:1.5rem!important;font-weight:700!important;line-height:1.3!important;margin:0 0 16px!important;letter-spacing:normal!important}
+#homeGames>.grid-header h2{margin:0!important}
+html:not([data-season="normal"]) #homeGames h2{color:#ffad67!important}
+#page-codes .card>.card__favorite-btn,#page-codes .card>.card__favorite-btn.active{width:32px!important;height:32px!important;min-width:32px!important;min-height:32px!important;padding:7px!important;box-sizing:border-box!important;line-height:1!important;transform:none!important;flex-shrink:0!important}
+.card__favorite-btn svg,.favorites-filter svg{display:block!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;fill:none!important;stroke:currentColor!important;stroke-width:1.8!important;stroke-linecap:round;stroke-linejoin:round;transform:none!important;flex-shrink:0!important}
+.card__favorite-btn.active svg,.favorites-filter.active svg{fill:currentColor!important}
+#favoritesGameBtn,#favoritesGameBtn.active{display:grid!important;place-items:center!important;min-width:46px!important;width:46px!important;height:44px!important;padding:0!important;box-sizing:border-box!important;line-height:1!important;transform:none!important}
+@media(hover:none){#page-codes .card:focus-within .card__content{opacity:1!important;visibility:visible}}
+
+/* Reference-inspired midnight Halloween scenery. */
+body{isolation:isolate}
+.halloween-scene{position:fixed;inset:0;z-index:-1;pointer-events:none;background:url('halloween-scene.svg') center center/cover no-repeat}
+html:not([data-season="normal"]) body{background:#0d0815!important}
+html[data-season="normal"] .halloween-scene{display:none}
+.halloween-web{width:255px;height:255px;opacity:.48;z-index:0;pointer-events:none}
+#halloween-banner{background:transparent!important;border:0!important;box-shadow:none!important;padding:10px 0 20px!important;margin-bottom:20px!important}
+#halloween-banner strong{font-family:Georgia,serif;font-style:italic;font-weight:500;font-size:clamp(28px,4vw,46px);letter-spacing:.015em;background:linear-gradient(110deg,#fff0c5,#ff9e42);background-clip:text;-webkit-background-clip:text;color:transparent;text-shadow:none}
+#halloween-banner .halloween-pumpkin,#halloween-banner .halloween-ghost{display:none}
+#halloween-banner div>span{font-size:12px;color:#bca2c4}
+#page-codes .card>.card__play-counter{opacity:0!important;visibility:hidden;transition:opacity .16s ease!important}
+#page-codes .card:hover>.card__play-counter,#page-codes .card:focus-within>.card__play-counter{opacity:1!important;visibility:visible}
+@media(max-width:700px){.halloween-web{width:115px;height:115px}.halloween-scene{background-position:65% center}}
+
+/* Popular-section badge; stack below NEW when both apply. */
+.card>.game-popular-badge{position:absolute;top:12px;left:0;z-index:20;padding:7px 12px;border-radius:0 5px 5px 0;background:linear-gradient(110deg,#b83520,#e97021);color:#fff5e5;font:800 11px/1.3 Inter,system-ui,sans-serif;letter-spacing:.06em;box-shadow:0 3px 12px #0007;pointer-events:none}
+.card:has(>.game-new-badge)>.game-popular-badge{top:49px}
+
+/* Compact fire marker shared by all copies of a top-ten popular game. */
+.card>.game-popular-badge{display:grid;place-items:center;left:10px;top:10px;width:28px;height:28px;padding:0;border-radius:50%;background:#211025bb;backdrop-filter:blur(5px);font-size:18px;line-height:1;box-shadow:0 2px 8px #0004;letter-spacing:0}
+.card:has(>.game-new-badge)>.game-popular-badge{top:49px;left:10px}
+html.account-locked main,html.account-locked .rewards-shell,html.account-locked .leaderboard-shell{display:none!important}
+
+/* Fire and play count share the top-right position. */
+#page-codes .card>.game-popular-badge,#page-codes .card:has(>.game-new-badge)>.game-popular-badge{top:10px;right:10px;left:auto;opacity:1;visibility:visible;transition:opacity .16s ease,visibility .16s ease}
+#page-codes .card:hover>.game-popular-badge,#page-codes .card:focus-within>.game-popular-badge{opacity:0;visibility:hidden}
+</style>
+<script src="seasonal.js?v=floating-v15" defer></script>
      <meta charset="UTF-8" />
      <script src="online-players.js?v=20260911"></script>
      <title>Tinkle Codes</title>
@@ -11,7 +99,7 @@
      <link rel="stylesheet" href="token-rewards.css?v=20260910-ui">
      <script src="token-rewards-config.js" defer></script>
      <script src="token-rewards-rules.js?v=20260910-accounts" defer></script>
-     <script src="player-config.js" defer></script><script src="shop-catalog.js" defer></script><script src="player-account.js?v=20260913-persistence" defer></script><script src="player-cosmetics.js?v=20260910-accounts" defer></script><script src="tinkle-wallet.js?v=20260910-accounts" defer></script>
+     <script src="player-config.js" defer></script><script src="shop-catalog.js" defer></script><script src="player-account.js?v=floating-v15" defer></script><script src="player-cosmetics.js?v=floating-v15" defer></script><script src="tinkle-wallet.js?v=20260910-accounts" defer></script>
      <script src="token-rewards.js?v=20260910-accounts" defer></script>
      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -1889,7 +1977,8 @@
              flex: 0 0 auto;
          }
      </style>
- <link rel="stylesheet" href="site-theme.css"><link rel="stylesheet" href="player-ui.css?v=20260910-centered"></head>
+ <link rel="stylesheet" href="site-theme.css"><link rel="stylesheet" href="player-ui.css?v=20260910-centered"><link rel="stylesheet" href="seasonal.css?v=floating-v15">
+</head>
 
  <body>
      <!-- LOADER SCREEN -->
@@ -1970,11 +2059,7 @@
 
                      <div class="sort-wrap">
                          <span class="sort-label"></span>
-                         <select id="sortSelect" class="sort-select">
-                             <option value="az">All games (A–Z)</option>
-                             <option value="popular">Popular (weekly)</option>
-                             <option value="recent">Recently added</option>
-                         </select>
+                         
                      </div>
                  </div>
              </section>
@@ -2006,25 +2091,25 @@
              </section>
 
              <!-- RECENTLY PLAYED -->
-             <section class="grid-shell" id="recentSection" style="display:none;">
+             <section class="library-section" id="recentSection">
                  <div class="grid-header">
-                     <div class="grid-title">Recently Played</div>
+                     <h2>Recently played</h2><div class="recent-scroll-buttons"><button type="button" id="recentScrollLeft" aria-label="Scroll recently played left">‹</button><button type="button" id="recentScrollRight" aria-label="Scroll recently played right">›</button></div>
                  </div>
-                 <div class="recent-row" id="recentGrid"></div>
+                 <div class="discovery-grid" id="recentGrid" role="region" aria-label="Recently played games, scroll horizontally" tabindex="0"></div><p id="recentEmpty" class="section-status">Your recently played games will appear here.</p>
 
              </section>
 
 
              <!-- GRID -->
-             <section class="grid-shell" id="homeGames">
+             <section class="library-section" id="homeGames">
                  <div class="grid-header">
-                     <div class="grid-title">Codes</div>
+                     <h2 id="allGamesTitle">All games</h2>
                      <div class="grid-count" id="cardsCount">Showing 0</div>
                  </div>
-                 <div class="cards-grid" id="cardsGrid"></div>
+                 <div class="discovery-grid" id="cardsGrid"></div>
                  <div class="no-results" id="noResults" style="display:none;">No games match that search or category.</div>
              </section>
-             <section class="grid-shell" id="homeFavorites"><div class="grid-header"><div class="grid-title">Your favorites</div></div><div class="recent-row" id="homeFavoritesGrid"></div><p class="home-empty" id="homeFavoritesEmpty">Tap a heart on a card to add your favorites here.</p></section>
+             
              </div>
          </div>
 
@@ -2078,10 +2163,9 @@
 
          <div class="page" id="page-settings">
              <div class="page-card" style="padding: 28px 32px;">
-                 <div class="page-card-header" style="font-size: 0.85rem;">Control Room</div>
                  <div class="page-card-title" style="font-size: 1.6rem; margin-bottom: 8px;">Settings</div>
                  <div class="page-card-sub" style="font-size: 0.9rem; margin-bottom: 28px;">
-                     Customize your experience — all settings are saved.
+                     customize tinkle — your own way.
                  </div>
 
                  <div class="settings-grid">
@@ -2089,9 +2173,9 @@
                      <div class="setting-card">
                          <div class="setting-header">
                              <span class="setting-icon"></span>
-                             <h3>Appearance</h3>
+                             <h3>Themes</h3>
                          </div>
-                         <div class="setting-desc">Change the look and feel of the interface.</div>
+                         <div class="setting-desc">change the site colors</div>
                          <div class="setting-controls">
                              <select id="themeSelect" class="select-large">
                                  <option value="galaxy">Galaxy (default)</option>
@@ -2102,34 +2186,8 @@
                          </div>
                      </div>
 
-                     <!-- Layout Card -->
-                     <div class="setting-card">
-                         <div class="setting-header">
-                             <span class="setting-icon"></span>
-                             <h3>Design</h3>
-                         </div>
-                         <div class="toggle-row-large">
-                             <div class="toggle-info">
-                                 <div class="toggle-label-large">Hide Title</div>
-                                 <div class="toggle-sub-large">Remove the title/welcome block.</div>
-                             </div>
-                             <label class="toggle-switch-large">
-                                 <input type="checkbox" id="heroToggle">
-                                 <span class="toggle-slider-large"></span>
-                             </label>
-                         </div>
-                         <div class="toggle-row-large">
-                             <div class="toggle-info">
-                                 <div class="toggle-label-large">Reduce Motion</div>
-                                 <div class="toggle-sub-large">Disable animations and card flips.</div>
-                             </div>
-                             <label class="toggle-switch-large">
-                                 <input type="checkbox" id="motionToggle">
-                                 <span class="toggle-slider-large"></span>
-                             </label>
-                         </div>
-                     </div>
-
+                     <div class="setting-card" id="tabCloakCard"><div class="setting-header"><h3>Tab cloak</h3></div><p class="setting-desc">disguise the tab title and icon.</p><label for="tabCloakPreset">Tab cloak</label><select id="tabCloakPreset" class="select-large"></select><button id="tabCloakReset" class="btn-small-spacious" type="button">Reset cloak</button><p id="tabCloakStatus" role="status" class="setting-desc"></p></div>
+                     <div class="setting-card" id="antiCloseCard"><div class="setting-header"><h3>Anti-close</h3></div><p class="setting-desc">ask for confirmation before leaving or closing this tab.</p><label class="anti-close-control"><span>Enable anti-close</span><input type="checkbox" id="antiCloseToggle" role="switch"></label><p id="antiCloseStatus" class="setting-desc" role="status"></p></div>
                      <!-- Safety Card -->
                      <div class="setting-card">
                          <div class="setting-header">
@@ -2169,14 +2227,13 @@
      </div>
 
      <!-- Load game data before the page scripts initialize. -->
-     <script src="game-cards.js"></script>
-     <script src="homepage-ui.js"></script>
+     <script src="game-cards.js?v=floating-v15"></script>
+     <script src="homepage-ui.js?v=floating-v15"></script>
      <script src="weekly-popularity.js"></script>
 
      <dialog id="homeCustomize" aria-labelledby="homeCustomizeTitle">
        <form id="homeForm"><h2 id="homeCustomizeTitle">Make yourself at home</h2><p>Choose your sections and their order. Saved on this device.</p><div id="homeOrder"></div>
        <label class="home-setting">Card density<select id="homeDensity"><option value="comfortable">Comfortable</option><option value="compact">Compact</option></select></label>
-       <label class="home-setting">Default game sort<select id="homeDefaultSort"><option value="az">All games (A–Z)</option><option value="popular">Popular (weekly)</option><option value="recent">Recently added</option></select></label>
        <p id="homeSaveStatus" role="status"></p><div class="home-actions"><button type="button" id="homeReset">Reset layout</button><button type="button" id="homeClose">Cancel</button><button type="submit">Save layout</button></div></form>
      </dialog>
      <!-- Toast -->
@@ -2197,18 +2254,23 @@
              <button class="close-btn" style="position: absolute; top: 12px; right: 18px; font-size: 28px; background: none; border: none; color: white; cursor: pointer;">&times;</button>
              <!-- ADMIN UPDATE LOG START -->
 <h2>Update Log</h2>
-<h3>Teeny Weeny Update</h3>
+<h3>HUGE Halloween Update</h3>
 <ul>
-    <li>🎲 Added Gamble With Your Friends (Solo)</li>
-    <li>🐈 Added Pet The Cat</li>
-    <li>🐦‍🔥 Added Angry Birds Epic</li>
+    <li>🎃 New halloween theme along with 22 new themes (cursors & backgrounds)</li>
+    <li>🥸 Added tab cloaking (28 presets)</li>
+    <li>👤 Added guest browsing, no sign-in required</li>
+    <li>🗂️ Added NEW and POPULAR banners to games across the library</li>
+    <li>🎮 Updated game cards</li>
+    <li>❤️ Moved favorites beside Random Game</li>
+    <li>🛑 Added Anti-close setting</li>
+    <li>🔑 Restyled Enter Code page</li>
 </ul>
 <h3>Coming Soon</h3>
 <ul>
     <li>🎮 Adding Mouse P.I. For Hire SOON</li>
     <li>📋 Looking through your suggestions and game requests also</li>
 </ul>
-<div class="log-footer" style="margin-top:20px;padding-top:12px;border-top:1px solid rgba(255,255,255,.2);font-size:.75rem;text-align:center"><span>Version 2.0.6 • Last updated Oct 26, 2026</span></div>
+<div class="log-footer" style="margin-top:20px;padding-top:12px;border-top:1px solid rgba(255,255,255,.2);font-size:.75rem;text-align:center"><span>Version 3.0.0 • Last updated Oct 27, 2026</span></div>
 <!-- ADMIN UPDATE LOG END -->
 
          </div>
@@ -2591,6 +2653,7 @@
          };
 
          const settingsRef = ref(db, "siteSettings");
+         onValue(settingsRef, snapshot => {window.tinkleDiscoverySettings=snapshot.val()||{};window.dispatchEvent(new Event('discovery-settings'));},error=>console.warn('Spotlight settings unavailable',error));
          const triggerAnnRef = ref(db, "announcementTriggerNow");
          const triggerRef = ref(db, "jumpscareTriggerNow");
          const trollBaseRef = ref(db, "trollTriggers");
@@ -3140,6 +3203,7 @@
 
          // Panic function - REPLACES THE PARENT WINDOW (actual browser tab)
          function triggerPanic() {
+             window.TinkleAntiClose?.suspend();
              let url = panicUrlInput ? panicUrlInput.value.trim() : "https://google.com";
 
              // Add https:// if no protocol is specified
@@ -3368,18 +3432,11 @@
          const heroToggle = document.getElementById("heroToggle");
          const motionToggle = document.getElementById("motionToggle");
 
-         function applyTheme(theme) {
-             const root = document.documentElement;
-             if (theme === "galaxy") {
-                 root.removeAttribute("data-theme");
-             } else {
-                 root.setAttribute("data-theme", theme);
-             }
-         }
+         function applyTheme(theme){window.TinkleSettings?.applyTheme(theme);}
 
          function loadSettings() {
              try {
-                 const storedTheme = localStorage.getItem("tinkleTheme");
+                 const storedTheme = localStorage.getItem("tinkleImportedTheme") || "default";
                  const compact = localStorage.getItem("tinkleCompact");
                  const heroHidden = localStorage.getItem("tinkleHeroHidden");
                  const reducedMotion = localStorage.getItem("tinkleMotion");
@@ -3410,7 +3467,7 @@
                      window.TinkleWallet.equip('theme', null).catch(error => showToast('THEME', error.message));
                  }
                  try {
-                     localStorage.setItem("tinkleTheme", value);
+                     localStorage.setItem("tinkleImportedTheme", value);
                  } catch {}
                  showToast("SETTINGS", "Theme set to " + value);
              });
@@ -3642,9 +3699,9 @@
              const updateLogBtn = document.getElementById('updateLogBtn');
 
              // Check if we should skip the loader (returning from code site)
-             const shouldSkipLoader = localStorage.getItem("skipLoader") === "true";
+             const shouldSkipLoader = true;
              const skipTime = parseInt(localStorage.getItem("loaderSkipTime") || "0");
-             const timeSinceSkip = Date.now() - skipTime;
+             const timeSinceSkip = 0;
 
              // Clear the skip flag after 10 seconds to prevent permanent skipping
              if (timeSinceSkip > 10000) {
@@ -3738,36 +3795,24 @@
 
              if (recentGames.length > 6) recentGames.pop();
 
-             localStorage.setItem("recentGames", JSON.stringify(recentGames));
+             try{localStorage.setItem("recentGames", JSON.stringify(recentGames));}catch{}
+             renderRecentGames();
          }
 
 
-         function renderRecentGames() {
-             const section = document.getElementById("recentSection");
-             const grid = document.getElementById("recentGrid");
-
-             grid.innerHTML = "";
-
-             // Check if we're on "All Games" category AND sort mode is "az" (A-Z)
-             const shouldShowRecent = (currentCategory === "all" && sortMode === "az");
-
-             if (!shouldShowRecent || !recentGames.length) {
-                 section.style.display = "none";
-                 return;
-             }
-
-             section.style.display = "block";
-
-             recentGames.forEach(code => {
-                 const game = games.find(g => g.code === code);
-
-                 if (!game) return;
-
-                 const card = createGameCard(game);
-                 grid.appendChild(card);
-             });
+         function renderRecentGames(){
+             const grid=document.getElementById('recentGrid'),allowed=new Set(getFilteredGames().map(game=>game.code));
+             const recent=recentGames.map(code=>games.find(game=>game.code===code)).filter(game=>game&&allowed.has(game.code));
+             grid.replaceChildren(...recent.map(createGameCard));document.getElementById('recentEmpty').hidden=recent.length>0;requestAnimationFrame(syncRecentScroll);
+             document.getElementById('recentEmpty').textContent=recentGames.length?'No recently played games match your filters.':'Your recently played games will appear here.';
          }
 
+         const recentScroller=document.getElementById('recentGrid');
+         function syncRecentScroll(){document.getElementById('recentScrollLeft').disabled=recentScroller.scrollLeft<=1;document.getElementById('recentScrollRight').disabled=recentScroller.scrollLeft+recentScroller.clientWidth>=recentScroller.scrollWidth-1;}
+         recentScroller.addEventListener('scroll',syncRecentScroll,{passive:true});window.addEventListener('resize',syncRecentScroll);
+         recentScroller.addEventListener('wheel',event=>{if(event.ctrlKey||Math.abs(event.deltaX)>Math.abs(event.deltaY)||!event.deltaY)return;const delta=event.deltaY*(event.deltaMode===1?16:event.deltaMode===2?recentScroller.clientWidth:1);const max=recentScroller.scrollWidth-recentScroller.clientWidth;if(max<=0||(delta<0&&recentScroller.scrollLeft<=0)||(delta>0&&recentScroller.scrollLeft>=max-1))return;event.preventDefault();recentScroller.scrollLeft+=delta;},{passive:false});
+         document.getElementById('recentScrollLeft').onclick=()=>recentScroller.scrollBy({left:-320,behavior:document.body.classList.contains('reduce-motion')?'instant':'smooth'});
+         document.getElementById('recentScrollRight').onclick=()=>recentScroller.scrollBy({left:320,behavior:document.body.classList.contains('reduce-motion')?'instant':'smooth'});
          // Add this function to check URL parameters for return flag
          function checkForReturnFromCodeSite() {
              const urlParams = new URLSearchParams(window.location.search);
@@ -3796,7 +3841,7 @@
          const categoryPillsContainer = document.getElementById("categoryPills");
          const popularCount = document.getElementById("popularCount");
          const popularEmpty = document.getElementById("popularEmpty");
-         const sortSelect = document.getElementById("sortSelect");
+         const sortSelect = null;
 
          const games = [];
          const categorySet = new Set();
@@ -3865,7 +3910,7 @@
          window.addEventListener('weekly-popularity-changed', () => {
              clearTimeout(weeklyRefreshTimer);
              weeklyRefreshTimer = setTimeout(() => {
-                 if (sortMode === 'popular') renderCards();
+                 renderCards();
              }, 250);
          });
 
@@ -3929,7 +3974,7 @@
                  const matchesCategory = cat === "all" ||
                      (g.categories && g.categories.includes(cat));
 
-                 return matchesSearch && matchesCategory;
+                 return matchesSearch && matchesCategory && (!favoritesOnly || isFavorite(g));
              });
          }
 
@@ -4043,97 +4088,25 @@
              }
              if (copied) showCopyToast(message);
              else showToast("CLIPBOARD", "Copy failed. Select this code manually: " + text);
+             return copied;
          }
 
+         function heartIcon(){const ns='http://www.w3.org/2000/svg',svg=document.createElementNS(ns,'svg'),path=document.createElementNS(ns,'path');svg.setAttribute('viewBox','0 0 24 24');svg.setAttribute('aria-hidden','true');svg.setAttribute('focusable','false');path.setAttribute('d','M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z');svg.append(path);return svg;}
          function createGameCard(game) {
-             const card = document.createElement("div");
-             card.className = "card";
-             card.tabIndex = 0;
-             card.setAttribute("role", "group");
-             card.dataset.code = game.code;
-             card.setAttribute("aria-label", "Copy code for " + game.name);
-
-             const front = document.createElement("div");
-             front.className = "card__front";
-             if (game.img) {
-                 front.style.backgroundImage = "url('" + game.img.replace(/'/g, "\\'") + "')";
-             } else {
-                 front.style.backgroundImage = "linear-gradient(135deg, rgba(15,23,42,0.9), rgba(30,64,175,0.9))";
-             }
-
-             const content = document.createElement("div");
-             content.className = "card__content";
-
-             const topRow = document.createElement("div");
-             topRow.className = "card__top-row";
-
-             const title = document.createElement("p");
-             title.className = "card__title";
-             title.textContent = game.name;
-
-             const codePill = document.createElement("div");
-             codePill.className = "card__code-pill";
-             codePill.textContent = game.code || "no-code";
-
-             // 🧡 favorite button
-             const favBtn = document.createElement("button");
-             favBtn.type = "button";
-             favBtn.className = "card__favorite-btn";
-             favBtn.setAttribute("aria-label", "Favorite " + game.name);
-
-             function syncFavButton() {
-                 if (isFavorite(game)) {
-                     favBtn.classList.add("active");
-                     favBtn.textContent = "♥";
-                 } else {
-                     favBtn.classList.remove("active");
-                     favBtn.textContent = "♡";
-                 }
-             }
-
-             favBtn.addEventListener("click", (e) => {
-                 e.stopPropagation();
-                 toggleFavorite(game);
-                 syncFavButton();
-             });
-
-             syncFavButton();
-
-             topRow.appendChild(title);
-             topRow.appendChild(codePill);
-             topRow.appendChild(favBtn);
-
-             const desc = document.createElement("div");
-             desc.className = "card__description";
-             desc.textContent = "Tap anywhere on this card or use the button to copy the code to your clipboard.";
-
-             const footer = document.createElement("div");
-             footer.className = "card__footer";
-
-             // Play counter (now the main hover element)
-             const playCounter = document.createElement("div");
-             playCounter.className = "card__play-counter";
-             playCounter.innerHTML = `
-        <span class="counter-icon">🎮</span> 
-        <span class="counter-number" data-game="${sanitizeKey(game.name)}">0</span>
-        <span class="counter-label">plays</span>
-    `;
-
-             const btn = document.createElement("button");
-             btn.type = "button";
-             btn.className = "btn-glow card__copy-btn";
-             btn.innerHTML = "<span>Copy code</span>";
-
-             footer.appendChild(playCounter);
-             footer.appendChild(btn);
-
-             content.appendChild(topRow);
-             content.appendChild(desc);
-             content.appendChild(footer);
-
-             card.appendChild(front);
-             card.appendChild(content);
-
+             const card=document.createElement('div');card.className='card';card.tabIndex=0;card.dataset.code=game.code;card.setAttribute('role','group');card.setAttribute('aria-label','Copy code for '+game.name);
+             const front=document.createElement('div');front.className='card__front';if(game.img)front.style.backgroundImage='url("'+game.img.replace(/"/g,'%22')+'")';
+             const content=document.createElement('div');content.className='card__content';
+             const title=document.createElement('p');title.className='card__title';title.textContent=game.name;
+             const playCounter=document.createElement('div');playCounter.className='card__play-counter';
+             const number=document.createElement('span');number.className='counter-number';number.dataset.game=sanitizeKey(game.name);number.textContent='0';playCounter.append(number,document.createTextNode(' plays'));
+             const favBtn=document.createElement('button');favBtn.type='button';favBtn.className='card__favorite-btn';
+             function syncFavButton(){favBtn.classList.toggle('active',isFavorite(game));favBtn.replaceChildren(heartIcon());favBtn.setAttribute('aria-label',(isFavorite(game)?'Unfavorite ':'Favorite ')+game.name);favBtn.setAttribute('aria-pressed',String(isFavorite(game)));}
+             favBtn.onclick=event=>{event.stopPropagation();toggleFavorite(game);syncFavButton();};syncFavButton();
+             const btn=document.createElement('button');btn.type='button';btn.className='card__copy-btn';btn.textContent='Copy code';
+             const confirmation=document.createElement('span');confirmation.className='card-copy-confirmation';confirmation.textContent='Code copied';confirmation.setAttribute('role','status');
+             content.append(title,btn);card.append(front,content,playCounter,favBtn,confirmation);
+             if(isNewGame(game)){const badge=document.createElement('span');badge.className='game-new-badge';badge.textContent='NEW';card.append(badge);}
+             let copyTimer;
              // Function to update the play counter
              async function updatePlayCounter(retryCount = 0) {
                  try {
@@ -4184,7 +4157,8 @@
                  }
 
                  // Always copy immediately; rewards and counters run independently.
-                 tryCopyToClipboard(game.code);
+                 const copied=await tryCopyToClipboard(game.code);
+                 if(copied){card.classList.add('code-copied');clearTimeout(copyTimer);copyTimer=setTimeout(()=>card.classList.remove('code-copied'),1600);}
                  addRecentGame(game);
                  window.TinkleRewards?.onCard(game.code);
 
@@ -4216,96 +4190,49 @@
                  handleCopy();
              });
 
-             return card;
+             addPopularIcon(card);return card;
          }
 
 
-         let cardsRenderVersion = 0;
-         async function renderCards() {
-             const renderVersion = ++cardsRenderVersion;
-             const filtered = getFilteredGames();
-
-             if (!filtered.length) {
-                 cardsGrid.replaceChildren();
-                 noResults.style.display = "";
-                 cardsCount.textContent = "Showing 0";
-                 return;
-             }
-
-             noResults.style.display = "none";
-
-             let toRender = [...filtered];
-
-             if (sortMode === "az") {
-                 // A–Z by name
-                 toRender.sort((a, b) => a.name.localeCompare(b.name));
-             } else if (sortMode === "recent") {
-                 // higher id = added later
-                 toRender.sort((a, b) => b.id - a.id);
-                 toRender = toRender.slice(0, 12);
-             } // Update the popular sorting in renderCards function
-             else if (sortMode === "popular") {
-                 // Use weekly click data for popular section
-                 let weeklyData = {};
-                 if (window.getWeeklyClickData) {
-                     try {
-                         weeklyData = await window.getWeeklyClickData();
-                     } catch (e) {
-                         console.error("getWeeklyClickData error:", e);
-                         if (renderVersion === cardsRenderVersion) {
-                             cardsCount.textContent = "Weekly rankings could not load. Try again.";
-                         }
-                         return;
-                     }
-                 }
-
-                 const ranked = toRender
-                     .map(g => {
-                         const key = sanitizeKey(g.name);
-                         return {
-                             game: g,
-                             count: (weeklyData && weeklyData[key]) || 0
-                         };
-                     })
-                     .filter(entry => entry.count > 0)
-                     .sort((a, b) => b.count - a.count)
-                     .slice(0, 12);
-
-                 if (ranked.length) {
-                     toRender = ranked.map(e => e.game);
-                 } else {
-                     toRender.sort((a, b) => a.name.localeCompare(b.name));
-                 }
-             }
-
-             if (renderVersion !== cardsRenderVersion) return;
-             cardsGrid.replaceChildren();
-             toRender.forEach((game, index) => {
-                 const card = createGameCard(game);
-
-                 // Add gold/silver/bronze badges only in Popular mode
-                 if (sortMode === "popular") {
-                     const badge = document.createElement("div");
-                     badge.className =
-                         "rank-badge " +
-                         (index === 0 ?
-                             "rank-1" // gold
-                             :
-                             index === 1 ?
-                             "rank-2" // silver
-                             :
-                             index === 2 ?
-                             "rank-3" // bronze
-                             :
-                             "");
-                     badge.textContent = "#" + (index + 1);
-                     card.appendChild(badge);
-                 }
-
-                 cardsGrid.appendChild(card);
-             });
-
-             cardsCount.textContent = "Showing " + toRender.length;
+         let popularCodes=new Set();
+         function addPopularIcon(card){if(!popularCodes.has(card.dataset.code)||card.querySelector('.game-popular-badge'))return;const icon=document.createElement('span');icon.className='game-popular-badge';icon.textContent='🔥';icon.title='Popular game';icon.setAttribute('aria-label','Popular game');card.append(icon);}
+         function isNewGame(game){return games.slice(-10).some(item=>item.code===game.code);}
+         let favoritesOnly=false;
+         const discovery=document.createElement('section');discovery.className='discovery';
+         document.getElementById('homeGames').before(discovery);
+         const newSection=document.createElement('section'),popularSection=document.createElement('section');newSection.id='homeNew';popularSection.id='homePopular';
+         function makeSection(section,label){section.className='library-section';const title=document.createElement('h2');title.textContent=label;const grid=document.createElement('div');grid.className='discovery-grid';section.append(title,grid);document.getElementById('homeSections').append(section);return grid;}
+         const newGrid=makeSection(newSection,'New games'),popularGrid=makeSection(popularSection,'Popular games');
+         const popularStatus=document.createElement('p');popularStatus.className='section-status';popularStatus.setAttribute('role','status');popularSection.append(popularStatus);
+         const newStatus=document.createElement('p');newStatus.className='section-status';newStatus.textContent='No new games match your filters.';newSection.append(newStatus);
+         function renderDiscovery(){document.documentElement.dataset.season=window.tinkleDiscoverySettings?.seasonalTheme==='normal'?'normal':'halloween';}
+         window.addEventListener('discovery-settings',renderDiscovery);renderDiscovery();
+         const favoritesButton=document.createElement('button');favoritesButton.type='button';favoritesButton.className='btn-glow favorites-filter';favoritesButton.id='favoritesGameBtn';favoritesButton.replaceChildren(heartIcon());favoritesButton.title='Show favorites';favoritesButton.setAttribute('aria-label','Show favorites');favoritesButton.setAttribute('aria-pressed','false');
+         document.getElementById('randomGameBtn').after(favoritesButton);
+         favoritesButton.onclick=()=>{favoritesOnly=!favoritesOnly;favoritesButton.classList.toggle('active',favoritesOnly);favoritesButton.setAttribute('aria-pressed',String(favoritesOnly));favoritesButton.title=favoritesOnly?'Show all games':'Show favorites';favoritesButton.setAttribute('aria-label',favoritesButton.title);renderCards();};
+         window.addEventListener('favorites-changed',()=>{if(favoritesOnly)renderCards();document.querySelectorAll('.card').forEach(card=>{const game=games.find(g=>g.code===card.dataset.code),button=card.querySelector('.card__favorite-btn');if(game&&button){button.classList.toggle('active',isFavorite(game));button.replaceChildren(heartIcon());button.setAttribute('aria-pressed',String(isFavorite(game)));}});});
+         let cardsRenderVersion=0;
+         async function renderCards(){
+             const version=++cardsRenderVersion,filtered=getFilteredGames();
+             cardsGrid.replaceChildren(...[...filtered].sort((a,b)=>a.name.localeCompare(b.name)).map(createGameCard));
+             document.getElementById('allGamesTitle').textContent=favoritesOnly?'Favorite games':'All games';
+             cardsCount.textContent='Showing '+filtered.length;noResults.style.display=filtered.length?'none':'';
+             noResults.textContent=favoritesOnly?'No favorites match. Tap a heart on a game to save it.':'No games match that search or category.';
+             document.getElementById('page-codes').classList.toggle('favorites-view',favoritesOnly);renderRecentGames();
+             if(favoritesOnly)return;
+             const fresh=filtered.filter(isNewGame).sort((a,b)=>b.id-a.id);
+             newGrid.replaceChildren(...fresh.map(createGameCard));newStatus.hidden=fresh.length>0;
+             popularGrid.replaceChildren();popularStatus.textContent='Loading this week’s popular games…';
+             try{
+                 if(!window.getWeeklyClickData){popularStatus.textContent='Weekly rankings are unavailable.';return;}
+                 const data=await window.getWeeklyClickData();if(version!==cardsRenderVersion)return;
+                 const globalRanked=games.map(game=>({game,count:Number(data?.[sanitizeKey(game.name)])||0})).filter(x=>x.count>0).sort((a,b)=>b.count-a.count||a.game.name.localeCompare(b.game.name)).slice(0,10);
+                 popularCodes=new Set(globalRanked.map(x=>x.game.code));
+                 const ranked=globalRanked.filter(x=>filtered.some(game=>game.code===x.game.code));
+                 popularGrid.replaceChildren(...ranked.map(x=>createGameCard(x.game)));
+                 document.querySelectorAll('.card').forEach(card=>{card.querySelector('.game-popular-badge')?.remove();addPopularIcon(card);});
+                 popularStatus.textContent=ranked.length?'':'No plays recorded this week.';
+             }catch{if(version===cardsRenderVersion)popularStatus.textContent='Weekly rankings could not load. All games are available below.';}
          }
 
          function updateFavoritesGrid() {
@@ -4319,20 +4246,7 @@
              });
          }
 
-         function renderHomeFavorites(visible = true) {
-             const grid = document.getElementById('homeFavoritesGrid');
-             grid.replaceChildren();
-             if (!visible) return;
-             const favorites = games.filter(isFavorite);
-             favorites.forEach(game => grid.appendChild(createGameCard(game)));
-             document.getElementById('homeFavoritesEmpty').hidden = favorites.length > 0;
-         }
-         HomepageUI.mount({
-             refreshFavorites: renderHomeFavorites,
-             panicKey: () => panicKey,
-             settingPanic: () => isSettingKey,
-             onSort: value => { sortMode = value; sortSelect.value = value; renderCards(); renderRecentGames(); }
-         });
+         HomepageUI.mount({refreshFavorites:()=>{},panicKey:()=>panicKey,settingPanic:()=>isSettingKey,onSort:()=>{sortMode='az';renderCards();renderRecentGames();}});
 
          // Set up real-time counter updates
          if (window.listenToAllTimeCounts) {
@@ -4437,7 +4351,8 @@
             .back-button.hidden { opacity: 0; pointer-events: none; transform: translateY(-8px); animation: none; }
             @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
         </style>
-    </head>
+    <link rel="stylesheet" href="seasonal.css?v=floating-v15">
+</head>
     <body>
         <button class="back-button" onclick="window.location.href='${returnURL}'">🔙 Go Back</button>
         <iframe id="gameFrame" src="${codeSiteURL}" allowfullscreen></iframe>
@@ -4482,7 +4397,8 @@
 
  <head>
      <title>Tinkle Party Cinema</title>
- </head>
+ <link rel="stylesheet" href="seasonal.css?v=floating-v15">
+</head>
 
  <body style="margin:0;background-color:black;">
      <iframe src="${moviesLink}" style="border:none;width:100vw;height:100vh;" allowfullscreen>
@@ -4509,7 +4425,8 @@
 
  <head>
      <title>Tinkle Party Music</title>
- </head>
+ <link rel="stylesheet" href="seasonal.css?v=floating-v15">
+</head>
 
  <body style="margin:0;background-color:black;">
      <iframe src="${musicLink}" style="border:none;width:100vw;height:100vh;" allowfullscreen>
