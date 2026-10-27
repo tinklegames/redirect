@@ -270,7 +270,7 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
                         iframeHint.textContent = "⚠️ This site cannot open in an iframe. Use 'Open in New Tab' instead.";
                     }
 
-                    showNotification("✅ Valid code! Link generated.", "success");
+                    showNotification("link generated", "success");
                 } else {
                     resultDiv.innerHTML = "❌ Invalid code. Try again.";
                     showNotification("❌ Invalid code. Please try again.", "error");
@@ -340,7 +340,7 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
         // New function: Open in new tab with iframe wrapper (hides URL)
         function openInPrivateTab() {
             if (!generatedLink) {
-                showNotification("❌ No link generated. Please enter a valid code first.", "error");
+                showNotification("enter a valid code", "error");
                 return;
             }
 
