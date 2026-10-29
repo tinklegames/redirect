@@ -2,8 +2,9 @@
  <html lang="en">
 
  <head>
-<script src="anti-close.js?v=floating-v15" defer></script>
-<script src="settings-data.js?v=floating-v15" defer></script><script src="settings-import.js?v=floating-v15" defer></script><link rel="stylesheet" href="settings-import.css?v=floating-v15">
+<script src="tab-cloak-bridge.js?v=cloak-history-v17" defer></script>
+<script src="anti-close.js?v=cloak-history-v17" defer></script>
+<script src="settings-data.js?v=cloak-history-v17" defer></script><script src="settings-import.js?v=cloak-history-v17" defer></script><link rel="stylesheet" href="settings-import.css?v=cloak-history-v17">
 <!-- Tinkle seasonal update v2 -->
 <style>/* Set Seasonal theme to Normal in Site settings to disable Halloween. */
 #homeIntro,#loaderScreen{display:none!important;visibility:hidden!important;pointer-events:none!important}
@@ -89,7 +90,7 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
 #page-codes .card>.game-popular-badge,#page-codes .card:has(>.game-new-badge)>.game-popular-badge{top:10px;right:10px;left:auto;opacity:1;visibility:visible;transition:opacity .16s ease,visibility .16s ease}
 #page-codes .card:hover>.game-popular-badge,#page-codes .card:focus-within>.game-popular-badge{opacity:0;visibility:hidden}
 </style>
-<script src="seasonal.js?v=floating-v15" defer></script>
+<script src="seasonal.js?v=cloak-history-v17" defer></script>
      <meta charset="UTF-8" />
      <script src="online-players.js?v=20260911"></script>
      <title>Tinkle Codes</title>
@@ -99,7 +100,7 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
      <link rel="stylesheet" href="token-rewards.css?v=20260910-ui">
      <script src="token-rewards-config.js" defer></script>
      <script src="token-rewards-rules.js?v=20260910-accounts" defer></script>
-     <script src="player-config.js" defer></script><script src="shop-catalog.js" defer></script><script src="player-account.js?v=floating-v15" defer></script><script src="player-cosmetics.js?v=floating-v15" defer></script><script src="tinkle-wallet.js?v=20260910-accounts" defer></script>
+     <script src="player-config.js" defer></script><script src="shop-catalog.js" defer></script><script src="player-account.js?v=cloak-history-v17" defer></script><script src="player-cosmetics.js?v=cloak-history-v17" defer></script><script src="tinkle-wallet.js?v=20260910-accounts" defer></script>
      <script src="token-rewards.js?v=20260910-accounts" defer></script>
      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -1977,8 +1978,8 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
              flex: 0 0 auto;
          }
      </style>
- <link rel="stylesheet" href="site-theme.css"><link rel="stylesheet" href="player-ui.css?v=20260910-centered"><link rel="stylesheet" href="seasonal.css?v=floating-v15">
-</head>
+ <link rel="stylesheet" href="site-theme.css"><link rel="stylesheet" href="player-ui.css?v=20260910-centered"><link rel="stylesheet" href="seasonal.css?v=cloak-history-v17">
+<script src="update-history.js?v=cloak-history-v17" defer></script></head>
 
  <body>
      <!-- LOADER SCREEN -->
@@ -2186,8 +2187,8 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
                          </div>
                      </div>
 
-                     <div class="setting-card" id="tabCloakCard"><div class="setting-header"><h3>Tab cloak</h3></div><p class="setting-desc">disguise the tab title and icon.</p><label for="tabCloakPreset">Tab cloak</label><select id="tabCloakPreset" class="select-large"></select><button id="tabCloakReset" class="btn-small-spacious" type="button">Reset cloak</button><p id="tabCloakStatus" role="status" class="setting-desc"></p></div>
-                     <div class="setting-card" id="antiCloseCard"><div class="setting-header"><h3>Anti-close</h3></div><p class="setting-desc">ask for confirmation before leaving or closing this tab.</p><label class="anti-close-control"><span>Enable anti-close</span><input type="checkbox" id="antiCloseToggle" role="switch"></label><p id="antiCloseStatus" class="setting-desc" role="status"></p></div>
+                     <div class="setting-card" id="tabCloakCard"><div class="setting-header"><h3>Tab cloak</h3></div><p class="setting-desc">Change the tab title and icon.</p><label for="tabCloakPreset">Tab cloak</label><select id="tabCloakPreset" class="select-large"></select><button id="openCloakedTab" class="btn-small-spacious" type="button">Open in about:blank</button><button id="tabCloakReset" class="btn-small-spacious" type="button">Reset cloak</button><p id="tabCloakStatus" role="status" class="setting-desc"></p></div>
+                     <div class="setting-card" id="antiCloseCard"><div class="setting-header"><h3>Anti-close</h3></div><p class="setting-desc">Ask for confirmation before leaving or closing this tab.</p><label class="anti-close-control"><span>Enable anti-close</span><input type="checkbox" id="antiCloseToggle" role="switch"></label><p id="antiCloseStatus" class="setting-desc" role="status"></p></div>
                      <!-- Safety Card -->
                      <div class="setting-card">
                          <div class="setting-header">
@@ -2227,8 +2228,8 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
      </div>
 
      <!-- Load game data before the page scripts initialize. -->
-     <script src="game-cards.js?v=floating-v15"></script>
-     <script src="homepage-ui.js?v=floating-v15"></script>
+     <script src="game-cards.js?v=cloak-history-v17"></script>
+     <script src="homepage-ui.js?v=cloak-history-v17"></script>
      <script src="weekly-popularity.js"></script>
 
      <dialog id="homeCustomize" aria-labelledby="homeCustomizeTitle">
@@ -3015,7 +3016,7 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
              const content = document.querySelector('#updateLog .log-content');
              if (!content) return '';
              return Array.from(content.children)
-                 .filter(node => !node.classList.contains('close-btn'))
+                 .filter(node => !node.classList.contains('close-btn') && !node.classList.contains('update-history-tools'))
                  .map(node => node.textContent.replace(/\s+/g, ' ').trim()).join('\n');
          }
 
@@ -4352,7 +4353,7 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
             .back-button.hidden { opacity: 0; pointer-events: none; transform: translateY(-8px); animation: none; }
             @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
         </style>
-    <link rel="stylesheet" href="seasonal.css?v=floating-v15">
+    <link rel="stylesheet" href="seasonal.css?v=cloak-history-v17">
 </head>
     <body>
         <iframe id="gameFrame" src="${codeSiteURL}" allowfullscreen></iframe>
@@ -4397,7 +4398,7 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
 
  <head>
      <title>Tinkle Party Cinema</title>
- <link rel="stylesheet" href="seasonal.css?v=floating-v15">
+ <link rel="stylesheet" href="seasonal.css?v=cloak-history-v17">
 </head>
 
  <body style="margin:0;background-color:black;">
@@ -4425,7 +4426,7 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
 
  <head>
      <title>Tinkle Party Music</title>
- <link rel="stylesheet" href="seasonal.css?v=floating-v15">
+ <link rel="stylesheet" href="seasonal.css?v=cloak-history-v17">
 </head>
 
  <body style="margin:0;background-color:black;">
