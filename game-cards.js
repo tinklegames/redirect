@@ -2564,5 +2564,89 @@ window.GAME_CARDS = [
       "puzzle"
     ],
     "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.mobygames.com%2Fpromos%2F1823290-angry-birds-epic-screenshot.jpg&f=1&nofb=1&ipt=c6035e422c3581f7e381eaa97cd0af6698bd253d045bb37f9e87ce48ab74e835&ipo=images"
+  },
+  {
+    "addedAt": 1793299878838,
+    "isNew": true,
+    "name": "Angry Birds Star Wars II",
+    "code": "ABSW2",
+    "categories": [
+      "puzzle"
+    ],
+    "img": "https://upload.wikimedia.org/wikipedia/en/d/d4/Angry_Birds_Star_Wars_II.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original"
+  },
+  {
+    "addedAt": 1793315841154,
+    "isNew": true,
+    "name": "Feed and Grow: Fish",
+    "code": "FAGF",
+    "categories": [
+      "action",
+      "simulator"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fm.gjcdn.net%2Ffireside-post-image%2F900%2F1548252-ivayzsqf-v4.jpg&f=1&nofb=1&ipt=2f88229fbaec10be99aa2fc3fd1fe00cb95237cf2b1fd531777a0a3c3b0ca704&ipo=images"
+  },
+  {
+    "addedAt": 1793315866002,
+    "isNew": true,
+    "name": "Ravenfield",
+    "code": "RAVEN",
+    "categories": [
+      "action"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fgfn.am%2Fen%2Fgames%2Fmedia%2Fimages%2Fart_image-ravenfield-b80b71e9.original.jpg&f=1&nofb=1&ipt=b61d570307a53c6661c8b7be148890c9157acfbea1d66952bc867c0a22dc5bab&ipo=images"
+  },
+  {
+    "addedAt": 1793315926404,
+    "isNew": true,
+    "name": "Rotten Machines",
+    "code": "ROTTENMACHINES",
+    "categories": [
+      "horror"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimg.itch.zone%2FaW1nLzMxMjIxNDE4LnBuZw%3D%3D%2Foriginal%2FLXJaHz.png&f=1&nofb=1&ipt=89bdfb85c3f2edbdaf799232694a04ccc3e76b874ca01ce8242371de6f178bbc&ipo=images"
+  },
+  {
+    "addedAt": 1793315969438,
+    "isNew": true,
+    "name": "Five Nights at Freddy's: Into the Pit",
+    "code": "FNAFPIT",
+    "categories": [
+      "adventure",
+      "horror"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Funiversonintendo.com%2Fwp-content%2Fuploads%2F2024%2F08%2FFive-Nights-at-Freddys-Into-the-Pit-QUAD.jpg&f=1&nofb=1&ipt=2351c3368c92ff2e78b7a217a107928f3c60b2abf2ad4669a8135faca1ec758e&ipo=images"
+  },
+  {
+    "addedAt": 1793316009138,
+    "isNew": true,
+    "name": "Super Mario Odyssey",
+    "code": "SMO",
+    "categories": [
+      "action",
+      "adventure"
+    ],
+    "img": "https://upload.wikimedia.org/wikipedia/en/8/8d/Super_Mario_Odyssey.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original"
+  },
+  {
+    "addedAt": 1793316071872,
+    "isNew": true,
+    "name": "The Happyhills Homicide",
+    "code": "THHH1",
+    "categories": [
+      "adventure"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn2.steamgriddb.com%2Fgrid%2Fcc3d91ac30526223f89b412d29ac1915.jpg&f=1&nofb=1&ipt=ec42dd45da03714af6d826f9f43fe0dbb5150c20ed4e71a975088646dea49d75&ipo=images"
+  },
+  {
+    "addedAt": 1793316112804,
+    "isNew": true,
+    "name": "YoHoHo.io",
+    "code": "YOHOHO",
+    "categories": [
+      "action",
+      "multiplayer"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fouazgames.com%2Fwp-content%2Fuploads%2F2026%2F04%2FYoHoHo.io_.webp&f=1&nofb=1&ipt=d6567d4388d76579acf7e9c7787231fa7d25bd088abd4b38cfa14c7306763718&ipo=images"
   }
 ];
