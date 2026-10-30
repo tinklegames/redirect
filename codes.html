@@ -3096,18 +3096,18 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
 
          document.getElementById("openCodeSiteBtn").addEventListener("click", openCodeSite);
 
-         // Movies navigation
-         function openMoviesSite() {
-             if (!MOVIES_URL) return;
-             window.open(MOVIES_URL, "_blank");
-             showToast("NAVIGATION", "Opened movies site");
+         // One handler per navigation action. Build blank wrappers with DOM nodes.
+         function openMediaSite(url,title){
+             const win=window.open('about:blank','_blank');
+             if(!win){showToast('POP-UP BLOCKED','Allow pop-ups for this site to open '+title+'.');return;}
+             const doc=win.document;doc.title=title;doc.body.style.cssText='margin:0;background:#100b18;overflow:hidden';
+             const frame=doc.createElement('iframe');frame.src=url;frame.title=title;frame.allow='autoplay; fullscreen; picture-in-picture';frame.allowFullscreen=true;frame.style.cssText='position:fixed;inset:0;width:100%;height:100%;border:0';doc.body.append(frame);
+             let cloak=null;try{cloak=JSON.parse(localStorage.getItem('tinkleTabCloak'))}catch{}
+             if(cloak?.title)doc.title=cloak.title;
+             if(cloak?.icon){const icon=doc.createElement('link');icon.rel='icon';icon.href=new URL(cloak.icon,location.href).href;doc.head.append(icon);}
          }
-
-         function openMusicSite() {
-             if (!MUSIC_URL) return;
-             window.open(MUSIC_URL, "_blank");
-             showToast("NAVIGATION", "Opened music site");
-         }
+         function openMoviesSite(){openMediaSite('https://tinklegames.github.io/host/cinema','Tinkle Party Cinema');}
+         function openMusicSite(){openMediaSite('https://tinklehost.github.io/music/','Tinkle Party Music');}
 
          // Top nav page switching
          const navTabs = document.querySelectorAll(".top-nav-tab");
@@ -4377,7 +4377,7 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
                 if (event.data === 'hide_back_button') document.querySelector('.back-button')?.classList.add('hidden');
             });
         <\/script>
-    <script id="tinkle-update-archive" type="application/json">[{"html":"\u003ch2>Update Log\u003c/h2>\n\u003ch3>HUGE Halloween Update\u003c/h3>\n\u003cul>\n    \u003cli>🎃 New halloween theme along with 22 new themes (cursors & backgrounds)\u003c/li>\n    \u003cli>🥸 Added tab cloaking (28 presets)\u003c/li>\n    \u003cli>👤 Added guest browsing, no sign-in required\u003c/li>\n    \u003cli>🗂️ Added NEW and POPULAR banners to games across the library\u003c/li>\n    \u003cli>🎮 Updated game cards\u003c/li>\n    \u003cli>❤️ Moved favorites beside Random Game\u003c/li>\n    \u003cli>🛑 Added Anti-close setting\u003c/li>\n    \u003cli>🔑 Restyled Enter Code page\u003c/li>\n\u003c/ul>\n\u003ch3>Coming Soon\u003c/h3>\n\u003cul>\n    \u003cli>🎮 Adding Mouse P.I. For Hire SOON\u003c/li>\n    \u003cli>📋 Looking through your suggestions and game requests also\u003c/li>\n\u003c/ul>\n\u003cdiv class=\"log-footer\" style=\"margin-top:20px;padding-top:12px;border-top:1px solid rgba(255,255,255,.2);font-size:.75rem;text-align:center\">\u003cspan>Version 3.0.0 • Last updated Oct 27, 2026\u003c/span>\u003c/div>"}]</script>
+    
 </body>
 </html>
 `);
@@ -4387,61 +4387,6 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
              }
          });
 
-         const moviesButton = document.querySelector('.top-nav-tab[data-page="movies"]');
-         const moviesLink = "https://tinklegames.github.io/host/cinema";
-
-         moviesButton.addEventListener("click", () => {
-             const win = window.open("about:blank", "_blank");
-
-             if (win) {
-                 win.document.write(`
- <html>
-
- <head>
-     <title>Tinkle Party Cinema</title>
- <link rel="stylesheet" href="seasonal.css?v=auto-cloak-v18">
-</head>
-
- <body style="margin:0;background-color:black;">
-     <iframe src="${moviesLink}" style="border:none;width:100vw;height:100vh;" allowfullscreen>
-     </iframe>
- </body>
-
- </html>
- `);
-                 win.document.close();
-             } else {
-                 alert("Please allow pop-ups to open Movies.");
-             }
-         });
-
-         const musicButton = document.querySelector('.top-nav-tab[data-page="music"]');
-         const musicLink = "https://tinklehost.github.io/music/";
-
-         musicButton.addEventListener("click", () => {
-             const win = window.open("about:blank", "_blank");
-
-             if (win) {
-                 win.document.write(`
- <html>
-
- <head>
-     <title>Tinkle Party Music</title>
- <link rel="stylesheet" href="seasonal.css?v=auto-cloak-v18">
-</head>
-
- <body style="margin:0;background-color:black;">
-     <iframe src="${musicLink}" style="border:none;width:100vw;height:100vh;" allowfullscreen>
-     </iframe>
- </body>
-
- </html>
- `);
-                 win.document.close();
-             } else {
-                 alert("Please allow pop-ups to open Music.");
-             }
-         });
      </script>
      <script>
          // Check if Firebase functions are available
@@ -4461,6 +4406,7 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
              }
          }, 2000);
      </script>
- </body>
+ <script id="tinkle-update-archive" type="application/json">[{"html":"\u003ch2>Update Log\u003c/h2>\n\u003ch3>HUGE Halloween Update\u003c/h3>\n\u003cul>\n    \u003cli>🎃 New halloween theme along with 22 new themes (cursors & backgrounds)\u003c/li>\n    \u003cli>🥸 Added tab cloaking (28 presets)\u003c/li>\n    \u003cli>👤 Added guest browsing, no sign-in required\u003c/li>\n    \u003cli>🗂️ Added NEW and POPULAR banners to games across the library\u003c/li>\n    \u003cli>🎮 Updated game cards\u003c/li>\n    \u003cli>❤️ Moved favorites beside Random Game\u003c/li>\n    \u003cli>🛑 Added Anti-close setting\u003c/li>\n    \u003cli>🔑 Restyled Enter Code page\u003c/li>\n\u003c/ul>\n\u003ch3>Coming Soon\u003c/h3>\n\u003cul>\n    \u003cli>🎮 Adding Mouse P.I. For Hire SOON\u003c/li>\n    \u003cli>📋 Looking through your suggestions and game requests also\u003c/li>\n\u003c/ul>\n\u003cdiv class=\"log-footer\" style=\"margin-top:20px;padding-top:12px;border-top:1px solid rgba(255,255,255,.2);font-size:.75rem;text-align:center\">\u003cspan>Version 3.0.0 • Last updated Oct 27, 2026\u003c/span>\u003c/div>"}]</script>
+</body>
 
  </html>
