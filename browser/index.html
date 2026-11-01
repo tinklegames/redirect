@@ -16,6 +16,31 @@
     window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
     plausible.init()
   </script>
+  <!-- Register the isolation worker BEFORE starting the Firefox application. -->
+  <script>
+  (() => {
+    if (window.crossOriginIsolated) return;
+    // The Firefox worker pool requires cross-origin isolation.
+    // Registration controls only this browser/ directory, not the parent website.
+    if (!window.isSecureContext || !('serviceWorker' in navigator)) {
+      document.addEventListener('DOMContentLoaded', () => {
+        const el = document.getElementById('splash-status');
+        if (el) el.textContent = 'Firefox requires HTTPS and service worker support.';
+      });
+      return;
+    }
+    navigator.serviceWorker.register('./coi-serviceworker.js', {scope:'./'})
+      .then(async registration => {
+        await navigator.serviceWorker.ready;
+        if (!navigator.serviceWorker.controller) {
+          console.log('[Tinkle Firefox] COI service worker installed; reloading to activate isolation');
+          location.reload();
+        } else {
+          console.warn('[Tinkle Firefox] Service worker controls this page but crossOriginIsolated is false. Check iframe and response policies.');
+        }
+      }).catch(err => console.error('[Tinkle Firefox] COI service worker registration failed:', err));
+  })();
+  </script>
   <!-- Reassemble the three GitHub-friendly Gecko WASM chunks before the Vite app fetches gecko.wasm. -->
   <script>
   (() => {
@@ -71,7 +96,17 @@
     };
   })();
   </script>
-    <script type="module" crossorigin src="./assets/index-Dv1pfZJ9.js"></script>
+    <script type="module">
+    const start = () => import('./assets/index-Dv1pfZJ9.js');
+    if (window.crossOriginIsolated) start();
+    else {
+      console.log('[Tinkle Firefox] Waiting for cross-origin isolation before starting Gecko');
+      document.addEventListener('DOMContentLoaded', () => {
+        const el = document.getElementById('splash-status');
+        if (el) el.textContent = 'Enabling cross-origin isolation…';
+      });
+    }
+  </script>
     <link rel="stylesheet" crossorigin href="./assets/index-CJZf4zMx.css">
   </head>
   <body>
