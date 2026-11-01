@@ -1,0 +1,4429 @@
+ <!DOCTYPE html>
+ <html lang="en">
+
+ <head>
+<script src="tab-cloak-bridge.js?v=auto-cloak-v18" defer></script>
+<script src="anti-close.js?v=auto-cloak-v18" defer></script>
+<script src="settings-data.js?v=auto-cloak-v18" defer></script><script src="settings-import.js?v=auto-cloak-v18" defer></script><link rel="stylesheet" href="settings-import.css?v=auto-cloak-v18">
+<!-- Tinkle seasonal update v2 -->
+<style>/* Set Seasonal theme to Normal in Site settings to disable Halloween. */
+#homeIntro,#loaderScreen{display:none!important;visibility:hidden!important;pointer-events:none!important}
+.discovery{margin:20px 0 32px}.discovery h2{font-size:1.5rem;margin:0 0 16px}.discovery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}.discovery .card{min-height:220px}.spotlight{padding:26px;border:1px solid #a96be1;border-radius:22px;margin-bottom:28px;background:linear-gradient(120deg,#21152e,#11131c)}.spotlight .card{max-width:540px;min-height:270px}.spotlight p{color:#c5b8d6;margin-bottom:18px}.game-new-badge{position:absolute;top:12px;left:12px;z-index:5;background:#ff842b;color:#1b0920;font-weight:900;letter-spacing:.12em;padding:6px 12px;border-radius:5px;box-shadow:0 3px 15px #0008;pointer-events:none}.card{position:relative}
+:root:not([data-season="normal"]){--accent:#ff8b38;--primary:#ff8b38}
+html:not([data-season="normal"]) body{background:radial-gradient(ellipse at top right,#321345 0,transparent 55%),#100c17!important}
+html:not([data-season="normal"]) .card{border-color:#704182!important;box-shadow:0 5px 22px #160a24}
+html:not([data-season="normal"]) .card:hover{border-color:#ff923e!important;box-shadow:0 0 24px #ff7b2738}
+html:not([data-season="normal"]) .discovery h2{color:#ffad67}
+html:not([data-season="normal"]) .spotlight h2:before{content:'🎃 ';}
+html:not([data-season="normal"]) .btn-glow{background:linear-gradient(110deg,#9d4bc1,#d86829)!important;color:white}
+@media(max-width:600px){.discovery-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.spotlight{padding:16px}}
+
+#app{opacity:1!important;transform:none!important}
+/* Strong seasonal palette also overrides stored personal themes. */
+html:not([data-season="normal"]){--bg-base:#13091c!important;--panel:#24132f!important;--panel-soft:#321a3f!important;--accent:#ff8b32!important;--accent-2:#bc65ec!important;--accent-3:#ffb45b!important;--text:#fff4e8!important;--text-soft:#d7bddf!important;--border-soft:#834b91!important;--card-border-glow:#f481293d!important;--accent-soft:#ff8b3233!important;--bg-grad-1:#943d2f66!important;--bg-grad-2:#7728a366!important;--bg-grad-3:#4c175766!important}
+html:not([data-season="normal"]) body{background:radial-gradient(ellipse at 5% 5%,#5d281f99,transparent 45%),radial-gradient(ellipse at 95% 10%,#5d237caa,transparent 50%),#13091c!important;color:#fff4e8!important}
+#halloween-banner{display:flex;align-items:center;justify-content:center;gap:22px;position:relative;z-index:1;box-sizing:border-box;width:min(100%,1100px);margin:18px auto 28px;padding:22px 28px;border:2px solid #ff8c3d;border-radius:22px;background:linear-gradient(115deg,#35172d,#29123c 55%,#51231c);box-shadow:0 0 36px #ff7a2226,inset 0 0 32px #a33eea18;color:#fff2df;text-align:left}
+#halloween-banner strong{display:block;font-size:clamp(20px,3vw,34px);font-weight:900;letter-spacing:.12em;color:#ffac5f;text-shadow:0 0 22px #ff741b66}#halloween-banner div>span{display:block;margin-top:7px;font-size:14px;color:#e9c9f3;letter-spacing:.03em}.halloween-pumpkin,.halloween-ghost{font-size:clamp(34px,5vw,62px);line-height:1.2}
+.halloween-web{position:fixed;top:0;width:130px;height:130px;pointer-events:none;z-index:4;opacity:.32;background:repeating-radial-gradient(circle at top left,transparent 0 22px,#e6cbff 23px 24px,transparent 25px 29px);clip-path:polygon(0 0,100% 0,0 100%)}.halloween-web-left{left:0}.halloween-web-right{right:0;transform:scaleX(-1)}
+html[data-season="normal"] #halloween-banner,html[data-season="normal"] .halloween-web{display:none!important}
+.card>.game-new-badge{display:block!important;position:absolute!important;inset:12px auto auto 0!important;z-index:20!important;padding:8px 20px 8px 15px!important;border-radius:0 5px 5px 0!important;background:#ff8b32!important;color:#190b20!important;font-size:13px!important;font-weight:950!important;letter-spacing:.12em!important;box-shadow:0 3px 12px #0009!important;opacity:1!important;transform:none!important;visibility:visible!important}
+@media(max-width:600px){#halloween-banner{gap:12px;padding:17px 12px;margin-top:12px}#halloween-banner div>span{font-size:11px}.halloween-web{width:70px;height:70px}.halloween-ghost{display:none}}
+/* Unified library cards and quiet hover interaction. */
+#page-codes .cards-grid,#page-codes .discovery-grid,#page-codes .recent-row{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(210px,1fr))!important;gap:18px!important;overflow:visible!important}
+#page-codes .cards-grid,#page-codes .discovery-grid,#page-codes .recent-row{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))!important}
+#page-codes .card{width:100%!important;max-width:320px!important;min-width:0!important;height:220px!important;min-height:220px!important;perspective:none!important;transition:transform .18s ease,box-shadow .18s ease!important;isolation:isolate}
+#page-codes .card:hover,#page-codes .card:focus-within{transform:scale(1.035)!important;box-shadow:0 10px 30px #0005!important}
+#page-codes .card .card__front,#page-codes .card:hover .card__front,#page-codes .card:focus-within .card__front{opacity:1!important;transform:none!important;filter:none!important}
+#page-codes .card .card__content{position:absolute!important;inset:auto 0 0!important;display:flex!important;flex-direction:row!important;justify-content:space-between!important;align-items:center!important;gap:8px!important;padding:35px 14px 13px!important;opacity:1!important;transform:none!important;background:linear-gradient(transparent,#0c0713e8)!important;z-index:2;pointer-events:none}
+#page-codes .card__title{color:white!important;font-size:14px!important;line-height:1.3!important;margin:0!important;white-space:normal!important;text-shadow:0 1px 6px #000;max-width:75%}
+#page-codes .card__copy-btn{display:none!important}
+#page-codes .card>.card__play-counter{position:absolute!important;inset:10px 10px auto auto!important;z-index:6!important;font-size:11px!important;padding:5px 9px!important;border-radius:20px!important;background:#170e23cf!important;backdrop-filter:blur(6px);color:#fff!important;opacity:1!important;transform:none!important;display:flex!important;gap:4px!important;pointer-events:none}
+#page-codes .card>.card__favorite-btn{position:absolute!important;inset:auto 10px 10px auto!important;z-index:7!important;width:30px!important;height:30px!important;border-radius:50%!important;display:grid!important;place-items:center!important;background:#160d24b8!important;border:1px solid #ffffff40!important;font-size:21px!important;color:#fff!important;cursor:pointer}
+#page-codes .card>.card__favorite-btn.active{color:#ff9fbf!important}
+.card-copy-confirmation{position:absolute;inset:0;z-index:8;display:grid;place-items:center;background:#160b2d99;color:#fff;font-size:18px;font-weight:750;opacity:0;transition:opacity .15s;pointer-events:none;backdrop-filter:blur(2px)}.code-copied .card-copy-confirmation{opacity:1}
+.library-section{margin:0 0 30px}.section-status{font-size:14px;color:var(--text-soft);margin:12px 0 0}.favorites-filter{min-width:46px;font-size:24px;padding:7px 13px!important}.favorites-filter[aria-pressed="true"]{box-shadow:0 0 0 2px #ffacd1;color:#ffd4e4!important}
+html:not([data-season="normal"]) body{background:radial-gradient(ellipse at 15% 0,#57304655,transparent 65%),radial-gradient(ellipse at 95% 25%,#49306544,transparent 65%),linear-gradient(145deg,#1c1128,#20142d 55%,#25182e)!important;background-attachment:fixed!important}
+html:not([data-season="normal"]) #halloween-banner{background:linear-gradient(115deg,#48254155,#39204f55 55%,#4e2b3555);border-color:#bb795d55;box-shadow:none}
+.halloween-web{width:165px;height:165px;clip-path:none;background:none;opacity:.35;filter:drop-shadow(0 0 2px #f0d9ff22)}.halloween-web svg{display:block;width:100%;height:100%;overflow:visible}
+@media(max-width:600px){#page-codes .cards-grid,#page-codes .discovery-grid,#page-codes .recent-row{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}#page-codes .card{height:220px!important}.halloween-web{width:100px;height:100px}}
+@media(prefers-reduced-motion:reduce){#page-codes .card{transition:none!important}}
+
+/* Floating hover titles; identical section geometry and stable SVG hearts. */
+#page-codes .card .card__content{inset:auto 48px 14px 14px!important;display:block!important;width:auto!important;height:auto!important;min-height:0!important;padding:0!important;gap:0!important;background:none!important;border:0!important;box-shadow:none!important;opacity:0!important;visibility:hidden;transform:translateY(4px)!important;transition:opacity .16s ease,transform .16s ease!important}
+#page-codes .card:hover .card__content,#page-codes .card:focus-within .card__content{opacity:1!important;visibility:visible;transform:translateY(0)!important}
+#page-codes .card .card__title{display:inline!important;max-width:none!important;font-size:14px!important;font-weight:650!important;line-height:1.45!important;color:white!important;background:none!important;padding:0!important;border:0!important;box-shadow:none!important;text-shadow:0 1px 3px #000,0 0 9px #000,0 0 16px #000!important}
+#homeGames.library-section{padding:0!important;background:none!important;border:0!important;box-shadow:none!important;border-radius:0!important;margin:0 0 30px!important}
+#homeGames>.grid-header{display:flex;align-items:center;justify-content:space-between;margin:0 0 16px!important;padding:0!important;border:0!important;background:none!important}
+#homeGames h2,.discovery .library-section h2{font-size:1.5rem!important;font-weight:700!important;line-height:1.3!important;margin:0 0 16px!important;letter-spacing:normal!important}
+#homeGames>.grid-header h2{margin:0!important}
+html:not([data-season="normal"]) #homeGames h2{color:#ffad67!important}
+#page-codes .card>.card__favorite-btn,#page-codes .card>.card__favorite-btn.active{width:32px!important;height:32px!important;min-width:32px!important;min-height:32px!important;padding:7px!important;box-sizing:border-box!important;line-height:1!important;transform:none!important;flex-shrink:0!important}
+.card__favorite-btn svg,.favorites-filter svg{display:block!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;fill:none!important;stroke:currentColor!important;stroke-width:1.8!important;stroke-linecap:round;stroke-linejoin:round;transform:none!important;flex-shrink:0!important}
+.card__favorite-btn.active svg,.favorites-filter.active svg{fill:currentColor!important}
+#favoritesGameBtn,#favoritesGameBtn.active{display:grid!important;place-items:center!important;min-width:46px!important;width:46px!important;height:44px!important;padding:0!important;box-sizing:border-box!important;line-height:1!important;transform:none!important}
+@media(hover:none){#page-codes .card:focus-within .card__content{opacity:1!important;visibility:visible}}
+
+/* Reference-inspired midnight Halloween scenery. */
+body{isolation:isolate}
+.halloween-scene{position:fixed;inset:0;z-index:-1;pointer-events:none;background:url('halloween-scene.svg') center center/cover no-repeat}
+html:not([data-season="normal"]) body{background:#0d0815!important}
+html[data-season="normal"] .halloween-scene{display:none}
+.halloween-web{width:255px;height:255px;opacity:.48;z-index:0;pointer-events:none}
+#halloween-banner{background:transparent!important;border:0!important;box-shadow:none!important;padding:10px 0 20px!important;margin-bottom:20px!important}
+#halloween-banner strong{font-family:Georgia,serif;font-style:italic;font-weight:500;font-size:clamp(28px,4vw,46px);letter-spacing:.015em;background:linear-gradient(110deg,#fff0c5,#ff9e42);background-clip:text;-webkit-background-clip:text;color:transparent;text-shadow:none}
+#halloween-banner .halloween-pumpkin,#halloween-banner .halloween-ghost{display:none}
+#halloween-banner div>span{font-size:12px;color:#bca2c4}
+#page-codes .card>.card__play-counter{opacity:0!important;visibility:hidden;transition:opacity .16s ease!important}
+#page-codes .card:hover>.card__play-counter,#page-codes .card:focus-within>.card__play-counter{opacity:1!important;visibility:visible}
+@media(max-width:700px){.halloween-web{width:115px;height:115px}.halloween-scene{background-position:65% center}}
+
+/* Popular-section badge; stack below NEW when both apply. */
+.card>.game-popular-badge{position:absolute;top:12px;left:0;z-index:20;padding:7px 12px;border-radius:0 5px 5px 0;background:linear-gradient(110deg,#b83520,#e97021);color:#fff5e5;font:800 11px/1.3 Inter,system-ui,sans-serif;letter-spacing:.06em;box-shadow:0 3px 12px #0007;pointer-events:none}
+.card:has(>.game-new-badge)>.game-popular-badge{top:49px}
+
+/* Compact fire marker shared by all copies of a top-ten popular game. */
+.card>.game-popular-badge{display:grid;place-items:center;left:10px;top:10px;width:28px;height:28px;padding:0;border-radius:50%;background:#211025bb;backdrop-filter:blur(5px);font-size:18px;line-height:1;box-shadow:0 2px 8px #0004;letter-spacing:0}
+.card:has(>.game-new-badge)>.game-popular-badge{top:49px;left:10px}
+html.account-locked main,html.account-locked .rewards-shell,html.account-locked .leaderboard-shell{display:none!important}
+
+/* Fire and play count share the top-right position. */
+#page-codes .card>.game-popular-badge,#page-codes .card:has(>.game-new-badge)>.game-popular-badge{top:10px;right:10px;left:auto;opacity:1;visibility:visible;transition:opacity .16s ease,visibility .16s ease}
+#page-codes .card:hover>.game-popular-badge,#page-codes .card:focus-within>.game-popular-badge{opacity:0;visibility:hidden}
+</style>
+<script src="seasonal.js?v=auto-cloak-v18" defer></script>
+     <meta charset="UTF-8" />
+     <script src="online-players.js?v=20260911"></script>
+     <title>Tinkle Codes</title>
+     <link rel="stylesheet" href="homepage-ui.css">
+     <script src="secret-shortcut.js" defer></script>
+     <script src="https://cdn.jsdelivr.net/npm/whatareyoutryingtodo/disable-devtool.min.js" disable-devtool-auto></script>
+     <link rel="stylesheet" href="token-rewards.css?v=20260910-ui">
+     <script src="token-rewards-config.js" defer></script>
+     <script src="token-rewards-rules.js?v=20260910-accounts" defer></script>
+     <script src="player-config.js" defer></script><script src="shop-catalog.js" defer></script><script src="player-account.js?v=auto-cloak-v18" defer></script><script src="player-cosmetics.js?v=auto-cloak-v18" defer></script><script src="tinkle-wallet.js?v=20260910-accounts" defer></script>
+     <script src="token-rewards.js?v=20260910-accounts" defer></script>
+     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+     <style>
+         :root {
+             --bg-base: #020617;
+             --bg-grad-1: rgba(79, 70, 229, 0.45);
+             --bg-grad-2: rgba(34, 211, 238, 0.28);
+             --bg-grad-3: rgba(168, 85, 247, 0.38);
+             --bg-glow: #020617;
+             --panel: rgba(15, 23, 42, 0.95);
+             --panel-soft: rgba(15, 23, 42, 0.9);
+             --accent: #4f46e5;
+             --accent-2: #a855f7;
+             --accent-3: #22d3ee;
+             --accent-soft: rgba(79, 70, 229, 0.5);
+             --text: #f9fafb;
+             --text-soft: #cbd5f5;
+             --border-soft: rgba(148, 163, 184, 0.45);
+             --radius-lg: 22px;
+             --radius-md: 16px;
+             --transition-fast: 0.18s ease;
+             --shadow-soft: 0 32px 80px rgba(0, 0, 0, 0.9);
+             --card-border-glow: rgba(248, 250, 252, 0.15);
+         }
+
+         /* THEME: Midnight */
+         html[data-theme="midnight"] {
+             --bg-base: #020617;
+             --bg-grad-1: rgba(30, 64, 175, 0.55);
+             --bg-grad-2: rgba(15, 23, 42, 0.85);
+             --bg-grad-3: rgba(15, 23, 42, 0.9);
+             --bg-glow: #020617;
+             --panel: rgba(15, 23, 42, 0.98);
+             --panel-soft: rgba(15, 23, 42, 0.96);
+             --accent: #22d3ee;
+             --accent-2: #0ea5e9;
+             --accent-3: #38bdf8;
+             --accent-soft: rgba(15, 118, 232, 0.6);
+             --card-border-glow: rgba(15, 23, 42, 0.9);
+         }
+
+         /* THEME: Neon Grid */
+         html[data-theme="neon"] {
+             --bg-base: #02010a;
+             --bg-grad-1: rgba(236, 72, 153, 0.45);
+             --bg-grad-2: rgba(56, 189, 248, 0.4);
+             --bg-grad-3: rgba(94, 234, 212, 0.35);
+             --bg-glow: #020617;
+             --panel: rgba(10, 10, 25, 0.98);
+             --panel-soft: rgba(10, 10, 25, 0.94);
+             --accent: #f97316;
+             --accent-2: #a855f7;
+             --accent-3: #22c55e;
+             --accent-soft: rgba(244, 63, 94, 0.65);
+             --card-border-glow: rgba(248, 250, 252, 0.25);
+         }
+
+         /* THEME: Aurora */
+         html[data-theme="aurora"] {
+             --bg-base: #01111a;
+             --bg-grad-1: rgba(56, 189, 248, 0.5);
+             --bg-grad-2: rgba(74, 222, 128, 0.45);
+             --bg-grad-3: rgba(129, 140, 248, 0.3);
+             --bg-glow: #020617;
+             --panel: rgba(8, 47, 73, 0.98);
+             --panel-soft: rgba(8, 47, 73, 0.96);
+             --accent: #22c55e;
+             --accent-2: #0ea5e9;
+             --accent-3: #22d3ee;
+             --accent-soft: rgba(34, 197, 94, 0.55);
+             --card-border-glow: rgba(34, 197, 94, 0.3);
+         }
+
+
+         *,
+         *::before,
+         *::after {
+             box-sizing: border-box;
+             margin: 0;
+             padding: 0;
+         }
+
+         html,
+         body {
+             height: 100%;
+         }
+
+         body {
+             font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+             background:
+                 radial-gradient(circle at 10% 0%, var(--bg-grad-1) 0%, transparent 40%),
+                 radial-gradient(circle at 90% 0%, var(--bg-grad-2) 0%, transparent 40%),
+                 radial-gradient(circle at 50% 100%, var(--bg-grad-3) 0%, transparent 40%),
+                 radial-gradient(circle at 50% 40%, var(--bg-base) 0%, var(--bg-base) 55%, var(--bg-base) 100%);
+             color: var(--text);
+             overflow-x: hidden;
+             overflow-y: auto;
+             -webkit-font-smoothing: antialiased;
+             background-attachment: fixed;
+             transition: background 0.4s ease;
+         }
+
+         body::before {
+             content: "";
+             position: fixed;
+             inset: 0;
+             pointer-events: none;
+             background-image:
+                 radial-gradient(1px 1px at 10% 20%, rgba(248, 250, 252, 0.45) 0, transparent 40%),
+                 radial-gradient(1px 1px at 80% 10%, rgba(248, 250, 252, 0.4) 0, transparent 40%),
+                 radial-gradient(1px 1px at 30% 70%, rgba(248, 250, 252, 0.3) 0, transparent 40%),
+                 radial-gradient(1px 1px at 60% 80%, rgba(248, 250, 252, 0.35) 0, transparent 40%);
+             opacity: 0.5;
+             z-index: -1;
+         }
+
+         .btn-glow {
+             position: relative;
+             padding: 10px 20px;
+             border-radius: 999px;
+             border: 1px solid rgb(61, 106, 255);
+             font-size: 11px;
+             text-transform: uppercase;
+             font-weight: 600;
+             letter-spacing: 2px;
+             background: transparent;
+             color: #fff;
+             overflow: hidden;
+             box-shadow: 0 0 0 0 transparent;
+             transition: all 0.2s ease-in;
+             cursor: pointer;
+             display: inline-flex;
+             align-items: center;
+             gap: 6px;
+         }
+
+         .btn-glow svg {
+             width: 14px;
+             height: 14px;
+         }
+
+         .btn-glow:hover {
+             background: rgb(61, 106, 255);
+             box-shadow: 0 0 30px 5px rgba(0, 142, 236, 0.815);
+             transition: all 0.2s ease-out;
+         }
+
+         .btn-glow:hover::before {
+             animation: sh02 0.5s 0s linear;
+         }
+
+         .btn-glow::before {
+             content: '';
+             display: block;
+             width: 0px;
+             height: 86%;
+             position: absolute;
+             top: 7%;
+             left: 0%;
+             opacity: 0;
+             background: #fff;
+             box-shadow: 0 0 50px 30px #fff;
+             transform: skewX(-20deg);
+         }
+
+         @keyframes sh02 {
+             from {
+                 opacity: 0;
+                 left: 0%;
+             }
+
+             50% {
+                 opacity: 1;
+             }
+
+             to {
+                 opacity: 0;
+                 left: 100%;
+             }
+         }
+
+         .btn-glow:active {
+             box-shadow: 0 0 0 0 transparent;
+             transition: box-shadow 0.2s ease-in;
+             transform: translateY(1px);
+         }
+
+         /* ---------- Loader Screen ---------- */
+         .loader-screen {
+             position: fixed;
+             inset: 0;
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             background:
+                 radial-gradient(circle at 15% 0%, var(--bg-grad-1) 0%, transparent 45%),
+                 radial-gradient(circle at 85% 0%, var(--bg-grad-2) 0%, transparent 45%),
+                 radial-gradient(circle at 50% 100%, var(--bg-grad-3) 0%, transparent 45%),
+                 var(--bg-base);
+             z-index: 40;
+             transition: opacity 0.5s ease, visibility 0.5s ease;
+         }
+
+         .gate.hidden {
+             opacity: 0;
+             visibility: hidden;
+             pointer-events: none;
+         }
+
+         .loader-panel {
+             width: min(460px, 92vw);
+             background: radial-gradient(circle at top, var(--panel-soft), var(--panel));
+             border-radius: 26px;
+             border: 1px solid var(--border-soft);
+             box-shadow: 0 40px 120px rgba(0, 0, 0, 1);
+             padding: 28px 26px 22px;
+             display: flex;
+             flex-direction: column;
+             gap: 18px;
+             align-items: center;
+             text-align: center;
+             position: relative;
+             overflow: hidden;
+         }
+
+         .gate-panel::before {
+             content: "";
+             position: absolute;
+             width: 180%;
+             height: 180%;
+             background: radial-gradient(circle at top, var(--accent-soft), transparent 55%);
+             opacity: 0.7;
+             pointer-events: none;
+             z-index: -2;
+         }
+
+         .gate-panel::after {
+             content: "";
+             position: absolute;
+             inset: 0;
+             border-radius: inherit;
+             border: 1px solid rgba(148, 163, 184, 0.35);
+             opacity: 0.6;
+             pointer-events: none;
+         }
+
+         .loader-wrapper {
+             position: relative;
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             width: 190px;
+             height: 190px;
+             font-family: "Inter", sans-serif;
+             font-size: 1.18em;
+             font-weight: 300;
+             color: white;
+             border-radius: 50%;
+             background-color: transparent;
+             user-select: none;
+             margin-bottom: 4px;
+         }
+
+         .loader {
+             position: absolute;
+             top: 0;
+             left: 0;
+             width: 100%;
+             aspect-ratio: 1 / 1;
+             border-radius: 50%;
+             background-color: transparent;
+             animation: loader-rotate 2s linear infinite;
+             z-index: 0;
+         }
+
+         @keyframes loader-rotate {
+             0% {
+                 transform: rotate(90deg);
+                 box-shadow:
+                     0 10px 20px 0 #fff inset,
+                     0 20px 30px 0 #ad5fff inset,
+                     0 60px 60px 0 #471eec inset;
+             }
+
+             50% {
+                 transform: rotate(270deg);
+                 box-shadow:
+                     0 10px 20px 0 #fff inset,
+                     0 20px 10px 0 #d60a47 inset,
+                     0 40px 60px 0 #311e80 inset;
+             }
+
+             100% {
+                 transform: rotate(450deg);
+                 box-shadow:
+                     0 10px 20px 0 #fff inset,
+                     0 20px 30px 0 #ad5fff inset,
+                     0 60px 60px 0 #471eec inset;
+             }
+         }
+
+         .loader-letter {
+             display: inline-block;
+             opacity: 0.4;
+             transform: translateY(0);
+             animation: loader-letter-anim 2s infinite;
+             z-index: 1;
+             border-radius: 50ch;
+             border: none;
+             padding: 0 1px;
+         }
+
+         .loader-letter:nth-child(1) {
+             animation-delay: 0s;
+         }
+
+         .loader-letter:nth-child(2) {
+             animation-delay: 0.1s;
+         }
+
+         .loader-letter:nth-child(3) {
+             animation-delay: 0.2s;
+         }
+
+         .loader-letter:nth-child(4) {
+             animation-delay: 0.3s;
+         }
+
+         .loader-letter:nth-child(5) {
+             animation-delay: 0.4s;
+         }
+
+         .loader-letter:nth-child(6) {
+             animation-delay: 0.5s;
+         }
+
+         .loader-letter:nth-child(7) {
+             animation-delay: 0.6s;
+         }
+
+         .loader-letter:nth-child(8) {
+             animation-delay: 0.7s;
+         }
+
+         .loader-letter:nth-child(9) {
+             animation-delay: 0.8s;
+         }
+
+         .loader-letter:nth-child(10) {
+             animation-delay: 0.9s;
+         }
+
+         @keyframes loader-letter-anim {
+
+             0%,
+             100% {
+                 opacity: 0.4;
+                 transform: translateY(0);
+             }
+
+             20% {
+                 opacity: 1;
+                 transform: scale(1.15);
+             }
+
+             40% {
+                 opacity: 0.7;
+                 transform: translateY(0);
+             }
+         }
+
+         .gate-title {
+             font-size: 0.85rem;
+             text-transform: uppercase;
+             letter-spacing: 0.18em;
+             color: var(--text-soft);
+         }
+
+         .gate-main {
+             font-size: 1.4rem;
+             font-weight: 600;
+             margin-top: 2px;
+         }
+
+         .gate-sub {
+             font-size: 0.9rem;
+             color: var(--text-soft);
+             margin-top: 4px;
+         }
+
+         .group {
+             display: flex;
+             line-height: 30px;
+             align-items: center;
+             position: relative;
+             max-width: 280px;
+             width: 100%;
+             margin-top: 10px;
+         }
+
+         .input {
+             width: 100%;
+             height: 48px;
+             line-height: 30px;
+             padding: 0 5rem;
+             padding-left: 3rem;
+             border: 2px solid transparent;
+             border-radius: 12px;
+             outline: none;
+             background-color: #f8fafc;
+             color: #0d0c22;
+             transition: .5s ease;
+             font-size: 0.9rem;
+         }
+
+         .input::placeholder {
+             color: #94a3b8;
+         }
+
+         .input:focus,
+         .input:hover {
+             outline: none;
+             border-color: rgba(129, 140, 248);
+             background-color: #fff;
+             box-shadow: 0 0 0 6px rgb(129 140 248 / 25%);
+         }
+
+         .icon {
+             position: absolute;
+             left: 1rem;
+             fill: none;
+             width: 1.1rem;
+             height: 1.1rem;
+             color: #64748b;
+         }
+
+         .gate-error {
+             font-size: 0.82rem;
+             color: #fecaca;
+             min-height: 1.2em;
+             margin-top: 4px;
+         }
+
+         .gate-actions {
+             margin-top: 10px;
+             display: flex;
+             justify-content: center;
+         }
+
+         .app {
+             min-height: 100vh;
+             opacity: 0;
+             transform: translateY(12px);
+             transition: opacity 0.5s ease, transform 0.5s ease;
+             padding: 26px 18px 26px;
+             max-width: 1200px;
+             margin: 0 auto;
+         }
+
+         .app.visible {
+             opacity: 1;
+             transform: translateY(0);
+         }
+
+         .top-shell {
+             position: sticky;
+             top: 0;
+             z-index: 10;
+             padding-bottom: 20px;
+             backdrop-filter: blur(18px);
+             -webkit-backdrop-filter: blur(18px);
+         }
+
+         .top-bar {
+             display: flex;
+             align-items: center;
+             justify-content: space-between;
+             gap: 18px;
+             padding: 14px 20px;
+             border-radius: 999px;
+             border: 1px solid rgba(148, 163, 184, 0.4);
+             background: linear-gradient(120deg, var(--panel-soft), var(--panel));
+             box-shadow: 0 26px 80px rgba(0, 0, 0, 0.9);
+             flex-wrap: wrap;
+         }
+
+         .brand {
+             display: flex;
+             align-items: center;
+             gap: 12px;
+         }
+
+         .brand-orbit {
+             width: 36px;
+             height: 36px;
+             border-radius: 999px;
+             background: conic-gradient(from 210deg, var(--accent), var(--accent-2), var(--accent-3), var(--accent));
+             box-shadow: 0 0 26px rgba(0, 0, 0, 0.9);
+             position: relative;
+             overflow: hidden;
+         }
+
+         .brand-orbit::before {
+             content: "";
+             position: absolute;
+             inset: 4px;
+             border-radius: inherit;
+             border: 1px solid rgba(15, 23, 42, 0.85);
+             opacity: 0.9;
+         }
+
+         .brand-orbit svg {
+             position: absolute;
+             inset: 7px;
+         }
+
+         .brand-text-main {
+             font-size: 0.95rem;
+             letter-spacing: 0.2em;
+             text-transform: uppercase;
+             font-weight: 600;
+         }
+
+         .brand-text-sub {
+             font-size: 0.8rem;
+             color: var(--text-soft);
+         }
+
+         .top-right {
+             display: flex;
+             align-items: center;
+             gap: 10px;
+             flex-wrap: wrap;
+         }
+
+         .top-nav {
+             display: inline-flex;
+             align-items: center;
+             gap: 4px;
+             padding: 2px;
+             border-radius: 999px;
+             background: rgba(15, 23, 42, 0.9);
+             border: 1px solid rgba(148, 163, 184, 0.35);
+         }
+
+         .top-nav-tab {
+             position: relative;
+             border: none;
+             background: transparent;
+             color: var(--text-soft);
+             font-size: 0.72rem;
+             letter-spacing: 0.16em;
+             text-transform: uppercase;
+             padding: 7px 12px;
+             cursor: pointer;
+             border-radius: 999px;
+             transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+         }
+
+         .top-nav-tab::after {
+             content: "";
+             position: absolute;
+             inset: 0;
+             border-radius: inherit;
+             background: radial-gradient(circle at top, var(--accent), var(--accent-2));
+             opacity: 0;
+             transition: opacity 0.18s ease;
+             z-index: -1;
+         }
+
+         .top-nav-tab.active {
+             color: #f9fafb;
+             transform: translateY(-1px);
+         }
+
+         .top-nav-tab.active::after {
+             opacity: 1;
+         }
+
+         .top-nav-tab:hover:not(.active) {
+             color: #e5e7eb;
+         }
+
+         .hero {
+             margin-top: 36px;
+             margin-bottom: 28px;
+             display: grid;
+             grid-template-columns: minmax(0, 1.55fr) minmax(0, 1.1fr);
+             gap: 40px;
+             align-items: center;
+         }
+
+         body.hide-hero .hero {
+             display: none;
+         }
+
+         .hero-left {
+             max-width: 520px;
+         }
+
+         .hero-kicker {
+             font-size: 0.8rem;
+             text-transform: uppercase;
+             letter-spacing: 0.24em;
+             color: var(--text-soft);
+             margin-bottom: 10px;
+         }
+
+         .hero-title {
+             font-size: clamp(1.9rem, 3vw, 2.3rem);
+             font-weight: 700;
+             line-height: 1.15;
+         }
+
+         .hero-title span {
+             background: linear-gradient(120deg, var(--accent-3), var(--accent-2));
+             -webkit-background-clip: text;
+             background-clip: text;
+             color: transparent;
+         }
+
+         .hero-sub {
+             font-size: 0.98rem;
+             color: var(--text-soft);
+             margin-top: 12px;
+             max-width: 480px;
+         }
+
+         .hero-meta-row {
+             display: flex;
+             gap: 16px;
+             margin-top: 18px;
+             flex-wrap: wrap;
+             align-items: center;
+         }
+
+         .hero-stat-pill {
+             padding: 6px 12px;
+             border-radius: 999px;
+             border: 1px solid rgba(148, 163, 184, 0.45);
+             background: rgba(15, 23, 42, 0.85);
+             font-size: 0.8rem;
+             color: var(--text-soft);
+         }
+
+         .hero-right {
+             justify-self: stretch;
+         }
+
+         .hero-card {
+             border-radius: var(--radius-lg);
+             border: 1px solid rgba(148, 163, 184, 0.4);
+             background: radial-gradient(circle at top, var(--panel-soft), var(--panel));
+             box-shadow: var(--shadow-soft);
+             padding: 18px 18px 16px;
+         }
+
+         .hero-card-header {
+             font-size: 0.78rem;
+             text-transform: uppercase;
+             letter-spacing: 0.2em;
+             color: var(--text-soft);
+             margin-bottom: 10px;
+         }
+
+         .hero-card-body {
+             font-size: 0.86rem;
+             color: var(--text-soft);
+             line-height: 1.6;
+         }
+
+         .hero-card-body strong {
+             color: var(--text);
+         }
+
+         .filters {
+             margin-bottom: 26px;
+             display: flex;
+             flex-direction: column;
+             gap: 14px;
+         }
+
+         .search-field-wrap {
+             position: relative;
+             max-width: 460px;
+         }
+
+         .search-input {
+             width: 100%;
+             padding: 11px 14px 11px 38px;
+             border-radius: 999px;
+             border: 1px solid rgba(148, 163, 184, 0.55);
+             background: radial-gradient(circle at top left, var(--panel-soft), var(--panel));
+             color: var(--text);
+             font-size: 0.9rem;
+             outline: none;
+             box-shadow: 0 18px 50px rgba(0, 0, 0, 0.8);
+             position: relative;
+         }
+
+         .search-input::placeholder {
+             color: rgba(148, 163, 184, 0.85);
+         }
+
+         .search-field-wrap span.icon {
+             position: absolute;
+             left: 12px;
+             top: 50%;
+             transform: translateY(-50%);
+             font-size: 0.94rem;
+             color: rgba(148, 163, 184, 0.9);
+         }
+
+         .search-field-wrap::before {
+             content: "";
+             position: absolute;
+             inset: -1px;
+             border-radius: 999px;
+             padding: 1px;
+             background: linear-gradient(120deg, var(--accent), var(--accent-3));
+             -webkit-mask:
+                 linear-gradient(#000 0 0) content-box,
+                 linear-gradient(#000 0 0);
+             -webkit-mask-composite: xor;
+             mask-composite: exclude;
+             opacity: 0.2;
+             pointer-events: none;
+         }
+
+         .search-input:focus {
+             border-color: rgba(129, 140, 248, 0.9);
+             box-shadow: 0 20px 60px rgba(0, 0, 0, 1);
+         }
+
+         .pill-row {
+             display: flex;
+             flex-wrap: nowrap;
+             gap: 12px;
+             overflow-x: auto;
+             padding-bottom: 2px;
+         }
+
+         .pill-row::-webkit-scrollbar {
+             height: 4px;
+         }
+
+         .pill-row::-webkit-scrollbar-thumb {
+             background: rgba(148, 163, 184, 0.5);
+             border-radius: 999px;
+         }
+
+         .cat-tab {
+             position: relative;
+             border: none;
+             background: transparent;
+             color: var(--text-soft);
+             font-size: 0.8rem;
+             letter-spacing: 0.16em;
+             text-transform: uppercase;
+             padding: 6px 14px 10px;
+             cursor: pointer;
+             white-space: nowrap;
+             transition: color 0.18s ease, transform 0.18s ease;
+         }
+
+         .cat-tab::after {
+             content: "";
+             position: absolute;
+             left: 12px;
+             right: 12px;
+             bottom: 3px;
+             height: 2px;
+             border-radius: 999px;
+             background: linear-gradient(90deg, var(--accent-3), var(--accent-2));
+             opacity: 0;
+             transform: scaleX(0.4);
+             transform-origin: center;
+             transition: opacity 0.2s ease, transform 0.2s ease;
+         }
+
+         .cat-tab.active {
+             color: var(--text);
+             transform: translateY(-1px);
+         }
+
+         .cat-tab.active::after {
+             opacity: 1;
+             transform: scaleX(1);
+         }
+
+         .grid-shell {
+             background: var(--panel);
+             border-radius: var(--radius-lg);
+             border: 1px solid var(--border-soft);
+             box-shadow: var(--shadow-soft);
+             padding: 22px 20px 18px;
+         }
+
+         .grid-header {
+             display: flex;
+             justify-content: space-between;
+             align-items: center;
+             margin-bottom: 18px;
+             gap: 10px;
+         }
+
+         .grid-title {
+             font-size: 0.8rem;
+             text-transform: uppercase;
+             letter-spacing: 0.22em;
+             color: var(--text-soft);
+         }
+
+         .grid-count {
+             font-size: 0.8rem;
+             color: var(--text-soft);
+         }
+
+         .grid-count strong {
+             color: var(--text);
+         }
+
+         .cards-grid {
+             display: grid;
+             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+             gap: 26px;
+         }
+
+         body.compact-grid .cards-grid {
+             gap: 18px;
+         }
+
+         body.compact-grid .card {
+             height: 190px;
+         }
+
+         .no-results {
+             font-size: 0.88rem;
+             color: var(--text-soft);
+             padding-top: 8px;
+         }
+
+         .card {
+             position: relative;
+             width: 100%;
+             max-width: 320px;
+             height: 210px;
+             margin: 0 auto;
+             border-radius: 20px;
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             overflow: hidden;
+             perspective: 1000px;
+             box-shadow: 0 0 0 3px var(--card-border-glow);
+             transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+             border: 1px solid rgba(148, 163, 184, 0.65);
+             cursor: pointer;
+             background: #020617;
+         }
+
+         html[data-theme="neon"] .card {
+             background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 1));
+         }
+
+         .card__front {
+             position: absolute;
+             inset: 0;
+             background-size: cover;
+             background-position: center;
+             background-repeat: no-repeat;
+             transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+             filter: brightness(0.95);
+         }
+
+         .card::before {
+             content: "";
+             position: absolute;
+             inset: 0;
+             background: radial-gradient(circle at 10% 0%, rgba(15, 23, 42, 0.35), transparent 55%);
+             pointer-events: none;
+         }
+
+         .card:hover {
+             transform: scale(1.04) translateY(-4px);
+             box-shadow: 0 22px 70px rgba(0, 0, 0, 0.95);
+             border-color: rgba(129, 140, 248, 0.9);
+         }
+
+         .card:hover .card__front {
+             transform: scale(1.07);
+             filter: blur(3px) brightness(0.55);
+         }
+
+         body.reduce-motion .card,
+         body.reduce-motion .card__front,
+         body.reduce-motion .card__content {
+             transition: none !important;
+             transform: none !important;
+             filter: none !important;
+         }
+
+         .card__content {
+             position: absolute;
+             inset: 0;
+             padding: 16px 18px 14px;
+             box-sizing: border-box;
+             background: radial-gradient(circle at top, rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.88));
+             backdrop-filter: blur(8px);
+             -webkit-backdrop-filter: blur(8px);
+             transform: rotateX(-90deg);
+             transform-origin: bottom;
+             transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+             display: flex;
+             flex-direction: column;
+             justify-content: space-between;
+             border-top: 1px solid rgba(148, 163, 184, 0.6);
+         }
+
+         .card:hover .card__content {
+             transform: rotateX(0deg);
+         }
+
+         .card__top-row {
+             display: flex;
+             align-items: center;
+             justify-content: space-between;
+             gap: 10px;
+         }
+
+         .card__title {
+             margin: 0;
+             font-size: 0.98rem;
+             color: #f9fafb;
+             font-weight: 600;
+             white-space: nowrap;
+             overflow: hidden;
+             text-overflow: ellipsis;
+         }
+
+         .card__code-pill {
+             font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+             font-size: 0.76rem;
+             padding: 4px 10px;
+             border-radius: 999px;
+             background: rgba(15, 23, 42, 0.85);
+             border: 1px solid rgba(148, 163, 184, 0.6);
+             color: #e5e7eb;
+             white-space: nowrap;
+             max-width: 130px;
+             overflow: hidden;
+             text-overflow: ellipsis;
+             text-align: right;
+         }
+
+         .card__description {
+             margin-top: 10px;
+             font-size: 0.8rem;
+             color: #e5e7eb;
+             line-height: 1.5;
+             opacity: 0.9;
+         }
+
+         .card__footer {
+             display: flex;
+             justify-content: space-between;
+             align-items: center;
+             gap: 10px;
+             margin-top: 12px;
+         }
+
+         .card__hint {
+             font-size: 0.72rem;
+             color: rgba(148, 163, 184, 0.9);
+         }
+
+         .card__copy-btn {
+             padding-inline: 14px;
+             font-size: 0.72rem;
+         }
+
+         .toast {
+             position: fixed;
+             right: 20px;
+             bottom: 20px;
+             padding: 10px 14px;
+             border-radius: 16px;
+             background: radial-gradient(circle at top, var(--panel-soft), var(--panel));
+             color: var(--text);
+             font-size: 0.82rem;
+             display: flex;
+             align-items: center;
+             gap: 8px;
+             box-shadow: 0 24px 60px rgba(0, 0, 0, 1);
+             border: 1px solid rgba(148, 163, 184, 0.7);
+             opacity: 0;
+             transform: translateY(16px);
+             pointer-events: none;
+             transition: opacity 0.22s ease, transform 0.22s ease;
+             z-index: 50;
+         }
+
+         .toast.show {
+             opacity: 1;
+             transform: translateY(0);
+             pointer-events: auto;
+         }
+
+         .toast-dot {
+             width: 8px;
+             height: 8px;
+             border-radius: 999px;
+             background: var(--accent-3);
+             box-shadow: 0 0 12px var(--accent-3);
+         }
+
+         .toast-label {
+             text-transform: uppercase;
+             letter-spacing: 0.16em;
+             font-size: 0.7rem;
+             opacity: 0.8;
+         }
+
+         .fab-code {
+             position: fixed;
+             bottom: 20px;
+             left: 20px;
+             z-index: 45;
+             border-radius: 999px;
+             padding: 8px 13px;
+             border: 1px solid rgba(61, 106, 255, 0.8);
+             background: radial-gradient(circle at top left, var(--accent), var(--panel));
+             color: #e5e7eb;
+             font-size: 0.78rem;
+             display: flex;
+             align-items: center;
+             gap: 6px;
+             cursor: pointer;
+             box-shadow: 0 26px 70px rgba(0, 0, 0, 0.95);
+         }
+
+         .fab-code svg {
+             width: 15px;
+             height: 15px;
+         }
+
+         .fab-code:hover {
+             transform: translateY(-1px);
+         }
+
+         .page {
+             display: none;
+             animation: fadeInPage 0.3s ease;
+         }
+
+         .page.active {
+             display: block;
+         }
+
+         @keyframes fadeInPage {
+             from {
+                 opacity: 0;
+                 transform: translateY(4px);
+             }
+
+             to {
+                 opacity: 1;
+                 transform: translateY(0);
+             }
+         }
+
+         .page-card {
+             border-radius: var(--radius-lg);
+             border: 1px solid rgba(148, 163, 184, 0.4);
+             background: radial-gradient(circle at top, var(--panel-soft), var(--panel));
+             box-shadow: var(--shadow-soft);
+             padding: 20px 20px 18px;
+             margin-top: 18px;
+         }
+
+         .page-card-header {
+             font-size: 0.8rem;
+             text-transform: uppercase;
+             letter-spacing: 0.22em;
+             color: var(--text-soft);
+             margin-bottom: 8px;
+         }
+
+         .page-card-title {
+             font-size: 1.1rem;
+             font-weight: 600;
+             margin-bottom: 6px;
+         }
+
+         .page-card-sub {
+             font-size: 0.9rem;
+             color: var(--text-soft);
+             margin-bottom: 14px;
+         }
+
+         .form-grid {
+             display: grid;
+             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+             gap: 14px 18px;
+         }
+
+         .field-label {
+             font-size: 0.8rem;
+             color: var(--text-soft);
+             margin-bottom: 4px;
+         }
+
+         .field-input,
+         .field-textarea,
+         .field-select {
+             width: 100%;
+             border-radius: 12px;
+             border: 1px solid rgba(148, 163, 184, 0.6);
+             background: rgba(15, 23, 42, 0.9);
+             color: var(--text);
+             padding: 9px 11px;
+             font-size: 0.88rem;
+             outline: none;
+             resize: vertical;
+             min-height: 42px;
+         }
+
+         .field-textarea {
+             min-height: 80px;
+         }
+
+         .field-input:focus,
+         .field-textarea:focus,
+         .field-select:focus {
+             border-color: rgba(129, 140, 248, 0.9);
+             box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.8);
+         }
+
+         .form-actions {
+             margin-top: 16px;
+             display: flex;
+             justify-content: flex-end;
+         }
+
+         .settings-grid {
+             display: flex;
+             flex-direction: column;
+             gap: 24px;
+             margin-top: 24px;
+         }
+
+         /* Individual setting cards */
+         .setting-card {
+             background: rgba(15, 23, 42, 0.6);
+             border-radius: 24px;
+             padding: 20px 24px;
+             border: 1px solid rgba(148, 163, 184, 0.25);
+             transition: all 0.2s ease;
+         }
+
+         .setting-card:hover {
+             border-color: rgba(79, 70, 229, 0.5);
+             background: rgba(15, 23, 42, 0.7);
+         }
+
+         .setting-header {
+             display: flex;
+             align-items: center;
+             gap: 12px;
+             margin-bottom: 16px;
+         }
+
+         .setting-icon {
+             font-size: 1.4rem;
+         }
+
+         .setting-header h3 {
+             font-size: 1rem;
+             font-weight: 600;
+             color: var(--text);
+             margin: 0;
+         }
+
+         .setting-desc {
+             font-size: 0.8rem;
+             color: var(--text-soft);
+             margin-bottom: 20px;
+             line-height: 1.4;
+         }
+
+         .setting-controls {
+             display: flex;
+             align-items: center;
+             justify-content: space-between;
+             flex-wrap: wrap;
+             gap: 16px;
+         }
+
+         /* Larger, more spacious toggles */
+         .toggle-row-large {
+             display: flex;
+             align-items: center;
+             justify-content: space-between;
+             padding: 12px 0;
+             border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+         }
+
+         .toggle-row-large:last-child {
+             border-bottom: none;
+         }
+
+         .toggle-info {
+             flex: 1;
+         }
+
+         .toggle-label-large {
+             font-size: 0.95rem;
+             font-weight: 500;
+             color: var(--text);
+             margin-bottom: 4px;
+         }
+
+         .toggle-sub-large {
+             font-size: 0.75rem;
+             color: var(--text-soft);
+         }
+
+         /* Bigger toggle switch */
+         .toggle-switch-large {
+             position: relative;
+             width: 52px;
+             height: 28px;
+             flex-shrink: 0;
+         }
+
+         .toggle-switch-large input {
+             opacity: 0;
+             width: 0;
+             height: 0;
+         }
+
+         .toggle-slider-large {
+             position: absolute;
+             cursor: pointer;
+             top: 0;
+             left: 0;
+             right: 0;
+             bottom: 0;
+             background: rgba(71, 85, 105, 0.6);
+             border-radius: 34px;
+             transition: 0.25s;
+         }
+
+         .toggle-slider-large:before {
+             position: absolute;
+             content: "";
+             height: 22px;
+             width: 22px;
+             left: 3px;
+             bottom: 3px;
+             background-color: white;
+             border-radius: 50%;
+             transition: 0.25s;
+         }
+
+         input:checked+.toggle-slider-large {
+             background: linear-gradient(120deg, var(--accent), var(--accent-2));
+         }
+
+         input:checked+.toggle-slider-large:before {
+             transform: translateX(23px);
+         }
+
+         /* Larger select dropdown */
+         .select-large {
+             width: 100%;
+             max-width: 280px;
+             padding: 12px 18px;
+             border-radius: 16px;
+             background: rgba(0, 0, 0, 0.4);
+             border: 1px solid rgba(148, 163, 184, 0.4);
+             color: var(--text);
+             font-size: 0.9rem;
+             cursor: pointer;
+             transition: all 0.2s;
+         }
+
+         .select-large:focus {
+             border-color: var(--accent);
+             outline: none;
+             box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+         }
+
+         /* Panic section - more spacious */
+         .panic-section-spacious {
+             background: rgba(0, 0, 0, 0.3);
+             border-radius: 24px;
+             padding: 20px;
+             margin-top: 8px;
+             border: 1px solid rgba(148, 163, 184, 0.2);
+         }
+
+         .panic-row-spacious {
+             display: flex;
+             flex-wrap: wrap;
+             gap: 20px;
+             margin-bottom: 20px;
+         }
+
+         .panic-field-spacious {
+             flex: 1;
+             min-width: 200px;
+         }
+
+         .panic-field-spacious label {
+             display: block;
+             font-size: 0.7rem;
+             text-transform: uppercase;
+             letter-spacing: 0.1em;
+             color: var(--text-soft);
+             margin-bottom: 8px;
+         }
+
+         .panic-input-large {
+             width: 100%;
+             padding: 12px 16px;
+             border-radius: 16px;
+             background: rgba(0, 0, 0, 0.5);
+             border: 1px solid rgba(148, 163, 184, 0.4);
+             color: white;
+             font-size: 0.9rem;
+             font-family: monospace;
+         }
+
+         .panic-preview-spacious {
+             display: flex;
+             align-items: center;
+             justify-content: space-between;
+             flex-wrap: wrap;
+             gap: 16px;
+             padding-top: 16px;
+             border-top: 1px solid rgba(148, 163, 184, 0.2);
+         }
+
+         .key-badge {
+             background: linear-gradient(135deg, var(--accent), var(--accent-2));
+             padding: 6px 18px;
+             border-radius: 40px;
+             font-weight: 700;
+             font-family: monospace;
+             font-size: 0.9rem;
+         }
+
+         .button-group {
+             display: flex;
+             gap: 12px;
+         }
+
+         .btn-small-spacious {
+             padding: 8px 20px;
+             border-radius: 40px;
+             background: rgba(255, 255, 255, 0.05);
+             border: 1px solid rgba(148, 163, 184, 0.4);
+             color: var(--text);
+             font-size: 0.75rem;
+             cursor: pointer;
+             transition: all 0.2s;
+         }
+
+         .btn-small-spacious:hover {
+             background: var(--accent);
+             border-color: var(--accent);
+         }
+
+         /* Spacing improvements for settings page */
+         .page-card {
+             padding: 28px 32px !important;
+         }
+
+         .page-card-header {
+             font-size: 0.85rem !important;
+             letter-spacing: 0.2em;
+             margin-bottom: 12px;
+         }
+
+         .page-card-title {
+             font-size: 1.6rem !important;
+             margin-bottom: 8px;
+         }
+
+         .page-card-sub {
+             font-size: 0.9rem !important;
+             margin-bottom: 28px !important;
+             line-height: 1.5;
+         }
+
+         body.reduce-motion * {
+             animation-duration: 0.001ms !important;
+             animation-iteration-count: 1 !important;
+             transition-duration: 0.001ms !important;
+             scroll-behavior: auto !important;
+         }
+
+         @media (max-width: 900px) {
+             .hero {
+                 grid-template-columns: minmax(0, 1fr);
+                 gap: 24px;
+                 margin-top: 26px;
+             }
+
+             .hero {
+                 margin-bottom: 24px;
+             }
+         }
+
+         @media (max-width: 640px) {
+             .top-bar {
+                 flex-direction: column;
+                 align-items: flex-start;
+                 gap: 10px;
+                 border-radius: 20px;
+             }
+
+             .hero {
+                 margin-top: 22px;
+             }
+
+             .app {
+                 padding-inline: 14px;
+             }
+
+             .grid-shell {
+                 padding-inline: 16px;
+             }
+
+             .fab-code {
+                 left: 14px;
+                 bottom: 14px;
+             }
+
+             .toast {
+                 right: 14px;
+                 bottom: 14px;
+             }
+         }
+
+         /* ---- Copy Notification Toast ---- */
+         .copy-toast {
+             position: fixed;
+             bottom: 22px;
+             right: 22px;
+             background: rgba(20, 20, 30, 0.92);
+             backdrop-filter: blur(10px);
+             color: #fff;
+             padding: 12px 18px;
+             border-radius: 12px;
+             font-size: 0.9rem;
+             letter-spacing: 0.03em;
+             border: 1px solid rgba(255, 255, 255, 0.15);
+             box-shadow: 0 6px 22px rgba(0, 0, 0, 0.6);
+             opacity: 0;
+             transform: translateY(20px);
+             transition: opacity .25s ease, transform .25s ease;
+             pointer-events: none;
+             isolation: isolate;
+             z-index: 999999999 !important;
+         }
+
+
+         .copy-toast.show {
+             opacity: 1;
+             transform: translateY(0);
+         }
+
+         .rank-badge {
+             position: absolute;
+             top: 10px;
+             left: 10px;
+             padding: 4px 10px;
+             border-radius: 999px;
+             font-size: 0.7rem;
+             font-weight: 600;
+             color: #0f172a;
+             background: #e5e7eb;
+             box-shadow: 0 0 18px rgba(15, 23, 42, 0.7);
+         }
+
+         .rank-1 {
+             background: linear-gradient(135deg, #facc15, #f97316);
+             color: #0f172a;
+         }
+
+         .rank-2 {
+             background: linear-gradient(135deg, #e5e7eb, #9ca3af);
+             color: #020617;
+         }
+
+         .rank-3 {
+             background: linear-gradient(135deg, #cf9604, #846003);
+             color: #0f172a;
+         }
+
+         .filters-bottom {
+             display: flex;
+             justify-content: space-between;
+             align-items: center;
+             gap: 12px;
+             flex-wrap: wrap;
+             margin-top: 10px;
+         }
+
+         .sort-wrap {
+             display: flex;
+             align-items: center;
+             gap: 6px;
+             font-size: 0.78rem;
+             color: var(--text-soft);
+         }
+
+         .sort-label {
+             text-transform: uppercase;
+             letter-spacing: 0.18em;
+             font-weight: 500;
+         }
+
+         .sort-select {
+             background: rgba(15, 23, 42, 0.9);
+             border-radius: 999px;
+             border: 1px solid rgba(148, 163, 184, 0.45);
+             color: #e5e7eb;
+             font-size: 0.78rem;
+             padding: 6px 12px;
+             outline: none;
+             cursor: pointer;
+         }
+
+         .sort-select:focus {
+             box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.6);
+         }
+
+         @media (max-width: 640px) {
+             .filters-bottom {
+                 align-items: flex-start;
+             }
+         }
+
+         /* --- Sent sparkle effect --- */
+         .sparkle-layer {
+             position: fixed;
+             inset: 0;
+             pointer-events: none;
+             z-index: 9999;
+         }
+
+         .sparkle-dot {
+             position: fixed;
+             width: var(--size, 6px);
+             height: var(--size, 6px);
+             border-radius: 999px;
+             background: radial-gradient(circle at 30% 30%, #ffffff, #6366f1);
+             opacity: 0;
+             transform: translate(-50%, -50%) scale(0.4);
+             animation: sparklePop 0.6s ease-out forwards;
+             animation-delay: var(--delay, 0s);
+         }
+
+         @keyframes sparklePop {
+             0% {
+                 opacity: 0;
+                 transform: translate(-50%, -50%) scale(0.4);
+             }
+
+             55% {
+                 opacity: 1;
+                 transform: translate(calc(-50% + var(--sx, 0px)),
+                         calc(-50% + var(--sy, 0px))) scale(1);
+             }
+
+             100% {
+                 opacity: 0;
+                 transform: translate(calc(-50% + var(--sx, 0px)),
+                         calc(-50% + var(--sy, 0px))) scale(0.2);
+             }
+         }
+
+         /* --- Update Log Overlay --- */
+         .update-log.hidden-start {
+             opacity: 0;
+             pointer-events: none;
+         }
+
+         .update-log {
+             position: fixed;
+             inset: 0;
+             background: rgba(0, 0, 0, 0.4);
+             backdrop-filter: blur(5px);
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             z-index: 9999;
+             opacity: 1;
+             transition: opacity 0.5s ease;
+         }
+
+         .update-log.fade-out {
+             opacity: 0;
+             pointer-events: none;
+         }
+
+         .log-content {
+             background: rgba(0, 0, 0, 0.25);
+             backdrop-filter: blur(15px);
+             -webkit-backdrop-filter: blur(15px);
+             padding: 30px 40px;
+             border-radius: 20px;
+             color: white;
+             max-width: 420px;
+             width: 90%;
+             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+             text-align: left;
+             position: relative;
+             transition: transform 0.5s ease, opacity 0.5s ease;
+             opacity: 1;
+             transform: scale(1);
+         }
+
+         .update-log.fade-out .log-content {
+             opacity: 0;
+             transform: scale(0.95);
+         }
+
+         .log-content h2 {
+             margin-top: 0;
+             margin-bottom: 8px;
+         }
+
+         .log-content h3 {
+             margin-top: 14px;
+             margin-bottom: 6px;
+             font-size: 0.95rem;
+             opacity: 0.85;
+         }
+
+         .log-content ul {
+             padding-left: 20px;
+             margin: 0;
+         }
+
+         .log-content li {
+             margin-bottom: 4px;
+             font-size: 0.9rem;
+         }
+
+         .close-btn {
+             position: absolute;
+             top: 10px;
+             right: 14px;
+             font-size: 1.4rem;
+             cursor: pointer;
+             border: none;
+             background: transparent;
+             color: #e5e7eb;
+         }
+
+         /* Floating "Updates" button (bottom-right) */
+         .update-fab {
+             position: fixed;
+             right: 18px;
+             bottom: 18px;
+             z-index: 10;
+             border: none;
+             border-radius: 999px;
+             padding: 8px 14px;
+             font-size: 0.8rem;
+             letter-spacing: 0.08em;
+             text-transform: uppercase;
+             background: radial-gradient(circle at top left, rgba(59, 130, 246, 0.9), rgba(129, 140, 248, 0.95));
+             color: #eef2ff;
+             display: flex;
+             /* only shown after unlock */
+             align-items: center;
+             gap: 6px;
+             box-shadow: 0 10px 30px rgba(15, 23, 42, 0.8);
+             cursor: pointer;
+         }
+
+         .update-fab span.dot {
+             width: 6px;
+             height: 6px;
+             border-radius: 999px;
+             background: #fbbf24;
+             box-shadow: 0 0 10px rgba(251, 191, 36, 0.8);
+         }
+
+         .update-fab:hover {
+             transform: translateY(-1px);
+         }
+
+         .log-footer {
+             margin-top: 18px;
+             padding-top: 12px;
+             border-top: 1px solid rgba(255, 255, 255, 0.15);
+             font-size: 0.75rem;
+             color: rgba(255, 255, 255, 0.7);
+             text-align: center;
+         }
+
+
+         .card__favorite-btn {
+             border: none;
+             background: transparent;
+             color: rgba(148, 163, 184, 0.9);
+             cursor: pointer;
+             padding: 0;
+             margin-left: 4px;
+             font-size: 1rem;
+             line-height: 1;
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             transition: transform 0.15s ease, color 0.15s ease, text-shadow 0.15s ease;
+         }
+
+         .card__favorite-btn:hover {
+             transform: scale(1.1) translateY(-1px);
+             color: var(--accent-2);
+         }
+
+         .card__favorite-btn.active {
+             color: var(--accent-3);
+             text-shadow: 0 0 10px var(--accent-3);
+         }
+
+         /* Falling Snow */
+         #snow-container {
+             pointer-events: none;
+             position: fixed;
+             inset: 0;
+             overflow: hidden;
+             z-index: 9999;
+             /* under your toasts, over the UI */
+         }
+
+         .snowflake {
+             position: absolute;
+             top: -10px;
+             color: white;
+             font-size: 0.8rem;
+             opacity: 0.9;
+             animation-name: fall;
+             animation-timing-function: linear;
+             user-select: none;
+         }
+
+         /* Use top so it doesn't fight your transform */
+         @keyframes fall {
+             from {
+                 top: -10px;
+             }
+
+             to {
+                 top: 110vh;
+                 opacity: 0.3;
+             }
+         }
+
+         /* Make the play counter more prominent and match your theme */
+         .card__play-counter {
+             display: flex;
+             align-items: center;
+             gap: 6px;
+             font-size: 0.8rem;
+             color: #fff;
+             background: rgba(61, 106, 255, 0.15);
+             /* Matching the button blue */
+             padding: 6px 14px;
+             border-radius: 999px;
+             border: 1px solid rgba(61, 106, 255, 0.5);
+             transition: all 0.2s ease;
+             backdrop-filter: blur(4px);
+             box-shadow: 0 0 10px rgba(61, 106, 255, 0.2);
+         }
+
+         .card:hover .card__play-counter {
+             background: rgba(61, 106, 255, 0.25);
+             border-color: rgb(61, 106, 255);
+             transform: scale(1.05);
+             box-shadow: 0 0 20px rgba(61, 106, 255, 0.4);
+         }
+
+         .counter-icon {
+             font-size: 0.85rem;
+             color: #fff;
+             opacity: 0.9;
+             filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
+         }
+
+         .counter-number {
+             font-weight: 700;
+             color: #fff;
+             text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+             transition: transform 0.2s ease;
+             min-width: 30px;
+             text-align: center;
+             font-size: 0.9rem;
+             background: linear-gradient(135deg, #fff, #e0e7ff);
+             -webkit-background-clip: text;
+             -webkit-text-fill-color: transparent;
+             background-clip: text;
+         }
+
+         .counter-label {
+             font-size: 0.65rem;
+             opacity: 0.8;
+             text-transform: uppercase;
+             letter-spacing: 0.5px;
+             color: rgba(255, 255, 255, 0.8);
+             font-weight: 500;
+         }
+
+         /* Add a subtle glow animation on hover */
+         .card:hover .counter-number {
+             animation: counterGlow 1.5s ease-in-out infinite;
+         }
+
+         @keyframes counterGlow {
+
+             0%,
+             100% {
+                 text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+             }
+
+             50% {
+                 text-shadow: 0 0 20px rgba(61, 106, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.5);
+             }
+         }
+
+         /* Style for when the counter updates (matches button flash) */
+         .card__play-counter.updating {
+             background: rgb(61, 106, 255);
+             box-shadow: 0 0 30px 5px rgba(61, 106, 255, 0.8);
+             transition: all 0.2s ease-out;
+         }
+
+         .card__play-counter.updating .counter-number {
+             -webkit-text-fill-color: white;
+             color: white;
+             text-shadow: 0 0 20px white;
+         }
+
+         /* Recently Played Horizontal Scroll */
+         .recent-row {
+             display: flex;
+             gap: 16px;
+             overflow-x: auto;
+             padding-bottom: 6px;
+             scroll-behavior: smooth;
+         }
+
+         .recent-row::-webkit-scrollbar {
+             height: 6px;
+         }
+
+         .recent-row::-webkit-scrollbar-thumb {
+             background: rgba(148, 163, 184, 0.5);
+             border-radius: 999px;
+         }
+
+         /* Make cards fixed width in scroll row */
+         .recent-row .card {
+             min-width: 240px;
+             max-width: 240px;
+             flex: 0 0 auto;
+         }
+     </style>
+ <link rel="stylesheet" href="site-theme.css"><link rel="stylesheet" href="player-ui.css?v=20260910-centered"><link rel="stylesheet" href="seasonal.css?v=auto-cloak-v18">
+<script src="update-history.js?v=auto-cloak-v18" defer></script><style id="tinkle-browser-style">
+#page-browser{min-height:75vh}.browser-shell{margin-top:18px;border:1px solid var(--border-soft);border-radius:22px;background:var(--panel);overflow:hidden;box-shadow:var(--shadow-soft)}
+.browser-toolbar{display:flex;align-items:center;gap:9px;padding:14px;background:var(--panel-soft);border-bottom:1px solid var(--border-soft);flex-wrap:wrap}
+.browser-toolbar button{border:1px solid var(--border-soft);border-radius:12px;background:var(--panel);color:var(--text);height:39px;min-width:39px;padding:0 11px;cursor:pointer;transition:transform .2s,border-color .2s}.browser-toolbar button:hover{transform:translateY(-2px);border-color:var(--accent)}
+.browser-toolbar form{display:flex;flex:1;min-width:180px;gap:8px}.browser-toolbar input{width:100%;height:39px;padding:0 14px;border:1px solid var(--border-soft);border-radius:12px;background:var(--bg-base);color:var(--text);outline:none}.browser-toolbar input:focus{border-color:var(--accent)}
+.browser-viewport{position:relative;height:min(72vh,850px);min-height:420px;background:#fff}.browser-viewport iframe{width:100%;height:100%;border:0;background:#fff}.browser-hint{padding:11px 15px;font-size:12px;color:var(--text-soft);border-top:1px solid var(--border-soft)}
+@media(max-width:600px){.browser-toolbar{gap:5px;padding:9px}.browser-toolbar button{min-width:34px;padding:0 7px}.browser-viewport{height:65vh;min-height:340px}}
+</style>
+</head>
+
+ <body>
+     <!-- LOADER SCREEN -->
+     <div class="loader-screen" id="loaderScreen">
+         <div class="loader-panel">
+             <div class="loader-wrapper">
+                 <span class="loader-letter">T</span>
+                 <span class="loader-letter">I</span>
+                 <span class="loader-letter">N</span>
+                 <span class="loader-letter">K</span>
+                 <span class="loader-letter">L</span>
+                 <span class="loader-letter">E</span>
+                 <span class="loader-letter">G</span>
+                 <span class="loader-letter">A</span>
+                 <span class="loader-letter">M</span>
+                 <span class="loader-letter">E</span>
+                 <span class="loader-letter">S</span>
+                 <div class="loader"></div>
+             </div>
+             <div class="gate-title">Welcome to</div>
+             <div class="gate-main">Tinkle Games</div>
+             <div class="gate-sub"></div>
+         </div>
+     </div>
+     <!-- MAIN APP -->
+     <div class="app" id="app">
+         <div class="top-shell">
+             <header class="top-bar">
+                 <div class="brand">
+                     <div class="brand-orbit">
+                         <svg viewBox="0 0 32 32">
+                             <circle cx="16" cy="16" r="11" fill="none" stroke="rgba(15,23,42,0.9)" stroke-width="2" />
+                             <ellipse cx="16" cy="16" rx="14" ry="5.4" fill="none" stroke="rgba(148,163,184,0.75)" stroke-width="1.1" />
+                             <circle cx="22" cy="16" r="1.4" fill="#f97316" />
+                         </svg>
+                     </div>
+                     <div>
+                         <div class="brand-text-main">TINKLE CODES</div>
+                         <div class="brand-text-sub">games · and more</div>
+                     </div>
+                 </div>
+                 <div class="top-right">
+                     <a class="token-rewards-link" href="rewards.html" aria-label="Tinkle Tokens and rewards">✦ <span data-token-balance>—</span> · Rewards</a>
+                     <div class="top-nav" id="topNav">
+                         <button class="top-nav-tab active" data-page="codes">Codes</button>
+                         <button class="top-nav-tab" data-page="music">Music</button>
+                         <button class="top-nav-tab" data-page="requests">Requests</button>
+                         <button class="top-nav-tab" data-page="suggestions">Suggestions</button>
+                         <button class="top-nav-tab" data-page="settings">Settings</button>
+                         <button class="top-nav-tab" data-page="browser">Browser</button>
+                     </div>
+                     <button class="btn-glow" id="openCodeSiteBtn">
+                         <span>Enter Code</span>
+                         <svg viewBox="0 0 24 24" fill="none">
+                             <path d="M7 17L17 7M9 7H17V15" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+                         </svg>
+                     </button>
+                 </div>
+             </header>
+         </div>
+
+         <!-- PAGE: CODES -->
+         <div class="page active" id="page-codes">
+             <div class="home-toolbar"><small>/ Search · Arrows Browse · Enter Copy · F Favorite</small><button class="btn-glow" id="customizeHome">Customize home</button></div>
+             <section class="filters">
+                 <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+                     <div class="search-field-wrap" style="flex: 1;">
+                         <span class="icon">🔍</span>
+                         <input id="searchInput" class="search-input" placeholder="Search by game name or code..." />
+                     </div>
+                     <button class="btn-glow" id="randomGameBtn" style="padding: 11px 20px; white-space: nowrap; margin-bottom: 0;">
+                         <span>🎲 Random Game</span>
+                     </button>
+                 </div>
+
+                 <div class="filters-bottom">
+                     <div class="pill-row" id="categoryPills"></div>
+
+                     <div class="sort-wrap">
+                         <span class="sort-label"></span>
+                         
+                     </div>
+                 </div>
+             </section>
+
+
+             <div id="homeSections">
+             <section class="hero" id="homeIntro">
+                 <div class="hero-left">
+                     <div class="hero-kicker">Tinkle games</div>
+                     <h1 class="hero-title">All your <span>codes</span>, floating in one clean space.</h1>
+                     <p class="hero-sub">
+                         A spaced-out deck for browsing and copying codes. Search by name or code, filter by game type, and paste into the main code site whenever you’re ready.
+                     </p>
+                     <div class="hero-meta-row">
+                         <div class="hero-stat-pill" id="heroStats">0 games loaded</div>
+                         <div class="hero-stat-pill">made by ______</div>
+                     </div>
+                 </div>
+                 <div class="hero-right">
+                     <div class="hero-card">
+                         <div class="hero-card-header">How it works</div>
+                         <div class="hero-card-body">
+                             <p><strong>1.</strong> Scroll through the grid of cards.</p>
+                             <p><strong>2.</strong> Click <strong>Copy code</strong> (or the card) to grab a code.</p>
+                             <p><strong>3.</strong> Hit <strong>Code site</strong> (top right) to open the codes page and paste.</p>
+                         </div>
+                     </div>
+                 </div>
+             </section>
+
+             <!-- RECENTLY PLAYED -->
+             <section class="library-section" id="recentSection">
+                 <div class="grid-header">
+                     <h2>Recently played</h2><div class="recent-scroll-buttons"><button type="button" id="recentScrollLeft" aria-label="Scroll recently played left">‹</button><button type="button" id="recentScrollRight" aria-label="Scroll recently played right">›</button></div>
+                 </div>
+                 <div class="discovery-grid" id="recentGrid" role="region" aria-label="Recently played games, scroll horizontally" tabindex="0"></div><p id="recentEmpty" class="section-status">Your recently played games will appear here.</p>
+
+             </section>
+
+
+             <!-- GRID -->
+             <section class="library-section" id="homeGames">
+                 <div class="grid-header">
+                     <h2 id="allGamesTitle">All games</h2>
+                     <div class="grid-count" id="cardsCount">Showing 0</div>
+                 </div>
+                 <div class="discovery-grid" id="cardsGrid"></div>
+                 <div class="no-results" id="noResults" style="display:none;">No games match that search or category.</div>
+             </section>
+             
+             </div>
+         </div>
+
+         <!-- PAGE: BROWSER -->
+         <div class="page" id="page-browser">
+           <div class="browser-shell" style="overflow:hidden">
+              <div class="browser-viewport" style="height:min(78vh,950px);min-height:550px">
+                <iframe id="browserFrame" title="Firefox Gecko WebAssembly Browser" src="/" allow="cross-origin-isolated" style="width:100%;height:100%;border:0"></iframe>
+              </div>
+              <p class="browser-hint" id="browserStatus">Firefox Gecko WebAssembly · Use the Firefox toolbar inside the window to browse. First launch downloads a large engine and may take time.</p>
+            </div>
+         </div>
+
+         <!-- PAGE: SUGGESTIONS -->
+         <div class="page" id="page-suggestions">
+             <div class="page-card">
+                 <div class="page-card-header">Feedback lane</div>
+                 <div class="page-card-title">Suggestions</div>
+                 <div class="page-card-sub">
+                     Drop ideas for new features, layout changes, themes, or any other updates you wanna see.
+                 </div>
+                 <form id="suggestionsForm">
+                     <div class="form-grid">
+                         <div style="grid-column: 1 / -1;">
+                             <div class="field-label">Suggestion</div>
+                             <textarea class="field-textarea" name="message" id="suggestion" placeholder="Describe what you want to add, change, or fix..."></textarea>
+                         </div>
+                     </div>
+                     <div class="form-actions">
+                         <button type="submit" class="btn-glow">
+                             <span>Send suggestion</span>
+                         </button>
+                     </div>
+                 </form>
+             </div>
+         </div>
+
+         <!-- PAGE: GAME REQUESTS -->
+         <div class="page" id="page-requests">
+             <div class="page-card">
+                 <div class="page-card-header">Request a game</div>
+                 <div class="page-card-title">Game requests</div>
+                 <div class="page-card-sub">
+                     Request new games you want codes for.
+                 </div>
+                 <form id="requestsForm">
+                     <div class="form-grid">
+                         <div>
+                             <div class="field-label">Game title</div>
+                             <input class="field-input" id="req-game" name="title" placeholder="e.g. Stumble Guys, Getting Over It..." />
+                         </div>
+                     </div>
+                     <div class="form-actions">
+                         <button type="submit" class="btn-glow">
+                             <span>Send request</span>
+                         </button>
+                     </div>
+                 </form>
+             </div>
+         </div>
+
+         <div class="page" id="page-settings">
+             <div class="page-card" style="padding: 28px 32px;">
+                 <div class="page-card-title" style="font-size: 1.6rem; margin-bottom: 8px;">Settings</div>
+                 <div class="page-card-sub" style="font-size: 0.9rem; margin-bottom: 28px;">
+                     customize tinkle — your own way.
+                 </div>
+
+                 <div class="settings-grid">
+                     <!-- Appearance Card -->
+                     <div class="setting-card">
+                         <div class="setting-header">
+                             <span class="setting-icon"></span>
+                             <h3>Themes</h3>
+                         </div>
+                         <div class="setting-desc">change the site colors</div>
+                         <div class="setting-controls">
+                             <select id="themeSelect" class="select-large">
+                                 <option value="galaxy">Galaxy (default)</option>
+                                 <option value="midnight">Midnight</option>
+                                 <option value="neon">Neon Grid</option>
+                                 <option value="aurora">Aurora</option>
+                             </select>
+                         </div>
+                     </div>
+
+                     <div class="setting-card" id="tabCloakCard"><div class="setting-header"><h3>Tab cloak</h3></div><p class="setting-desc">disguise the tab title and icon</p><label for="tabCloakPreset">Tab cloak</label><select id="tabCloakPreset" class="select-large"></select><button id="tabCloakReset" class="btn-small-spacious" type="button">Reset cloak</button><p id="tabCloakStatus" role="status" class="setting-desc"></p></div>
+                     <div class="setting-card" id="antiCloseCard"><div class="setting-header"><h3>Anti-close</h3></div><p class="setting-desc">ask for confirmation before leaving or closing this tab</p><label class="anti-close-control"><span>Enable anti-close</span><input type="checkbox" id="antiCloseToggle" role="switch"></label><p id="antiCloseStatus" class="setting-desc" role="status"></p></div>
+                     <!-- Safety Card -->
+                     <div class="setting-card">
+                         <div class="setting-header">
+                             <span class="setting-icon"></span>
+                             <h3>Panic Button</h3>
+                         </div>
+                         <div class="setting-desc">Press a key to instantly redirect to a safe URL.</div>
+
+                         <div class="panic-section-spacious">
+                             <div class="panic-row-spacious">
+                                 <div class="panic-field-spacious">
+                                     <label>🔗 Panic URL</label>
+                                     <input type="text" id="panicUrl" class="panic-input-large" placeholder="https://google.com" value="https://google.com">
+                                 </div>
+                                 <div class="panic-field-spacious">
+                                     <label>⌨️ Panic Key</label>
+                                     <div style="display: flex; gap: 10px;">
+                                         <input type="text" id="panicKeyInput" class="panic-input-large" readonly placeholder="Click 'Set Key'" style="cursor: pointer; background: #0f172a;" value="` (backtick)">
+                                         <button id="setPanicKeyBtn" class="btn-small-spacious">Set Key</button>
+                                     </div>
+                                 </div>
+                             </div>
+                             <div class="panic-preview-spacious">
+                                 <div>Current keybind: <span id="currentPanicKey" class="key-badge">` (backtick)</span></div>
+                                 <div class="button-group">
+                                     <button id="clearPanicKeyBtn" class="btn-small-spacious">Reset to default</button>
+                                 </div>
+                             </div>
+                             <div class="setting-desc" style="margin-top: 16px; font-size: 0.7rem;">
+                                 💡 Press your panic key anytime to instantly redirect.
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+
+     <!-- Load game data before the page scripts initialize. -->
+     <script src="game-cards.js?v=auto-cloak-v18"></script>
+     <script src="homepage-ui.js?v=auto-cloak-v18"></script>
+     <script src="weekly-popularity.js"></script>
+
+     <dialog id="homeCustomize" aria-labelledby="homeCustomizeTitle">
+       <form id="homeForm"><h2 id="homeCustomizeTitle">Make yourself at home</h2><p>Choose your sections and their order. Saved on this device.</p><div id="homeOrder"></div>
+       <label class="home-setting">Card density<select id="homeDensity"><option value="comfortable">Comfortable</option><option value="compact">Compact</option></select></label>
+       <p id="homeSaveStatus" role="status"></p><div class="home-actions"><button type="button" id="homeReset">Reset layout</button><button type="button" id="homeClose">Cancel</button><button type="submit">Save layout</button></div></form>
+     </dialog>
+     <!-- Toast -->
+     <div class="toast" id="toast">
+         <span class="toast-dot"></span>
+         <div>
+             <div class="toast-label" id="toastLabel">CLIPBOARD</div>
+             <div id="toastText">Copied</div>
+         </div>
+     </div>
+
+     <!-- COPY NOTIFICATION -->
+     <div id="copyToast" class="copy-toast">Code Copied!</div>
+
+     <!-- UPDATE LOG OVERLAY -->
+     <div id="updateLog" style="position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 99999; opacity: 0; transition: opacity 0.3s ease;">
+         <div class="log-content" style="background: var(--panel); backdrop-filter: blur(20px); border-radius: 28px; padding: 32px 40px; max-width: 450px; width: 90%; max-height: 85vh; overflow-y: auto; color: var(--text); border: 1px solid var(--border-soft); box-shadow: 0 20px 60px rgba(0,0,0,0.5);">
+             <button class="close-btn" style="position: absolute; top: 12px; right: 18px; font-size: 28px; background: none; border: none; color: white; cursor: pointer;">&times;</button>
+             <!-- ADMIN UPDATE LOG START -->
+<h2>Update Log</h2>
+<h3>games &gt; goy</h3>
+<ul>
+    <li>🌠 Added Angry Birds Star Wars II</li>
+    <li>🐟 Added Feed and Grow: Fish</li>
+    <li>🔫 Added Ravenfield</li>
+    <li>⛽️ Added Rotten Machines</li>
+    <li>🎊 Added Five Nights at Freddy&#39;s: Into the Pit</li>
+    <li>🧢 Added Super Mario Odyssey</li>
+    <li>📼 Added The Happyhills Homicide</li>
+    <li>⚔️ Added YoHoHo.io</li>
+    <li>Also added update log for future updates 😩</li>
+</ul>
+<h3>Coming Soon</h3>
+<ul>
+    <li>📋 Looking through your suggestions and game requests also</li>
+</ul>
+<div class="log-footer" style="margin-top:20px;padding-top:12px;border-top:1px solid rgba(255,255,255,.2);font-size:.75rem;text-align:center"><span>Version 3.0.1 • Last updated Oct 29, 2026</span></div>
+<!-- ADMIN UPDATE LOG END -->
+
+         </div>
+     </div>
+
+     <!-- Floating Updates button -->
+     <button id="updateLogBtn" class="update-fab" type="button">
+         <span class="dot"></span>
+         <span>Updates</span>
+     </button>
+
+     <div id="snow-container"></div>
+
+     <script src="live-notices.js?v=20260911-live-v3"></script>
+     <script src="event-core.js"></script>
+     <script src="live-events.js?v=20260915-fullscreen"></script>
+     <!-- Firebase / Troll / Presence logic -->
+     <script type="module">
+         import {
+             initializeApp
+         } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+         import {
+             getAnalytics
+         } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
+         import {
+             getDatabase,
+             ref,
+             get,
+             set,
+             onValue,
+             push,
+             onDisconnect,
+             runTransaction
+         } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
+         import {
+             getAuth,
+             signInAnonymously,
+             onAuthStateChanged
+         }
+         from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+
+         const firebaseConfig = {
+             apiKey: "AIzaSyC-IDS2wfF3ZgVzjwf0cHUazNGolLFhXVQ",
+             authDomain: "mostpopular-39c60.firebaseapp.com",
+             databaseURL: "https://mostpopular-39c60-default-rtdb.europe-west1.firebasedatabase.app",
+             projectId: "mostpopular-39c60",
+             storageBucket: "mostpopular-39c60.firebasedatabase.app",
+             messagingSenderId: "939775132675",
+             appId: "1:939775132675:web:7d40bd8fff497c53553a36",
+             measurementId: "G-XTTQ03YFN9"
+         };
+
+         // Initialize Firebase
+         const app = initializeApp(firebaseConfig);
+         const analytics = getAnalytics(app);
+
+         // --- 🔐 Anonymous Auth ---
+         const auth = getAuth(app);
+         const anonymousSignIn = signInAnonymously(auth)
+             .then(() => console.log("✅ Signed in anonymously"))
+             .catch((error) => console.error("❌ Auth error:", error));
+
+         onAuthStateChanged(auth, (user) => {
+             if (user) {
+                 console.log("👤 Anonymous UID:", user.uid);
+             }
+         });
+
+         const db = getDatabase(app);
+
+         // --- Sanitize Firebase keys ---
+         function sanitizeKey(name) {
+             return name.replace(/[.#$/\[\]]/g, "_");
+         }
+
+         window.incrementGameClick = async function(name) {
+             try {
+                 const result = await window.incrementGameClicks(name);
+                 return result;
+             } catch (e) {
+                 console.error("incrementGameClick failed:", e);
+             }
+         };
+
+         // Add this test function to check Firebase data
+         window.testFirebaseData = async function() {
+             try {
+                 console.log("Testing Firebase connection...");
+                 const snapshot = await get(ref(db, 'allTimeClickData'));
+                 if (snapshot.exists()) {
+                     console.log("All-time click data:", snapshot.val());
+                 } else {
+                     console.log("No all-time click data found yet");
+
+                     // Try to write some test data
+                     const testKey = sanitizeKey("Test Game");
+                     await set(ref(db, 'allTimeClickData/' + testKey), 42);
+                     console.log("Wrote test data. Try reading it back...");
+
+                     const testSnapshot = await get(ref(db, 'allTimeClickData/' + testKey));
+                     console.log("Test data read:", testSnapshot.val());
+                 }
+             } catch (e) {
+                 console.error("Firebase test failed:", e);
+             }
+         };
+
+         // Call this after Firebase initializes
+         setTimeout(() => {
+             window.testFirebaseData();
+         }, 3000);
+
+         // --- Attach copy & click events to buttons ---
+         window.attachButtonEvents = function(container = document) {
+             container.querySelectorAll(".get-code").forEach(btn => {
+                 btn.addEventListener("click", async () => {
+                     const card = btn.closest(".game-card");
+                     const code = card.dataset.code;
+                     const name = card.querySelector(".game-name").textContent;
+
+                     // Firebase increment
+                     try {
+                         await incrementGameClick(name);
+                     } catch (e) {
+                         console.error("incrementGameClick failed:", e);
+                     }
+
+                     // Copy code to clipboard
+                     navigator.clipboard.writeText(code)
+                         .then(() => showNotification("Copied! Code: " + code, true))
+                         .catch(() => showNotification("Failed to copy code", false));
+                 });
+             });
+         };
+
+         // .info is SDK-local metadata: receive it through onValue, not get().
+         let resolveWeeklyClock;
+         const weeklyClockReady = new Promise(resolve => { resolveWeeklyClock = resolve; });
+         let weeklyMigration;
+         function ensureWeeklyMigration() {
+             if (!weeklyMigration) {
+                 weeklyMigration = (async () => {
+                     await anonymousSignIn;
+                     if (!auth.currentUser) throw new Error('Sign-in is required to initialize weekly rankings.');
+                     await weeklyClockReady;
+                     const marker = await get(ref(db, 'weeklyClickData/__legacyMigrated'));
+                     if (!marker.val()) {
+                         const week = WeeklyPopularity.weekKey();
+                         await runTransaction(ref(db, 'weeklyClickData'), current =>
+                             WeeklyPopularity.migrateLegacy(current, week));
+                     }
+                 })().catch(error => {
+                     weeklyMigration = null;
+                     throw error;
+                 });
+             }
+             return weeklyMigration;
+         }
+         window.getWeeklyClickData = async function() {
+             await ensureWeeklyMigration();
+             const snapshot = await get(ref(db, WeeklyPopularity.path()));
+             return snapshot.exists() ? snapshot.val() : {};
+         };
+
+         // Switch the active bucket even when a visitor leaves the page open over noon.
+         let activeWeeklyPath;
+         let stopWeeklyListener;
+         function syncWeeklyPeriod() {
+             const path = WeeklyPopularity.path();
+             if (path === activeWeeklyPath) return;
+             activeWeeklyPath = path;
+             if (stopWeeklyListener) stopWeeklyListener();
+             window.dispatchEvent(new Event('weekly-popularity-changed'));
+             stopWeeklyListener = onValue(ref(db, path), () => {
+                 window.dispatchEvent(new Event('weekly-popularity-changed'));
+             }, error => console.error('Weekly popularity listener failed:', error));
+         }
+         onValue(ref(db, '.info/serverTimeOffset'), snapshot => {
+             WeeklyPopularity.setServerOffset(snapshot.val());
+             resolveWeeklyClock();
+             syncWeeklyPeriod();
+         });
+         onAuthStateChanged(auth, user => {
+             if (user) {
+                 activeWeeklyPath = null;
+                 syncWeeklyPeriod();
+             }
+         });
+         setInterval(syncWeeklyPeriod, 1000);
+         document.addEventListener('visibilitychange', () => {
+             if (!document.hidden) syncWeeklyPeriod();
+         });
+         window.addEventListener('focus', syncWeeklyPeriod);
+
+         // Update this function with debugging
+         window.getAllTimeClickCount = async function(gameName) {
+             try {
+                 console.log("Getting count for game:", gameName);
+                 const safeKey = sanitizeKey(gameName);
+                 console.log("Sanitized key:", safeKey);
+
+                 const snapshot = await get(ref(db, 'allTimeClickData/' + safeKey));
+                 const count = snapshot.exists() ? snapshot.val() : 0;
+                 console.log(`Count for ${gameName}:`, count);
+                 return count;
+             } catch (e) {
+                 console.error("getAllTimeClickCount failed:", e);
+                 return 0;
+             }
+         };
+
+         // Generate a unique session ID when the page loads
+         const sessionId = Date.now().toString() + Math.random().toString(36).substr(2, 9);
+         console.log("Session ID:", sessionId);
+
+         // Track if we've already checked sessions for this game to avoid multiple Firebase calls
+         const sessionChecked = new Set();
+
+         // Track last click time for each game per user (in memory)
+         const lastClickTime = new Map();
+         const COOLDOWN_TIME = 5 * 60 * 1000; // 5 minutes in milliseconds (adjust as needed)
+
+         window.incrementGameClicks = async function(name) {
+             try {
+                 await ensureWeeklyMigration();
+                 console.log("Incrementing clicks for:", name);
+                 const safeKey = sanitizeKey(name);
+
+                 const auth = getAuth();
+                 const userId = auth.currentUser?.uid;
+
+                 if (!userId) {
+                     console.error("No user ID available");
+                     return null;
+                 }
+
+                 // Check cooldown in memory first (faster)
+                 const lastTime = lastClickTime.get(name);
+                 const now = Date.now();
+
+                 if (lastTime && (now - lastTime < COOLDOWN_TIME)) {
+                     const secondsLeft = Math.ceil((COOLDOWN_TIME - (now - lastTime)) / 1000);
+                     console.log(`Cooldown active for ${name}. ${secondsLeft}s remaining`);
+
+                     // Get current counts to display
+                     const allTimeRef = ref(db, 'allTimeClickData/' + safeKey);
+                     const allTimeSnapshot = await get(allTimeRef);
+                     const allTimeCurrent = allTimeSnapshot.exists() ? allTimeSnapshot.val() : 0;
+
+                     const weeklyRef = ref(db, WeeklyPopularity.path() + '/' + safeKey);
+                     const weeklySnapshot = await get(weeklyRef);
+                     const weeklyCurrent = weeklySnapshot.exists() ? weeklySnapshot.val() : 0;
+
+                     return {
+                         weekly: weeklyCurrent,
+                         allTime: allTimeCurrent,
+                         onCooldown: true,
+                         secondsLeft: secondsLeft
+                     };
+                 }
+
+                 // Check Firebase for the last click time (in case user switched devices or cleared cache)
+                 const lastClickRef = ref(db, `userClickTimestamps/${userId}/${safeKey}`);
+                 const lastClickSnapshot = await get(lastClickRef);
+
+                 let lastFirebaseTime = lastClickSnapshot.exists() ? lastClickSnapshot.val() : 0;
+
+                 // If last click was within cooldown period, don't increment
+                 if (lastFirebaseTime && (now - lastFirebaseTime < COOLDOWN_TIME)) {
+                     const secondsLeft = Math.ceil((COOLDOWN_TIME - (now - lastFirebaseTime)) / 1000);
+                     console.log(`Firebase cooldown active for ${name}. ${secondsLeft}s remaining`);
+
+                     // Still update memory cache
+                     lastClickTime.set(name, lastFirebaseTime);
+
+                     // Get current counts
+                     const allTimeRef = ref(db, 'allTimeClickData/' + safeKey);
+                     const allTimeSnapshot = await get(allTimeRef);
+                     const allTimeCurrent = allTimeSnapshot.exists() ? allTimeSnapshot.val() : 0;
+
+                     const weeklyRef = ref(db, WeeklyPopularity.path() + '/' + safeKey);
+                     const weeklySnapshot = await get(weeklyRef);
+                     const weeklyCurrent = weeklySnapshot.exists() ? weeklySnapshot.val() : 0;
+
+                     return {
+                         weekly: weeklyCurrent,
+                         allTime: allTimeCurrent,
+                         onCooldown: true,
+                         secondsLeft: secondsLeft
+                     };
+                 }
+
+                 // Cooldown passed - increment counts
+                 const allTimeRef = ref(db, 'allTimeClickData/' + safeKey);
+                 const allTimeSnapshot = await get(allTimeRef);
+                 const allTimeCurrent = allTimeSnapshot.exists() ? allTimeSnapshot.val() : 0;
+                 await set(allTimeRef, allTimeCurrent + 1);
+
+                 const weeklyRef = ref(db, WeeklyPopularity.path() + '/' + safeKey);
+                 // Increment atomically in the current week; old weeks remain separate.
+                 const weeklyResult = await runTransaction(weeklyRef, count => (count || 0) + 1);
+                 const weeklyCurrent = weeklyResult.snapshot.val() - 1;
+
+                 // Update timestamp in Firebase
+                 await set(lastClickRef, now);
+
+                 // Update memory cache
+                 lastClickTime.set(name, now);
+
+                 console.log(`Cooldown passed! Incremented counts to all-time: ${allTimeCurrent + 1}, weekly: ${weeklyCurrent + 1}`);
+
+                 return {
+                     weekly: weeklyCurrent + 1,
+                     allTime: allTimeCurrent + 1,
+                     onCooldown: false
+                 };
+             } catch (e) {
+                 console.error("incrementGameClicks failed:", e);
+                 return null;
+             }
+         };
+
+         // Clean up old sessions (optional)
+         window.cleanupOldSessions = async function() {
+             try {
+                 const auth = getAuth();
+                 const userId = auth.currentUser?.uid;
+                 if (!userId) return;
+
+                 // This would need to be done server-side or with a Cloud Function
+                 // For now, we'll just let sessions accumulate
+                 console.log("Sessions are stored permanently to track unique visits");
+             } catch (e) {
+                 console.error("Failed to clean up old sessions:", e);
+             }
+         };
+
+         // Listen for real-time updates to all-time counts
+         const allTimeCountsRef = ref(db, 'allTimeClickData');
+         let allTimeCountsListener = null;
+
+         window.listenToAllTimeCounts = function(callback) {
+             if (allTimeCountsListener) {
+                 off(allTimeCountsListener);
+             }
+             allTimeCountsListener = onValue(allTimeCountsRef, (snapshot) => {
+                 const counts = snapshot.exists() ? snapshot.val() : {};
+                 callback(counts);
+             });
+         };
+
+         // --- Show top 5 popular games ---
+         window.showPopular = async function() {
+             const clickData = await getAllClickData();
+             const ranked = allCards
+                 .map(card => {
+                     const name = card.querySelector(".game-name").textContent;
+                     const safeKey = sanitizeKey(name); // sanitize here too
+                     return {
+                         card,
+                         count: clickData[safeKey] || 0
+                     };
+                 })
+                 .filter(e => e.count > 0)
+                 .sort((a, b) => b.count - a.count)
+                 .slice(0, 5);
+
+             gamesContainer.innerHTML = "";
+             ranked.forEach((entry, i) => {
+                 const clone = entry.card.cloneNode(true);
+                 const badge = document.createElement("div");
+                 badge.className = "rank-badge " +
+                     (i === 0 ? "rank-gold" : i === 1 ? "rank-silver" : i === 2 ? "rank-bronze" : "rank-blue");
+                 badge.textContent = `#${i + 1}`;
+                 clone.appendChild(badge);
+                 gamesContainer.appendChild(clone);
+             });
+
+             attachButtonEvents(gamesContainer);
+         };
+
+         const settingsRef = ref(db, "siteSettings");
+         onValue(settingsRef, snapshot => {window.tinkleDiscoverySettings=snapshot.val()||{};window.dispatchEvent(new Event('discovery-settings'));},error=>console.warn('Spotlight settings unavailable',error));
+         const triggerAnnRef = ref(db, "announcementTriggerNow");
+         const triggerRef = ref(db, "jumpscareTriggerNow");
+         const trollBaseRef = ref(db, "trollTriggers");
+
+         // === Timestamp Guards ===
+         let lastAnnounceTriggerTime = 0;
+         let lastJumpscareTimestamp = 0;
+         let lastCursorChaos = 0;
+         let lastCreepySound = 0;
+         let lastFlashbang = 0;
+         let lastReverseControls = 0;
+
+         let initialAnnounceLoaded = false;
+         let initialJumpLoaded = false;
+         let initialCursorLoaded = false;
+         let initialSoundLoaded = false;
+         let initialFlashbangLoaded = false;
+         let initialReverseLoaded = false;
+
+         let liveEventClockOffset = 0;
+         onValue(ref(db, '.info/serverTimeOffset'), snapshot => { liveEventClockOffset = Number(snapshot.val()) || 0; });
+         const liveEventView = LiveEvents.mount({
+             now: () => Date.now() + liveEventClockOffset,
+             recruit: async id => {
+                 await anonymousSignIn;
+                 if (!auth.currentUser) throw new Error('Sign-in is still connecting. Try again.');
+                 const result = await runTransaction(ref(db, 'siteSettings/liveEvent'), current =>
+                     EventCore.recruit(current, id, Date.now() + liveEventClockOffset), { applyLocally: false });
+                 if (!result.committed) throw new Error('This Crab Rave has ended.');
+             }
+         });
+         onValue(ref(db, 'siteSettings/liveEvent'), snapshot => liveEventView.render(snapshot.val()), error => {
+             console.error('Live event unavailable:', error);
+             liveEventView.render(null);
+         });
+         const liveNotices = LiveNotices.mount();
+         onValue(ref(db, '.info/serverTimeOffset'), snapshot => liveNotices.setClockOffset(snapshot.val()));
+         // Listen-only: visitors never delete announcement records.
+         onValue(settingsRef, snapshot => {
+             const settings = snapshot.val() || {};
+             document.body.style.backgroundColor = settings.backgroundColor || '#0a0a0a';
+             liveNotices.render(settings);
+         });
+         // Legacy admin compatibility: show newly sent messages without clearing shared data.
+         let legacyAnnouncementInitialized = false;
+         onValue(triggerAnnRef, snapshot => {
+             const message = snapshot.val();
+             if (!legacyAnnouncementInitialized) { legacyAnnouncementInitialized = true; return; }
+             if (!message || message.timestamp === lastAnnounceTriggerTime) return;
+             lastAnnounceTriggerTime = message.timestamp;
+             if (typeof message.text === 'string') {
+                 get(settingsRef).then(snapshot => liveNotices.render({ ...(snapshot.val() || {}), liveAnnouncement: {
+                     id: 'legacy-' + message.timestamp, text: message.text, style: 'toast', expiresAt: Date.now() + 15000
+                 }}));
+             }
+         });
+
+         // === Manual Jumpscare Trigger ===
+         onValue(triggerRef, (snapshot) => {
+             const t = snapshot.val();
+             if (!t || typeof t.timestamp !== "number") return;
+
+             if (!initialJumpLoaded) {
+                 lastJumpscareTimestamp = t.timestamp;
+                 initialJumpLoaded = true;
+                 return;
+             }
+
+             if (t.timestamp === lastJumpscareTimestamp) return;
+             lastJumpscareTimestamp = t.timestamp;
+
+             const img = document.createElement("img");
+             img.src = t.image;
+             img.style.position = "fixed";
+             img.style.top = "0";
+             img.style.left = "0";
+             img.style.width = "100%";
+             img.style.height = "100%";
+             img.style.objectFit = "cover";
+             img.style.zIndex = "10000";
+             document.body.appendChild(img);
+
+             setTimeout(() => img.remove(), 1500);
+
+             // Optional: clear after use
+             set(triggerRef, null);
+         });
+
+         // === Cursor Chaos
+         onValue(ref(db, "trollTriggers/cursorChaos"), (snap) => {
+             const data = snap.val();
+             if (!data || typeof data.timestamp !== "number") return;
+
+             if (!initialCursorLoaded) {
+                 lastCursorChaos = data.timestamp;
+                 initialCursorLoaded = true;
+                 return;
+             }
+
+             if (data.timestamp === lastCursorChaos) return;
+             lastCursorChaos = data.timestamp;
+
+             document.body.style.cursor = "none";
+             setTimeout(() => {
+                 document.body.style.cursor = "default";
+             }, 3000);
+         });
+
+         // === creepySound (taco rain / crab rave) and audio playing
+         onValue(ref(db, "trollTriggers/creepySound"), (snap) => {
+             const data = snap.val();
+             if (!data || !data.url || Date.now() - data.timestamp > 10000) return;
+
+             const audio = new Audio(data.url);
+             audio.play().catch(console.error);
+
+             // 🌮 Taco rain
+             if (data.url.includes("rainingtacos.mp3")) {
+                 startTacoRain();
+             }
+
+             // 🦀 Crab rave
+             if (data.url.includes("crabrave.mp3")) {
+                 startCrabRave();
+             }
+         });
+
+         // === Taco Rain Animation ===
+         function startTacoRain() {
+             const tacoURL = "https://cdn-icons-png.flaticon.com/512/10342/10342492.png"; // <== your taco image URL
+             const rainContainer = document.createElement("div");
+             rainContainer.id = "taco-rain";
+             rainContainer.style.position = "fixed";
+             rainContainer.style.top = "0";
+             rainContainer.style.left = "0";
+             rainContainer.style.width = "100%";
+             rainContainer.style.height = "100%";
+             rainContainer.style.pointerEvents = "none";
+             rainContainer.style.overflow = "hidden";
+             rainContainer.style.zIndex = "99999";
+             document.body.appendChild(rainContainer);
+
+             // Generate tacos + spice particles
+             const tacoCount = 20;
+             const spiceCount = 40;
+             for (let i = 0; i < tacoCount; i++) createTaco(rainContainer, tacoURL);
+             for (let i = 0; i < spiceCount; i++) createSpice(rainContainer);
+
+             // Remove after song ends (~30s)
+             setTimeout(() => rainContainer.remove(), 33000);
+         }
+
+         function createTaco(container, tacoURL) {
+             const taco = document.createElement("img");
+             taco.src = tacoURL;
+             taco.style.position = "absolute";
+             taco.style.top = "-100px";
+             taco.style.left = Math.random() * 100 + "vw";
+             taco.style.width = 50 + Math.random() * 50 + "px";
+             taco.style.opacity = 0.9;
+             taco.style.transform = `rotate(${Math.random() * 360}deg)`;
+             taco.style.animation = `tacoFall ${4 + Math.random() * 5}s linear infinite`;
+             taco.style.animationDelay = Math.random() * 5 + "s";
+             container.appendChild(taco);
+         }
+
+         function createSpice(container) {
+             const spice = document.createElement("div");
+             spice.style.position = "absolute";
+             spice.style.top = "-10px";
+             spice.style.left = Math.random() * 100 + "vw";
+             spice.style.width = "8px";
+             spice.style.height = "8px";
+             spice.style.borderRadius = "50%";
+             spice.style.background = Math.random() > 0.5 ? "#d17f3f" : "#f5c26b"; // taco spice colors
+             spice.style.opacity = 0.8;
+             spice.style.animation = `spiceFall ${3 + Math.random() * 3}s linear infinite`;
+             spice.style.animationDelay = Math.random() * 5 + "s";
+             container.appendChild(spice);
+         }
+
+         // === CSS Animations ===
+         const style = document.createElement("style");
+         style.textContent = `
+  @keyframes tacoFall {
+    0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
+
+  @keyframes spiceFall {
+    0% { transform: translateY(-10px); opacity: 1; }
+    100% { transform: translateY(110vh); opacity: 0; }
+  }
+  `;
+         document.head.appendChild(style);
+
+         function startCrabRave() {
+             const crabURL = "https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUyYXJjYTZ2YWxsdTU4bjZleW0yczdxYmhjcmVjMnJob2cwOHlpNTlieiZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/NitS36ljNxQcfT0QIT/200.gif";
+             const pageHeight = Math.max(document.body.scrollHeight, window.innerHeight);
+             const raveContainer = document.createElement("div");
+             raveContainer.id = "crab-rave";
+             Object.assign(raveContainer.style, {
+                 position: "absolute",
+                 top: "0",
+                 left: "0",
+                 width: "100%",
+                 height: pageHeight + "px",
+                 pointerEvents: "none",
+                 zIndex: "99998",
+             });
+             document.body.appendChild(raveContainer);
+
+             // === Create full-page spotlights ===
+             const spotlight = document.createElement("div");
+             Object.assign(spotlight.style, {
+                 position: "absolute", // scrolls with page
+                 top: "0",
+                 left: "0",
+                 width: "100%",
+                 height: pageHeight + "px",
+                 pointerEvents: "none",
+                 zIndex: "99999",
+                 background: "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.2) 0%, transparent 70%)",
+                 mixBlendMode: "screen",
+                 transition: "background 0.3s ease",
+             });
+             document.body.appendChild(spotlight);
+
+             // === Create crab crowd ===
+             const crabCount = 50;
+             for (let i = 0; i < crabCount; i++) {
+                 const crab = document.createElement("img");
+                 crab.src = crabURL;
+                 crab.style.position = "absolute";
+                 crab.style.transition = "transform 0.2s ease";
+                 crab.style.willChange = "transform";
+
+                 const x = Math.random() * 95 + 2.5;
+                 const y = Math.random() * pageHeight;
+
+                 const scale = 0.3 + Math.random() * 0.4;
+
+                 Object.assign(crab.style, {
+                     left: `${x}%`,
+                     top: `${y}px`,
+                     transform: `translate(-50%, 0) scale(${scale})`,
+                     zIndex: Math.floor(scale * 100),
+                 });
+
+                 raveContainer.appendChild(crab);
+             }
+
+             // === Beat sync: page scale + crab bounce + spotlight color ===
+             const colors = ["#ff00ff", "#00ffff", "#ffcc00", "#ff69b4", "#00ff00"];
+             let beatUp = false;
+             let colorIndex = 0;
+
+             const beatInterval = setInterval(() => {
+                 beatUp = !beatUp;
+
+                 // Page scaling bounce
+                 const scale = beatUp ? 1.03 : 1; // grow slightly on beat
+                 document.body.style.transform = `scale(${scale})`;
+                 document.body.style.transformOrigin = "center top";
+                 document.body.style.transition = "transform 0.2s ease";
+
+                 // Spotlight moves randomly
+                 const spotlightX = Math.random() * 100;
+                 const spotlightY = Math.random() * 100;
+                 const color = colors[colorIndex % colors.length];
+                 colorIndex++;
+                 spotlight.style.background = `radial-gradient(circle at ${spotlightX}% ${spotlightY}%, ${color}40 0%, transparent 70%)`;
+
+                 // Crab bounce per beat
+                 document.querySelectorAll("#crab-rave img").forEach((crab) => {
+                     const bounce = `translateY(${beatUp ? -6 : 0}px)`;
+                     crab.style.transform = crab.style.transform.replace(/translateY\(.*?\)/, "") + ` ${bounce}`;
+                 });
+             }, 480); // ~125 BPM
+
+             // === End effect after ~17s ===
+             setTimeout(() => {
+                 clearInterval(beatInterval);
+                 document.body.style.transform = "scale(1)";
+                 raveContainer.remove();
+                 spotlight.remove();
+             }, 17000);
+         }
+
+         // === Flashbang
+         onValue(ref(db, "trollTriggers/flashbang"), (snap) => {
+             const data = snap.val();
+             if (!data || typeof data.timestamp !== "number") return;
+
+             if (!initialFlashbangLoaded) {
+                 lastFlashbang = data.timestamp;
+                 initialFlashbangLoaded = true;
+                 return;
+             }
+
+             if (data.timestamp === lastFlashbang) return;
+             lastFlashbang = data.timestamp;
+
+             const flash = document.createElement("div");
+             flash.style.position = "fixed";
+             flash.style.top = "0";
+             flash.style.left = "0";
+             flash.style.width = "100%";
+             flash.style.height = "100%";
+             flash.style.background = "white";
+             flash.style.zIndex = "99999";
+             flash.style.transition = "opacity 0.5s ease";
+             flash.style.opacity = "1";
+             document.body.appendChild(flash);
+
+             setTimeout(() => flash.style.opacity = "0", 200);
+             setTimeout(() => flash.remove(), 800);
+         });
+
+         // === Reverse Controls
+         onValue(ref(db, "trollTriggers/reverseControls"), (snap) => {
+             const data = snap.val();
+             if (!data || typeof data.timestamp !== "number") return;
+
+             if (!initialReverseLoaded) {
+                 lastReverseControls = data.timestamp;
+                 initialReverseLoaded = true;
+                 return;
+             }
+
+             if (data.timestamp === lastReverseControls) return;
+             lastReverseControls = data.timestamp;
+
+             const moveHandler = (e) => {
+                 window.scrollBy(
+                     (Math.random() - 0.5) * -50,
+                     (Math.random() - 0.5) * -50
+                 );
+             };
+             document.addEventListener("mousemove", moveHandler);
+             setTimeout(() => {
+                 document.removeEventListener("mousemove", moveHandler);
+             }, 3000);
+         });
+
+         // === 👥 Live User Presence Tracking ===
+         TinkleOnlinePlayers.track({ db, ref, push, onValue, onDisconnect, set,
+             getProfile: () => window.TinkleAccount?.profile, events: window });
+     </script>
+
+
+     <script>
+         // --- Update Log helpers ---
+         const updateLog = document.getElementById("updateLog");
+         const updateLogBtn = document.getElementById("updateLogBtn");
+
+         // Only the visible log content defines a revision, never a deployment or commit.
+         function updateLogRevision() {
+             const content = document.querySelector('#updateLog .log-content');
+             if (!content) return '';
+             return Array.from(content.children)
+                 .filter(node => !node.classList.contains('close-btn') && !node.classList.contains('update-history-tools'))
+                 .map(node => node.textContent.replace(/\s+/g, ' ').trim()).join('\n');
+         }
+
+         function showUnseenUpdateLog() {
+             const revision = updateLogRevision();
+             if (!revision) return;
+             try {
+                 if (localStorage.getItem('tinkle.updateLog.seenContent') === revision) return;
+             } catch {}
+             showUpdateLog();
+         }
+
+         function showUpdateLog() {
+             const updateLog = document.getElementById("updateLog");
+             if (!updateLog) return;
+             updateLog.style.display = "flex";
+             try { localStorage.setItem('tinkle.updateLog.seenContent', updateLogRevision()); } catch {}
+             setTimeout(() => {
+                 updateLog.style.opacity = "1";
+             }, 10);
+         }
+
+         function hideUpdateLog() {
+             const updateLog = document.getElementById("updateLog");
+             if (!updateLog) return;
+             updateLog.style.opacity = "0";
+             setTimeout(() => {
+                 updateLog.style.display = "none";
+             }, 300);
+         }
+
+         if (updateLog) {
+             // clicking dark backdrop closes
+             updateLog.addEventListener("click", event => { if (event.target === updateLog) hideUpdateLog(); });
+             // close button inside
+             const closeBtn = updateLog.querySelector(".close-btn");
+             if (closeBtn) {
+                 closeBtn.addEventListener("click", (e) => {
+                     e.stopPropagation();
+                     hideUpdateLog();
+                 });
+             }
+         }
+
+         if (updateLogBtn) {
+             updateLogBtn.addEventListener("click", (e) => {
+                 e.preventDefault();
+                 showUpdateLog();
+             });
+         }
+
+         // Toasts are reserved for feedback that is not already visible in the controls.
+         const toast = document.getElementById("toast");
+         const toastText = document.getElementById("toastText");
+         const toastLabel = document.getElementById("toastLabel");
+         let toastTimeout;
+
+         function showToast(label, msg) {
+             if (["NAVIGATION", "SETTINGS", "FAVORITES", "FILTER", "SORT", "🎲 RANDOM GAME"].includes(label)) return;
+             if (!toast) return;
+             if (label) toastLabel.textContent = label;
+             if (msg) toastText.textContent = msg;
+             toast.classList.add("show");
+             clearTimeout(toastTimeout);
+             toastTimeout = setTimeout(() => toast.classList.remove("show"), 2200);
+         }
+
+         const gate = document.getElementById("gate");
+         const app = document.getElementById("app");
+
+         // Code site navigation
+         function openCodeSite() {
+             const codeSiteURL = new URL("index.html", window.location.href).href;
+             window.open(codeSiteURL, "_blank");
+             showToast("NAVIGATION", "Opened code site");
+         }
+
+         document.getElementById("openCodeSiteBtn").addEventListener("click", openCodeSite);
+
+         // One handler per navigation action. Build blank wrappers with DOM nodes.
+         function openMediaSite(url,title){
+             const win=window.open('about:blank','_blank');
+             if(!win){showToast('POP-UP BLOCKED','Allow pop-ups for this site to open '+title+'.');return;}
+             const doc=win.document;doc.title=title;doc.body.style.cssText='margin:0;background:#100b18;overflow:hidden';
+             const frame=doc.createElement('iframe');frame.src=url;frame.title=title;frame.allow='autoplay; fullscreen; picture-in-picture';frame.allowFullscreen=true;frame.style.cssText='position:fixed;inset:0;width:100%;height:100%;border:0';doc.body.append(frame);
+             let cloak=null;try{cloak=JSON.parse(localStorage.getItem('tinkleTabCloak'))}catch{}
+             if(cloak?.title)doc.title=cloak.title;
+             if(cloak?.icon){const icon=doc.createElement('link');icon.rel='icon';icon.href=new URL(cloak.icon,location.href).href;doc.head.append(icon);}
+         }
+         function openMusicSite(){openMediaSite('https://tinklehost.github.io/music/','Tinkle Party Music');}
+
+         // Top nav page switching
+         const navTabs = document.querySelectorAll(".top-nav-tab");
+         const pages = document.querySelectorAll(".page");
+
+         function switchPage(pageKey) {
+             pages.forEach(p => {
+                 if (p.id === "page-" + pageKey) {
+                     p.classList.add("active");
+                 } else {
+                     p.classList.remove("active");
+                 }
+             });
+             navTabs.forEach(t => {
+                 t.classList.toggle("active", t.dataset.page === pageKey);
+             });
+         }
+
+         navTabs.forEach(tab => {
+             tab.addEventListener("click", () => {
+                 const page = tab.dataset.page;
+                 if (page === "music") {
+                     openMusicSite();
+                     return;
+                 }
+                 if (page === "popular") {
+                     renderPopular();
+                 }
+                 switchPage(page);
+             });
+         });
+
+
+         // Firefox WASM is hosted at / by the bundled Vite demo server.
+         // Its own Firefox toolbar handles address entry and navigation.
+
+         // Panic Key System - Targets the actual browser tab, not the iframe
+         const panicUrlInput = document.getElementById("panicUrl");
+         const panicKeyInput = document.getElementById("panicKeyInput");
+         const setPanicKeyBtn = document.getElementById("setPanicKeyBtn");
+         const clearPanicKeyBtn = document.getElementById("clearPanicKeyBtn");
+         const testPanicBtn = document.getElementById("testPanicBtn");
+         const currentPanicKeySpan = document.getElementById("currentPanicKey");
+
+         let panicKey = "`"; // Default key is backtick
+         let isSettingKey = false;
+
+         // Load panic settings from localStorage
+         function loadPanicSettings() {
+             try {
+                 const savedKey = localStorage.getItem("panicKey");
+                 const savedUrl = localStorage.getItem("panicUrl");
+
+                 if (savedKey) {
+                     panicKey = savedKey;
+                     let displayKey = panicKey;
+                     if (panicKey === "`") displayKey = "` (backtick)";
+                     else if (panicKey === "esc") displayKey = "ESC";
+                     else if (panicKey === "space") displayKey = "SPACE";
+                     else displayKey = panicKey.toUpperCase();
+
+                     currentPanicKeySpan.textContent = displayKey;
+                     if (panicKeyInput) panicKeyInput.value = displayKey;
+                 } else {
+                     panicKey = "`";
+                     currentPanicKeySpan.textContent = "` (backtick)";
+                     if (panicKeyInput) panicKeyInput.value = "` (backtick)";
+                     localStorage.setItem("panicKey", "`");
+                 }
+
+                 if (savedUrl && panicUrlInput) {
+                     panicUrlInput.value = savedUrl;
+                 } else if (panicUrlInput) {
+                     panicUrlInput.value = "https://google.com";
+                 }
+
+                 // Always setup the panic listener (always active)
+                 setupPanicListener();
+
+             } catch (e) {
+                 console.error("Failed to load panic settings:", e);
+             }
+         }
+
+         // Save panic settings
+         function savePanicSettings() {
+             try {
+                 if (panicKey) localStorage.setItem("panicKey", panicKey);
+                 if (panicUrlInput) localStorage.setItem("panicUrl", panicUrlInput.value);
+             } catch (e) {
+                 console.error("Failed to save panic settings:", e);
+             }
+         }
+
+         // Panic function - REPLACES THE PARENT WINDOW (actual browser tab)
+         function triggerPanic() {
+             window.TinkleAntiClose?.suspend();
+             let url = panicUrlInput ? panicUrlInput.value.trim() : "https://google.com";
+
+             // Add https:// if no protocol is specified
+             if (!url.startsWith("http://") && !url.startsWith("https://")) {
+                 url = "https://" + url;
+             }
+
+             // Show a quick flash effect for visual feedback
+             const flash = document.createElement("div");
+             flash.style.position = "fixed";
+             flash.style.top = "0";
+             flash.style.left = "0";
+             flash.style.width = "100%";
+             flash.style.height = "100%";
+             flash.style.backgroundColor = "rgba(0,0,0,0.9)";
+             flash.style.zIndex = "999999";
+             flash.style.pointerEvents = "none";
+             flash.style.transition = "opacity 0.2s ease";
+             flash.style.opacity = "1";
+             document.body.appendChild(flash);
+
+             setTimeout(() => {
+                 flash.style.opacity = "0";
+                 setTimeout(() => flash.remove(), 200);
+             }, 150);
+
+             // CRITICAL: Target the TOP window (actual browser tab), not the iframe
+             setTimeout(() => {
+                 try {
+                     // This targets the actual browser tab, even if inside an iframe
+                     if (window.top && window.top !== window.self) {
+                         // We're in an iframe - redirect the parent
+                         window.top.location.replace(url);
+                     } else {
+                         // We're in the main window
+                         window.location.replace(url);
+                     }
+                 } catch (e) {
+                     // Cross-origin error fallback
+                     window.location.replace(url);
+                 }
+             }, 150);
+         }
+
+         // Setup keyboard listener for panic key (always active)
+         let panicListenerActive = false;
+
+         function setupPanicListener() {
+             if (panicListenerActive) return;
+
+             const keyHandler = (e) => {
+                 // Check if the pressed key matches the panic key
+                 let pressedKey = e.key.toLowerCase();
+
+                 // Handle special keys
+                 if (pressedKey === "escape") pressedKey = "esc";
+                 if (pressedKey === " ") pressedKey = "space";
+
+                 let currentKey = panicKey.toLowerCase();
+
+                 if (pressedKey === currentKey) {
+                     e.preventDefault();
+                     e.stopPropagation();
+                     triggerPanic();
+                 }
+             };
+
+             document.addEventListener("keydown", keyHandler);
+             panicListenerActive = true;
+
+             // Store the handler for cleanup
+             window.panicKeyHandler = keyHandler;
+         }
+
+         // Remove panic listener
+         function removePanicListener() {
+             if (window.panicKeyHandler) {
+                 document.removeEventListener("keydown", window.panicKeyHandler);
+                 panicListenerActive = false;
+                 window.panicKeyHandler = null;
+             }
+         }
+
+         // Set panic key
+         function startSettingKey() {
+             if (isSettingKey) return;
+             isSettingKey = true;
+
+             const originalPlaceholder = panicKeyInput.placeholder;
+             panicKeyInput.placeholder = "Press any key...";
+             panicKeyInput.style.backgroundColor = "rgba(79, 70, 229, 0.3)";
+             panicKeyInput.style.borderColor = "rgba(79, 70, 229, 0.8)";
+             panicKeyInput.value = "";
+
+             const keyHandler = (e) => {
+                 e.preventDefault();
+                 e.stopPropagation();
+
+                 let key = e.key.toLowerCase();
+
+                 // Handle special keys
+                 if (key === "escape") key = "esc";
+                 if (key === " ") key = "space";
+
+                 // Don't allow setting modifier keys alone
+                 if (key === "control" || key === "alt" || key === "shift" || key === "meta") {
+                     panicKeyInput.placeholder = "Cannot use modifier keys alone";
+                     setTimeout(() => {
+                         panicKeyInput.placeholder = originalPlaceholder;
+                     }, 1000);
+                     return;
+                 }
+
+                 panicKey = key;
+
+                 // Display the key nicely
+                 let displayKey = key;
+                 if (key === "`") displayKey = "` (backtick)";
+                 else if (key === "esc") displayKey = "ESC";
+                 else if (key === "space") displayKey = "SPACE";
+                 else displayKey = key.toUpperCase();
+
+                 panicKeyInput.value = displayKey;
+                 currentPanicKeySpan.textContent = displayKey;
+
+                 // Save the key
+                 savePanicSettings();
+
+                 // Re-setup listener with new key
+                 removePanicListener();
+                 setupPanicListener();
+
+                 // Reset UI
+                 panicKeyInput.placeholder = originalPlaceholder;
+                 panicKeyInput.style.backgroundColor = "";
+                 panicKeyInput.style.borderColor = "";
+                 isSettingKey = false;
+
+                 document.removeEventListener("keydown", keyHandler);
+
+                 showToast("PANIC KEY", `Panic key set to: ${displayKey}`);
+             };
+
+             document.addEventListener("keydown", keyHandler);
+
+             // Timeout after 10 seconds
+             setTimeout(() => {
+                 if (isSettingKey) {
+                     isSettingKey = false;
+                     panicKeyInput.placeholder = originalPlaceholder;
+                     panicKeyInput.style.backgroundColor = "";
+                     panicKeyInput.style.borderColor = "";
+                     let displayKey = panicKey;
+                     if (panicKey === "`") displayKey = "` (backtick)";
+                     else if (panicKey === "esc") displayKey = "ESC";
+                     else if (panicKey === "space") displayKey = "SPACE";
+                     else displayKey = panicKey.toUpperCase();
+                     panicKeyInput.value = displayKey;
+                     document.removeEventListener("keydown", keyHandler);
+                     showToast("PANIC KEY", "Key setting cancelled (timeout)");
+                 }
+             }, 10000);
+         }
+
+         // Clear panic key (reset to default backtick)
+         function clearPanicKey() {
+             panicKey = "`";
+             panicKeyInput.value = "` (backtick)";
+             currentPanicKeySpan.textContent = "` (backtick)";
+             savePanicSettings();
+
+             // Re-setup listener with default key
+             removePanicListener();
+             setupPanicListener();
+
+             showToast("PANIC KEY", "Panic key reset to ` (backtick)");
+         }
+
+         // Save URL when changed
+         if (panicUrlInput) {
+             panicUrlInput.addEventListener("change", () => {
+                 savePanicSettings();
+                 showToast("PANIC KEY", "Panic URL saved");
+             });
+         }
+
+         // Set key button
+         if (setPanicKeyBtn) {
+             setPanicKeyBtn.addEventListener("click", startSettingKey);
+         }
+
+         // Clear key button
+         if (clearPanicKeyBtn) {
+             clearPanicKeyBtn.addEventListener("click", clearPanicKey);
+         }
+
+         // Test panic button
+         if (testPanicBtn) {
+             testPanicBtn.addEventListener("click", () => {
+                 triggerPanic();
+             });
+         }
+
+         // Load panic settings on page load
+         loadPanicSettings();
+
+         // Keyboard shortcut to show current panic key (Ctrl+Shift+K)
+         document.addEventListener("keydown", (e) => {
+             if (e.ctrlKey && e.shiftKey && e.key === "K") {
+                 e.preventDefault();
+                 let displayKey = panicKey;
+                 if (panicKey === "`") displayKey = "` (backtick)";
+                 else if (panicKey === "esc") displayKey = "ESC";
+                 else if (panicKey === "space") displayKey = "SPACE";
+                 else displayKey = panicKey.toUpperCase();
+                 showToast("PANIC KEY", `Current panic key: ${displayKey} | URL: ${panicUrlInput?.value || "https://google.com"}`);
+             }
+         });
+
+         // Also add a special warning for about:blank iframe users
+         console.log("Panic key active! Press your panic key to escape (default: `)");
+
+         // Theme + settings
+         const themeSelect = document.getElementById("themeSelect");
+         const compactToggle = document.getElementById("compactToggle");
+         const heroToggle = document.getElementById("heroToggle");
+         const motionToggle = document.getElementById("motionToggle");
+
+         function applyTheme(theme){window.TinkleSettings?.applyTheme(theme);}
+
+         function loadSettings() {
+             try {
+                 const storedTheme = localStorage.getItem("tinkleImportedTheme") || "default";
+                 const compact = localStorage.getItem("tinkleCompact");
+                 const heroHidden = localStorage.getItem("tinkleHeroHidden");
+                 const reducedMotion = localStorage.getItem("tinkleMotion");
+                 if (storedTheme && themeSelect) {
+                     themeSelect.value = storedTheme;
+                     applyTheme(storedTheme);
+                 }
+                 if (compact === "1" && compactToggle) {
+                     compactToggle.checked = true;
+                     document.body.classList.add("compact-grid");
+                 }
+                 if (heroHidden === "1" && heroToggle) {
+                     heroToggle.checked = true;
+                     document.body.classList.add("hide-hero");
+                 }
+                 if (reducedMotion === "1" && motionToggle) {
+                     motionToggle.checked = true;
+                     document.body.classList.add("reduce-motion");
+                 }
+             } catch {}
+         }
+
+         if (themeSelect) {
+             themeSelect.addEventListener("change", () => {
+                 const value = themeSelect.value;
+                 applyTheme(value);
+                 if (window.TinkleAccount?.profile?.equipped?.theme) {
+                     window.TinkleWallet.equip('theme', null).catch(error => showToast('THEME', error.message));
+                 }
+                 try {
+                     localStorage.setItem("tinkleImportedTheme", value);
+                 } catch {}
+                 showToast("SETTINGS", "Theme set to " + value);
+             });
+         }
+
+         if (compactToggle) {
+             compactToggle.addEventListener("change", () => {
+                 if (compactToggle.checked) {
+                     document.body.classList.add("compact-grid");
+                     try {
+                         localStorage.setItem("tinkleCompact", "1");
+                     } catch {}
+                     showToast("SETTINGS", "Compact grid enabled");
+                 } else {
+                     document.body.classList.remove("compact-grid");
+                     try {
+                         localStorage.setItem("tinkleCompact", "0");
+                     } catch {}
+                     showToast("SETTINGS", "Compact grid disabled");
+                 }
+             });
+         }
+
+         if (heroToggle) {
+             heroToggle.addEventListener("change", () => {
+                 if (heroToggle.checked) {
+                     document.body.classList.add("hide-hero");
+                     try {
+                         localStorage.setItem("tinkleHeroHidden", "1");
+                     } catch {}
+                     showToast("SETTINGS", "Intro hero hidden");
+                 } else {
+                     document.body.classList.remove("hide-hero");
+                     try {
+                         localStorage.setItem("tinkleHeroHidden", "0");
+                     } catch {}
+                     showToast("SETTINGS", "Intro hero visible");
+                 }
+             });
+         }
+
+         if (motionToggle) {
+             motionToggle.addEventListener("change", () => {
+                 if (motionToggle.checked) {
+                     document.body.classList.add("reduce-motion");
+                     try {
+                         localStorage.setItem("tinkleMotion", "1");
+                     } catch {}
+                     showToast("SETTINGS", "Reduced motion enabled");
+                 } else {
+                     document.body.classList.remove("reduce-motion");
+                     try {
+                         localStorage.setItem("tinkleMotion", "0");
+                     } catch {}
+                     showToast("SETTINGS", "Reduced motion disabled");
+                 }
+             });
+         }
+
+         loadSettings();
+
+
+
+         function playSparkleBurst(anchorEl) {
+             if (!anchorEl) return;
+             // Respect your reduce-motion toggle
+             if (document.body.classList.contains("reduce-motion")) return;
+
+             const rect = anchorEl.getBoundingClientRect();
+             const cx = rect.left + rect.width / 2;
+             const cy = rect.top + rect.height / 2;
+
+             const layer = document.createElement("div");
+             layer.className = "sparkle-layer";
+             document.body.appendChild(layer);
+
+             const count = 16;
+             for (let i = 0; i < count; i++) {
+                 const dot = document.createElement("div");
+                 dot.className = "sparkle-dot";
+
+                 const angle = (Math.PI * 2 * i) / count + Math.random() * 0.5;
+                 const dist = 24 + Math.random() * 36;
+                 const sx = Math.cos(angle) * dist;
+                 const sy = Math.sin(angle) * dist;
+
+                 dot.style.left = cx + "px";
+                 dot.style.top = cy + "px";
+                 dot.style.setProperty("--sx", sx + "px");
+                 dot.style.setProperty("--sy", sy + "px");
+                 dot.style.setProperty("--size", 4 + Math.random() * 5 + "px");
+                 dot.style.setProperty("--delay", i * 0.01 + "s");
+
+                 layer.appendChild(dot);
+             }
+
+             // Clean up after the animation
+             setTimeout(() => {
+                 layer.remove();
+             }, 700);
+         }
+
+         // Replace the suggestions form submission handler with this:
+         const suggestionsForm = document.getElementById("suggestionsForm");
+         let lastSuggestionSubmit = 0; // cooldown tracker
+
+         if (suggestionsForm) {
+             suggestionsForm.addEventListener("submit", async (e) => {
+                 e.preventDefault();
+
+                 const now = Date.now();
+                 const elapsed = now - lastSuggestionSubmit;
+
+                 // 60s cooldown (60000 ms)
+                 if (elapsed < 60000) {
+                     const remaining = Math.ceil((60000 - elapsed) / 1000);
+                     showToast("COOLDOWN", `Please wait ${remaining}s before submitting another suggestion.`);
+                     return;
+                 }
+
+                 const input = document.getElementById("suggestion");
+                 const gameName = input.value.trim();
+
+                 if (!gameName) {
+                     showToast("ERROR", "Type a suggestion before sending.");
+                     return;
+                 }
+
+                 // Show immediate success message
+                 showToast("SUGGESTION", "Suggestion submitted! ✨");
+
+                 // ✨ Sparkle burst on the submit button
+                 const btn = suggestionsForm.querySelector("button[type='submit']");
+                 if (typeof playSparkleBurst === "function") {
+                     playSparkleBurst(btn || suggestionsForm);
+                 }
+
+                 // Reset form and set cooldown immediately
+                 suggestionsForm.reset();
+                 lastSuggestionSubmit = now;
+
+                 // Send to spreadsheet in the background (don't await)
+                 try {
+                     fetch(
+                         "https://script.google.com/macros/s/AKfycbx5-AJYIr6YKofpmG_DRQTzNOlI-5sbC-41Ccy92r0u71ZiKFYdCTZweyODr7lsZPsf/exec", {
+                             method: "POST",
+                             mode: "no-cors",
+                             headers: {
+                                 "Content-Type": "application/json"
+                             },
+                             body: JSON.stringify({
+                                 game: gameName
+                             }),
+                         }
+                     ).catch(err => console.error("Background suggestion send failed:", err));
+                 } catch (err) {
+                     console.error("Suggestion submit failed:", err);
+                     // Don't show error toast since we already showed success
+                 }
+             });
+         }
+
+         // Replace the requests form submission handler with this:
+         const requestsForm = document.getElementById("requestsForm");
+         let lastRequestSubmit = 0; // cooldown tracker
+
+         if (requestsForm) {
+             requestsForm.addEventListener("submit", async (e) => {
+                 e.preventDefault();
+
+                 const now = Date.now();
+                 const elapsed = now - lastRequestSubmit;
+
+                 // 60 second cooldown (60000 ms)
+                 if (elapsed < 60000) {
+                     const remaining = Math.ceil((60000 - elapsed) / 1000);
+                     showToast("COOLDOWN", `Please wait ${remaining}s before submitting another request.`);
+                     return;
+                 }
+
+                 // Grab fields
+                 const gameName = document.getElementById("req-game").value.trim();
+
+                 if (!gameName) {
+                     showToast("ERROR", "Please enter a game name before submitting.");
+                     return;
+                 }
+
+                 // Show immediate success message
+                 showToast("REQUEST", "Game request submitted! 🎉");
+
+                 // ✨ Sparkle burst on the submit button
+                 const btn = requestsForm.querySelector("button[type='submit']");
+                 if (typeof playSparkleBurst === "function") {
+                     playSparkleBurst(btn || requestsForm);
+                 }
+
+                 // Reset form and set cooldown immediately
+                 requestsForm.reset();
+                 lastRequestSubmit = now;
+
+                 // Send to spreadsheet in the background (don't await)
+                 const payload = {
+                     game: gameName
+                 };
+
+                 try {
+                     fetch(
+                         "https://script.google.com/macros/s/AKfycbzeM04a5TJDonO4hj2QkeEinqdviobX2veBbX-IKcUYYV0WJ50ybbmuIeHcO7qiSeH3/exec", {
+                             method: "POST",
+                             mode: "no-cors",
+                             headers: {
+                                 "Content-Type": "application/json"
+                             },
+                             body: JSON.stringify(payload),
+                         }
+                     ).catch(err => console.error("Background request send failed:", err));
+                 } catch (err) {
+                     console.error("Request submit failed:", err);
+                     // Don't show error toast since we already showed success
+                 }
+             });
+         }
+
+         // Replace the existing loader script with this:
+         window.addEventListener('DOMContentLoaded', () => {
+             const loaderScreen = document.getElementById('loaderScreen');
+             const app = document.getElementById('app');
+             const updateLogBtn = document.getElementById('updateLogBtn');
+
+             // Check if we should skip the loader (returning from code site)
+             const shouldSkipLoader = true;
+             const skipTime = parseInt(localStorage.getItem("loaderSkipTime") || "0");
+             const timeSinceSkip = 0;
+
+             // Clear the skip flag after 10 seconds to prevent permanent skipping
+             if (timeSinceSkip > 10000) {
+                 localStorage.removeItem("skipLoader");
+                 localStorage.removeItem("loaderSkipTime");
+             }
+
+
+             if (shouldSkipLoader && timeSinceSkip < 10000) {
+                 // Skip loader entirely - hide immediately
+                 if (loaderScreen) {
+                     loaderScreen.style.display = 'none';
+                     loaderScreen.style.opacity = '0';
+                     loaderScreen.style.visibility = 'hidden';
+                 }
+                 if (app) {
+                     app.classList.add('visible');
+                     app.style.opacity = '1';
+                     app.style.transform = 'none';
+                 }
+
+                 showUnseenUpdateLog();
+
+                 // Initialize features immediately
+                 if (typeof startSnow === 'function') startSnow();
+
+                 // Show update log button
+                 if (updateLogBtn) updateLogBtn.style.display = 'flex';
+
+                 // Clear skip flags after using them
+                 setTimeout(() => {
+                     localStorage.removeItem("skipLoader");
+                     localStorage.removeItem("loaderSkipTime");
+                 }, 1000);
+
+             } else {
+                 // Normal flow - show loader for 2 seconds
+                 setTimeout(() => {
+                     if (loaderScreen) {
+                         loaderScreen.style.opacity = '0';
+                         loaderScreen.style.visibility = 'hidden';
+                     }
+                     if (app) app.classList.add('visible');
+
+                     showUnseenUpdateLog();
+
+                     // Initialize features after loader
+                     if (typeof startSnow === 'function') startSnow();
+
+                     // Show update log button
+                     if (updateLogBtn) updateLogBtn.style.display = 'flex';
+
+                 }, 1200);
+             }
+         });
+
+         // Re-attach update log event listeners
+         setTimeout(() => {
+             const updateLogEl = document.getElementById("updateLog");
+             const closeBtn = updateLogEl?.querySelector(".close-btn");
+             const updateLogBtn = document.getElementById("updateLogBtn");
+
+             if (updateLogEl) {
+                 updateLogEl.addEventListener("click", (e) => {
+                     if (e.target === updateLogEl) hideUpdateLog();
+                 });
+             }
+             if (closeBtn) {
+                 closeBtn.addEventListener("click", (e) => {
+                     e.stopPropagation();
+                     hideUpdateLog();
+                 });
+             }
+             if (updateLogBtn) {
+                 // Remove old listeners by cloning
+                 const newBtn = updateLogBtn.cloneNode(true);
+                 updateLogBtn.parentNode.replaceChild(newBtn, updateLogBtn);
+                 newBtn.addEventListener("click", () => {
+                     showUpdateLog();
+                 });
+             }
+         }, 100);
+
+         let recentGames = JSON.parse(localStorage.getItem("recentGames") || "[]");
+
+         function addRecentGame(game) {
+             // store ONLY code
+             recentGames = recentGames.filter(code => code !== game.code);
+
+             recentGames.unshift(game.code);
+
+             if (recentGames.length > 6) recentGames.pop();
+
+             try{localStorage.setItem("recentGames", JSON.stringify(recentGames));}catch{}
+             renderRecentGames();
+         }
+
+
+         function renderRecentGames(){
+             const grid=document.getElementById('recentGrid'),allowed=new Set(getFilteredGames().map(game=>game.code));
+             const recent=recentGames.map(code=>games.find(game=>game.code===code)).filter(game=>game&&allowed.has(game.code));
+             grid.replaceChildren(...recent.map(createGameCard));document.getElementById('recentEmpty').hidden=recent.length>0;requestAnimationFrame(syncRecentScroll);
+             document.getElementById('recentEmpty').textContent=recentGames.length?'No recently played games match your filters.':'Your recently played games will appear here.';
+         }
+
+         const recentScroller=document.getElementById('recentGrid');
+         function syncRecentScroll(){document.getElementById('recentScrollLeft').disabled=recentScroller.scrollLeft<=1;document.getElementById('recentScrollRight').disabled=recentScroller.scrollLeft+recentScroller.clientWidth>=recentScroller.scrollWidth-1;}
+         recentScroller.addEventListener('scroll',syncRecentScroll,{passive:true});window.addEventListener('resize',syncRecentScroll);
+         recentScroller.addEventListener('wheel',event=>{if(event.ctrlKey||Math.abs(event.deltaX)>Math.abs(event.deltaY)||!event.deltaY)return;const delta=event.deltaY*(event.deltaMode===1?16:event.deltaMode===2?recentScroller.clientWidth:1);const max=recentScroller.scrollWidth-recentScroller.clientWidth;if(max<=0||(delta<0&&recentScroller.scrollLeft<=0)||(delta>0&&recentScroller.scrollLeft>=max-1))return;event.preventDefault();recentScroller.scrollLeft+=delta;},{passive:false});
+         document.getElementById('recentScrollLeft').onclick=()=>recentScroller.scrollBy({left:-320,behavior:document.body.classList.contains('reduce-motion')?'instant':'smooth'});
+         document.getElementById('recentScrollRight').onclick=()=>recentScroller.scrollBy({left:320,behavior:document.body.classList.contains('reduce-motion')?'instant':'smooth'});
+         // Add this function to check URL parameters for return flag
+         function checkForReturnFromCodeSite() {
+             const urlParams = new URLSearchParams(window.location.search);
+             const returned = urlParams.get('returned');
+
+             if (returned === 'true') {
+                 localStorage.setItem("skipLoader", "true");
+                 localStorage.setItem("skipGate", "true");
+                 localStorage.setItem("loaderSkipTime", Date.now().toString());
+
+                 // Clean up the URL
+                 const cleanUrl = window.location.pathname;
+                 window.history.replaceState({}, document.title, cleanUrl);
+             }
+         }
+
+         // Call this early in your script
+         checkForReturnFromCodeSite();
+
+         // Card data is maintained in game-cards.js.
+         const cardsGrid = document.getElementById("cardsGrid");
+         const noResults = document.getElementById("noResults");
+         const cardsCount = document.getElementById("cardsCount");
+         const heroStats = document.getElementById("heroStats");
+         const searchInput = document.getElementById("searchInput");
+         const categoryPillsContainer = document.getElementById("categoryPills");
+         const popularCount = document.getElementById("popularCount");
+         const popularEmpty = document.getElementById("popularEmpty");
+         const sortSelect = null;
+
+         const games = [];
+         const categorySet = new Set();
+
+         // 🔐 favorites state (per device)
+         const FAVORITES_KEY = "tinkleFavoritesV1";
+         let favoriteIds = new Set();
+
+         function loadFavorites() {
+             try {
+                 const raw = localStorage.getItem(FAVORITES_KEY);
+                 if (!raw) return;
+                 const arr = JSON.parse(raw);
+                 if (Array.isArray(arr)) {
+                     favoriteIds = new Set(arr);
+                 }
+             } catch (e) {
+                 console.error("Failed to load favorites", e);
+             }
+         }
+
+         function saveFavorites() {
+             try {
+                 localStorage.setItem(FAVORITES_KEY, JSON.stringify(Array.from(favoriteIds)));
+             } catch (e) {
+                 console.error("Failed to save favorites", e);
+             }
+         }
+
+         function isFavorite(game) {
+             return favoriteIds.has(game.id);
+         }
+
+         function toggleFavorite(game) {
+             if (isFavorite(game)) {
+                 favoriteIds.delete(game.id);
+                 showToast("FAVORITES", "Removed " + game.name + " from favorites");
+             } else {
+                 favoriteIds.add(game.id);
+                 showToast("FAVORITES", "Favorited " + game.name);
+             }
+             saveFavorites();
+             updateFavoritesGrid();
+         }
+
+         loadFavorites(); // load immediately so hearts render correctly
+
+         function sanitizeKey(name) {
+             return (name || "").replace(/[.#$/\[\]]/g, "_");
+         }
+
+         if (!Array.isArray(window.GAME_CARDS)) {
+             throw new Error("Game data could not load. Make sure game-cards.js is beside codes.html.");
+         }
+         window.GAME_CARDS.forEach((game, index) => {
+             games.push({ ...game, id: index });
+             game.categories.forEach(cat => categorySet.add(cat));
+         });
+
+         if (heroStats) heroStats.textContent = games.length + " games loaded";
+         if (cardsCount) cardsCount.textContent = "Showing " + games.length;
+
+         let currentCategory = "all";
+         let sortMode = "az"; // "az" | "popular" | "recent"
+         let weeklyRefreshTimer;
+         window.addEventListener('weekly-popularity-changed', () => {
+             clearTimeout(weeklyRefreshTimer);
+             weeklyRefreshTimer = setTimeout(() => {
+                 renderCards();
+             }, 250);
+         });
+
+         function createTab(label, value, active = false) {
+             const btn = document.createElement("button");
+             btn.type = "button";
+             btn.className = "cat-tab" + (active ? " active" : "");
+             btn.textContent = label;
+             btn.dataset.value = value;
+             btn.addEventListener("click", () => {
+                 const allTabs = categoryPillsContainer.querySelectorAll(".cat-tab");
+                 allTabs.forEach(t => t.classList.remove("active"));
+                 btn.classList.add("active");
+                 currentCategory = value;
+                 renderCards();
+                 renderRecentGames();
+                 if (value === "all") showToast("FILTER", "Showing all games");
+                 else showToast("FILTER", "Category: " + label);
+             });
+             return btn;
+         }
+
+         // "All" tab
+         if (categoryPillsContainer) {
+             categoryPillsContainer.appendChild(createTab("ALL", "all", true));
+             Array.from(categorySet).sort((a, b) => a.localeCompare(b)).forEach(cat => {
+                 categoryPillsContainer.appendChild(createTab(cat.toUpperCase(), cat.toLowerCase(), false));
+             });
+         }
+
+         // Sort dropdown (A–Z / Popular / Recently added)
+         if (sortSelect) {
+             sortSelect.addEventListener("change", () => {
+                 sortMode = sortSelect.value;
+
+                 if (sortMode === "az") {
+                     showToast("SORT", "Viewing all games A–Z");
+                 } else if (sortMode === "popular") {
+                     showToast("SORT", "Viewing most-clicked games");
+                 } else if (sortMode === "recent") {
+                     showToast("SORT", "Viewing recently added");
+                 }
+
+                 renderCards();
+                 renderRecentGames();
+             });
+         }
+
+
+
+         let searchQuery = "";
+
+         function getFilteredGames() {
+             return games.filter(g => {
+                 const q = searchQuery.toLowerCase();
+                 const matchesSearch = !q ||
+                     g.name.toLowerCase().includes(q) ||
+                     (g.code || "").toLowerCase().includes(q);
+
+                 const cat = currentCategory;
+                 const matchesCategory = cat === "all" ||
+                     (g.categories && g.categories.includes(cat));
+
+                 return matchesSearch && matchesCategory && (!favoritesOnly || isFavorite(g));
+             });
+         }
+
+         // Random Game Button - completely separate from search bar
+         document.getElementById("randomGameBtn").addEventListener("click", () => {
+             // Get all games
+             const allGames = games;
+
+             if (allGames.length === 0) {
+                 showToast("RANDOM", "No games available");
+                 return;
+             }
+
+             // Pick a random game
+             const randomIndex = Math.floor(Math.random() * allGames.length);
+             const randomGame = allGames[randomIndex];
+
+             // Copy the code to clipboard
+             tryCopyToClipboard(randomGame.code, `🎲 ${randomGame.name}: ${randomGame.code} copied!`);
+
+             // Show sparkle effect on the button
+             const btn = document.getElementById("randomGameBtn");
+             if (typeof playSparkleBurst === "function") {
+                 playSparkleBurst(btn);
+             }
+
+             // Show toast with game name and code
+             showToast("🎲 RANDOM GAME", `${randomGame.name}: ${randomGame.code}`);
+
+             // Also show the bottom toast
+
+
+             // Highlight the selected game in the grid
+             setTimeout(() => {
+                 const gameCards = document.querySelectorAll('.card');
+                 gameCards.forEach(card => {
+                     const title = card.querySelector('.card__title');
+                     if (title && title.textContent === randomGame.name) {
+                         // Highlight the card
+                         card.style.transition = 'all 0.3s ease';
+                         card.style.boxShadow = '0 0 30px rgba(79, 70, 229, 0.8)';
+                         card.style.transform = 'scale(1.05)';
+                         card.style.borderColor = 'rgba(79, 70, 229, 0.9)';
+
+                         // Scroll to the card
+                         card.scrollIntoView({
+                             behavior: 'smooth',
+                             block: 'center'
+                         });
+
+                         // Remove highlight after 2 seconds
+                         setTimeout(() => {
+                             card.style.boxShadow = '';
+                             card.style.transform = '';
+                             card.style.borderColor = '';
+                         }, 2000);
+
+                         // Add a subtle pulse animation
+                         card.style.animation = 'pulse 0.5s ease 3';
+                         setTimeout(() => {
+                             card.style.animation = '';
+                         }, 1500);
+                     }
+                 });
+             }, 100);
+
+             // Optional: Increment play count for this game
+             if (window.incrementGameClick) {
+                 window.incrementGameClick(randomGame.name).catch(console.error);
+             }
+         });
+
+         // Add pulse animation if it doesn't exist
+         if (!document.querySelector('#pulse-animation')) {
+             const style = document.createElement('style');
+             style.id = 'pulse-animation';
+             style.textContent = `
+        @keyframes pulse {
+            0% { transform: scale(1.05); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1.05); }
+        }
+    `;
+             document.head.appendChild(style);
+         }
+
+         function setCategory(category) {
+             currentCategory = category;
+             renderGames(); // your existing function
+             renderRecentGames(); // update visibility
+         }
+
+
+         async function tryCopyToClipboard(text, message = "Code copied!") {
+             let copied = false;
+             try {
+                 if (navigator.clipboard && navigator.clipboard.writeText) {
+                     await navigator.clipboard.writeText(text);
+                     copied = true;
+                 }
+             } catch (e) {}
+             if (!copied) {
+                 const previous = document.activeElement;
+                 const temp = document.createElement("textarea");
+                 temp.value = text;
+                 temp.style.cssText = "position:fixed;opacity:0";
+                 document.body.appendChild(temp);
+                 try { temp.select(); copied = document.execCommand("copy"); }
+                 catch (e) {}
+                 finally { temp.remove(); previous?.focus({ preventScroll: true }); }
+             }
+             if (copied) showCopyToast(message);
+             else showToast("CLIPBOARD", "Copy failed. Select this code manually: " + text);
+             return copied;
+         }
+
+         function heartIcon(){const ns='http://www.w3.org/2000/svg',svg=document.createElementNS(ns,'svg'),path=document.createElementNS(ns,'path');svg.setAttribute('viewBox','0 0 24 24');svg.setAttribute('aria-hidden','true');svg.setAttribute('focusable','false');path.setAttribute('d','M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z');svg.append(path);return svg;}
+         function createGameCard(game) {
+             const card=document.createElement('div');card.className='card';card.tabIndex=0;card.dataset.code=game.code;card.setAttribute('role','group');card.setAttribute('aria-label','Copy code for '+game.name);
+             const front=document.createElement('div');front.className='card__front';if(game.img)front.style.backgroundImage='url("'+game.img.replace(/"/g,'%22')+'")';
+             const content=document.createElement('div');content.className='card__content';
+             const title=document.createElement('p');title.className='card__title';title.textContent=game.name;
+             const playCounter=document.createElement('div');playCounter.className='card__play-counter';
+             const number=document.createElement('span');number.className='counter-number';number.dataset.game=sanitizeKey(game.name);number.textContent='0';playCounter.append(number,document.createTextNode(' plays'));
+             const favBtn=document.createElement('button');favBtn.type='button';favBtn.className='card__favorite-btn';
+             function syncFavButton(){favBtn.classList.toggle('active',isFavorite(game));favBtn.replaceChildren(heartIcon());favBtn.setAttribute('aria-label',(isFavorite(game)?'Unfavorite ':'Favorite ')+game.name);favBtn.setAttribute('aria-pressed',String(isFavorite(game)));}
+             favBtn.onclick=event=>{event.stopPropagation();toggleFavorite(game);syncFavButton();};syncFavButton();
+             const btn=document.createElement('button');btn.type='button';btn.className='card__copy-btn';btn.textContent='Copy code';
+             const confirmation=document.createElement('span');confirmation.className='card-copy-confirmation';confirmation.textContent='Code copied';confirmation.setAttribute('role','status');
+             content.append(title,btn);card.append(front,content,playCounter,favBtn,confirmation);
+             if(isNewGame(game)){const badge=document.createElement('span');badge.className='game-new-badge';badge.textContent='NEW';card.append(badge);}
+             let copyTimer;
+             // Function to update the play counter
+             async function updatePlayCounter(retryCount = 0) {
+                 try {
+                     console.log("Updating counter for:", game.name);
+
+                     // Check if the function exists
+                     if (typeof window.getAllTimeClickCount !== 'function') {
+                         console.warn("getAllTimeClickCount not ready yet, retrying...", retryCount);
+                         if (retryCount < 5) { // Retry up to 5 times
+                             setTimeout(() => updatePlayCounter(retryCount + 1), 500 * (retryCount + 1));
+                             return;
+                         } else {
+                             console.error("getAllTimeClickCount still not available after 5 retries");
+                             // Set a fallback value
+                             const counterSpan = playCounter.querySelector('.counter-number');
+                             if (counterSpan) {
+                                 counterSpan.textContent = "0";
+                             }
+                             return;
+                         }
+                     }
+
+                     const count = await window.getAllTimeClickCount(game.name);
+                     console.log("Received count:", count);
+
+                     const counterSpan = playCounter.querySelector('.counter-number');
+                     if (counterSpan) {
+                         counterSpan.textContent = count;
+                         console.log("Counter updated to:", count);
+                     } else {
+                         console.error("Counter span not found");
+                     }
+                 } catch (e) {
+                     console.error("Error updating play counter:", e);
+                     if (retryCount < 3) {
+                         setTimeout(() => updatePlayCounter(retryCount + 1), 1000);
+                     }
+                 }
+             }
+
+             // Initial counter load
+             updatePlayCounter();
+
+             async function handleCopy() {
+                 if (!game.code) {
+                     showToast("CLIPBOARD", "No code on this card");
+                     return;
+                 }
+
+                 // Always copy immediately; rewards and counters run independently.
+                 const copied=await tryCopyToClipboard(game.code);
+                 if(copied){card.classList.add('code-copied');clearTimeout(copyTimer);copyTimer=setTimeout(()=>card.classList.remove('code-copied'),1600);}
+                 addRecentGame(game);
+                 window.TinkleRewards?.onCard(game.code);
+
+                 // Increment counts (with cooldown)
+                 if (window.incrementGameClick) {
+                     try {
+                         const result = await window.incrementGameClick(game.name);
+
+                         // Update counter with all-time count
+                         updatePlayCounter();
+
+                         // Add visual feedback on the counter
+                         playCounter.classList.add('updating');
+                         setTimeout(() => {
+                             playCounter.classList.remove('updating');
+                         }, 300);
+
+                     } catch (e) {
+                         console.error("incrementGameClick error:", e);
+                     }
+                 }
+
+
+             }
+
+             card.addEventListener("click", handleCopy);
+             btn.addEventListener("click", (e) => {
+                 e.stopPropagation();
+                 handleCopy();
+             });
+
+             addPopularIcon(card);return card;
+         }
+
+
+         let popularCodes=new Set();
+         function addPopularIcon(card){if(!popularCodes.has(card.dataset.code)||card.querySelector('.game-popular-badge'))return;const icon=document.createElement('span');icon.className='game-popular-badge';icon.textContent='🔥';icon.title='Popular game';icon.setAttribute('aria-label','Popular game');card.append(icon);}
+         function isNewGame(game){return games.slice(-10).some(item=>item.code===game.code);}
+         let favoritesOnly=false;
+         const discovery=document.createElement('section');discovery.className='discovery';
+         document.getElementById('homeGames').before(discovery);
+         const newSection=document.createElement('section'),popularSection=document.createElement('section');newSection.id='homeNew';popularSection.id='homePopular';
+         function makeSection(section,label){section.className='library-section';const title=document.createElement('h2');title.textContent=label;const grid=document.createElement('div');grid.className='discovery-grid';section.append(title,grid);document.getElementById('homeSections').append(section);return grid;}
+         const newGrid=makeSection(newSection,'New games'),popularGrid=makeSection(popularSection,'Trending games (weekly)');
+         const popularStatus=document.createElement('p');popularStatus.className='section-status';popularStatus.setAttribute('role','status');popularSection.append(popularStatus);
+         const newStatus=document.createElement('p');newStatus.className='section-status';newStatus.textContent='No new games match your filters.';newSection.append(newStatus);
+         function renderDiscovery(){document.documentElement.dataset.season=window.tinkleDiscoverySettings?.seasonalTheme==='normal'?'normal':'halloween';}
+         window.addEventListener('discovery-settings',renderDiscovery);renderDiscovery();
+         const favoritesButton=document.createElement('button');favoritesButton.type='button';favoritesButton.className='btn-glow favorites-filter';favoritesButton.id='favoritesGameBtn';favoritesButton.replaceChildren(heartIcon());favoritesButton.title='Show favorites';favoritesButton.setAttribute('aria-label','Show favorites');favoritesButton.setAttribute('aria-pressed','false');
+         document.getElementById('randomGameBtn').after(favoritesButton);
+         favoritesButton.onclick=()=>{favoritesOnly=!favoritesOnly;favoritesButton.classList.toggle('active',favoritesOnly);favoritesButton.setAttribute('aria-pressed',String(favoritesOnly));favoritesButton.title=favoritesOnly?'Show all games':'Show favorites';favoritesButton.setAttribute('aria-label',favoritesButton.title);renderCards();};
+         window.addEventListener('favorites-changed',()=>{if(favoritesOnly)renderCards();document.querySelectorAll('.card').forEach(card=>{const game=games.find(g=>g.code===card.dataset.code),button=card.querySelector('.card__favorite-btn');if(game&&button){button.classList.toggle('active',isFavorite(game));button.replaceChildren(heartIcon());button.setAttribute('aria-pressed',String(isFavorite(game)));}});});
+         let cardsRenderVersion=0;
+         async function renderCards(){
+             const version=++cardsRenderVersion,filtered=getFilteredGames();
+             cardsGrid.replaceChildren(...[...filtered].sort((a,b)=>a.name.localeCompare(b.name)).map(createGameCard));
+             document.getElementById('allGamesTitle').textContent=favoritesOnly?'Favorite games':'All games';
+             cardsCount.textContent='Showing '+filtered.length;noResults.style.display=filtered.length?'none':'';
+             noResults.textContent=favoritesOnly?'No favorites match. Tap a heart on a game to save it.':'No games match that search or category.';
+             document.getElementById('page-codes').classList.toggle('favorites-view',favoritesOnly);renderRecentGames();
+             if(favoritesOnly)return;
+             const fresh=filtered.filter(isNewGame).sort((a,b)=>b.id-a.id);
+             newGrid.replaceChildren(...fresh.map(createGameCard));newStatus.hidden=fresh.length>0;
+             popularGrid.replaceChildren();popularStatus.textContent='Loading this week’s popular games…';
+             try{
+                 if(!window.getWeeklyClickData){popularStatus.textContent='Weekly rankings are unavailable.';return;}
+                 const data=await window.getWeeklyClickData();if(version!==cardsRenderVersion)return;
+                 const globalRanked=games.map(game=>({game,count:Number(data?.[sanitizeKey(game.name)])||0})).filter(x=>x.count>0).sort((a,b)=>b.count-a.count||a.game.name.localeCompare(b.game.name)).slice(0,10);
+                 popularCodes=new Set(globalRanked.map(x=>x.game.code));
+                 const ranked=globalRanked.filter(x=>filtered.some(game=>game.code===x.game.code));
+                 popularGrid.replaceChildren(...ranked.map(x=>createGameCard(x.game)));
+                 document.querySelectorAll('.card').forEach(card=>{card.querySelector('.game-popular-badge')?.remove();addPopularIcon(card);});
+                 popularStatus.textContent=ranked.length?'':'No plays recorded this week.';
+             }catch{if(version===cardsRenderVersion)popularStatus.textContent='Weekly rankings could not load. All games are available below.';}
+         }
+
+         function updateFavoritesGrid() {
+             window.dispatchEvent(new Event("favorites-changed"));
+         }
+
+         if (searchInput) {
+             searchInput.addEventListener("input", () => {
+                 searchQuery = searchInput.value || "";
+                 renderCards();
+             });
+         }
+
+         HomepageUI.mount({refreshFavorites:()=>{},panicKey:()=>panicKey,settingPanic:()=>isSettingKey,onSort:()=>{sortMode='az';renderCards();renderRecentGames();}});
+
+         // Set up real-time counter updates
+         if (window.listenToAllTimeCounts) {
+             console.log("Setting up real-time listener");
+             window.listenToAllTimeCounts((counts) => {
+                 console.log("Real-time update received:", counts);
+
+                 document.querySelectorAll('.counter-number').forEach(counter => {
+                     const gameKey = counter.dataset.game;
+                     const count = counts[gameKey] || 0;
+                     console.log(`Updating ${gameKey} to ${count}`);
+
+                     counter.textContent = count;
+
+                     // Add animation
+                     counter.style.transform = 'scale(1.2)';
+                     setTimeout(() => {
+                         counter.style.transform = 'scale(1)';
+                     }, 200);
+                 });
+             });
+         } else {
+             console.error("listenToAllTimeCounts not available");
+         }
+
+         function renderRecent() {
+             // Clear old grid
+             cardsGrid.innerHTML = "";
+             noResults.style.display = "none";
+
+             // Get last 8 games added (in original order)
+             const recent = games.slice(-12).reverse();
+             // newest = top
+
+             // Nothing found fallback
+             if (recent.length === 0) {
+                 cardsCount.textContent = "Showing 0";
+                 noResults.style.display = "";
+                 return;
+             }
+
+             // Display card count
+             cardsCount.textContent = `Showing ${recent.length}`;
+
+             // Render the 8 most recent cards
+             recent.forEach(game => {
+                 const card = createGameCard(game);
+                 cardsGrid.appendChild(card);
+             });
+         }
+
+
+         // ---- Bottom-right toast ----
+         let copyToastTimer;
+         function showCopyToast(text = "Code Copied!") {
+             const toast = document.getElementById("copyToast");
+             toast.textContent = text;
+             toast.classList.add("show");
+
+             clearTimeout(copyToastTimer);
+             copyToastTimer = setTimeout(() => {
+                 toast.classList.remove("show");
+             }, 2000);
+         }
+
+         // The update log opens only when the visitor selects Updates.
+     </script>
+     <script>
+         const codeSiteBtn = document.getElementById("openCodeSiteBtn");
+         const codeSiteURL = new URL("index.html", window.location.href).href;
+         const returnURL = window.location.href;
+
+         // Remove any existing listeners
+         const newBtn = codeSiteBtn.cloneNode(true);
+         codeSiteBtn.parentNode.replaceChild(newBtn, codeSiteBtn);
+         const freshBtn = document.getElementById("openCodeSiteBtn");
+
+         freshBtn.addEventListener("click", () => {
+             localStorage.setItem("skipGate", "true");
+             localStorage.setItem("skipLoader", "true");
+             localStorage.setItem("loaderSkipTime", Date.now().toString());
+
+             const newDoc = window.open("about:blank", "_self");
+             if (newDoc) {
+                 newDoc.document.write(`
+<html>
+    <head>
+        <title>Tinkle Party Codes</title>
+        <button class="back-button" onclick="window.location.href='${returnURL}'">🔙 Go Back</button>
+        <style>
+            body { margin: 0; background-color: black; overflow: hidden; font-family: Arial, sans-serif; }
+            iframe { border: none; width: 100vw; height: 100vh; }
+            .back-button {
+                position: fixed; top: 12px; left: 12px;
+                background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.3);
+                color: white; font-size: 14px; padding: 8px 16px; border-radius: 8px;
+                cursor: pointer; z-index: 1000; backdrop-filter: blur(8px);
+                transition: all 0.4s ease; opacity: 0; transform: translateY(-8px);
+                animation: fadeIn 0.6s ease forwards; animation-delay: 0.5s;
+                text-decoration: none; display: inline-block;
+            }
+            .back-button:hover { background: rgba(255,255,255,0.25); transform: scale(1.05); }
+            .back-button.hidden { opacity: 0; pointer-events: none; transform: translateY(-8px); animation: none; }
+            @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+        </style>
+    <link rel="stylesheet" href="seasonal.css?v=auto-cloak-v18">
+</head>
+    <body>
+        <iframe id="gameFrame" src="${codeSiteURL}" allowfullscreen></iframe>
+        <script>
+            const backButton = document.querySelector('.back-button');
+            const gameFrame = document.getElementById('gameFrame');
+            document.addEventListener('keydown', function(e) {
+                if (e.key === '\\\\' || e.keyCode === 220) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    backButton.classList.remove('hidden');
+                    gameFrame.src = 'about:blank';
+                    setTimeout(() => { gameFrame.src = '${codeSiteURL}'; }, 50);
+                }
+            }, true);
+            window.addEventListener('message', function(event) {
+                if (event.data === 'game_started') backButton.classList.add('hidden');
+                else if (event.data === 'game_ended') backButton.classList.remove('hidden');
+            });
+            window.addEventListener('message', (event) => {
+                if (event.data === 'hide_back_button') document.querySelector('.back-button')?.classList.add('hidden');
+            });
+        <\/script>
+    
+</body>
+</html>
+`);
+                 newDoc.document.close();
+             } else {
+                 alert("Redirect blocked — enable pop-ups for this site.");
+             }
+         });
+
+     </script>
+     <script>
+         // Check if Firebase functions are available
+         setTimeout(() => {
+             console.log("Checking Firebase functions:");
+             console.log("- getAllTimeClickCount:", typeof window.getAllTimeClickCount);
+             console.log("- listenToAllTimeCounts:", typeof window.listenToAllTimeCounts);
+             console.log("- incrementGameClicks:", typeof window.incrementGameClicks);
+
+             // If getAllTimeClickCount is still not available, define a fallback
+             if (typeof window.getAllTimeClickCount !== 'function') {
+                 console.warn("getAllTimeClickCount not found, creating fallback");
+                 window.getAllTimeClickCount = async function(gameName) {
+                     console.log("Fallback: returning 0 for", gameName);
+                     return 0;
+                 };
+             }
+         }, 2000);
+     </script>
+ <script id="tinkle-update-archive" type="application/json">[{"html":"\u003ch2>Update Log\u003c/h2>\n\u003ch3>HUGE Halloween Update\u003c/h3>\n\u003cul>\n    \u003cli>🎃 New halloween theme along with 22 new themes (cursors & backgrounds)\u003c/li>\n    \u003cli>🥸 Added tab cloaking (28 presets)\u003c/li>\n    \u003cli>👤 Added guest browsing, no sign-in required\u003c/li>\n    \u003cli>🗂️ Added NEW and POPULAR banners to games across the library\u003c/li>\n    \u003cli>🎮 Updated game cards\u003c/li>\n    \u003cli>❤️ Moved favorites beside Random Game\u003c/li>\n    \u003cli>🛑 Added Anti-close setting\u003c/li>\n    \u003cli>🔑 Restyled Enter Code page\u003c/li>\n\u003c/ul>\n\u003ch3>Coming Soon\u003c/h3>\n\u003cul>\n    \u003cli>🎮 Adding Mouse P.I. For Hire SOON\u003c/li>\n    \u003cli>📋 Looking through your suggestions and game requests also\u003c/li>\n\u003c/ul>\n\u003cdiv class=\"log-footer\" style=\"margin-top:20px;padding-top:12px;border-top:1px solid rgba(255,255,255,.2);font-size:.75rem;text-align:center\">\u003cspan>Version 3.0.0 • Last updated Oct 27, 2026\u003c/span>\u003c/div>"}]</script>
+</body>
+
+ </html>

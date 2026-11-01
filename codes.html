@@ -1977,6 +1977,42 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
              max-width: 240px;
              flex: 0 0 auto;
          }
+
+         /* Tinkle Firefox integration: isolate styles from the rest of Tinkle Codes. */
+         .tinkle-browser-shell{width:100%;height:min(82vh,980px);min-height:560px;display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--border-soft,rgba(148,163,184,.3));border-radius:18px;background:#0b1020;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+         .tinkle-browser-toolbar{min-height:54px;padding:8px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px;background:rgba(15,23,42,.97);border-bottom:1px solid rgba(148,163,184,.2);color:#f8fafc}
+         .tinkle-browser-brand{font-size:14px;font-weight:750;white-space:nowrap;display:flex;align-items:center;gap:9px}
+         .tinkle-browser-dot{width:9px;height:9px;border-radius:50%;background:#f97316;box-shadow:0 0 12px #f97316}
+         .tinkle-browser-actions{display:flex;flex-wrap:wrap;gap:7px}
+         .tinkle-browser-actions button,.tinkle-browser-setup button{background:rgba(99,102,241,.2);border:1px solid rgba(165,180,252,.32);border-radius:9px;padding:9px 12px;color:#f8fafc;cursor:pointer;font:inherit;font-size:12px}
+         .tinkle-browser-actions button:hover,.tinkle-browser-setup button:hover{background:rgba(99,102,241,.4)}
+         .tinkle-browser-view{position:relative;flex:1;min-height:0;background:#050816}
+         #tinkleFirefoxFrame{display:block;width:100%;height:100%;border:0;background:#050816}
+         .tinkle-browser-setup{position:absolute;inset:0;overflow:auto;background:rgba(7,12,28,.98);padding:clamp(22px,5vw,60px);color:#f8fafc;z-index:2}
+         .tinkle-browser-setup[hidden]{display:none}
+         .tinkle-browser-setup h2{font-size:24px;margin:0 0 12px}
+         .tinkle-browser-setup p{max-width:680px;line-height:1.65;color:#cbd5e1}
+         .tinkle-browser-setup form{display:flex;flex-wrap:wrap;gap:10px;max-width:760px;margin-top:24px}
+         .tinkle-browser-setup input{flex:1;min-width:230px;padding:12px 14px;border-radius:9px;border:1px solid #64748b;background:#111b31;color:#fff;font:inherit}
+         @media(max-width:600px){.tinkle-browser-shell{min-height:470px;height:75vh}.tinkle-browser-toolbar{align-items:flex-start;flex-direction:column}}
+
+
+         /* Immersive Browser: full viewport with a delayed hover navigation drawer. */
+         body.browser-immersive { overflow: hidden; }
+         body.browser-immersive #app { padding: 0 !important; max-width: none !important; }
+         body.browser-immersive #page-browser { display: block !important; position: fixed; inset: 0; z-index: 900; margin: 0; padding: 0; width: 100vw; height: 100dvh; }
+         body.browser-immersive .tinkle-browser-shell { width: 100%; height: 100%; min-height: 0; border: 0; border-radius: 0; box-shadow: none; }
+         body.browser-immersive .tinkle-browser-view { height: 100%; }
+         body.browser-immersive .top-shell { position: fixed; z-index: 1100; top: 0; left: 0; right: 0; padding: 12px clamp(10px,2vw,28px); transform: translateY(calc(-100% - 20px)); opacity: 0; pointer-events: none; transition: transform .32s cubic-bezier(.2,.8,.2,1), opacity .25s ease; }
+         body.browser-immersive.browser-nav-open .top-shell { transform: translateY(0); opacity: 1; pointer-events: auto; }
+         body.browser-immersive .top-bar { border-radius: 20px; }
+         body.browser-immersive .tinkle-browser-toolbar { position: fixed; z-index: 1050; top: 96px; right: 20px; min-height: 0; border: 1px solid rgba(148,163,184,.3); border-radius: 12px; box-shadow: 0 12px 36px #0009; opacity: 0; pointer-events: none; transform: translateY(-10px); transition: opacity .2s,transform .2s; }
+         body.browser-immersive.browser-nav-open .tinkle-browser-toolbar { opacity: 1; pointer-events: auto; transform: translateY(0); }
+         #browserTopHoverZone { display: none; }
+         body.browser-immersive #browserTopHoverZone { display: block; position: fixed; z-index: 1090; top: 0; left: 0; width: 100%; height: 16px; background: transparent; }
+         body.browser-immersive.browser-nav-open #browserTopHoverZone { pointer-events: none; }
+         @media(max-width:700px) { body.browser-immersive .top-shell { padding: 6px; } body.browser-immersive .top-bar { border-radius: 12px; } body.browser-immersive .tinkle-browser-toolbar { top: 125px; right: 8px; max-width: calc(100vw - 16px); } }
+
      </style>
  <link rel="stylesheet" href="site-theme.css"><link rel="stylesheet" href="player-ui.css?v=20260910-centered"><link rel="stylesheet" href="seasonal.css?v=auto-cloak-v18">
 <script src="update-history.js?v=auto-cloak-v18" defer></script></head>
@@ -2004,6 +2040,7 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
              <div class="gate-sub"></div>
          </div>
      </div>
+     <div id="browserTopHoverZone" aria-label="Move mouse here for one second to reveal navigation" title="Hold here for 1 second to show tabs"></div>
      <!-- MAIN APP -->
      <div class="app" id="app">
          <div class="top-shell">
@@ -2029,7 +2066,7 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
                          <button class="top-nav-tab" data-page="requests">Requests</button>
                          <button class="top-nav-tab" data-page="suggestions">Suggestions</button>
                          <button class="top-nav-tab" data-page="settings">Settings</button>
-                         <button class="top-nav-tab" data-page="movies">Movies</button>
+                         <button class="top-nav-tab" data-page="browser">Browser</button>
                      </div>
                      <button class="btn-glow" id="openCodeSiteBtn">
                          <span>Enter Code</span>
@@ -2115,6 +2152,32 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
          </div>
 
          <!-- PAGE: SUGGESTIONS -->
+         <!-- Tinkle Firefox browser, served from its own running Gecko/WASM app -->
+         <div class="page" id="page-browser">
+             <section class="tinkle-browser-shell">
+                 <div class="tinkle-browser-toolbar">
+                     <div class="tinkle-browser-brand"><span class="tinkle-browser-dot"></span> Tinkle Firefox</div>
+                     <div class="tinkle-browser-actions">
+                         <button type="button" id="tinkleBrowserReload" title="Reload embedded Firefox">↻ Reload</button>
+                         <button type="button" id="tinkleBrowserOpen" title="Open Firefox in a full tab">↗ Full screen</button>
+                         <button type="button" id="tinkleBrowserConfigure" title="Set the URL of your hosted Firefox">⚙ Connect</button>
+                     </div>
+                 </div>
+                 <div class="tinkle-browser-view">
+                     <iframe id="tinkleFirefoxFrame" title="Tinkle Firefox WebAssembly browser" src="about:blank" allow="fullscreen; clipboard-read; clipboard-write" allowfullscreen loading="lazy"></iframe>
+                     <div id="tinkleBrowserSetup" class="tinkle-browser-setup" hidden>
+                         <h2>Connect Tinkle Firefox</h2>
+                         <p>Enter the URL where your Tinkle Firefox Vite build is running. For local testing use <code>http://localhost:5173/</code>. On GitHub Pages, use a publicly hosted HTTPS deployment with its Wisp proxy configured.</p>
+                         <form id="tinkleBrowserUrlForm">
+                             <input id="tinkleBrowserUrl" type="url" placeholder="https://your-firefox-host.example/" aria-label="Tinkle Firefox app URL" required>
+                             <button type="submit">Connect</button>
+                         </form>
+                         <p id="tinkleBrowserMessage" role="status"></p>
+                     </div>
+                 </div>
+             </section>
+         </div>
+
          <div class="page" id="page-suggestions">
              <div class="page-card">
                  <div class="page-card-header">Feedback lane</div>
@@ -3109,6 +3172,64 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
          function openMoviesSite(){openMediaSite('https://tinklegames.github.io/host/cinema','Tinkle Party Cinema');}
          function openMusicSite(){openMediaSite('https://tinklehost.github.io/music/','Tinkle Party Music');}
 
+         // Browser tab: embeds the real Gecko/WASM frontend, not a simulated browser.
+         // It must be deployed on a web server with its assets and Wisp service.
+         const TINKLE_FIREFOX_STORAGE_KEY = 'tinkleFirefoxAppUrl';
+         let tinkleBrowserStarted = false;
+         function tinkleBrowserUrl() {
+             try { return localStorage.getItem(TINKLE_FIREFOX_STORAGE_KEY) || ''; } catch { return ''; }
+         }
+         function tinkleBrowserSetUrl(url) {
+             try { localStorage.setItem(TINKLE_FIREFOX_STORAGE_KEY, url); } catch {}
+         }
+         function initializeTinkleBrowser() {
+             const frame = document.getElementById('tinkleFirefoxFrame');
+             const setup = document.getElementById('tinkleBrowserSetup');
+             if (!frame || !setup) return;
+             if (tinkleBrowserStarted) return;
+             tinkleBrowserStarted = true;
+             const configured = tinkleBrowserUrl();
+             // Only default to localhost when the Tinkle Games site itself runs locally.
+             const local = ['localhost','127.0.0.1'].includes(location.hostname);
+             const url = configured || (local ? 'http://localhost:5173/' : '');
+             if (url) {
+                 frame.src = url;
+                 setup.hidden = true;
+             } else {
+                 setup.hidden = false;
+             }
+         }
+         document.getElementById('tinkleBrowserConfigure')?.addEventListener('click', () => {
+             initializeTinkleBrowser();
+             const setup = document.getElementById('tinkleBrowserSetup');
+             setup.hidden = false;
+             document.getElementById('tinkleBrowserUrl').value = tinkleBrowserUrl() || (['localhost','127.0.0.1'].includes(location.hostname) ? 'http://localhost:5173/' : '');
+         });
+         document.getElementById('tinkleBrowserUrlForm')?.addEventListener('submit', e => {
+             e.preventDefault();
+             const input = document.getElementById('tinkleBrowserUrl');
+             const msg = document.getElementById('tinkleBrowserMessage');
+             try {
+                 const url = new URL(input.value.trim());
+                 if (!['https:', 'http:'].includes(url.protocol)) throw new Error('Enter an HTTP or HTTPS URL.');
+                 if (location.protocol === 'https:' && url.protocol !== 'https:') throw new Error('An HTTPS website needs an HTTPS Firefox deployment.');
+                 tinkleBrowserSetUrl(url.href);
+                 document.getElementById('tinkleFirefoxFrame').src = url.href;
+                 document.getElementById('tinkleBrowserSetup').hidden = true;
+             } catch (error) { msg.textContent = error.message || 'Invalid browser URL'; }
+         });
+         document.getElementById('tinkleBrowserReload')?.addEventListener('click', () => {
+             initializeTinkleBrowser();
+             const frame = document.getElementById('tinkleFirefoxFrame');
+             if (frame.src !== 'about:blank') frame.src = frame.src;
+         });
+         document.getElementById('tinkleBrowserOpen')?.addEventListener('click', () => {
+             initializeTinkleBrowser();
+             const url = document.getElementById('tinkleFirefoxFrame').src;
+             if (url !== 'about:blank') window.open(url, '_blank', 'noopener,noreferrer');
+             else document.getElementById('tinkleBrowserSetup').hidden = false;
+         });
+
          // Top nav page switching
          const navTabs = document.querySelectorAll(".top-nav-tab");
          const pages = document.querySelectorAll(".page");
@@ -3126,12 +3247,49 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
              });
          }
 
+         // Hold the pointer at the very top for 2 seconds to reveal site tabs.
+         // A transparent 16px strip captures hover even when the Firefox iframe is focused.
+         const browserHoverZone = document.getElementById('browserTopHoverZone');
+         const browserNavShell = document.querySelector('.top-shell');
+         const browserToolbar = document.querySelector('.tinkle-browser-toolbar');
+         let browserRevealTimer = null;
+         let browserHideTimer = null;
+         function clearBrowserReveal() { clearTimeout(browserRevealTimer); browserRevealTimer = null; }
+         function revealBrowserNav() {
+             if (!document.body.classList.contains('browser-immersive')) return;
+             clearTimeout(browserHideTimer);
+             document.body.classList.add('browser-nav-open');
+         }
+         function hideBrowserNavSoon() {
+             clearTimeout(browserHideTimer);
+             browserHideTimer = setTimeout(() => {
+                 if (!browserNavShell?.matches(':hover') && !browserToolbar?.matches(':hover')) {
+                     document.body.classList.remove('browser-nav-open');
+                 }
+             }, 400);
+         }
+         browserHoverZone?.addEventListener('pointerenter', e => {
+             if (e.pointerType === 'touch') return;
+             clearBrowserReveal();
+             browserRevealTimer = setTimeout(revealBrowserNav, 500);
+         });
+         browserHoverZone?.addEventListener('pointerleave', clearBrowserReveal);
+         browserHoverZone?.addEventListener('click', revealBrowserNav); // touch accessibility
+         browserNavShell?.addEventListener('pointerenter', () => clearTimeout(browserHideTimer));
+         browserNavShell?.addEventListener('pointerleave', hideBrowserNavSoon);
+         browserToolbar?.addEventListener('pointerenter', () => clearTimeout(browserHideTimer));
+         browserToolbar?.addEventListener('pointerleave', hideBrowserNavSoon);
+         document.addEventListener('keydown', e => {
+             if (e.key === 'Escape' && document.body.classList.contains('browser-immersive')) {
+                 document.body.classList.remove('browser-nav-open');
+             }
+         });
+
          navTabs.forEach(tab => {
              tab.addEventListener("click", () => {
                  const page = tab.dataset.page;
-                 if (page === "movies") {
-                     openMoviesSite();
-                     return;
+                 if (page === "browser") {
+                     initializeTinkleBrowser();
                  }
                  if (page === "music") {
                      openMusicSite();
@@ -3141,6 +3299,11 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
                      renderPopular();
                  }
                  switchPage(page);
+                 clearBrowserReveal();
+                 clearTimeout(browserHideTimer);
+                 document.body.classList.toggle('browser-immersive', page === 'browser');
+                 document.body.classList.remove('browser-nav-open');
+                 if (page === 'browser') window.scrollTo(0, 0);
              });
          });
 
