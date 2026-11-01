@@ -35,6 +35,7 @@
       const directory = new URL('./', request.url);
       let current = 0;
       let activeReader = null;
+      let partBytes = 0;
       const stream = new ReadableStream({
         async pull(controller) {
           try {
@@ -45,11 +46,16 @@
                 const response = await originalFetch(url, { signal: request.signal, cache: 'default' });
                 if (!response.ok || !response.body) throw new Error('WASM part ' + (current + 1) + ': HTTP ' + response.status);
                 const headerLength = Number(response.headers.get('Content-Length'));
-                if (headerLength && headerLength !== lengths[current]) throw new Error('WASM part ' + (current + 1) + ' has unexpected size');
+                if (headerLength && headerLength !== lengths[current]) console.warn('[Tinkle Firefox] Part ' + (current + 1) + ' Content-Length differs from expected (' + headerLength + ' vs ' + lengths[current] + '); checking actual downloaded bytes');
+                partBytes = 0;
                 activeReader = response.body.getReader();
               }
               const result = await activeReader.read();
-              if (result.done) { activeReader.releaseLock(); activeReader = null; current++; continue; }
+              if (result.done) {
+                if (partBytes !== lengths[current]) throw new Error('WASM part ' + (current + 1) + ' downloaded ' + partBytes + ' bytes; expected ' + lengths[current] + '. Check GitHub Pages deployment, Git LFS pointers, and file paths.');
+                activeReader.releaseLock(); activeReader = null; current++; continue;
+              }
+              partBytes += result.value.byteLength;
               controller.enqueue(result.value);
               return;
             }
