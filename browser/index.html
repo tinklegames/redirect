@@ -25,7 +25,7 @@
     if (!window.isSecureContext || !('serviceWorker' in navigator)) {
       document.addEventListener('DOMContentLoaded', () => {
         const el = document.getElementById('splash-status');
-        if (el) el.textContent = 'Firefox requires HTTPS and service worker support.';
+        if (el) el.textContent = 'Tinkle Browser requires HTTPS and service worker support.';
       });
       return;
     }
@@ -33,12 +33,12 @@
       .then(async registration => {
         await navigator.serviceWorker.ready;
         if (!navigator.serviceWorker.controller) {
-          console.log('[Tinkle Firefox] COI service worker installed; reloading to activate isolation');
+          console.log('[Tinkle Browser] COI service worker installed; reloading to activate isolation');
           location.reload();
         } else {
-          console.warn('[Tinkle Firefox] Service worker controls this page but crossOriginIsolated is false. Check iframe and response policies.');
+          console.warn('[Tinkle Browser] Service worker controls this page but crossOriginIsolated is false. Check iframe and response policies.');
         }
-      }).catch(err => console.error('[Tinkle Firefox] COI service worker registration failed:', err));
+      }).catch(err => console.error('[Tinkle Browser] COI service worker registration failed:', err));
   })();
   </script>
   <!-- Reassemble the three GitHub-friendly Gecko WASM chunks before the Vite app fetches gecko.wasm. -->
@@ -71,7 +71,7 @@
                 const response = await originalFetch(url, { signal: request.signal, cache: 'default' });
                 if (!response.ok || !response.body) throw new Error('WASM part ' + (current + 1) + ': HTTP ' + response.status);
                 const headerLength = Number(response.headers.get('Content-Length'));
-                if (headerLength && headerLength !== lengths[current]) console.warn('[Tinkle Firefox] Part ' + (current + 1) + ' Content-Length differs from expected (' + headerLength + ' vs ' + lengths[current] + '); checking actual downloaded bytes');
+                if (headerLength && headerLength !== lengths[current]) console.warn('[Tinkle Browser] Part ' + (current + 1) + ' Content-Length differs from expected (' + headerLength + ' vs ' + lengths[current] + '); checking actual downloaded bytes');
                 partBytes = 0;
                 activeReader = response.body.getReader();
               }
@@ -88,7 +88,7 @@
         },
         cancel(reason) { if (activeReader) return activeReader.cancel(reason); }
       });
-      console.info('[Tinkle Firefox] Loading Gecko WASM from three parts');
+      console.info('[Tinkle Browser] Loading Gecko WASM from three parts');
       return Promise.resolve(new Response(stream, {
         status: 200,
         headers: { 'Content-Type': 'application/wasm', 'Content-Length': String(total) }
@@ -100,7 +100,7 @@
     const start = () => import('./assets/index-Dv1pfZJ9.js');
     if (window.crossOriginIsolated) start();
     else {
-      console.log('[Tinkle Firefox] Waiting for cross-origin isolation before starting Gecko');
+      console.log('[Tinkle Browser] Waiting for cross-origin isolation before starting Gecko');
       document.addEventListener('DOMContentLoaded', () => {
         const el = document.getElementById('splash-status');
         if (el) el.textContent = 'Enabling cross-origin isolation…';
@@ -117,7 +117,7 @@
         <div id="splash-shell" class="stage-inner" data-phase="loading">
           <div class="logo-lockup">
             <span class="logo-tile firefox-tile">
-              <img class="project-logo" src="logo.webp" alt="Firefox" />
+              <img class="project-logo" src="logo.webp" alt="Tinkle" />
             </span>
             <span class="logo-x" aria-hidden="true">&times;</span>
             <span class="logo-tile wasm-tile">
@@ -149,7 +149,7 @@
           </p>
 
           <div id="stage-card" class="launch-panel" data-phase="loading">
-            <div class="panel-loading" aria-label="Loading Firefox">
+            <div class="panel-loading" aria-label="Loading Tinkle Browser">
               <div
                 class="progress-track"
                 role="progressbar"
