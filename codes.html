@@ -4387,6 +4387,11 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
 #updateLog .update-version-section:last-child{margin-bottom:0;border-bottom:0;padding-bottom:0}
 #updateLog .update-version-section h2{padding-right:28px;color:var(--accent-3);font-size:1.35rem}
 #updateLog .update-version-section .log-footer{opacity:.72}
+#updateLog .update-history-tools{margin:14px 0 18px}
+#updateLog .update-past-button{cursor:pointer;border:1px solid var(--border-soft);border-radius:12px;padding:10px 16px;background:var(--panel-soft);color:var(--text);font:600 13px Inter,system-ui,sans-serif}
+#updateLog .update-past-button:hover{border-color:var(--accent)}
+#updateLog #update-scroll-history{max-height:340px;overflow-y:auto;overscroll-behavior:contain;padding:12px 8px 0 0;scrollbar-width:thin}
+#updateLog #update-scroll-history[hidden]{display:none!important}
 </style>
 <script>
 (function(){
@@ -4413,7 +4418,7 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
       const footer=template.content.querySelector('.log-footer');
       const version=(footer?.textContent||'').match(/Version\s+([\w.-]+)/i);
       const title=template.content.querySelector('h2');
-      if(title)title.textContent=version?'Version '+version[1]:'Previous Update';
+      if(title)title.textContent=version?'v'+version[1].replace(/^v/i,''):'Previous Update';
       section.appendChild(template.content);archive.appendChild(section);
     }
     // Style current release and append history beneath it in the same scrolling panel.
@@ -4423,6 +4428,22 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
     node=start.nextSibling;
     while(node&&node!==end){if(node.nodeType===1)node.style.display='none';node=node.nextSibling;}
     end.after(currentDisplay,archive);
+    archive.hidden=true;
+    archive.style.display='none';
+    // Keep the Past Updates button; reveal the scrollable archive only when clicked.
+    const existingTools=panel.querySelectorAll('.update-history-tools');
+    existingTools.forEach(el=>el.remove());
+    const tools=document.createElement('div');tools.className='update-history-tools';
+    const button=document.createElement('button');button.type='button';button.className='update-past-button';
+    button.textContent='Past Updates';button.setAttribute('aria-expanded','false');
+    button.addEventListener('click',()=>{
+      const opening=archive.hidden;
+      archive.hidden=!opening;archive.style.display=opening?'block':'none';
+      button.setAttribute('aria-expanded',String(opening));
+      button.textContent=opening?'Hide Past Updates':'Past Updates';
+      if(opening)archive.scrollIntoView({behavior:'smooth',block:'nearest'});
+    });
+    tools.appendChild(button);archive.before(tools);
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',populate);else populate();
 })();
@@ -4463,6 +4484,11 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
 #updateLog .update-version-section:last-child{margin-bottom:0;border-bottom:0;padding-bottom:0}
 #updateLog .update-version-section h2{padding-right:28px;color:var(--accent-3);font-size:1.35rem}
 #updateLog .update-version-section .log-footer{opacity:.72}
+#updateLog .update-history-tools{margin:14px 0 18px}
+#updateLog .update-past-button{cursor:pointer;border:1px solid var(--border-soft);border-radius:12px;padding:10px 16px;background:var(--panel-soft);color:var(--text);font:600 13px Inter,system-ui,sans-serif}
+#updateLog .update-past-button:hover{border-color:var(--accent)}
+#updateLog #update-scroll-history{max-height:340px;overflow-y:auto;overscroll-behavior:contain;padding:12px 8px 0 0;scrollbar-width:thin}
+#updateLog #update-scroll-history[hidden]{display:none!important}
 </style>
 <script>
 (function(){
@@ -4489,7 +4515,7 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
       const footer=template.content.querySelector('.log-footer');
       const version=(footer?.textContent||'').match(/Version\s+([\w.-]+)/i);
       const title=template.content.querySelector('h2');
-      if(title)title.textContent=version?'Version '+version[1]:'Previous Update';
+      if(title)title.textContent=version?'v'+version[1].replace(/^v/i,''):'Previous Update';
       section.appendChild(template.content);archive.appendChild(section);
     }
     // Style current release and append history beneath it in the same scrolling panel.
@@ -4499,6 +4525,22 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
     node=start.nextSibling;
     while(node&&node!==end){if(node.nodeType===1)node.style.display='none';node=node.nextSibling;}
     end.after(currentDisplay,archive);
+    archive.hidden=true;
+    archive.style.display='none';
+    // Keep the Past Updates button; reveal the scrollable archive only when clicked.
+    const existingTools=panel.querySelectorAll('.update-history-tools');
+    existingTools.forEach(el=>el.remove());
+    const tools=document.createElement('div');tools.className='update-history-tools';
+    const button=document.createElement('button');button.type='button';button.className='update-past-button';
+    button.textContent='Past Updates';button.setAttribute('aria-expanded','false');
+    button.addEventListener('click',()=>{
+      const opening=archive.hidden;
+      archive.hidden=!opening;archive.style.display=opening?'block':'none';
+      button.setAttribute('aria-expanded',String(opening));
+      button.textContent=opening?'Hide Past Updates':'Past Updates';
+      if(opening)archive.scrollIntoView({behavior:'smooth',block:'nearest'});
+    });
+    tools.appendChild(button);archive.before(tools);
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',populate);else populate();
 })();
