@@ -2255,7 +2255,7 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
          <div class="log-content" style="background: var(--panel); backdrop-filter: blur(20px); border-radius: 28px; padding: 32px 40px; max-width: 450px; width: 90%; max-height: 85vh; overflow-y: auto; color: var(--text); border: 1px solid var(--border-soft); box-shadow: 0 20px 60px rgba(0,0,0,0.5);">
              <button class="close-btn" style="position: absolute; top: 12px; right: 18px; font-size: 28px; background: none; border: none; color: white; cursor: pointer;">&times;</button>
              <!-- ADMIN UPDATE LOG START -->
-<h2>Update Log</h2>
+<h2>Version 3.0.2</h2>
 <h3>bowser</h3>
 <ul>
     <li>🌐 Added Tinkle Browser</li>
@@ -3009,7 +3009,7 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
              const content = document.querySelector('#updateLog .log-content');
              if (!content) return '';
              return Array.from(content.children)
-                 .filter(node => !node.classList.contains('close-btn') && !node.classList.contains('update-history-tools'))
+                 .filter(node => !node.classList.contains('close-btn') && !node.classList.contains('update-history-tools') && !node.classList.contains('update-current-section') && node.id !== 'update-scroll-history')
                  .map(node => node.textContent.replace(/\s+/g, ' ').trim()).join('\n');
          }
 
@@ -4380,6 +4380,53 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
             });
         <\/script>
     
+
+<style>
+#updateLog .log-content{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:var(--border-soft) transparent}
+#updateLog .update-version-section{padding:0 0 22px;margin:0 0 24px;border-bottom:1px solid var(--border-soft)}
+#updateLog .update-version-section:last-child{margin-bottom:0;border-bottom:0;padding-bottom:0}
+#updateLog .update-version-section h2{padding-right:28px;color:var(--accent-3);font-size:1.35rem}
+#updateLog .update-version-section .log-footer{opacity:.72}
+</style>
+<script>
+(function(){
+  function populate(){
+    const panel=document.querySelector('#updateLog .log-content');
+    const marker=document.getElementById('tinkle-update-archive');
+    if(!panel||!marker)return;
+    let entries=[];
+    try{entries=JSON.parse(marker.textContent);if(!Array.isArray(entries))return;}catch{return;}
+    const start=Array.from(panel.childNodes).find(n=>n.nodeType===8&&n.textContent.includes('ADMIN UPDATE LOG START'));
+    const end=Array.from(panel.childNodes).find(n=>n.nodeType===8&&n.textContent.includes('ADMIN UPDATE LOG END'));
+    if(!start||!end)return;
+    // Wrap current release without modifying the editor's source markers.
+    const current=document.createElement('section');current.className='update-version-section';
+    let node=start.nextSibling;
+    while(node&&node!==end){const next=node.nextSibling;current.appendChild(node.cloneNode(true));node=next;}
+    // Keep original markup between markers so the admin editor still finds it.
+    const old=document.getElementById('update-scroll-history');if(old)old.remove();
+    const archive=document.createElement('div');archive.id='update-scroll-history';
+    for(const item of entries){
+      if(!item||typeof item.html!=='string')continue;
+      const section=document.createElement('section');section.className='update-version-section';
+      const template=document.createElement('template');template.innerHTML=item.html;
+      const footer=template.content.querySelector('.log-footer');
+      const version=(footer?.textContent||'').match(/Version\s+([\w.-]+)/i);
+      const title=template.content.querySelector('h2');
+      if(title)title.textContent=version?'Version '+version[1]:'Previous Update';
+      section.appendChild(template.content);archive.appendChild(section);
+    }
+    // Style current release and append history beneath it in the same scrolling panel.
+    const existing=panel.querySelector('.update-current-section');if(existing)existing.remove();
+    const currentDisplay=current.cloneNode(true);currentDisplay.classList.add('update-current-section');
+    // Hide original nodes visually, not structurally, for admin editing and revision tracking.
+    node=start.nextSibling;
+    while(node&&node!==end){if(node.nodeType===1)node.style.display='none';node=node.nextSibling;}
+    end.after(currentDisplay,archive);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',populate);else populate();
+})();
+</script>
 </body>
 </html>
 `);
@@ -4409,6 +4456,53 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
          }, 2000);
      </script>
  <script id="tinkle-update-archive" type="application/json">[{"html":"\u003ch2>Update Log\u003c/h2>\n\u003ch3>games &gt; goy\u003c/h3>\n\u003cul>\n    \u003cli>🌠 Added Angry Birds Star Wars II\u003c/li>\n    \u003cli>🐟 Added Feed and Grow: Fish\u003c/li>\n    \u003cli>🔫 Added Ravenfield\u003c/li>\n    \u003cli>⛽️ Added Rotten Machines\u003c/li>\n    \u003cli>🎊 Added Five Nights at Freddy&#39;s: Into the Pit\u003c/li>\n    \u003cli>🧢 Added Super Mario Odyssey\u003c/li>\n    \u003cli>📼 Added The Happyhills Homicide\u003c/li>\n    \u003cli>⚔️ Added YoHoHo.io\u003c/li>\n    \u003cli>Also added update log for future updates 😩\u003c/li>\n\u003c/ul>\n\u003ch3>Coming Soon\u003c/h3>\n\u003cul>\n    \u003cli>📋 Looking through your suggestions and game requests also\u003c/li>\n\u003c/ul>\n\u003cdiv class=\"log-footer\" style=\"margin-top:20px;padding-top:12px;border-top:1px solid rgba(255,255,255,.2);font-size:.75rem;text-align:center\">\u003cspan>Version 3.0.1 • Last updated Oct 29, 2026\u003c/span>\u003c/div>"},{"html":"\u003ch2>Update Log\u003c/h2>\n\u003ch3>HUGE Halloween Update\u003c/h3>\n\u003cul>\n    \u003cli>🎃 New halloween theme along with 22 new themes (cursors & backgrounds)\u003c/li>\n    \u003cli>🥸 Added tab cloaking (28 presets)\u003c/li>\n    \u003cli>👤 Added guest browsing, no sign-in required\u003c/li>\n    \u003cli>🗂️ Added NEW and POPULAR banners to games across the library\u003c/li>\n    \u003cli>🎮 Updated game cards\u003c/li>\n    \u003cli>❤️ Moved favorites beside Random Game\u003c/li>\n    \u003cli>🛑 Added Anti-close setting\u003c/li>\n    \u003cli>🔑 Restyled Enter Code page\u003c/li>\n\u003c/ul>\n\u003ch3>Coming Soon\u003c/h3>\n\u003cul>\n    \u003cli>🎮 Adding Mouse P.I. For Hire SOON\u003c/li>\n    \u003cli>📋 Looking through your suggestions and game requests also\u003c/li>\n\u003c/ul>\n\u003cdiv class=\"log-footer\" style=\"margin-top:20px;padding-top:12px;border-top:1px solid rgba(255,255,255,.2);font-size:.75rem;text-align:center\">\u003cspan>Version 3.0.0 • Last updated Oct 27, 2026\u003c/span>\u003c/div>"}]</script>
+
+<style>
+#updateLog .log-content{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:var(--border-soft) transparent}
+#updateLog .update-version-section{padding:0 0 22px;margin:0 0 24px;border-bottom:1px solid var(--border-soft)}
+#updateLog .update-version-section:last-child{margin-bottom:0;border-bottom:0;padding-bottom:0}
+#updateLog .update-version-section h2{padding-right:28px;color:var(--accent-3);font-size:1.35rem}
+#updateLog .update-version-section .log-footer{opacity:.72}
+</style>
+<script>
+(function(){
+  function populate(){
+    const panel=document.querySelector('#updateLog .log-content');
+    const marker=document.getElementById('tinkle-update-archive');
+    if(!panel||!marker)return;
+    let entries=[];
+    try{entries=JSON.parse(marker.textContent);if(!Array.isArray(entries))return;}catch{return;}
+    const start=Array.from(panel.childNodes).find(n=>n.nodeType===8&&n.textContent.includes('ADMIN UPDATE LOG START'));
+    const end=Array.from(panel.childNodes).find(n=>n.nodeType===8&&n.textContent.includes('ADMIN UPDATE LOG END'));
+    if(!start||!end)return;
+    // Wrap current release without modifying the editor's source markers.
+    const current=document.createElement('section');current.className='update-version-section';
+    let node=start.nextSibling;
+    while(node&&node!==end){const next=node.nextSibling;current.appendChild(node.cloneNode(true));node=next;}
+    // Keep original markup between markers so the admin editor still finds it.
+    const old=document.getElementById('update-scroll-history');if(old)old.remove();
+    const archive=document.createElement('div');archive.id='update-scroll-history';
+    for(const item of entries){
+      if(!item||typeof item.html!=='string')continue;
+      const section=document.createElement('section');section.className='update-version-section';
+      const template=document.createElement('template');template.innerHTML=item.html;
+      const footer=template.content.querySelector('.log-footer');
+      const version=(footer?.textContent||'').match(/Version\s+([\w.-]+)/i);
+      const title=template.content.querySelector('h2');
+      if(title)title.textContent=version?'Version '+version[1]:'Previous Update';
+      section.appendChild(template.content);archive.appendChild(section);
+    }
+    // Style current release and append history beneath it in the same scrolling panel.
+    const existing=panel.querySelector('.update-current-section');if(existing)existing.remove();
+    const currentDisplay=current.cloneNode(true);currentDisplay.classList.add('update-current-section');
+    // Hide original nodes visually, not structurally, for admin editing and revision tracking.
+    node=start.nextSibling;
+    while(node&&node!==end){if(node.nodeType===1)node.style.display='none';node=node.nextSibling;}
+    end.after(currentDisplay,archive);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',populate);else populate();
+})();
+</script>
 </body>
 
  </html>

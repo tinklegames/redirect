@@ -12,7 +12,7 @@
  }
  const escape=text=>String(text).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const list=text=>'<ul>\n'+text.split('\n').map(s=>s.trim()).filter(Boolean).map(s=>'    <li>'+escape(s)+'</li>').join('\n')+'\n</ul>';
- function markup(data){return '<h2>'+escape(data.title)+'</h2>\n<h3>'+escape(data.release)+'</h3>\n'+list(data.items)+(data.coming.trim()?'\n<h3>'+escape(data.comingTitle)+'</h3>\n'+list(data.coming):'')+'\n<div class="log-footer" style="margin-top:20px;padding-top:12px;border-top:1px solid rgba(255,255,255,.2);font-size:.75rem;text-align:center"><span>'+escape(data.footer)+'</span></div>';}
+ function markup(data){const version=(data.footer.match(/Version\s+([\w.-]+)/i)||[])[1];return '<h2>'+escape(version?'Version '+version:data.title)+'</h2>\n<h3>'+escape(data.release)+'</h3>\n'+list(data.items)+(data.coming.trim()?'\n<h3>'+escape(data.comingTitle)+'</h3>\n'+list(data.coming):'')+'\n<div class="log-footer" style="margin-top:20px;padding-top:12px;border-top:1px solid rgba(255,255,255,.2);font-size:.75rem;text-align:center"><span>'+escape(data.footer)+'</span></div>';}
  function replace(source,data){const r=region(source),next=markup(data);let result=source.slice(0,r.start)+start+'\n'+next+'\n'+end+source.slice(r.end);if(r.html.trim()===next.trim())return result;const pattern=/<script[^>]*id=["']tinkle-update-archive["'][^>]*>([\s\S]*?)<\/script>/i;const match=source.match(pattern);let entries=[];if(match){try{entries=JSON.parse(match[1]);if(!Array.isArray(entries))throw Error();}catch{throw Error('The update history could not be read. No changes were saved.');}}if(!entries.some(item=>item.html?.trim()===r.html.trim()))entries.unshift({html:r.html.trim()});const encoded=JSON.stringify(entries).replace(/</g,'\\u003c');const archive='<script id="tinkle-update-archive" type="application/json">'+encoded+'</script>';return match?result.replace(pattern,()=>archive):(()=>{const index=result.toLowerCase().lastIndexOf('</body>');if(index<0)throw Error('The page has no closing body tag.');return result.slice(0,index)+archive+'\n'+result.slice(index);})();}
  root.UpdateLogEditor={region,markup,replace};
  if(typeof document==='undefined')return;
@@ -25,7 +25,7 @@
   const headings=doc.querySelectorAll('h3'),lists=doc.querySelectorAll('ul');
   if(headings.length>2||lists.length>2)throw Error('This log has extra sections. Edit the file directly to preserve them.');
   const lines=list=>[...(list?.querySelectorAll('li')||[])].map(li=>li.textContent).join('\n');
-  const data={title:doc.querySelector('h2')?.textContent||'Update Log',release:headings[0]?.textContent||'',items:lines(lists[0]),comingTitle:headings[1]?.textContent||'Coming Soon',coming:lines(lists[1]),footer:doc.querySelector('.log-footer')?.textContent.trim()||''};
+  const data={title:'Update Log',release:headings[0]?.textContent||'',items:lines(lists[0]),comingTitle:headings[1]?.textContent||'Coming Soon',coming:lines(lists[1]),footer:doc.querySelector('.log-footer')?.textContent.trim()||''};
   source=text;handle=newHandle;dirty=false;version++;
   for(const [key,id] of Object.entries(fields))$(id).value=data[key];
   $('save-update-file').disabled=false;preview();$('update-file-status').textContent=handle?'Local codes.html connected. Save writes to this file.':'Website or imported copy loaded. Save creates an updated codes.html.';
