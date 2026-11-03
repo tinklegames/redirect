@@ -77,7 +77,7 @@ auth.onAuthStateChanged(user => {
     $('account-email').textContent = user.email;
     db.ref('siteSettings').once('value').then(snap => {
         const settings = snap.val() || {};
-        $('seasonal-theme').value=settings.seasonalTheme||'halloween';
+        $('seasonal-theme').value=settings.seasonalTheme === 'normal' ? 'normal' : 'thanksgiving';
         $('bgColor').value = /^#[0-9a-f]{6}$/i.test(settings.backgroundColor) ? settings.backgroundColor : '#0a0a0a';
         $('announcement').value = settings.announcement || '';
         $('jumpscareImage').value = settings.jumpscareImage || '';

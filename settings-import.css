@@ -1,4 +1,4 @@
-html[data-imported-theme]:not([data-imported-theme="default"]) .halloween-scene,html[data-imported-theme]:not([data-imported-theme="default"]) .halloween-web{display:none!important}
+html[data-imported-theme]:not([data-imported-theme="default"]) .harvest-scene{display:none!important}
 html[data-imported-theme]:not([data-imported-theme="default"]) :is(.setting-card,.page-card,.grid-shell,.player-dialog,.podium-card){background:var(--panel)!important;border-color:var(--border-soft)!important;color:var(--text)!important}
 html[data-imported-theme]:not([data-imported-theme="default"]) :is(input,textarea,select){background:var(--panel-soft)!important;color:var(--text)!important;border-color:var(--border-soft)!important}
 html[data-imported-theme]:not([data-imported-theme="default"]) .btn-glow{background:linear-gradient(110deg,var(--accent),var(--accent-2))!important;color:var(--text)!important}
@@ -26,7 +26,7 @@ html[data-imported-theme]:not([data-imported-theme="default"]) :is(input,textare
 #page-settings .panic-input-large{min-width:0;max-width:100%;box-sizing:border-box}
 #page-settings #tabCloakReset{align-self:flex-start;margin:0}
 #page-settings #tabCloakStatus{font-size:12px;margin:12px 0 0}
-html[data-imported-theme]:not([data-imported-theme="default"]) #halloween-banner strong{background:linear-gradient(110deg,var(--text),var(--accent))!important;background-clip:text!important;-webkit-background-clip:text!important;color:transparent!important}
+html[data-imported-theme]:not([data-imported-theme="default"]) #harvest-banner strong{background:linear-gradient(110deg,var(--text),var(--accent))!important;background-clip:text!important;-webkit-background-clip:text!important;color:transparent!important}
 @media(max-width:950px){#page-settings .settings-grid{gap:12px!important}#page-settings .setting-card{padding:18px!important}#page-settings>.page-card{padding:20px!important}}
 @media(max-width:720px){#page-settings .settings-grid{grid-template-columns:1fr!important}#page-settings .setting-card{min-height:0}}
 

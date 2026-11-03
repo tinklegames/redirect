@@ -1,0 +1,87 @@
+.harvest-scene {
+  overflow: hidden;
+}
+
+.harvest-scene::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("harvest-landscape.svg") center bottom / cover no-repeat;
+  opacity: .72;
+}
+
+.harvest-leaf {
+  position: absolute;
+  top: -2rem;
+  left: var(--leaf-left);
+  width: var(--leaf-size);
+  aspect-ratio: 1;
+  background: url("harvest-leaf.svg") center / contain no-repeat;
+  opacity: .55;
+  animation: harvest-drift var(--leaf-duration) var(--leaf-delay) linear infinite;
+}
+
+@keyframes harvest-drift {
+  0% { transform: translateX(-3vw) rotate(-35deg); }
+  35% { transform: translate(5vw, 36vh) rotate(100deg); }
+  70% { transform: translate(-2vw, 74vh) rotate(250deg); }
+  100% { transform: translate(4vw, calc(100vh + 4rem)) rotate(325deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .harvest-leaf { display: none; }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html[data-season="thanksgiving"]:is(:not([data-imported-theme]), [data-imported-theme="default"]) body {
+    cursor: url("harvest-cursor.svg?v=4") 3 2, auto;
+  }
+  html[data-season="thanksgiving"]:is(:not([data-imported-theme]), [data-imported-theme="default"]) :is(a[href], button:enabled, [role="button"]:not([aria-disabled="true"])) {
+    cursor: url("harvest-cursor.svg?v=4") 3 2, pointer;
+  }
+}
+
+/* Harvest borders and focus rings for the game toolbar and card controls. */
+html[data-season="thanksgiving"]:is(:not([data-imported-theme]), [data-imported-theme="default"])
+:is(.btn-glow, .top-nav-tab, .search-field-wrap, .filters select, .card__favorite-btn, #page-codes .card > .card__play-counter) {
+  border-color: #b47548 !important;
+  box-shadow: 0 0 12px #b8683026 !important;
+}
+
+html[data-season="thanksgiving"]:is(:not([data-imported-theme]), [data-imported-theme="default"])
+:is(.btn-glow, .top-nav-tab, .filters select, .card__favorite-btn):is(:hover, :focus-visible, .active),
+html[data-season="thanksgiving"]:is(:not([data-imported-theme]), [data-imported-theme="default"])
+.search-field-wrap:focus-within {
+  border-color: #ffc079 !important;
+  box-shadow: 0 0 14px #dc88494d !important;
+}
+
+html[data-season="thanksgiving"]:is(:not([data-imported-theme]), [data-imported-theme="default"])
+:is(.btn-glow, .top-nav-tab, .filters select, .card__favorite-btn):focus-visible {
+  outline: 2px solid #ffd193;
+  outline-offset: 2px;
+}
+
+html[data-season="thanksgiving"]:is(:not([data-imported-theme]), [data-imported-theme="default"])
+#page-codes .card > .card__play-counter {
+  background: #2b180fdf !important;
+}
+
+/* Engraved display lettering for the seasonal wordmark. */
+html[data-season="thanksgiving"] #harvest-banner strong {
+  font-family: "Hoefler Text", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+  font-size: clamp(1.75rem, 5vw, 4rem);
+  font-style: normal;
+  font-weight: 800;
+  font-variant-caps: small-caps;
+  letter-spacing: .055em;
+  line-height: 1.08;
+  text-align: center;
+  text-wrap: balance;
+}
+
+html[data-season="thanksgiving"]:is(:not([data-imported-theme]), [data-imported-theme="default"])
+#harvest-banner strong {
+  background-image: linear-gradient(180deg, #fff4cb 12%, #f7be6b 62%, #d67a36 100%);
+  filter: drop-shadow(0 2px 0 #542913) drop-shadow(0 4px 6px #1b0b06a6);
+}

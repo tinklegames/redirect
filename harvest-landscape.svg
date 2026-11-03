@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMax slice">
+  <defs>
+    <radialGradient id="sun"><stop stop-color="#ffe0a0"/><stop offset="1" stop-color="#e69550"/></radialGradient>
+    <g id="oak">
+      <path d="M-10 0-5-113-42-167-33-171 2-135 24-194 33-192 14-119 14 0Z" fill="#381c13"/>
+      <path d="M-75-143Q-123-160-102-205Q-119-244-69-259Q-58-300-12-279Q26-312 56-274Q107-277 111-234Q142-206 110-173Q109-135 61-139Q23-112-5-143Q-44-119-75-143Z" fill="currentColor"/>
+      <path d="M-75-207q31-38 67-12m15-35q32-21 62 7m-45 69q38 16 64-13" fill="none" stroke="#ffc173" stroke-opacity=".24" stroke-width="9" stroke-linecap="round"/>
+    </g>
+    <g id="pumpkin">
+      <path d="M-4-50q-4-13 7-22l8 4q-9 7-7 20" fill="#727443"/>
+      <path d="M0-49C-53-71-61-4-22 0H22C61-4 53-71 0-49Z" fill="#d4602b" stroke="#78351b" stroke-width="3"/>
+      <ellipse cy="-26" rx="27" ry="27" fill="#ef8c3e"/>
+      <ellipse cy="-26" rx="13" ry="25" fill="#f6a44e"/>
+    </g>
+    <g id="wheat" fill="none" stroke="#d4a35b" stroke-width="3" stroke-linecap="round">
+      <path d="M0 0q-4-47-26-88m14 47-19-8m15-4 4-16m-9 4-14-6m18 7 2-17M1 0q10-41 27-63m-17 35 16-4m-11-8-2-13m8 5 14-4"/>
+    </g>
+  </defs>
+  <circle cx="1160" cy="250" r="90" fill="url(#sun)" opacity=".5"/>
+  <path d="M0 635Q245 490 516 670T1050 606Q1260 515 1440 605V900H0Z" fill="#5d301f"/>
+  <path d="M0 710Q224 620 484 750T1010 721Q1270 611 1440 713V900H0Z" fill="#49251a"/>
+  <path d="M0 796Q220 751 469 827T980 800Q1200 749 1440 790V900H0Z" fill="#301911"/>
+  <use href="#oak" transform="translate(108 802) scale(1.55)" color="#8b3823"/>
+  <use href="#oak" transform="translate(1360 800) scale(1.75)" color="#a04b28"/>
+  <use href="#oak" transform="translate(1255 804) scale(.83)" color="#ad6734"/>
+  <use href="#wheat" transform="translate(180 892) scale(1.1)"/>
+  <use href="#wheat" transform="translate(1245 897) scale(1.35)"/>
+  <use href="#pumpkin" transform="translate(98 897) scale(1.15)"/>
+  <use href="#pumpkin" transform="translate(187 900) scale(.72)"/>
+  <use href="#pumpkin" transform="translate(1340 898) scale(1.2)"/>
+  <use href="#pumpkin" transform="translate(1266 900) scale(.68)"/>
+</svg>
