@@ -59,7 +59,8 @@ window.GAME_CARDS = [
     "categories": [
       "arcade"
     ],
-    "img": "https://cdn.jim-nielsen.com/ios/512/fruit-ninja-2020-08-31.png?rf=1024"
+    "img": "https://cdn.blipzi.com/fr/ui/fruit-ninja-d.jpg?width=500&height=500&aspect_ratio=1:1",
+    "isNew": true
   },
   {
     "name": "Bowmasters",
@@ -724,7 +725,8 @@ window.GAME_CARDS = [
     "categories": [
       "adventure"
     ],
-    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.wikia.nocookie.net%2Fkindergarten%2Fimages%2Fd%2Fde%2FKindergarten2.jpg%2Frevision%2Flatest%3Fcb%3D20240513195959&f=1&nofb=1&ipt=e3f674d3526db917d8c1e5361a64d98fe8e30e4dce0788142d400b54d9e9f2fa"
+    "img": "https://granny-games.com/data/image/game/kindergarten-2/kindergarten-2-1.jpg",
+    "isNew": true
   },
   {
     "name": "Kindergarten 3",
@@ -1086,7 +1088,8 @@ window.GAME_CARDS = [
       "arcade",
       "puzzle"
     ],
-    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.jim-nielsen.com%2Fios%2F512%2Fcut-the-rope-time-travel-2021-04-16.png&f=1&nofb=1&ipt=2f29189c2ecde21b02c1be734cf5135b411ad9a5a2e5ab30538c7ef035733d0d"
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fgogamego.io%2Fwp-content%2Fuploads%2Fthumbs%2Fcustom%2FC%2FCutTheRopeTimeTravel.webp&f=1&nofb=1&ipt=a520ccca8191e018fe7f0d02d832e65dcbca2dc507da3721adc5b8d0b3bd1ad4&ipo=images",
+    "isNew": true
   },
   {
     "name": "Rooftop Snipers",
@@ -1615,7 +1618,8 @@ window.GAME_CARDS = [
     "categories": [
       "arcade"
     ],
-    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdash.gamestores.fun%2Fuploads%2Fswingo_og_17a80fd821.png&f=1&nofb=1&ipt=e3514f7c5e1590412db5b1683a312a9fe5b9b0ea0c499caadaac44bc25cabb67"
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fgogamego.io%2Fwp-content%2Fuploads%2Fthumbs%2Fcustom%2FS%2FSwingo.webp&f=1&nofb=1&ipt=25b794edded315459ae5c31f0d5a9af6d9b0bce2628bc6b136415989d18af12b&ipo=images",
+    "isNew": true
   },
   {
     "name": "N-Gon",
@@ -1676,7 +1680,8 @@ window.GAME_CARDS = [
       "arcade",
       "simulator"
     ],
-    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.skgames.net%2Fimages%2Fweb%2Fhome%2Ftraffic-racer.jpg&f=1&nofb=1&ipt=5d604002e279aaa8ce5da9315797af81fb74a553f8a7102c071027be1db59a0e"
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fsnowrider3d.com%2Fdata%2Fimage%2Fgame%2Ftraffic-racer.png&f=1&nofb=1&ipt=ce78382cae59ef9683d88058d7a61034319b40c01413f68df2e7572cb3cbee95&ipo=images",
+    "isNew": true
   },
   {
     "name": "CloverPit",
@@ -1692,7 +1697,8 @@ window.GAME_CARDS = [
     "categories": [
       "puzzle"
     ],
-    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdash.gamestores.fun%2Fuploads%2Fog_The_Impossible_Quiz_3a546abc94.png&f=1&nofb=1&ipt=3c8fa7a4815c9518587fadc41d5c4200f174167ddd7fea5af5308d7ac8cbcd31"
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimg.poki-cdn.com%2Fcdn-cgi%2Fimage%2Fq%3D78%2Cscq%3D50%2Cwidth%3D1200%2Cheight%3D1200%2Cfit%3Dcover%2Cf%3Dpng%2F3cd96c99-46c1-4ff0-b04a-82381ea07349%2Fthe-impossible-quiz.png&f=1&nofb=1&ipt=3c323f85d7163af9e59a70c7565fb3ca9a91b7821f14fba9fcd1228a77a956aa&ipo=images",
+    "isNew": true
   },
   {
     "name": "The World's Hardest Game",
@@ -2270,7 +2276,8 @@ window.GAME_CARDS = [
     "categories": [
       "simulator"
     ],
-    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fgames.lol%2Fwp-content%2Fuploads%2F2023%2F09%2Fwhack-your-computer-on-pc.jpg&f=1&nofb=1&ipt=95014cdca33707b80db65d348b43d647178aa8da3c46ab48da7070ac358109dd"
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%2Fid%2FOIP.ACFg8JW4Y8f_mQQKcsFSHgAAAA%3Fr%3D0%26pid%3DApi&f=1&ipt=243b881bef5fedf77d38b2df3b405687c7f50576b5e877efb6615ba53bf8535e&ipo=images",
+    "isNew": true
   },
   {
     "name": "Whack The Thief",
