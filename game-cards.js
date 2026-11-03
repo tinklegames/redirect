@@ -2648,5 +2648,15 @@ window.GAME_CARDS = [
       "multiplayer"
     ],
     "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fouazgames.com%2Fwp-content%2Fuploads%2F2026%2F04%2FYoHoHo.io_.webp&f=1&nofb=1&ipt=d6567d4388d76579acf7e9c7787231fa7d25bd088abd4b38cfa14c7306763718&ipo=images"
+  },
+  {
+    "addedAt": 1793715595967,
+    "isNew": true,
+    "name": "Garten of Banban",
+    "code": "BANBAN1",
+    "categories": [
+      "horror"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimgs2.dab3games.com%2Fgarten-of-banban-1-escape-ft159.png&f=1&nofb=1&ipt=86c29f52759086da3f49a6d77a8064c789904bc2f15d50aff767e7304abd66e4&ipo=images"
   }
 ];
