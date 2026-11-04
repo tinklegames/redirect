@@ -2736,5 +2736,15 @@ window.GAME_CARDS = [
       "multiplayer"
     ],
     "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fsm.ign.com%2Ft%2Fign_za%2Fcover%2Fm%2Fmeccha-cha%2Fmeccha-chameleon_17nz.512.jpg&f=1&nofb=1&ipt=c1150a0c09aa3f7b7289667dcdc34f88bc6082b647ff927ba958cd7978183dea&ipo=images"
+  },
+  {
+    "addedAt": 1793820311405,
+    "isNew": true,
+    "name": "The Happyhills Homicide 2",
+    "code": "THHH2",
+    "categories": [
+      "horror"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fshared.fastly.steamstatic.com%2Fstore_item_assets%2Fsteam%2Fapps%2F3489670%2F3ce4fa40aba124969d47ea31782982b36c993684%2Fhero_capsule_2x.jpg%3Ft%3D1745319487&f=1&nofb=1&ipt=008069349fab41136d966aa9ee1308a15614bb2084ceb10da81fa37ba8c0ccd4&ipo=images"
   }
 ];
