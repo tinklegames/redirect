@@ -4634,6 +4634,72 @@ function openCodeSite() {
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',populate);else populate();
 })();
 </script>
+<style>#cursor-trail{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;color:var(--accent,#ff8b38)}</style>
+<canvas id="cursor-trail" aria-hidden="true"></canvas>
+<script>
+(() => {
+    const canvas = document.getElementById('cursor-trail');
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    const enabled = matchMedia('(any-pointer: fine) and (prefers-reduced-motion: no-preference)');
+    const points = [];
+    const duration = 360;
+    let frame = 0;
+    function clear() {
+        cancelAnimationFrame(frame);
+        frame = 0;
+        points.length = 0;
+        ctx.clearRect(0, 0, innerWidth, innerHeight);
+    }
+    function resize() {
+        const ratio = Math.min(devicePixelRatio || 1, 2);
+        canvas.width = Math.ceil(innerWidth * ratio);
+        canvas.height = Math.ceil(innerHeight * ratio);
+        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+        clear();
+    }
+    function draw(now) {
+        frame = 0;
+        ctx.clearRect(0, 0, innerWidth, innerHeight);
+        while (points.length && now - points[0].time >= duration) points.shift();
+        if (!points.length) return;
+        const newest = points[points.length - 1];
+        const fade = 1 - Math.max(0, now - newest.time) / duration;
+        ctx.strokeStyle = getComputedStyle(canvas).color;
+        ctx.globalAlpha = fade * 0.42;
+        ctx.lineWidth = 4;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.beginPath();
+        let previous = points[0];
+        ctx.moveTo(previous.x, previous.y);
+        for (let i = 1; i < points.length; i++) {
+            const point = points[i];
+            if (point.time - previous.time > 80) {
+                ctx.lineTo(previous.x, previous.y);
+                ctx.moveTo(point.x, point.y);
+            } else {
+                ctx.quadraticCurveTo(previous.x, previous.y,
+                    (previous.x + point.x) / 2, (previous.y + point.y) / 2);
+            }
+            previous = point;
+        }
+        ctx.lineTo(newest.x, newest.y);
+        ctx.stroke();
+        frame = requestAnimationFrame(draw);
+    }
+    resize();
+    addEventListener('resize', resize);
+    addEventListener('blur', clear);
+    enabled.addEventListener('change', clear);
+    addEventListener('pointermove', (event) => {
+        if (!enabled.matches || event.pointerType === 'touch') return;
+        points.push({ x: event.clientX, y: event.clientY, time: performance.now() });
+        if (points.length > 80) points.shift();
+        if (!frame) frame = requestAnimationFrame(draw);
+    }, { passive: true });
+})();
+</script>
 </body>
 
  </html>
