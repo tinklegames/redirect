@@ -91,7 +91,7 @@
   "GROW": "https://tinklegames.github.io/host/growden.io|true",
   "SCHOOLBOY": "https://tinklegames.github.io/host/schoolboy.html|true",
   "RAFT": "https://tinklegames.github.io/host/raft.html|true",
-  "SLIMERANCHER": "https://tinklegames.github.io/host/slimerancher.html|true",
+  "SLIMERANCHER": "https://nawsif.github.io/html/slimerancher|true",
   "CC3D": "https://tinklegames.github.io/cc3d/|true",
   "DEADSEAT": "https://tinklegames.github.io/gameports/TheDeadseat/|true",
   "CRAFT": "https://nawsif.github.io/html/novacraft|true",
@@ -313,5 +313,12 @@
   "ABSW2": "https://nawsif.github.io/absw2|true",
   "YOHOHO": "https://nawsif.github.io/html/yohoho|true",
   "THHH1": "https://nawsif.github.io/html/thhh1|true",
-  "BANBAN1": "https://nawsif.github.io/html/gartenofbanban|true"
+  "BANBAN1": "https://nawsif.github.io/html/gartenofbanban|true",
+  "BALDIPLUS": "https://nawsif.github.io/html/baldiplus|true",
+  "BALDIREMASTER": "https://nawsif.github.io/html/baldiremaster|true",
+  "DUDESTOP": "https://nawsif.github.io/html/dudestop|true",
+  "FLIPCOIN": "https://nawsif.github.io/html/flipcoin|true",
+  "HAPPYROOM": "https://nawsif.github.io/html/happyroom|true",
+  "MECCHA": "https://nawsif.github.io/html/meccha|true",
+  "TMFDS": "https://nawsif.github.io/html/tmfds|true"
 }

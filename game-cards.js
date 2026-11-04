@@ -2665,5 +2665,76 @@ window.GAME_CARDS = [
       "horror"
     ],
     "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimgs2.dab3games.com%2Fgarten-of-banban-1-escape-ft159.png&f=1&nofb=1&ipt=86c29f52759086da3f49a6d77a8064c789904bc2f15d50aff767e7304abd66e4&ipo=images"
+  },
+  {
+    "addedAt": 1793758506343,
+    "isNew": true,
+    "name": "Baldi's Basics Plus",
+    "code": "BALDIPLUS",
+    "categories": [
+      "horror"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftodikgames.com%2Fwp-content%2Fuploads%2F2024%2F06%2Fbaldis-basics-plus.jpg&f=1&nofb=1&ipt=1ece3d95a6deb1b8967ed3d670487ccaeba3c2d08bcd5a4bc361b866e652a114&ipo=images"
+  },
+  {
+    "addedAt": 1793758567075,
+    "isNew": true,
+    "name": "Baldi's Basics Classic Remastered",
+    "code": "BALDIREMASTER",
+    "categories": [
+      "horror"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fbaldigames.com%2Fdata%2Fimage%2Fposts%2Fbaldi-s-basics-classic-remastered.png&f=1&nofb=1&ipt=cd18ec28d5a8dd84e7b57f4ff1dc9af2028bf45543db4a4a35430f8a8e2ca793&ipo=images"
+  },
+  {
+    "addedAt": 1793758643174,
+    "isNew": true,
+    "name": "Dude, Stop",
+    "code": "DUDESTOP",
+    "categories": [
+      "puzzle"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fassets.nintendo.com%2Fimage%2Fupload%2Fc_fill%2Cw_1200%2Fq_auto%3Abest%2Ff_auto%2Fdpr_2.0%2Fstore%2Fsoftware%2Fswitch%2F70010000024501%2Fa91531236d1a5ac02da5afe86aa4430d7c0a904cf57d8c154ff4dc21cb1f45d3&f=1&nofb=1&ipt=84165907b99f239ff588b59ec6116fb362604dad7e08cad2463ec7293cf4b1a8&ipo=images"
+  },
+  {
+    "addedAt": 1793758687557,
+    "isNew": true,
+    "name": "The Message from Deep Space",
+    "code": "TMFDS",
+    "categories": [
+      "puzzle"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.4gamer.net%2Fgames%2F038%2FG003821%2F20260704004%2FTN%2F005.jpg&f=1&nofb=1&ipt=584467dcc8b2050ab0f263d08fbd6197d8339b854f6ef702ddaa3b67a7747b74&ipo=images"
+  },
+  {
+    "addedAt": 1793758832056,
+    "isNew": true,
+    "name": "Gamblers Table",
+    "code": "FLIPCOIN",
+    "categories": [
+      "simulator"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwoogames.io%2Fdata%2Fimage%2Fgame%2Fgamblers-table%2Fgamblers-table1.png&f=1&nofb=1&ipt=c630e3658f02d325029dc658b63a003fa30ede20ff9af1d3af17c52feaedce34&ipo=images"
+  },
+  {
+    "addedAt": 1793758856257,
+    "isNew": true,
+    "name": "Happy Room",
+    "code": "HAPPYROOM",
+    "categories": [
+      "action",
+      "simulator"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fnargames.com%2Fstorage%2Fuploads%2Fthumbs%2Fhappy-room.webp&f=1&nofb=1&ipt=b1e1d3dbb3d9148dd560bc4f1270a6c43c1f33f4e2f51efdec6f03a620688b0c&ipo=images"
+  },
+  {
+    "addedAt": 1793758910021,
+    "isNew": true,
+    "name": "Meccha Chameleon",
+    "code": "MECCHA",
+    "categories": [
+      "multiplayer"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fsm.ign.com%2Ft%2Fign_za%2Fcover%2Fm%2Fmeccha-cha%2Fmeccha-chameleon_17nz.512.jpg&f=1&nofb=1&ipt=c1150a0c09aa3f7b7289667dcdc34f88bc6082b647ff927ba958cd7978183dea&ipo=images"
   }
 ];
