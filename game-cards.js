@@ -2746,5 +2746,47 @@ window.GAME_CARDS = [
       "horror"
     ],
     "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fshared.fastly.steamstatic.com%2Fstore_item_assets%2Fsteam%2Fapps%2F3489670%2F3ce4fa40aba124969d47ea31782982b36c993684%2Fhero_capsule_2x.jpg%3Ft%3D1745319487&f=1&nofb=1&ipt=008069349fab41136d966aa9ee1308a15614bb2084ceb10da81fa37ba8c0ccd4&ipo=images"
+  },
+  {
+    "addedAt": 1793900361010,
+    "isNew": true,
+    "name": "Brotato: Primal Dread",
+    "code": "BROTATO2",
+    "categories": [
+      "action"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fgamesfinder-assets.s3.eu-north-1.amazonaws.com%2Fimages%2Fcobwhx.jpg&f=1&nofb=1&ipt=ff974b7e8df28f78e7aa1e1caafa21c2bfd53ecd93182de90faf48850474462e&ipo=images"
+  },
+  {
+    "addedAt": 1793900457826,
+    "isNew": true,
+    "name": "Mario Party 4",
+    "code": "MARIOPARTY4",
+    "categories": [
+      "arcade",
+      "multiplayer"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmariopartylegacy.com%2Fwp-content%2Fuploads%2F2025%2F03%2Fmario-party-4-game-icon.jpg&f=1&nofb=1&ipt=4e495bc47fd395ff88d312371adaa7e68895888a6886f1c890254b9fea11529c&ipo=images"
+  },
+  {
+    "addedAt": 1793900497559,
+    "isNew": true,
+    "name": "Luigi's Mansion",
+    "code": "LUIGIMANSION1",
+    "categories": [
+      "adventure"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fassets-prd.ignimgs.com%2F2022%2F01%2F08%2Fluigis-mansion-1-button-1641602487668.jpg&f=1&nofb=1&ipt=172a76f060b01062ef66cbe5af140e5d3029c8cad4da7a263d6647eff181c7a8&ipo=images"
+  },
+  {
+    "addedAt": 1793900540559,
+    "isNew": true,
+    "name": "Super Mario Maker 2",
+    "code": "MAKER2",
+    "categories": [
+      "action",
+      "puzzle"
+    ],
+    "img": "https://upload.wikimedia.org/wikipedia/en/c/c7/Super_Mario_Maker_2.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original"
   }
 ];
