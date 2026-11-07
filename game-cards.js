@@ -2788,5 +2788,46 @@ window.GAME_CARDS = [
       "puzzle"
     ],
     "img": "https://upload.wikimedia.org/wikipedia/en/c/c7/Super_Mario_Maker_2.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original"
+  },
+  {
+    "addedAt": 1793999740429,
+    "isNew": true,
+    "name": "Peggle Deluxe",
+    "code": "PEGGLEDELUXE",
+    "categories": [
+      "arcade"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn2.steamgriddb.com%2Fgrid%2F59f0243a12d7b1649631a1de4bb34b3e.png&f=1&nofb=1&ipt=9fa7674be0ba1cd16280c9dde736c65b642735643c9865bcff1e0179c1f29091&ipo=images"
+  },
+  {
+    "addedAt": 1793999776679,
+    "isNew": true,
+    "name": "Superflight",
+    "code": "SUPERFLIGHT",
+    "categories": [
+      "arcade"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fhowlongtobeat.com%2Fgames%2F50695_Superflight.jpg&f=1&nofb=1&ipt=02f596177c87fe2be3319866a73816c033a7950bf6b0fc476fd7ad8d16db640a&ipo=images"
+  },
+  {
+    "addedAt": 1794059780306,
+    "isNew": true,
+    "name": "Find The Needle",
+    "code": "NEEDLE",
+    "categories": [
+      "simulator"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fstatic.driffle.com%2Fmedia-gallery%2Fproduction%2Fadece79e-c777-4242-a172-b73c8d1891b7_find-the-needle-in-the-haystack.webp&f=1&nofb=1&ipt=625613672561bff1bcb8f0be6e9d0f9bb8a08e350dbbe758df441bd4c3859885&ipo=images"
+  },
+  {
+    "addedAt": 1794069873934,
+    "isNew": true,
+    "name": "Raldi's Crackhouse",
+    "code": "RALDIS",
+    "categories": [
+      "horror",
+      "puzzle"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn2.steamgriddb.com%2Fgrid%2F403eec4e0b81ab13cbf5a2452923f49c.png&f=1&nofb=1&ipt=dcf6b704853541dd05cefdbf20dfbf2b24ea5cf2f2b3fb1fa05aa7016ffe66d1&ipo=images"
   }
 ];
