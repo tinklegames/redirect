@@ -2829,5 +2829,28 @@ window.GAME_CARDS = [
       "puzzle"
     ],
     "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn2.steamgriddb.com%2Fgrid%2F403eec4e0b81ab13cbf5a2452923f49c.png&f=1&nofb=1&ipt=dcf6b704853541dd05cefdbf20dfbf2b24ea5cf2f2b3fb1fa05aa7016ffe66d1&ipo=images"
+  },
+  {
+    "addedAt": 1794177286871,
+    "isNew": true,
+    "name": "REPO: Halloween Update",
+    "code": "REPOHALLOW",
+    "categories": [
+      "action",
+      "adventure",
+      "horror"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fgrannygame.org%2Fdata%2Fimage%2Fgame%2Frepo.jpg&f=1&nofb=1&ipt=dfc3c534c13789299ab71c45a7b1c0a2cbc203c9ffd3f5e655e211fd7e04c56a&ipo=images"
+  },
+  {
+    "addedAt": 1794177326168,
+    "isNew": true,
+    "name": "Stick Fight: The Game",
+    "code": "STICKFIGHT",
+    "categories": [
+      "action",
+      "multiplayer"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimg-eshop.cdn.nintendo.net%2Fi%2Fc0d6798f5ded30d5c0d492e51ad756f0cca462b7470848ecbbd0ba801dea1b98.jpg&f=1&nofb=1&ipt=e03ced64bf848fcfc36b29fe84015da58f70ee87ebd291b484d97c3e18d2057f&ipo=images"
   }
 ];
