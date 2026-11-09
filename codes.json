@@ -332,5 +332,10 @@
   "NEEDLE": "https://nawsif.github.io/FindTheNeedle|true",
   "RALDIS": "https://nawsif.github.io/html/raldis|true",
   "REPOHALLOW": "https://nawsif.github.io/html/repohalloween|true",
-  "STICKFIGHT": "https://nawsif.github.io/html/stickfight|true"
+  "STICKFIGHT": "https://nawsif.github.io/html/stickfight|true",
+  "IONFURY": "https://agentcube.github.io/ion-fury-wasm/|true",
+  "JOC": "https://nawsif.github.io/html/joyofcreation|true",
+  "VECKIO": "https://nawsif.github.io/html/veckio|true",
+  "TAIKOWEB": "https://cjdgrevival.com/|true",
+  "DOMEKEEPER": "https://nawsif.github.io/dome-keeper|true"
 }
