@@ -41,13 +41,13 @@
       }).catch(err => console.error('[Tinkle Browser] COI service worker registration failed:', err));
   })();
   </script>
-  <!-- Reassemble the three GitHub-friendly Gecko WASM chunks before the Vite app fetches gecko.wasm. -->
+  <!-- Stream the Gecko WASM chunks in order when the app fetches gecko.wasm. -->
   <script>
   (() => {
     const originalFetch = window.fetch.bind(window);
-    const names = ['gecko.wasm.part1', 'gecko.wasm.part2', 'gecko.wasm.part3'];
-    const lengths = [79139869, 79139869, 79139868];
-    const total = lengths.reduce((a, b) => a + b, 0);
+    const partSize = 20_000_000;
+    const total = 237_419_606;
+    const partCount = Math.ceil(total / partSize);
     const isWasmRequest = input => {
       try {
         const url = new URL(typeof input === 'string' || input instanceof URL ? input : input.url, location.href);
@@ -57,7 +57,7 @@
     window.fetch = function(input, init) {
       if (!isWasmRequest(input)) return originalFetch(input, init);
       const request = new Request(input, init);
-      const directory = new URL('./', request.url);
+      const directory = new URL('./gecko-wasm/', request.url);
       let current = 0;
       let activeReader = null;
       let partBytes = 0;
@@ -65,19 +65,18 @@
         async pull(controller) {
           try {
             while (true) {
+              if (current >= partCount) { controller.close(); return; }
+              const expectedSize = Math.min(partSize, total - current * partSize);
               if (!activeReader) {
-                if (current >= names.length) { controller.close(); return; }
-                const url = new URL(names[current], directory);
+                const url = new URL('gecko.wasm.part' + (current + 1), directory);
                 const response = await originalFetch(url, { signal: request.signal, cache: 'default' });
                 if (!response.ok || !response.body) throw new Error('WASM part ' + (current + 1) + ': HTTP ' + response.status);
-                const headerLength = Number(response.headers.get('Content-Length'));
-                if (headerLength && headerLength !== lengths[current]) console.warn('[Tinkle Browser] Part ' + (current + 1) + ' Content-Length differs from expected (' + headerLength + ' vs ' + lengths[current] + '); checking actual downloaded bytes');
                 partBytes = 0;
                 activeReader = response.body.getReader();
               }
               const result = await activeReader.read();
               if (result.done) {
-                if (partBytes !== lengths[current]) throw new Error('WASM part ' + (current + 1) + ' downloaded ' + partBytes + ' bytes; expected ' + lengths[current] + '. Check GitHub Pages deployment, Git LFS pointers, and file paths.');
+                if (partBytes !== expectedSize) throw new Error('WASM part ' + (current + 1) + ' downloaded ' + partBytes + ' bytes; expected ' + expectedSize + '. Check the deployed gecko-wasm files.');
                 activeReader.releaseLock(); activeReader = null; current++; continue;
               }
               partBytes += result.value.byteLength;
@@ -88,7 +87,7 @@
         },
         cancel(reason) { if (activeReader) return activeReader.cancel(reason); }
       });
-      console.info('[Tinkle Browser] Loading Gecko WASM from three parts');
+      console.info('[Tinkle Browser] Loading Gecko WASM from ' + partCount + ' parts');
       return Promise.resolve(new Response(stream, {
         status: 200,
         headers: { 'Content-Type': 'application/wasm', 'Content-Length': String(total) }
