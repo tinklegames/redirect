@@ -2915,5 +2915,16 @@ window.GAME_CARDS = [
       "simulator"
     ],
     "img": "https://upload.wikimedia.org/wikipedia/en/c/c0/Turbo_Dismount_Icon.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original"
+  },
+  {
+    "addedAt": 1794322798860,
+    "isNew": true,
+    "name": "Veck.io",
+    "code": "VECKIO",
+    "categories": [
+      "action",
+      "multiplayer"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.playschoolgames.com%2Fweb%2Fuploads%2Fgames%2Fother%2Fveck-io%2Fveck-io.png&f=1&nofb=1&ipt=4d429d61eeac335897c1ab6d25ad843b6a537e83b6566889ebebef50b04e21ad&ipo=images"
   }
 ];
