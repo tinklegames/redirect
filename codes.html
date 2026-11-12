@@ -1971,7 +1971,21 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
 
      </style>
  <link rel="stylesheet" href="site-theme.css"><link rel="stylesheet" href="player-ui.css?v=20260910-centered"><link rel="stylesheet" href="seasonal.css?v=thanksgiving-v3">
-<script src="update-history.js?v=auto-cloak-v18" defer></script></head>
+<script src="update-history.js?v=auto-cloak-v18" defer></script><style id="tm-movies-style">
+#page-movies .tm-shell{max-width:1100px;margin:30px auto;color:var(--text,#fff)}
+#page-movies .tm-heading{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;margin-bottom:25px}
+#page-movies h1{font-size:clamp(25px,4vw,40px);margin:0 0 8px}#page-movies p{color:var(--text-soft,#aaa)}
+#page-movies button{cursor:pointer;border:1px solid var(--border-soft,#555);border-radius:12px;padding:11px 16px;background:var(--panel,#1a2030);color:var(--text,#fff)}
+#page-movies button:hover,#page-movies .tm-selected{border-color:var(--accent,#9b6cff);background:var(--accent-soft,#47305d)}
+#page-movies .tm-search{display:flex;gap:10px;margin-bottom:16px}#page-movies input{flex:1;min-width:0;border-radius:12px;border:1px solid var(--border-soft,#555);background:var(--panel,#1a2030);padding:13px;color:var(--text,#fff);font:inherit}
+#page-movies .tm-filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px}#page-movies .tm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:18px}
+#page-movies .tm-poster{overflow:hidden;text-align:left;padding:0!important;border-radius:14px!important;display:block;width:100%;background:var(--panel,#1a2030)}
+#page-movies .tm-poster img{display:block;width:100%;aspect-ratio:2/3;object-fit:cover;background:#222}#page-movies .tm-poster strong,#page-movies .tm-poster small{display:block;padding:9px 10px 0}#page-movies .tm-poster small{padding-bottom:10px;color:var(--text-soft,#aaa)}
+#page-movies .tm-detail{margin-top:25px;padding:22px;border:1px solid var(--border-soft,#555);border-radius:18px;background:var(--panel,#1a2030)}
+#page-movies .tm-detail[hidden]{display:none}#page-movies .tm-detail video{width:100%;max-height:65vh;background:#000;margin-top:15px}
+@media(max-width:600px){#page-movies .tm-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+</head>
 
  <body>
      <!-- LOADER SCREEN -->
@@ -2021,7 +2035,7 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
                          <button class="top-nav-tab" data-page="requests">Requests</button>
                          <button class="top-nav-tab" data-page="suggestions">Suggestions</button>
                          <button class="top-nav-tab" data-page="settings">Settings</button>
-                         <button class="top-nav-tab" data-page="browser">Browser</button>
+                         <a class="top-nav-tab" href="cinema.html" style="text-decoration:none;display:inline-flex;align-items:center">Movies</a>
                      </div>
                      <button class="btn-glow" id="openCodeSiteBtn">
                          <span>Enter Code</span>
@@ -2032,6 +2046,9 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
                  </div>
              </header>
          </div>
+
+
+
 
          <!-- PAGE: CODES -->
          <div class="page active" id="page-codes">
@@ -3220,10 +3237,7 @@ function openCodeSite() {
          navTabs.forEach(tab => {
              tab.addEventListener("click", () => {
                  const page = tab.dataset.page;
-                 if (page === 'browser') {
-                     openTinkleFirefox();
-                     return;
-                 }
+                 if (page === 'movies') { window.location.href = 'cinema.html'; return; }
                  if (page === 'music') {
                      openMusicSite();
                      return;
@@ -4535,6 +4549,7 @@ function openCodeSite() {
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',populate);else populate();
 })();
 </script>
+
 </body>
 </html>
 `);
@@ -4698,6 +4713,7 @@ function openCodeSite() {
     }, { passive: true });
 })();
 </script>
+
 </body>
 
  </html>
