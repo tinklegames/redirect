@@ -1,3 +1,4 @@
+```
 <!DOCTYPE html>
 <html>
 
@@ -317,6 +318,18 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
             });
         }
 
+        // Route supported game hosts through the current Cloudflare Worker.
+        function gameFrameUrl(url) {
+            try {
+                const parsed = new URL(url, window.location.href);
+                if (parsed.protocol !== 'https:') return url;
+                if (!['nawsif.github.io', 'tinklegames.github.io'].includes(parsed.hostname)) return url;
+                return '/__iframe_proxy?url=' + encodeURIComponent(parsed.href);
+            } catch {
+                return url;
+            }
+        }
+
         function openPage() {
             if (!generatedLink || !iframeAllowed) return;
 
@@ -329,7 +342,7 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
             const iframe = document.getElementById('siteFrame');
             const backslashHint = document.getElementById('backslashHint');
 
-            iframe.src = generatedLink;
+            iframe.src = gameFrameUrl(generatedLink);
             iframeContainer.style.display = 'block';
             document.body.classList.add('iframe-open');
 
@@ -422,22 +435,23 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
 </head>
 <body>
     <iframe id="gameFrame" allowfullscreen></iframe>
+    <div id="loading">Loading game...</div>
     
     <script>
-        const gameUrl = ${JSON.stringify(generatedLink)};
+        const gameUrl = ${JSON.stringify(gameFrameUrl(generatedLink))};
         const iframe = document.getElementById('gameFrame');
         const loading = document.getElementById('loading');
-        
-        iframe.src = gameUrl;
         
         iframe.onload = function() {
             loading.style.display = 'none';
         };
         
         iframe.onerror = function() {
-            loading.innerHTML = '⚠️ Failed to load game';
+            loading.textContent = '⚠️ Failed to load game';
             loading.style.background = 'rgba(0,0,0,0.9)';
         };
+
+        iframe.src = gameUrl;
         
         setTimeout(function() {
             if (loading.style.display !== 'none') {
@@ -530,3 +544,4 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
 </body>
 
 </html>
+```
