@@ -2875,16 +2875,6 @@ window.GAME_CARDS = [
     "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fgamefaqs.gamespot.com%2Fa%2Fbox%2F5%2F1%2F0%2F752510_front.jpg&f=1&nofb=1&ipt=cfed902b8c5f2acc971166ffd62a0c79456fe14207701eac6e0f14d4c0f2bdce&ipo=images"
   },
   {
-    "addedAt": 1794319608266,
-    "isNew": true,
-    "name": "Taiko no Tatsujin",
-    "code": "TAIKOWEB",
-    "categories": [
-      "arcade"
-    ],
-    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimages.ctfassets.net%2Fpkeegl0voupm%2F1heIWRbhA1rMtBLXjS1Bkm%2F97c1d78504d01184bc99ec4285f9f01a%2FSquare_Template.jpg%3Ffm%3Djpg%26q%3D60&f=1&nofb=1&ipt=629cc6d0a3bf95ebca49ed433210e747207b87175f16f576e5c137c2faa9ad9c&ipo=images"
-  },
-  {
     "addedAt": 1794319686402,
     "isNew": true,
     "name": "Kerbal Space Program",
