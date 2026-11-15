@@ -2916,5 +2916,16 @@ window.GAME_CARDS = [
       "multiplayer"
     ],
     "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.playschoolgames.com%2Fweb%2Fuploads%2Fgames%2Fother%2Fveck-io%2Fveck-io.png&f=1&nofb=1&ipt=4d429d61eeac335897c1ab6d25ad843b6a537e83b6566889ebebef50b04e21ad&ipo=images"
+  },
+  {
+    "addedAt": 1794753575037,
+    "isNew": true,
+    "name": "Dispatch",
+    "code": "DISPATCH",
+    "categories": [
+      "action",
+      "adventure"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimage.api.playstation.com%2Fvulcan%2Fap%2Frnd%2F202508%2F0621%2Fa316285a09eceee300a8f0cb007599cf20aa6404a105a05a.jpg&f=1&nofb=1&ipt=2d2af433b1c9edb054c907e09b34a4023a710593837c097ca40d05ecaf0a44d4&ipo=images"
   }
 ];
