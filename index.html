@@ -319,16 +319,39 @@ html.account-locked main,html.account-locked .rewards-shell,html.account-locked 
         }
 
         // Route supported game hosts through the current Cloudflare Worker.
-        function gameFrameUrl(url) {
-            try {
-                const parsed = new URL(url, window.location.href);
-                if (parsed.protocol !== 'https:') return url;
-                if (!['nawsif.github.io', 'tinklegames.github.io'].includes(parsed.hostname)) return url;
-                return '/__iframe_proxy?url=' + encodeURIComponent(parsed.href);
-            } catch {
-                return url;
-            }
+        
+function gameFrameUrl(url) {
+    try {
+        const parsed = new URL(url, window.location.href);
+
+        if (parsed.protocol !== 'https:') return url;
+
+        const supportedHosts = [
+            'nawsif.github.io',
+            'tinklegames.github.io'
+        ];
+
+        if (!supportedHosts.includes(parsed.hostname)) {
+            return url;
         }
+
+        const isGitHubRedirect =
+            window.location.hostname === 'tinklegames.github.io' &&
+            (
+                window.location.pathname === '/redirect' ||
+                window.location.pathname.startsWith('/redirect/')
+            );
+
+        if (isGitHubRedirect) {
+            return parsed.href;
+        }
+
+        return '/__iframe_proxy?url=' + encodeURIComponent(parsed.href);
+    } catch {
+        return url;
+    }
+}
+
 
         function openPage() {
             if (!generatedLink || !iframeAllowed) return;
