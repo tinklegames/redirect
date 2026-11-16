@@ -245,7 +245,7 @@
   "GETYOKED": "https://nawsif.github.io/html/getyoked|true",
   "TIQ2": "https://nawsif.github.io/html/tiq2|true",
   "KSAW": "https://nawsif.github.io/html/ksaw|true",
-  "BLOCK": "https://nawsif.github.io/html/blockblast|true",
+  "BLOCK": "https://raw.githack.com/dudeluther/bb-port/refs/heads/main/index.html|true",
   "BMD": "https://nawsif.github.io/html/bmd|true",
   "BOUNCEMASTERS": "https://nawsif.github.io/html/bouncemasters|true",
   "CFB": "https://nawsif.github.io/html/climbforbrainrots|true",
