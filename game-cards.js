@@ -2927,5 +2927,27 @@ window.GAME_CARDS = [
       "adventure"
     ],
     "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimage.api.playstation.com%2Fvulcan%2Fap%2Frnd%2F202508%2F0621%2Fa316285a09eceee300a8f0cb007599cf20aa6404a105a05a.jpg&f=1&nofb=1&ipt=2d2af433b1c9edb054c907e09b34a4023a710593837c097ca40d05ecaf0a44d4&ipo=images"
+  },
+  {
+    "addedAt": 1794858700673,
+    "isNew": true,
+    "name": "The Binding of Isaac: Repentance+",
+    "code": "TBOIREPETANCE",
+    "categories": [
+      "action",
+      "arcade"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.heypoorplayer.com%2Fwp-content%2Fuploads%2F2026%2F11%2FThe-Binding-of-Isaac-Repentance-Plus-Featured.jpg&f=1&nofb=1&ipt=b7b92dce0fc648983e816ce00b3eebbb3542a963958c0bb6aa9bbdbe9b82143b&ipo=images"
+  },
+  {
+    "addedAt": 1794858780637,
+    "isNew": true,
+    "name": "The Binding of Isaac: Wrath of the Lamb",
+    "code": "TBOIWRATH",
+    "categories": [
+      "action",
+      "arcade"
+    ],
+    "img": "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%2Fid%2FOIP.VHxcRxFpLqcreZMy1sZZJAAAAA%3Fr%3D0%26pid%3DApi&f=1&ipt=4921174fffe4a4fa1a0c1bcfe1e5698d43b88fcf7d416e9305ff7106d69353fa&ipo=images"
   }
 ];
